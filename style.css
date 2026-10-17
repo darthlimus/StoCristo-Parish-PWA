@@ -14,13 +14,14 @@ body {
 
 /* --- Header / Navigation --- */
 header {
-    background-color: #991b1b; /* Dark Burgundy */
+    background-color: #991b1b;
+    /* Dark Burgundy */
     color: white;
     padding: 12px 5%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .logo-container img {
@@ -46,15 +47,15 @@ header {
     position: relative;
     width: 100%;
     /* Fixed pixel height frames the image like a photo canvas */
-    height: 480px; 
-    
+    height: 480px;
+
     /* REPLACEMENT: Change 'church.jpg' to the actual name of your church background file */
     background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('Santuario_del_Santo_Cristo\,_San_Juan_City\,_April_2022.jpg') no-repeat;
-    
+
     /* Keeps the image perfectly scaled and centers the horizon of the building */
     background-size: cover;
-    background-position: center 30%; 
-    
+    background-position: center 30%;
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -73,7 +74,7 @@ header {
     font-weight: 400;
     margin-bottom: 8px;
     letter-spacing: 0.5px;
-    text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
 }
 
 .hero h1 {
@@ -81,7 +82,7 @@ header {
     font-weight: 700;
     margin-bottom: 25px;
     letter-spacing: -0.5px;
-    text-shadow: 2px 2px 10px rgba(0,0,0,0.7);
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
 }
 
 .hero-buttons {
@@ -135,7 +136,7 @@ header {
     background: #fff;
     border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
     display: flex;
     flex-direction: column;
     border: 1px solid #eee;
@@ -198,15 +199,17 @@ header {
     .hero {
         height: 380px;
     }
+
     .hero h1 {
         font-size: 2.2rem;
     }
+
     .services-container {
         grid-template-columns: 1fr;
     }
 }
 
-.main-footer{
+.main-footer {
     background-color: #111;
     color: #e5e7eb;
     padding: 60px 0 20px 0;
@@ -214,7 +217,7 @@ header {
     border-top: 4px solid #eab308;
 }
 
-.footer-container{
+.footer-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 25px;
@@ -223,53 +226,53 @@ header {
     gap: 40px;
 }
 
-.foot-col h3{
+.foot-col h3 {
     color: #fff;
     font-size: 1.2rem;
     margin-bottom: 20px;
     padding-bottom: 8px;
 }
 
-.footer-col p{
+.footer-col p {
     font-size: 0.9rem;
     line-height: 1.7;
     margin-bottom: 12px;
     color: #ccc;
 }
 
-.footer-col .church-name{ 
+.footer-col .church-name {
     font-weight: 600;
     color: #fff;
     font-size: 1rem;
     margin-bottom: 8px;
 }
 
-.schedule-list .footer-links{
+.schedule-list .footer-links {
     list-style: none;
     padding: 0;
 }
 
-.schedule-list strong{
+.schedule-list strong {
     color: #fff;
 }
 
-.footer-links li{
+.footer-links li {
     margin-bottom: 12px;
 }
 
-.footer-links a{
+.footer-links a {
     color: #ccc;
     text-decoration: none;
     font-size: 0.9rem;
     transition: color 0.2s ease;
 }
 
-.footer-links a:hover{
+.footer-links a:hover {
     color: #eab308;
     text-decoration: underline;
 }
 
-.footer-bottom{
+.footer-bottom {
     max-width: 1200px;
     margin: 40px auto 0 auto;
     padding: 20px 25px 0 25px;
@@ -285,15 +288,18 @@ header {
 /* --- Footer Mobile Responsiveness --- */
 @media (max-width: 992px) {
     .footer-container {
-        grid-template-columns: repeat(2, 1fr); /* Collapses down to 2 columns on tablets */
+        grid-template-columns: repeat(2, 1fr);
+        /* Collapses down to 2 columns on tablets */
     }
 }
 
 @media (max-width: 768px) {
     .footer-container {
-        grid-template-columns: 1fr; /* Stacks into 1 vertical column perfectly on mobile screens */
+        grid-template-columns: 1fr;
+        /* Stacks into 1 vertical column perfectly on mobile screens */
         gap: 30px;
     }
+
     .footer-bottom {
         margin-top: 30px;
     }
@@ -398,11 +404,12 @@ header {
 }
 
 /* Animates label upwards on interaction */
-.input-group input:focus ~ label,
-.input-group input:not(:placeholder-shown) ~ label {
+.input-group input:focus~label,
+.input-group input:not(:placeholder-shown)~label {
     transform: translateY(-22px);
     font-size: 0.85rem;
-    color: #eab308; /* Turns gold when active */
+    color: #eab308;
+    /* Turns gold when active */
 }
 
 .input-icon {
@@ -442,7 +449,8 @@ header {
 .login-submit-btn {
     width: 100%;
     padding: 12px;
-    background-color: #991b1b; /* Matches your Parish dark red branding */
+    background-color: #991b1b;
+    /* Matches your Parish dark red branding */
     color: white;
     border: none;
     border-radius: 6px;
@@ -465,7 +473,8 @@ header {
 }
 
 .register-prompt a {
-    color: #eab308; /* Highlighted Link Gold Accent */
+    color: #eab308;
+    /* Highlighted Link Gold Accent */
     text-decoration: none;
     font-weight: 600;
 }
@@ -484,33 +493,35 @@ header {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 9999; /* Ensures modal stays on top of header and hero content */
+    z-index: 9999;
+    /* Ensures modal stays on top of header and hero content */
     justify-content: center;
     align-items: center;
 }
 
 /* 2. Target active state if you use a class to toggle visibility */
-.modal.active, 
+.modal.active,
 .modal.show {
-  display: flex !important; /* Centers the inner modal container */
+    display: flex !important;
+    /* Centers the inner modal container */
 }
 
 /* 3. The Actual Modal Box */
 .modal-content {
-  background-color: #ffffff;
-  margin: 30px auto;
-  padding: 24px;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 600px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-  position: relative;
-  z-index: 10000;
+    background-color: #ffffff;
+    margin: 30px auto;
+    padding: 24px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 10000;
 }
 
 /* Variant for large modals (like the User Dashboard) */
 .modal-large {
-  max-width: 900px;
+    max-width: 900px;
 }
 
 .modal-overlay {
@@ -537,8 +548,10 @@ header {
 }
 
 .modal-box {
-    background: #1f2937; /* Dark elegant container background */
-    border: 1px solid #eab308; /* Gold Accent Frame */
+    background: #1f2937;
+    /* Dark elegant container background */
+    border: 1px solid #eab308;
+    /* Gold Accent Frame */
     border-radius: 12px;
     padding: 30px;
     width: 100%;
@@ -587,7 +600,7 @@ header {
     margin-bottom: 5px;
 }
 
-.form-group input, 
+.form-group input,
 .form-group textarea {
     width: 100%;
     padding: 10px 12px;
@@ -600,7 +613,7 @@ header {
     transition: border-color 0.2s;
 }
 
-.form-group input:focus, 
+.form-group input:focus,
 .form-group textarea:focus {
     border-color: #eab308;
 }
@@ -608,7 +621,8 @@ header {
 .form-submit-btn {
     width: 100%;
     padding: 12px;
-    background-color: #991b1b; /* Parish Burgundy */
+    background-color: #991b1b;
+    /* Parish Burgundy */
     color: #fff;
     border: none;
     border-radius: 6px;
@@ -780,7 +794,8 @@ header {
 /* ==================== ADMIN DASHBOARD STYLES (BURGUNDY & GOLD THEME) ==================== */
 
 .admin-body {
-    background-color: #2b080c; /* Deep Burgundy background */
+    background-color: #2b080c;
+    /* Deep Burgundy background */
     color: #f8fafc;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
@@ -789,8 +804,10 @@ header {
 
 /* Admin Header Navigation */
 .admin-nav {
-    background: #4a0e17; /* Rich Crimson */
-    border-bottom: 3px solid #d4af37; /* Gold accent border */
+    background: #4a0e17;
+    /* Rich Crimson */
+    border-bottom: 3px solid #d4af37;
+    /* Gold accent border */
     padding: 15px 30px;
     display: flex;
     justify-content: space-between;
@@ -800,7 +817,8 @@ header {
 
 .admin-nav h1 {
     font-size: 1.3rem;
-    color: #fef08a; /* Soft Gold text */
+    color: #fef08a;
+    /* Soft Gold text */
     margin: 0;
     font-weight: 600;
 }
@@ -833,8 +851,10 @@ header {
 }
 
 .stat-card {
-    background: #3b0b12; /* Solid dark burgundy card */
-    border: 1px solid rgba(212, 175, 55, 0.4); /* Gold border tint */
+    background: #3b0b12;
+    /* Solid dark burgundy card */
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    /* Gold border tint */
     padding: 20px;
     border-radius: 10px;
     text-align: center;
@@ -852,7 +872,8 @@ header {
 .stat-card p {
     font-size: 1.8rem;
     font-weight: bold;
-    color: #d4af37; /* Gold numbers */
+    color: #d4af37;
+    /* Gold numbers */
     margin: 0;
 }
 
@@ -888,8 +909,10 @@ header {
 }
 
 .refresh-btn {
-    background: #d4af37; /* Church Gold button */
-    color: #2b080c; /* Deep burgundy text for contrast */
+    background: #d4af37;
+    /* Church Gold button */
+    color: #2b080c;
+    /* Deep burgundy text for contrast */
     border: none;
     padding: 9px 18px;
     border-radius: 6px;
@@ -905,7 +928,8 @@ header {
 
 /* Applications Table Container */
 .table-wrapper {
-    background: #ffffff; /* Clean white card container for high contrast readability */
+    background: #ffffff;
+    /* Clean white card container for high contrast readability */
     border-radius: 10px;
     border: 2px solid #d4af37;
     overflow-x: auto;
@@ -920,8 +944,10 @@ header {
 }
 
 .admin-table th {
-    background: #4a0e17; /* Burgundy header rows */
-    color: #d4af37; /* Gold header text */
+    background: #4a0e17;
+    /* Burgundy header rows */
+    color: #d4af37;
+    /* Gold header text */
     padding: 14px;
     border-bottom: 2px solid #d4af37;
     font-weight: 600;
@@ -930,11 +956,13 @@ header {
 .admin-table td {
     padding: 14px;
     border-bottom: 1px solid #e5e7eb;
-    color: #1f2937; /* Dark gray body text on white table background */
+    color: #1f2937;
+    /* Dark gray body text on white table background */
 }
 
 .admin-table tr:hover {
-    background: #fff8f8; /* Subtle warm tint on hover */
+    background: #fff8f8;
+    /* Subtle warm tint on hover */
 }
 
 /* Badges & Document Tags */
@@ -1146,83 +1174,357 @@ header {
 
 /* Modal Large Variant */
 .modal-large {
-  max-width: 900px;
-  width: 90%;
+    max-width: 900px;
+    width: 90%;
 }
 
 /* Dashboard Layout */
 .dashboard-empty {
-  text-align: center;
-  padding: 40px 20px;
-  color: #666;
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
 }
 
 .dashboard-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 15px;
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
 }
 
-.dashboard-table th, 
+.dashboard-table th,
 .dashboard-table td {
-  padding: 12px 15px;
-  text-align: left;
-  border-bottom: 1px solid #eee;
-  font-size: 0.95rem;
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    font-size: 0.95rem;
 }
 
 .dashboard-table th {
-  background-color: #f8f9fa;
-  color: #333;
-  font-weight: 600;
+    background-color: #f8f9fa;
+    color: #333;
+    font-weight: 600;
 }
 
 /* Status Badges */
 .badge {
-  padding: 5px 10px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  display: inline-block;
-  text-transform: uppercase;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-block;
+    text-transform: uppercase;
 }
 
 .badge-pending {
-  background-color: #fff3cd;
-  color: #856404;
-  border: 1px solid #ffeeba;
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
 }
 
 .badge-approved {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
 }
 
 .badge-incomplete {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
 }
 
 .badge-completed {
-  background-color: #d1ecf1;
-  color: #0c5460;
-  border: 1px solid #bee5eb;
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
 }
 
 /* View Details Button */
 .btn-sm {
-  padding: 5px 12px;
-  font-size: 0.85rem;
-  background-color: #d4af37;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.2s ease;
+    padding: 5px 12px;
+    font-size: 0.85rem;
+    background-color: #d4af37;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s ease;
 }
 
 .btn-sm:hover {
-  background-color: #b89628;
+    background-color: #b89628;
+}
+
+td,
+th,
+.file-badge span {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+/* ==========================================================================
+   MOBILE-FIRST PWA & ANDROID ADAPTATION
+   ========================================================================== */
+
+/* 1. Touch Target Optimization (Android Minimum 48px Tap Area) */
+button,
+.btn,
+.card-action,
+.close-btn,
+.status-select,
+.refresh-btn,
+.toggle-btn {
+    min-height: 44px;
+    touch-action: manipulation;
+    /* Eliminates the 300ms delay on Android touch taps */
+}
+
+/* 2. Fluid Dynamic Viewport Scaling for Hero Banner */
+@media (max-width: 768px) {
+    .hero {
+        height: 60vh;
+        /* Dynamic percentage height instead of hardcoded px */
+        min-height: 320px;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+        line-height: 1.2;
+    }
+
+    .hero h2 {
+        font-size: 1rem;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .hero-buttons .btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* 3. Fluid Responsive Grid Layouts (Services & Dashboard) */
+.services-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    /* Dynamic fluid columns */
+    gap: 20px;
+    padding: 0 16px;
+}
+
+/* 4. Adaptive Modals for Small Android Screens */
+@media (max-width: 600px) {
+
+    .modal-box,
+    .login-box,
+    .modal-content {
+        width: 95% !important;
+        max-width: 100% !important;
+        padding: 20px 16px !important;
+        margin: 10px auto !important;
+        max-height: 92vh !important;
+        /* Prevents overflow off-screen */
+        border-radius: 12px;
+    }
+
+    /* Stack form input rows vertically on narrow displays */
+    .form-row {
+        flex-direction: column !important;
+        /* FIXED: Changed !direction to !important */
+        gap: 0;
+    }
+
+    /* Horizontal scroll container for tables on small screens */
+    .table-wrapper {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        /* Smooth inertia scrolling on Android WebKit */
+    }
+
+    /* Stack admin control actions vertically */
+    .admin-actions,
+    .table-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-select,
+    .refresh-btn,
+    #searchInput {
+        width: 100%;
+    }
+}
+
+/* 5. Safe Area Insets for Edge-to-Edge Android Screens */
+body {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+}
+
+/* ==========================================================================
+   MOBILE HEADER & SLIDING SIDE DRAWER
+   ========================================================================== */
+
+/* Default Visibility Utilities */
+.mobile-only {
+    display: none !important;
+}
+
+@media (max-width: 768px) {
+    .desktop-only {
+        display: none !important;
+    }
+
+    .mobile-only {
+        display: block !important;
+    }
+
+    /* Sticky Header Bar on Mobile */
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 16px;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background-color: #991b1b /* Parish Burgundy */
+    }
+
+    .logo-container img {
+        max-width: 120px;
+        height: auto;
+    }
+
+    /* Hamburger Toggle Button */
+    .hamburger-btn {
+        background: transparent;
+        border: none;
+        color: #ffffff;
+        font-size: 1.8rem;
+        cursor: pointer;
+        padding: 4px 8px;
+    }
+
+    /* Dark Overlay Backdrop */
+    .drawer-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 9998;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+
+    .drawer-overlay.active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* Side Navigation Drawer */
+    .mobile-drawer {
+        position: fixed;
+        top: 0;
+        right: -280px; /* Hidden off screen right */
+        width: 280px;
+        height: 100vh;
+        background-color: #4a0e17; /* Dark Burgundy */
+        border-left: 2px solid #d4af37; /* Gold accent */
+        z-index: 9999;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+        transition: right 0.3s ease-in-out;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mobile-drawer.active {
+        right: 0; /* Slide into view */
+    }
+
+    .drawer-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 20px;
+        border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+    }
+
+    .drawer-header h3 {
+        color: #fef08a;
+        margin: 0;
+        font-size: 1.1rem;
+    }
+
+    .close-drawer-btn {
+        background: transparent;
+        border: none;
+        color: #ffffff;
+        font-size: 1.8rem;
+        cursor: pointer;
+    }
+
+    .drawer-links {
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        gap: 12px;
+    }
+
+    .drawer-links a {
+        color: #ffffff;
+        text-decoration: none;
+        font-size: 1rem;
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+}
+
+/* Ensure Modals Fit Mobile Screen Margins */
+@media (max-width: 768px) {
+    .modal-box {
+        width: 95% !important;
+        max-width: 95% !important;
+        padding: 16px !important;
+        margin: 10px auto;
+        box-sizing: border-box;
+    }
+
+    /* Wrap Long Text and Reference IDs */
+    .modal-box table, 
+    .modal-box td, 
+    .modal-box th,
+    .modal-box p,
+    .modal-box div {
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        white-space: normal !important;
+    }
+
+    /* Make Dashboard Data Tables Scroll horizontally on small screens */
+    #dashboardModal .table-container,
+    .modal-box table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Target Dashboard Specific Cards */
+    .dashboard-card, .application-item {
+        word-break: break-word;
+        padding: 10px !important;
+    }
 }

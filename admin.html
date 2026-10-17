@@ -4,19 +4,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Santuario Del Sto. Cristo - Admin Portal</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.webp">
+    <title>Santuario Del Sto. Cristo - Secretary Portal</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
+    <script src="dexie.js"></script>
+    <style>
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.65);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+        }
+
+        .modal-overlay.active {
+            display: flex !important;
+        }
+
+        .modal-box {
+            background: #ffffff;
+            color: #1a1a1a;
+            padding: 28px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 680px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            max-height: 85vh;
+            overflow-y: auto;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Form Label & Input Enhancements */
+        .modal-box label {
+            display: block;
+            color: #2c3e50;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .modal-box input,
+        .modal-box select,
+        .modal-box textarea {
+            color: #1a1a1a !important;
+            background-color: #ffffff !important;
+            border: 1px solid #abb2b9 !important;
+            font-size: 14px !important;
+            line-height: 1.4 !important;
+            border-radius: 5px;
+        }
+
+        .modal-box input:focus,
+        .modal-box select:focus,
+        .modal-box textarea:focus {
+            border-color: #4a0e17 !important;
+            outline: none;
+        }
+
+        /* Status Badge & Button Styling */
+        .status-select {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            border: 1px solid #ccc;
+        }
+
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-approved {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-rejected {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .btn-action {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-action:hover {
+            opacity: 0.9;
+        }
+    </style>
 </head>
 
 <body class="admin-body">
 
-    <header class="admin-nav">
-        <h1>⛪ Parish Secretariat Admin Dashboard</h1>
+    <!-- Secretatariat / Admin Authentication Modal -->
+    <div id="adminAuthModal" class="modal-overlay active">
+        <div class="modal-box" style="max-width: 420px; text-align: center;">
+            <h2 style="color: #4a0e17; margin-bottom: 8px;">Secretariat Portal Sign In</h2>
+            <p style="color: #666; font-size: 13px; margin-bottom: 20px;">Please authenticate to manage parish
+                applications.</p>
+
+            <form id="adminLoginForm" onsubmit="handleAdminLogin(event)">
+                <div style="margin-bottom: 15px; text-align: left;">
+                    <label for="adminEmail">Email Address</label>
+                    <input type="email" id="adminEmail" placeholder="admin@parish.com" required
+                        style="width: 100%; padding: 8px;">
+                </div>
+
+                <div style="margin-bottom: 20px; text-align: left;">
+                    <label for="adminPassword">Password</label>
+                    <input type="password" id="adminPassword" placeholder="••••••••" required
+                        style="width: 100%; padding: 8px;">
+                </div>
+
+                <button type="submit"
+                    style="background: #4a0e17; color: white; border: none; padding: 10px; border-radius: 4px; width: 100%; font-weight: bold; cursor: pointer;">
+                    Login as Secretariat
+                </button>
+            </form>
+
+            <!-- TEMPORARY ADMIN BYPASS / DEMO LOGIN SECTION -->
+            <div style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed #ccc; text-align: center;">
+                <button type="button" onclick="loginAsDemoAdmin()"
+                    style="background: #e74c3c; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%;">
+                    ⚡ Temporary Demo Login (Bypass Auth)
+                </button>
+                <small style="color: #777; display: block; margin-top: 6px;">For testing and demonstration only.</small>
+            </div>
+        </div>
+    </div>
+
+    <header class="admin-nav"
+        style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px;">
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <div class="logo-container">
+                <img src="MiniLogo-1.webp" width="150" height="auto" alt="Santuario Del Sto. Cristo Parish Logo">
+            </div>
+            <h1 style="margin: 0;">Parish Secretary Dashboard</h1>
+        </div>
+        <div id="adminUserHeader" style="font-size: 14px;"></div>
     </header>
 
     <div class="admin-container">
-        <div class="stats-grid">
+        <div class="stats-grid"
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px;">
             <div class="stat-card">
                 <h3>Total Submissions</h3>
                 <p id="totalCount">0</p>
@@ -47,8 +187,10 @@
             <select id="statusFilter" onchange="renderTable()">
                 <option value="ALL">All Statuses</option>
                 <option value="Pending">Pending</option>
+                <option value="Needs Revision">Needs Revision</option>
                 <option value="Approved">Approved</option>
                 <option value="Rejected">Rejected</option>
+                <option value="Completed">Completed</option>
             </select>
 
             <input type="text" id="searchInput" onkeyup="renderTable()" placeholder="Search by Ref ID or Email...">
@@ -87,18 +229,279 @@
         </div>
     </div>
 
+    <!-- Admin Application Details & Management Modal -->
+    <div id="adminUpdateModal" class="modal-overlay">
+        <div class="modal-box" style="max-width: 650px; text-align: left;">
+            <h3 style="color: #4a0e17; margin-bottom: 15px;">Application Details & Workflow Update</h3>
+
+            <!-- Applicant Information View -->
+            <div id="applicantInfoSection"
+                style="background: #f8f9fa; padding: 12px; border-radius: 6px; margin-bottom: 15px; font-size: 14px;">
+            </div>
+
+            <form id="adminUpdateForm" onsubmit="handleAdminUpdateSubmit(event)">
+                <input type="hidden" id="adminAppId">
+
+                <div class="form-group" style="margin-bottom: 10px;">
+                    <label><strong>Application Status *</strong></label>
+                    <select id="adminStatusSelect" required style="width: 100%; padding: 8px;">
+                        <option value="Pending">Pending</option>
+                        <option value="Needs Revision">Needs Revision</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Rejected">Rejected</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                </div>
+
+                <!-- Confirmed Date & Time Setup / Reschedule -->
+                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                    <div style="flex: 1;">
+                        <label><strong>Confirmed Appointment Date</strong></label>
+                        <input type="date" id="adminConfirmedDate" style="width: 100%; padding: 8px;">
+                    </div>
+                    <div style="flex: 1;">
+                        <label><strong>Confirmed Appointment Time</strong></label>
+                        <input type="time" id="adminConfirmedTime" style="width: 100%; padding: 8px;">
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 10px;">
+                    <label><strong>Admin Remarks / Notes</strong></label>
+                    <textarea id="adminNotesInput" rows="3" style="width: 100%; padding: 8px;"
+                        placeholder="Add details or instructions for the parishioner..."></textarea>
+                </div>
+
+                <!-- Status Audit Trail Section -->
+                <div style="margin-top: 15px;">
+                    <label><strong>Status History & Audit Trail</strong></label>
+                    <div id="statusHistoryContainer"
+                        style="max-height: 120px; overflow-y: auto; background: #fff; border: 1px solid #ccc; padding: 8px; font-size: 12px; border-radius: 4px;">
+                    </div>
+                </div>
+
+                <div style="margin-top: 15px; text-align: right;">
+                    <button type="button" onclick="closeModal('adminUpdateModal')"
+                        style="padding: 8px 15px;">Cancel</button>
+                    <button type="submit"
+                        style="background: #4a0e17; color: white; padding: 8px 15px; border: none; border-radius: 4px;">Save
+                        Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dedicated Appointment Confirmation & Reschedule Modal -->
+    <div id="appointmentModal" class="modal-overlay">
+        <div class="modal-box" style="max-width: 500px; text-align: left;">
+            <h3
+                style="color: #4a0e17; margin-bottom: 15px; font-size: 18px; border-bottom: 2px solid #4a0e17; padding-bottom: 8px;">
+                📅 Schedule / Update Appointment
+            </h3>
+
+            <div id="appointmentAppSummary"
+                style="background: #f4f6f8; border-left: 4px solid #4a0e17; padding: 12px; margin-bottom: 15px; font-size: 14px; color: #1a1a1a; line-height: 1.5;">
+            </div>
+
+            <form id="appointmentForm" onsubmit="handleAppointmentSubmit(event)">
+                <input type="hidden" id="apptAppId">
+
+                <div style="margin-bottom: 12px;">
+                    <label
+                        style="display: block; font-weight: bold; color: #2c3e50; margin-bottom: 5px; font-size: 14px;">
+                        Confirmed Date *
+                    </label>
+                    <input type="date" id="apptConfirmedDate" required
+                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; color: #1a1a1a; background: #fff;">
+                </div>
+
+                <div style="margin-bottom: 12px;">
+                    <label
+                        style="display: block; font-weight: bold; color: #2c3e50; margin-bottom: 5px; font-size: 14px;">
+                        Confirmed Time Slot *
+                    </label>
+                    <input type="time" id="apptConfirmedTime" required
+                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; color: #1a1a1a; background: #fff;">
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label
+                        style="display: block; font-weight: bold; color: #2c3e50; margin-bottom: 5px; font-size: 14px;">
+                        Admin Remarks / Schedule Notes
+                    </label>
+                    <textarea id="apptAdminNotes" rows="3"
+                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; color: #1a1a1a; background: #fff;"
+                        placeholder="Instructions or reminder details for parishioner..."></textarea>
+                </div>
+
+                <div style="text-align: right; gap: 8px; display: flex; justify-content: flex-end;">
+                    <button type="button" onclick="closeModal('appointmentModal')"
+                        style="padding: 8px 16px; background: #e0e0e0; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: #333;">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                        style="padding: 8px 16px; background: #4a0e17; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
+                        💾 Confirm Schedule
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dedicated In-Browser File Viewer Modal -->
+    <div id="fileViewerModal" class="modal-overlay">
+        <div class="modal-box"
+            style="max-width: 85vw; width: 900px; height: 85vh; display: flex; flex-direction: column; padding: 20px;">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 2px solid #4a0e17; padding-bottom: 8px;">
+                <h3 id="fileViewerTitle" style="color: #4a0e17; margin: 0; font-size: 18px;">📄 Document Preview</h3>
+                <div>
+                    <a id="fileDownloadBtn" href="#" download=""
+                        style="background: #1e5631; color: white; padding: 6px 12px; border-radius: 4px; text-decoration: none; font-size: 13px; font-weight: bold; margin-right: 8px;">
+                        ⬇️ Download File
+                    </a>
+                    <button type="button" onclick="closeModal('fileViewerModal')"
+                        style="padding: 6px 12px; background: #c0392b; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
+                        ✕ Close
+                    </button>
+                </div>
+            </div>
+
+            <!-- Viewer Container Frame -->
+            <div id="fileViewerContent"
+                style="flex: 1; width: 100%; background: #f0f0f0; border: 1px solid #ccc; border-radius: 6px; overflow: hidden; display: flex; justify-content: center; align-items: center;">
+                <p style="color: #777;">No document loaded.</p>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // 1. Initialize Dexie DB matching index.html setup
         const db = new Dexie('ParishPortalDB');
-        db.version(1).stores({
-            users: '++id, email, fullname, password, createdAt',
-            applications: '++id, referenceId, sacramentType, email, status, archived, createdAt'
+
+        // Database schema matching version 3
+        db.version(3).stores({
+            users: '++id, email, fullName, role, createdAt',
+            applications: '++id, referenceId, userId, applicantName, applicantEmail, sacramentType, status, preferredDate, confirmedDate, confirmedTime, details, documents, adminNotes, statusHistory, archived, createdAt',
+            notifications: '++id, userId, referenceId, title, message, isRead, createdAt'
         });
 
         let rawApplicationsData = [];
-        let showArchivedView = false; // Default: Active Inbox
+        let showArchivedView = false;
 
-        // Fetch applications from Dexie
+        // ==========================================
+        // AUTHENTICATION & DEMO LOGIN LOGIC
+        // ==========================================
+        // ==========================================
+        // SEPARATE ADMIN AUTHENTICATION LOGIC
+        // ==========================================
+        function checkAdminSession() {
+            // Read strictly from 'currentAdminUser' instead of 'currentUser'
+            const currentAdmin = JSON.parse(localStorage.getItem('currentAdminUser'));
+            const headerContainer = document.getElementById('adminUserHeader');
+
+            if (currentAdmin && currentAdmin.role === 'admin') {
+                closeModal('adminAuthModal');
+                if (headerContainer) {
+                    headerContainer.innerHTML = `
+                <span style="color: #d4af37; font-weight: bold; margin-right: 15px;">🔑 ${currentAdmin.fullName}</span>
+                <a href="#" onclick="logoutAdmin(event)" style="color: #ff6b6b; font-weight: bold; text-decoration: none;">Logout</a>
+            `;
+                }
+                fetchApplications();
+            } else {
+                openModal('adminAuthModal');
+                if (headerContainer) headerContainer.innerHTML = '';
+            }
+        }
+
+        async function handleAdminLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('adminEmail').value.trim().toLowerCase();
+            const password = document.getElementById('adminPassword').value.trim();
+
+            try {
+                const user = await db.users.where('email').equalsIgnoreCase(email).first();
+
+                if (user && user.password === password && user.role === 'admin') {
+                    const sessionUser = {
+                        id: user.id,
+                        fullName: user.fullName,
+                        email: user.email,
+                        role: user.role
+                    };
+                    localStorage.setItem('currentUser', JSON.stringify(sessionUser));
+                    checkAdminSession();
+                } else {
+                    alert('Invalid admin credentials or non-admin account.');
+                }
+            } catch (err) {
+                console.error("Admin login error:", err);
+            }
+        }
+
+        async function handleAdminLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('adminEmail').value.trim().toLowerCase();
+            const password = document.getElementById('adminPassword').value.trim();
+
+            try {
+                const user = await db.users.where('email').equalsIgnoreCase(email).first();
+
+                if (user && user.password === password && user.role === 'admin') {
+                    const adminSession = {
+                        id: user.id,
+                        fullName: user.fullName,
+                        email: user.email,
+                        role: user.role
+                    };
+                    // Save to 'currentAdminUser' to prevent leaking into parishioner view
+                    localStorage.setItem('currentAdminUser', JSON.stringify(adminSession));
+                    checkAdminSession();
+                } else {
+                    alert('Invalid admin credentials or non-admin account.');
+                }
+            } catch (err) {
+                console.error("Admin login error:", err);
+            }
+        }
+
+        async function loginAsDemoAdmin() {
+            const demoAdminSession = {
+                id: 9999,
+                fullName: 'Secretariat Admin (Demo)',
+                email: 'admin.demo@santuariodelstocristo.com',
+                role: 'admin'
+            };
+
+            try {
+                const existingAdmin = await db.users.where('role').equals('admin').first();
+                if (!existingAdmin) {
+                    await db.users.add({
+                        fullName: demoAdminSession.fullName,
+                        email: demoAdminSession.email,
+                        password: 'demo_password',
+                        role: 'admin',
+                        createdAt: new Date().toISOString()
+                    });
+                }
+
+                // Save demo admin into 'currentAdminUser'
+                localStorage.setItem('currentAdminUser', JSON.stringify(demoAdminSession));
+                checkAdminSession();
+            } catch (err) {
+                console.error("Error establishing demo session:", err);
+                alert("Failed to initialize demo admin mode.");
+            }
+        }
+
+        function logoutAdmin(event) {
+            if (event) event.preventDefault();
+            // Clear only the admin session
+            localStorage.removeItem('currentAdminUser');
+            checkAdminSession();
+        }
+        // ==========================================
+        // DATA FETCHING & RENDERING
+        // ==========================================
         async function fetchApplications() {
             try {
                 rawApplicationsData = await db.applications.toArray();
@@ -113,7 +516,6 @@
             }
         }
 
-        // Toggle Active / Archive View
         function switchView(isArchived) {
             showArchivedView = isArchived;
             document.getElementById('viewActiveBtn').classList.toggle('active', !isArchived);
@@ -121,7 +523,6 @@
             renderTable();
         }
 
-        // Update Top Stat Cards
         function updateStats() {
             const activeApps = rawApplicationsData.filter(a => !a.archived);
 
@@ -131,8 +532,6 @@
             document.getElementById('funCount').textContent = activeApps.filter(a => (a.sacramentType || '').toLowerCase() === 'funeral').length;
         }
 
-        // Render Table
-        // Render Table with Interactive File Viewer Links
         function renderTable() {
             const tbody = document.getElementById('applicationsTableBody');
             if (!tbody) return;
@@ -142,20 +541,20 @@
             const searchInput = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
 
             let filtered = rawApplicationsData.filter(app => {
-                // Filter by Archive Mode
                 const isArchived = Boolean(app.archived);
                 if (isArchived !== showArchivedView) return false;
 
                 const appService = (app.sacramentType || '').toLowerCase();
-                const appStatus = (app.status || '').toLowerCase();
+                const appStatus = (app.status || 'pending').toLowerCase();
 
                 if (serviceFilter !== 'all' && appService !== serviceFilter) return false;
                 if (statusFilter !== 'all' && appStatus !== statusFilter) return false;
 
                 if (searchInput !== '') {
                     const ref = (app.referenceId || '').toLowerCase();
-                    const email = (app.email || '').toLowerCase();
-                    const name = (app.fullName || app.childName || '').toLowerCase();
+                    const email = (app.applicantEmail || app.email || '').toLowerCase();
+                    const name = (app.applicantName || app.fullName || app.childName || '').toLowerCase();
+
                     if (!ref.includes(searchInput) && !email.includes(searchInput) && !name.includes(searchInput) && !appService.includes(searchInput)) {
                         return false;
                     }
@@ -180,98 +579,408 @@
                 if (currentStatus.toLowerCase() === 'approved') badgeClass = 'status-approved';
                 if (currentStatus.toLowerCase() === 'rejected') badgeClass = 'status-rejected';
 
-                let targetDate = app.preferredDate || app.targetDate || app.requestedDate || dateStr;
+                const targetDate = app.preferredDate || app.targetDate || app.requestedDate || dateStr;
+                const contactInfo = app.applicantName ? `${app.applicantName} <br><small style="color:#555;">${app.applicantEmail || ''}</small>` : (app.applicantEmail || app.email || app.fullName || 'N/A');
 
-                // Render Clickable Files / Documents List
-                let filesHtml = '<span style="color:#888;">No files</span>';
+                // Document Requirement Config
+                const reqConfig = {
+                    baptism: 2,
+                    wedding: 3,
+                    funeral: 1
+                };
+
+                const minRequired = reqConfig[(app.sacramentType || '').toLowerCase()] || 0;
+                const uploadedCount = app.documents ? app.documents.length : 0;
+                const isDocComplete = uploadedCount >= minRequired;
+
+                let filesHtml = '<span style="color:#c0392b; font-size:11px; font-weight:bold;">⚠️ Missing Documents</span>';
+
                 if (app.documents && app.documents.length > 0) {
-                    filesHtml = app.documents.map((doc, idx) => {
+                    const docBadges = app.documents.map((doc, idx) => {
                         let docName = typeof doc === 'string' ? `Doc ${idx + 1}` : (doc.name || `Doc ${idx + 1}`);
+                        let docUrl = typeof doc === 'string' ? doc : (doc.data || '#');
+                        let safeDocName = docName.replace(/'/g, "\\'");
 
-                        // Handle Base64 Data URLs, Object URLs, or Blob objects
-                        let docUrl = '#';
-                        if (typeof doc === 'string') {
-                            docUrl = doc; // Base64 string
-                        } else if (doc.data) {
-                            docUrl = doc.data;
-                        } else if (doc instanceof Blob || doc instanceof File) {
-                            docUrl = URL.createObjectURL(doc);
-                        }
+                        return `
+    <div style="margin: 3px 0;">
+        <button type="button" onclick="viewDocument('${safeDocName}', '${docUrl}')" 
+                style="background: #0056b3; color: white; border: none; padding: 3px 8px; border-radius: 3px; cursor: pointer; font-size: 11px; font-weight: bold;">
+            👁️ View
+        </button>
+        <a href="${docUrl}" download="${docName}" style="font-size: 11px; color: #0056b3; text-decoration: none; margin-left: 4px;">
+            📄 ${docName}
+        </a>
+    </div>`;
+                    }).join('');
 
-                        return `<a href="${docUrl}" target="_blank" download="${docName}" class="file-link" style="display:inline-block; margin: 2px 0; padding: 2px 6px; background: #eef2f7; border-radius: 4px; font-size: 12px; color: #0056b3; text-decoration: none;">📄 ${docName}</a>`;
-                    }).join('<br>');
+                    filesHtml = `
+<div style="margin-bottom: 4px;">
+    <span style="background: ${isDocComplete ? '#27ae60' : '#e67e22'}; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: bold;">
+        ${isDocComplete ? '✓ Docs Complete' : '⚠️ Incomplete Docs'} (${uploadedCount}/${minRequired})
+    </span>
+</div>
+${docBadges}
+`;
                 }
 
-                html += `
-        <tr style="${app.archived ? 'opacity: 0.7; background-color: #f9f9f9;' : ''}">
-            <td><strong>${app.referenceId || 'N/A'}</strong></td>
-            <td>${sacramentTitle}</td>
-            <td>${app.email || app.fullName || 'N/A'}</td>
-            <td>${targetDate}</td>
-            <td>${filesHtml}</td>
-            <td>
-                <select onchange="updateApplicationStatus(${app.id}, this.value)" class="status-select ${badgeClass}">
-                    <option value="Pending" ${currentStatus.toLowerCase() === 'pending' ? 'selected' : ''}>Pending</option>
-                    <option value="Approved" ${currentStatus.toLowerCase() === 'approved' ? 'selected' : ''}>Approved</option>
-                    <option value="Rejected" ${currentStatus.toLowerCase() === 'rejected' ? 'selected' : ''}>Rejected</option>
-                </select>
-                ${app.adminNote ? `<br><small style="color:red;">Note: ${app.adminNote}</small>` : ''}
-            </td>
-            <td>
-                <button onclick="toggleArchive(${app.id})" class="btn-action">
-                    ${app.archived ? '↩️ Restore' : '📦 Archive'}
+                // Dynamic Schedule Button Guard
+                let scheduleBtnHtml = '';
+                if (isDocComplete) {
+                    scheduleBtnHtml = `
+                <button onclick="openAppointmentModal('${app.id}')" style="background: #1e5631; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer;">
+                    📅 Schedule
                 </button>
-            </td>
-        </tr>
-    `;
+            `;
+                } else {
+                    scheduleBtnHtml = `
+                <button onclick="alert('⚠️ Incomplete Documents: Scheduling is disabled until all required documents are uploaded by the applicant.')" 
+                        style="background: #aab7b8; color: #ffffff; border: none; padding: 4px 8px; border-radius: 4px; cursor: not-allowed;" 
+                        title="Cannot schedule: Missing required document attachments">
+                    🚫 Incomplete
+                </button>
+            `;
+                }
+
+                const currentNotes = app.adminNotes || app.adminNote || '';
+
+                html += `
+<tr style="${app.archived ? 'opacity: 0.7; background-color: #f9f9f9;' : ''}">
+    <td><strong>${app.referenceId || 'N/A'}</strong></td>
+    <td>${sacramentTitle}</td>
+    <td>${contactInfo}</td>
+    <td>${targetDate}</td>
+    <td>${filesHtml}</td>
+    <td>
+        <select onchange="updateApplicationStatus('${app.id}', this.value)" class="status-select ${badgeClass}">
+            <option value="Pending" ${currentStatus.toLowerCase() === 'pending' ? 'selected' : ''}>Pending</option>
+            <option value="Needs Revision" ${currentStatus.toLowerCase() === 'needs revision' ? 'selected' : ''}>Needs Revision</option>
+            <option value="Approved" ${currentStatus.toLowerCase() === 'approved' ? 'selected' : ''}>Approved</option>
+            <option value="Rejected" ${currentStatus.toLowerCase() === 'rejected' ? 'selected' : ''}>Rejected</option>
+            <option value="Completed" ${currentStatus.toLowerCase() === 'completed' ? 'selected' : ''}>Completed</option>
+        </select>
+        ${currentNotes ? `<br><small style="color:red;">Note: ${currentNotes}</small>` : ''}
+    </td>
+    <td style="display: flex; gap: 5px;">
+        <button onclick="openAdminUpdateModal('${app.id}')" style="background: #4a0e17; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer;">
+            👁️ Details
+        </button>
+        ${scheduleBtnHtml}
+        <button onclick="toggleArchive('${app.id}')" class="btn-action">
+            ${app.archived ? '↩️ Restore' : '📦 Archive'}
+        </button>
+    </td>
+</tr>
+`;
             });
 
             tbody.innerHTML = html;
         }
 
-        // Update Status
+        async function openAdminUpdateModal(appId) {
+            let app = rawApplicationsData.find(a => String(a.id) === String(appId));
+
+            if (!app) {
+                app = await db.applications.get(isNaN(appId) ? appId : Number(appId));
+            }
+
+            if (!app) {
+                alert('Could not find application details for ID: ' + appId);
+                return;
+            }
+
+            document.getElementById('adminAppId').value = app.id;
+            document.getElementById('adminStatusSelect').value = app.status || 'Pending';
+            document.getElementById('adminConfirmedDate').value = app.confirmedDate || '';
+            document.getElementById('adminConfirmedTime').value = app.confirmedTime || '';
+            document.getElementById('adminNotesInput').value = app.adminNotes || app.adminNote || '';
+
+            let formattedDetails = 'None';
+            if (app.details && typeof app.details === 'object') {
+                formattedDetails = Object.entries(app.details)
+                    .map(([key, val]) => `<strong>${key}:</strong> ${val}`)
+                    .join(' | ');
+            } else if (app.details) {
+                formattedDetails = app.details;
+            }
+
+            const detailsContainer = document.getElementById('applicantInfoSection');
+            detailsContainer.style.cssText = "background: #f4f6f8; border-left: 4px solid #4a0e17; padding: 14px; border-radius: 6px; margin-bottom: 18px;";
+
+            detailsContainer.innerHTML = `
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; color: #1a1a1a; font-size: 14px; line-height: 1.6;">
+            <div><strong>Ref ID:</strong> <span style="color: #4a0e17; font-weight: bold;">${app.referenceId || 'N/A'}</span></div>
+            <div><strong>Sacrament:</strong> <span style="color: #1a1a1a;">${app.sacramentType || 'N/A'}</span></div>
+            <div><strong>Applicant Name:</strong> <span style="color: #1a1a1a;">${app.applicantName || app.fullName || 'N/A'}</span></div>
+            <div><strong>Email:</strong> <span style="color: #1a1a1a;">${app.applicantEmail || app.email || 'N/A'}</span></div>
+            <div><strong>Requested Date:</strong> <span style="color: #1a1a1a;">${app.preferredDate || app.targetDate || 'N/A'}</span></div>
+            <div><strong>Confirmed Slot:</strong> <span style="color: #1a1a1a;">${app.confirmedDate ? `${app.confirmedDate} at ${app.confirmedTime || 'TBD'}` : 'Not scheduled yet'}</span></div>
+        </div>
+        <hr style="margin: 10px 0; border: none; border-top: 1px solid #dcdcdc;">
+        <div style="color: #1a1a1a; font-size: 14px; line-height: 1.5;">
+            <strong>Additional Details:</strong> ${formattedDetails}
+        </div>
+    `;
+
+            const historyContainer = document.getElementById('statusHistoryContainer');
+            historyContainer.style.cssText = "max-height: 130px; overflow-y: auto; background: #ffffff; border: 1px solid #cccccc; padding: 10px; border-radius: 5px;";
+
+            if (app.statusHistory && app.statusHistory.length > 0) {
+                historyContainer.innerHTML = app.statusHistory.map(h => `
+            <div style="border-bottom: 1px solid #e0e0e0; padding: 6px 0; font-size: 13px; color: #222222; line-height: 1.5;">
+                <strong style="color: #4a0e17;">${h.oldStatus} → ${h.newStatus}</strong> 
+                <span style="color: #555555;">by <em>${h.changedBy || 'Admin'}</em> on ${new Date(h.changedAt).toLocaleString()}</span><br>
+                <span style="color: #1a1a1a;"><strong>Note:</strong> ${h.adminNote || 'None'}</span>
+            </div>
+        `).join('');
+            } else {
+                historyContainer.innerHTML = '<em style="color: #666666; font-size: 13px;">No previous status changes logged.</em>';
+            }
+
+            openModal('adminUpdateModal');
+        }
+
+        async function handleAdminUpdateSubmit(event) {
+            event.preventDefault();
+            const rawId = document.getElementById('adminAppId').value;
+            const appId = isNaN(rawId) ? rawId : Number(rawId);
+
+            const newStatus = document.getElementById('adminStatusSelect').value;
+            const confirmedDate = document.getElementById('adminConfirmedDate').value;
+            const confirmedTime = document.getElementById('adminConfirmedTime').value;
+            const adminNote = document.getElementById('adminNotesInput').value;
+            // Replace line inside handleAdminUpdateSubmit & handleAppointmentSubmit:
+            const currentUser = JSON.parse(localStorage.getItem('currentAdminUser')) || { fullName: 'Secretariat' };
+
+            if (confirmedDate && confirmedTime) {
+                const available = await isSlotAvailable(confirmedDate, confirmedTime, appId);
+                if (!available) {
+                    alert('Slot Conflict: The selected date and time is fully booked. Please select another slot.');
+                    return;
+                }
+            }
+
+            const app = await db.applications.get(appId);
+            if (!app) return;
+
+            const historyEntry = {
+                oldStatus: app.status || 'Pending',
+                newStatus: newStatus,
+                adminNote: adminNote,
+                changedAt: new Date().toISOString(),
+                changedBy: currentUser.fullName
+            };
+
+            const updatedHistory = app.statusHistory ? [...app.statusHistory, historyEntry] : [historyEntry];
+
+            await db.applications.update(appId, {
+                status: newStatus,
+                confirmedDate: confirmedDate || app.confirmedDate || null,
+                confirmedTime: confirmedTime || app.confirmedTime || null,
+                adminNotes: adminNote,
+                adminNote: adminNote,
+                statusHistory: updatedHistory
+            });
+
+            closeModal('adminUpdateModal');
+            await fetchApplications();
+        }
+
         async function updateApplicationStatus(id, newStatus) {
-            let adminNote = '';
-            if (newStatus === 'Rejected') {
-                adminNote = prompt('Enter rejection reason for parish record:');
-                if (adminNote === null) return;
+            const numericId = isNaN(id) ? id : Number(id);
+            let adminNotes = '';
+
+            if (newStatus === 'Rejected' || newStatus === 'Needs Revision') {
+                adminNotes = prompt(`Enter notes/reason for setting status to ${newStatus}:`);
+                if (adminNotes === null) return;
             }
 
             try {
-                await db.applications.update(id, {
+                const app = await db.applications.get(numericId);
+                if (!app) return;
+
+                const currentUser = JSON.parse(localStorage.getItem('currentUser')) || { fullName: 'Admin' };
+                const historyEntry = {
+                    oldStatus: app.status || 'Pending',
+                    newStatus: newStatus,
+                    adminNote: adminNotes || '',
+                    changedAt: new Date().toISOString(),
+                    changedBy: currentUser.fullName
+                };
+
+                const updatedHistory = app.statusHistory ? [...app.statusHistory, historyEntry] : [historyEntry];
+
+                await db.applications.update(numericId, {
                     status: newStatus,
-                    adminNote: adminNote || ''
+                    adminNotes: adminNotes || app.adminNotes || '',
+                    adminNote: adminNotes || app.adminNote || '',
+                    statusHistory: updatedHistory
                 });
 
-                const record = rawApplicationsData.find(a => a.id === id);
-                if (record) {
-                    record.status = newStatus;
-                    record.adminNote = adminNote;
-                }
-                updateStats();
-                renderTable();
+                await fetchApplications();
             } catch (error) {
                 console.error('Error updating status in Dexie:', error);
             }
         }
 
-        // Toggle Archive
         async function toggleArchive(id) {
-            const record = rawApplicationsData.find(a => a.id === id);
+            const numericId = isNaN(id) ? id : Number(id);
+            const record = rawApplicationsData.find(a => String(a.id) === String(id));
             if (!record) return;
 
             const newArchived = !record.archived;
             try {
-                await db.applications.update(id, { archived: newArchived });
-                record.archived = newArchived;
-                updateStats();
-                renderTable();
+                await db.applications.update(numericId, { archived: newArchived });
+                await fetchApplications();
             } catch (error) {
                 console.error('Error toggling archive status:', error);
             }
         }
 
-        window.onload = fetchApplications;
+        async function isSlotAvailable(targetDate, targetTime, currentAppId = null, maxSlotsPerSlot = 3) {
+            if (!targetDate) return true;
+
+            const existingApps = await db.applications
+                .where('confirmedDate')
+                .equals(targetDate)
+                .toArray();
+
+            const matchingSlots = existingApps.filter(app =>
+                String(app.id) !== String(currentAppId) &&
+                app.confirmedTime === targetTime &&
+                app.status !== 'Rejected'
+            );
+
+            return matchingSlots.length < maxSlotsPerSlot;
+        }
+
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('active');
+                modal.style.display = 'flex';
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('active');
+                modal.style.display = 'none';
+            }
+        }
+
+        async function openAppointmentModal(appId) {
+            let app = rawApplicationsData.find(a => String(a.id) === String(appId));
+
+            if (!app) {
+                app = await db.applications.get(isNaN(appId) ? appId : Number(appId));
+            }
+
+            if (!app) {
+                alert('Application record not found.');
+                return;
+            }
+
+            document.getElementById('apptAppId').value = app.id;
+            document.getElementById('apptConfirmedDate').value = app.confirmedDate || app.preferredDate || '';
+            document.getElementById('apptConfirmedTime').value = app.confirmedTime || '';
+            document.getElementById('apptAdminNotes').value = app.adminNotes || app.adminNote || '';
+
+            const summaryContainer = document.getElementById('appointmentAppSummary');
+            summaryContainer.innerHTML = `
+        <strong>Ref ID:</strong> ${app.referenceId || 'N/A'} | <strong>Sacrament:</strong> ${app.sacramentType || 'N/A'}<br>
+        <strong>Applicant:</strong> ${app.applicantName || app.fullName || 'N/A'}<br>
+        <strong>Requested Date:</strong> ${app.preferredDate || app.targetDate || 'N/A'}
+    `;
+
+            openModal('appointmentModal');
+        }
+
+        async function handleAppointmentSubmit(event) {
+            event.preventDefault();
+
+            const rawId = document.getElementById('apptAppId').value;
+            const appId = isNaN(rawId) ? rawId : Number(rawId);
+            const confirmedDate = document.getElementById('apptConfirmedDate').value;
+            const confirmedTime = document.getElementById('apptConfirmedTime').value;
+            const adminNotes = document.getElementById('apptAdminNotes').value;
+            const currentUser = JSON.parse(localStorage.getItem('currentUser')) || { fullName: 'Admin' };
+
+            const available = await isSlotAvailable(confirmedDate, confirmedTime, appId);
+            if (!available) {
+                alert('Slot Conflict: The selected date and time is fully booked. Please select another slot.');
+                return;
+            }
+
+            const app = await db.applications.get(appId);
+            if (!app) return;
+
+            const historyEntry = {
+                oldStatus: app.status || 'Pending',
+                newStatus: app.status || 'Approved',
+                adminNote: `Appointment confirmed for ${confirmedDate} at ${confirmedTime}. ${adminNotes ? 'Note: ' + adminNotes : ''}`,
+                changedAt: new Date().toISOString(),
+                changedBy: currentUser.fullName
+            };
+
+            const updatedHistory = app.statusHistory ? [...app.statusHistory, historyEntry] : [historyEntry];
+
+            await db.applications.update(appId, {
+                confirmedDate: confirmedDate,
+                confirmedTime: confirmedTime,
+                adminNotes: adminNotes,
+                adminNote: adminNotes,
+                statusHistory: updatedHistory
+            });
+
+            closeModal('appointmentModal');
+            await fetchApplications();
+        }
+
+        window.onload = checkAdminSession;
+
+        // ==========================================
+        // IN-BROWSER FILE VIEWER LOGIC
+        // ==========================================
+        function viewDocument(docName, docData) {
+            const titleEl = document.getElementById('fileViewerTitle');
+            const contentEl = document.getElementById('fileViewerContent');
+            const downloadBtn = document.getElementById('fileDownloadBtn');
+
+            if (!contentEl) return;
+
+            // Set title and download button link
+            if (titleEl) titleEl.textContent = `📄 Preview: ${docName}`;
+            if (downloadBtn) {
+                downloadBtn.href = docData;
+                downloadBtn.download = docName;
+            }
+
+            // Identify file type (Base64 data or extension)
+            const isImage = docData.startsWith('data:image/') || /\.(jpg|jpeg|png|webp|gif)$/i.test(docName);
+            const isPDF = docData.startsWith('data:application/pdf') || /\.pdf$/i.test(docName);
+
+            if (isImage) {
+                contentEl.innerHTML = `
+            <div style="width: 100%; height: 100%; overflow: auto; display: flex; justify-content: center; align-items: center; padding: 10px;">
+                <img src="${docData}" alt="${docName}" style="max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 4px 12px rgba(0,0,0,0.2); border-radius: 4px;">
+            </div>`;
+            } else if (isPDF) {
+                contentEl.innerHTML = `
+            <iframe src="${docData}" style="width: 100%; height: 100%; border: none;"></iframe>`;
+            } else {
+                // Fallback for unsupported browser preview types
+                contentEl.innerHTML = `
+            <div style="text-align: center; padding: 20px;">
+                <p style="font-size: 16px; color: #333; margin-bottom: 15px;">Preview is not available for this file format.</p>
+                <a href="${docData}" download="${docName}" style="background: #4a0e17; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold;">
+                    Download ${docName}
+                </a>
+            </div>`;
+            }
+
+            openModal('fileViewerModal');
+        }
     </script>
 </body>
 

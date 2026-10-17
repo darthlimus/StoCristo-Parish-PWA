@@ -155,34 +155,21 @@ app.post('/api/apply/baptism', upload.array('documents'), (req, res) => {
 });
 
 // 2. WEDDING APPLICATION ENDPOINT
-app.post('/api/apply/wedding', upload.array('documents'), (req, res) => {
+app.post('/api/apply/wedding', upload.array('documents', 5), (req, res) => {
     try {
         const formData = req.body;
+        // Collect filenames for all uploaded files
         const uploadedFiles = req.files ? req.files.map(f => f.filename) : [];
 
-        const newRecord = {
-            id: 'WED-' + Date.now(),
-            userId: formData.userId || 'GUEST',
-            serviceType: 'Wedding',
-            applicantData: formData,
-            attachedFiles: uploadedFiles,
-            status: 'Pending Verification',
-            adminNote: '',
-            isArchived: false,
-            submittedAt: new Date().toISOString()
-        };
-
-        applications.push(newRecord);
-        saveDataToJSON();
+        // Save to Database logic here...
 
         res.status(200).json({
             success: true,
             message: 'Wedding application submitted successfully!',
-            referenceId: newRecord.id
+            filesReceived: uploadedFiles.length
         });
     } catch (error) {
-        console.error('Error processing Wedding request:', error);
-        res.status(500).json({ success: false, message: 'Server Error processing application.' });
+        res.status(500).json({ success: false, message: 'Upload error.' });
     }
 });
 
@@ -267,9 +254,9 @@ app.patch('/api/admin/applications/:id/archive', (req, res) => {
 
     saveDataToJSON();
 
-    res.status(200).json({ 
-        success: true, 
-        message: isArchived ? 'Record archived to permanent storage.' : 'Record restored to active inbox.' 
+    res.status(200).json({
+        success: true,
+        message: isArchived ? 'Record archived to permanent storage.' : 'Record restored to active inbox.'
     });
 });
 
