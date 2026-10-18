@@ -502,6 +502,18 @@
         </div>
     </div>
 
+    <!-- DEDICATED CUSTOM ALERT MODAL -->
+    <div id="customAlertModal" class="modal-overlay" style="z-index: 999999;">
+        <div class="modal-box text-center" style="max-width: 420px; padding: 24px;">
+            <h3 id="customAlertTitle" style="color: #4a0e17; margin-top: 0; margin-bottom: 12px; font-size: 1.25rem;">
+                Notification</h3>
+            <p id="customAlertMessage"
+                style="color: #333; font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px; white-space: pre-line;">
+            </p>
+            <button class="form-submit-btn" onclick="closeModal('customAlertModal')"
+                style="width: 100%; padding: 10px; font-weight: bold;">OK</button>
+        </div>
+    </div>
     <script>
         function toggleMobileMenu() {
             const drawer = document.getElementById('mobileDrawer');
@@ -654,9 +666,9 @@
                     emailInput.value = '';
                     passwordInput.value = '';
 
-                    alert(`Welcome back, ${user.fullName}!`);
+                    showAlert(`Welcome back, ${user.fullName}!`);
                 } else {
-                    alert('Invalid email or password.');
+                    showAlert('Invalid email or password.');
                 }
             } catch (error) {
                 console.error('Login error:', error);
@@ -673,7 +685,7 @@
             try {
                 const existingUser = await db.users.where('email').equalsIgnoreCase(email).first();
                 if (existingUser) {
-                    alert('An account with this email already exists!');
+                    showAlert('An account with this email already exists!');
                     return;
                 }
 
@@ -685,7 +697,7 @@
                     createdAt: new Date().toISOString()
                 });
 
-                alert('Account created successfully!');
+                showAlert('Account created successfully!');
                 document.getElementById('registerForm').reset();
                 document.getElementById('loginEmail').value = email;
                 switchAuthTab('login');
@@ -959,21 +971,21 @@
 
             // 1. Check Required Text Fields
             if (!applicantName || !applicantEmail || !preferredDate) {
-                alert('❌ Incomplete Form: Please complete all required fields marked with *');
+                showAlert('❌ Incomplete Form: Please complete all required fields marked with *');
                 return;
             }
 
             // 2. Format Validation: Email & Contact Number
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(applicantEmail)) {
-                alert('❌ Invalid Format: Please enter a valid email address.');
+                showAlert('❌ Invalid Format: Please enter a valid email address.');
                 return;
             }
 
             if (phone) {
                 const phoneRegex = /^(09|\+639)\d{9}$/; // Philippine Mobile Standard
                 if (!phoneRegex.test(phone.replace(/[-\s]/g, ''))) {
-                    alert('❌ Invalid Format: Phone number must be a valid Philippine mobile number (e.g., 09171234567).');
+                    showAlert('❌ Invalid Format: Phone number must be a valid Philippine mobile number (e.g., 09171234567).');
                     return;
                 }
             }
@@ -981,7 +993,7 @@
             // 3. Date Validation: Prevent past date selection
             const today = new Date().toISOString().split('T')[0];
             if (sacramentType !== 'funeral' && preferredDate < today) {
-                alert('❌ Invalid Date: Preferred appointment date cannot be in the past.');
+                showAlert('❌ Invalid Date: Preferred appointment date cannot be in the past.');
                 return;
             }
 
@@ -994,7 +1006,7 @@
             const reqConfig = SACRAMENT_DOC_REQUIREMENTS[sacramentType] || { minFiles: 0 };
 
             if (filesToProcess.length < reqConfig.minFiles) {
-                alert(`❌ Missing Documents: ${sacramentType.toUpperCase()} requires at least ${reqConfig.minFiles} document file(s) uploaded (${reqConfig.label}). Per Parish Secretariat policy, submissions with incomplete documents cannot be processed.`);
+                showAlert(`❌ Missing Documents: ${sacramentType.toUpperCase()} requires at least ${reqConfig.minFiles} document file(s) uploaded (${reqConfig.label}). Per Parish Secretariat policy, submissions with incomplete documents cannot be processed.`);
                 return;
             }
 
@@ -1005,13 +1017,13 @@
             for (let file of filesToProcess) {
                 // Validate File Size
                 if (file.size > MAX_FILE_SIZE) {
-                    alert(`❌ File Size Exceeded: "${file.name}" exceeds the 10MB limit.`);
+                    showAlert(`❌ File Size Exceeded: "${file.name}" exceeds the 10MB limit.`);
                     return;
                 }
 
                 // Validate File Type
                 if (!ALLOWED_TYPES.includes(file.type)) {
-                    alert(`❌ Invalid File Type: "${file.name}" is not an accepted format. Accepted types: PDF, JPG, PNG, WEBP.`);
+                    showAlert(`❌ Invalid File Type: "${file.name}" is not an accepted format. Accepted types: PDF, JPG, PNG, WEBP.`);
                     return;
                 }
 
@@ -1174,7 +1186,7 @@
 
         async function checkApplicationUpdates() {
             const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-            if (!currentUser || !db.notifications || !db.applications) return;
+            if (!currentUser || typeof db === 'undefined' || !db.notifications || !db.applications) return;
 
             try {
                 const apps = await db.applications.where('userId').equals(currentUser.id).toArray();
@@ -1183,29 +1195,45 @@
                     const previous = lastKnownAppState[app.id];
 
                     if (previous) {
+                        let notifTitle = '';
+                        let notifMessage = '';
+
+                        // 1. Detect Status Change (e.g. Approved, Needs Revision, Rejected)
                         if (previous.status !== app.status) {
-                            await db.notifications.add({
-                                userId: currentUser.id,
-                                referenceId: app.referenceId,
-                                title: `Status Updated: ${app.referenceId}`,
-                                message: `Your ${app.sacramentType} application status changed from "${previous.status}" to "${app.status}".`,
-                                isRead: false,
-                                createdAt: new Date().toISOString()
-                            });
+                            notifTitle = `Status Updated: ${app.referenceId}`;
+                            notifMessage = `Your ${app.sacramentType.toUpperCase()} application status changed from "${previous.status}" to "${app.status}".`;
                         }
 
-                        if ((previous.confirmedDate !== app.confirmedDate || previous.confirmedTime !== app.confirmedTime) && app.confirmedDate) {
+                        // 2. Detect Appointment Date/Time Assignment or Reschedule
+                        else if ((previous.confirmedDate !== app.confirmedDate || previous.confirmedTime !== app.confirmedTime) && app.confirmedDate) {
+                            notifTitle = `Appointment Scheduled! 📅`;
+                            notifMessage = `Parish Secretariat confirmed your ${app.sacramentType.toUpperCase()} schedule for ${app.confirmedDate} at ${app.confirmedTime || 'TBD'}.`;
+                        }
+
+                        // If a change occurred, record in IndexedDB and launch native OS Notification
+                        if (notifTitle && notifMessage) {
                             await db.notifications.add({
                                 userId: currentUser.id,
                                 referenceId: app.referenceId,
-                                title: `Appointment Scheduled! 📅`,
-                                message: `Secretariat set your schedule for ${app.sacramentType} on ${app.confirmedDate} at ${app.confirmedTime || 'TBD'}.`,
+                                title: notifTitle,
+                                message: notifMessage,
                                 isRead: false,
                                 createdAt: new Date().toISOString()
                             });
+
+                            // Trigger Native System/Mobile Banner Notification
+                            if ('Notification' in window && Notification.permission === 'granted') {
+                                new Notification(notifTitle, {
+                                    body: notifMessage,
+                                    icon: '/favicon.webp',
+                                    badge: '/favicon.webp',
+                                    tag: app.referenceId // Prevents duplicate stacking
+                                });
+                            }
                         }
                     }
 
+                    // Update tracked state snapshot
                     lastKnownAppState[app.id] = {
                         status: app.status,
                         confirmedDate: app.confirmedDate,
@@ -1215,13 +1243,9 @@
 
                 await renderNotifications();
             } catch (err) {
-                console.error("Error checking status updates:", err);
+                console.error("Error checking application status updates:", err);
             }
         }
-        window.addEventListener('click', () => {
-            const dropdown = document.getElementById('notifDropdown');
-            if (dropdown) dropdown.style.display = 'none';
-        });
 
         // ==========================================
         // DYNAMIC GODPARENT ROWS (BAPTISM)
@@ -1262,7 +1286,80 @@
             }
         }
 
+        // Reusable Custom Alert Replacer
+        function showAlert(message, title = 'Parish Portal Notice') {
+            const titleEl = document.getElementById('customAlertTitle');
+            const msgEl = document.getElementById('customAlertMessage');
 
+            if (titleEl) titleEl.textContent = title;
+            if (msgEl) msgEl.textContent = message;
+
+            if (typeof openModal === 'function') {
+                openModal('customAlertModal');
+            } else {
+                const modal = document.getElementById('customAlertModal');
+                if (modal) {
+                    modal.style.display = 'flex';
+                    modal.classList.add('active');
+                }
+            }
+        }
+        async function requestNotificationPermission() {
+            if ('Notification' in window && 'serviceWorker' in navigator) {
+                const permission = await Notification.requestPermission();
+                if (permission === 'granted') {
+                    console.log('Push notification permission granted.');
+                }
+            }
+        }
+
+        // Trigger permission request when DOM loads or user logs in
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser) {
+                requestNotificationPermission();
+            }
+        });
+
+        // Toggle Desktop Notification Dropdown Menu
+        function toggleNotificationDropdown(event) {
+            if (event) event.stopPropagation();
+            const dropdown = document.getElementById('notifDropdown');
+            if (dropdown) {
+                dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
+            }
+        }
+
+        // Mark All Notifications as Read
+        async function markAllNotificationsRead() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser || typeof db === 'undefined' || !db.notifications) return;
+
+            try {
+                const unreadNotifs = await db.notifications
+                    .where('userId')
+                    .equals(currentUser.id)
+                    .filter(n => !n.isRead)
+                    .toArray();
+
+                for (const notif of unreadNotifs) {
+                    await db.notifications.update(notif.id, { isRead: true });
+                }
+
+                await renderNotifications();
+            } catch (err) {
+                console.error("Error marking notifications as read:", err);
+            }
+        }
+
+        // Close Desktop Dropdown when clicking anywhere outside
+        window.addEventListener('click', (event) => {
+            const dropdown = document.getElementById('notifDropdown');
+            const wrapper = document.getElementById('notifWrapper');
+            if (dropdown && wrapper && !wrapper.contains(event.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
     </script>
 </body>
 

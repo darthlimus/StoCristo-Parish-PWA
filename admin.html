@@ -374,6 +374,57 @@
         </div>
     </div>
 
+    <!-- DEDICATED CUSTOM ALERT MODAL -->
+    <div id="customAlertModal" class="modal-overlay" style="z-index: 999999;">
+        <div class="modal-box text-center" style="max-width: 420px; padding: 24px;">
+            <h3 id="customAlertTitle" style="color: #4a0e17; margin-top: 0; margin-bottom: 12px; font-size: 1.25rem;">
+                Notification</h3>
+            <p id="customAlertMessage"
+                style="color: #333; font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px; white-space: pre-line;">
+            </p>
+            <button class="form-submit-btn" onclick="closeModal('customAlertModal')"
+                style="width: 100%; padding: 10px; font-weight: bold;">OK</button>
+        </div>
+    </div>
+    <!-- DEDICATED CUSTOM NOTES / REMARKS MODAL -->
+    <div id="customNotesModal" class="modal-overlay" style="z-index: 999999;">
+        <div class="modal-box" style="max-width: 480px; padding: 24px; text-align: left;">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #4a0e17; padding-bottom: 10px; margin-bottom: 15px;">
+                <h3 id="customNotesTitle" style="color: #4a0e17; margin: 0; font-size: 1.2rem;">📋 Secretariat Remarks
+                </h3>
+                <span class="close-btn" onclick="closeModal('customNotesModal')"
+                    style="cursor: pointer; font-size: 1.5rem; color: #333;">&times;</span>
+            </div>
+
+            <div id="customNotesBody">
+                <p id="customNotesSubtitle" style="color: #555; font-size: 0.9rem; margin-bottom: 12px;">
+                    Please provide specific instructions or reasons for setting this status:
+                </p>
+
+                <div class="form-group" style="margin-bottom: 18px;">
+                    <label for="customNotesInput"
+                        style="display: block; font-weight: bold; color: #2c3e50; margin-bottom: 6px; font-size: 0.9rem;">
+                        Remarks / Revision Reason *
+                    </label>
+                    <textarea id="customNotesInput" rows="4"
+                        placeholder="Enter reason or document revision requirements..."
+                        style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 0.9rem; box-sizing: border-box;"></textarea>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                    <button type="button" onclick="closeModal('customNotesModal')"
+                        style="padding: 8px 16px; background: #e0e0e0; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: #333;">
+                        Cancel
+                    </button>
+                    <button id="customNotesConfirmBtn" type="button"
+                        style="padding: 8px 16px; background: #4a0e17; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
+                        Save Remarks
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
         const db = new Dexie('ParishPortalDB');
 
@@ -431,7 +482,7 @@
                     localStorage.setItem('currentUser', JSON.stringify(sessionUser));
                     checkAdminSession();
                 } else {
-                    alert('Invalid admin credentials or non-admin account.');
+                    showAlert('Invalid admin credentials or non-admin account.');
                 }
             } catch (err) {
                 console.error("Admin login error:", err);
@@ -457,7 +508,7 @@
                     localStorage.setItem('currentAdminUser', JSON.stringify(adminSession));
                     checkAdminSession();
                 } else {
-                    alert('Invalid admin credentials or non-admin account.');
+                    showAlert('Invalid admin credentials or non-admin account.');
                 }
             } catch (err) {
                 console.error("Admin login error:", err);
@@ -489,7 +540,7 @@
                 checkAdminSession();
             } catch (err) {
                 console.error("Error establishing demo session:", err);
-                alert("Failed to initialize demo admin mode.");
+                showAlert("Failed to initialize demo admin mode.");
             }
         }
 
@@ -633,7 +684,7 @@ ${docBadges}
             `;
                 } else {
                     scheduleBtnHtml = `
-                <button onclick="alert('⚠️ Incomplete Documents: Scheduling is disabled until all required documents are uploaded by the applicant.')" 
+                <button onclick="showAlert('⚠️ Incomplete Documents: Scheduling is disabled until all required documents are uploaded by the applicant.')" 
                         style="background: #aab7b8; color: #ffffff; border: none; padding: 4px 8px; border-radius: 4px; cursor: not-allowed;" 
                         title="Cannot schedule: Missing required document attachments">
                     🚫 Incomplete
@@ -684,7 +735,7 @@ ${docBadges}
             }
 
             if (!app) {
-                alert('Could not find application details for ID: ' + appId);
+                showAlert('Could not find application details for ID: ' + appId);
                 return;
             }
 
@@ -754,7 +805,7 @@ ${docBadges}
             if (confirmedDate && confirmedTime) {
                 const available = await isSlotAvailable(confirmedDate, confirmedTime, appId);
                 if (!available) {
-                    alert('Slot Conflict: The selected date and time is fully booked. Please select another slot.');
+                    showAlert('Slot Conflict: The selected date and time is fully booked. Please select another slot.');
                     return;
                 }
             }
@@ -785,26 +836,56 @@ ${docBadges}
             await fetchApplications();
         }
 
+        // Helper to open the Custom Notes Modal and return a Promise with the entered remarks
+        function requestSecretariatNotes(statusName) {
+            return new Promise((resolve) => {
+                const titleEl = document.getElementById('customNotesTitle');
+                const subtitleEl = document.getElementById('customNotesSubtitle');
+                const inputEl = document.getElementById('customNotesInput');
+                const confirmBtn = document.getElementById('customNotesConfirmBtn');
+
+                if (titleEl) titleEl.textContent = `📋 Notes for Status: ${statusName}`;
+                if (subtitleEl) subtitleEl.textContent = `Please enter the reason or specific requirements for setting the application to "${statusName}":`;
+                if (inputEl) inputEl.value = '';
+
+                openModal('customNotesModal');
+
+                // Handle Confirmation Click
+                confirmBtn.onclick = () => {
+                    const notes = inputEl.value.trim();
+                    if (!notes) {
+                        alert('Please enter remarks before confirming.');
+                        return;
+                    }
+                    closeModal('customNotesModal');
+                    resolve(notes);
+                };
+            });
+        }
+
+        // Updated Status Change Handler for Dropdown Actions in Table
         async function updateApplicationStatus(id, newStatus) {
             const numericId = isNaN(id) ? id : Number(id);
             let adminNotes = '';
 
-            if (newStatus === 'Rejected' || newStatus === 'Needs Revision') {
-                adminNotes = prompt(`Enter notes/reason for setting status to ${newStatus}:`);
-                if (adminNotes === null) return;
+            // Prompt custom notes modal specifically for "Needs Revision" or "Rejected"
+            if (newStatus === 'Needs Revision' || newStatus === 'Rejected') {
+                adminNotes = await requestSecretariatNotes(newStatus);
+                if (!adminNotes) return; // User cancelled
             }
 
             try {
                 const app = await db.applications.get(numericId);
                 if (!app) return;
 
-                const currentUser = JSON.parse(localStorage.getItem('currentUser')) || { fullName: 'Admin' };
+                const currentAdmin = JSON.parse(localStorage.getItem('currentAdminUser')) || { fullName: 'Secretariat' };
+
                 const historyEntry = {
                     oldStatus: app.status || 'Pending',
                     newStatus: newStatus,
                     adminNote: adminNotes || '',
                     changedAt: new Date().toISOString(),
-                    changedBy: currentUser.fullName
+                    changedBy: currentAdmin.fullName
                 };
 
                 const updatedHistory = app.statusHistory ? [...app.statusHistory, historyEntry] : [historyEntry];
@@ -877,7 +958,7 @@ ${docBadges}
             }
 
             if (!app) {
-                alert('Application record not found.');
+                showAlert('Application record not found.');
                 return;
             }
 
@@ -908,7 +989,7 @@ ${docBadges}
 
             const available = await isSlotAvailable(confirmedDate, confirmedTime, appId);
             if (!available) {
-                alert('Slot Conflict: The selected date and time is fully booked. Please select another slot.');
+                showAlert('Slot Conflict: The selected date and time is fully booked. Please select another slot.');
                 return;
             }
 
@@ -980,6 +1061,25 @@ ${docBadges}
             }
 
             openModal('fileViewerModal');
+        }
+
+        // Reusable Custom Alert Replacer
+        function showAlert(message, title = 'Parish Portal Notice') {
+            const titleEl = document.getElementById('customAlertTitle');
+            const msgEl = document.getElementById('customAlertMessage');
+
+            if (titleEl) titleEl.textContent = title;
+            if (msgEl) msgEl.textContent = message;
+
+            if (typeof openModal === 'function') {
+                openModal('customAlertModal');
+            } else {
+                const modal = document.getElementById('customAlertModal');
+                if (modal) {
+                    modal.style.display = 'flex';
+                    modal.classList.add('active');
+                }
+            }
         }
     </script>
 </body>

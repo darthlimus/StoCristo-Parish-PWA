@@ -268,3 +268,21 @@ app.listen(PORT, () => {
     console.log(`Ready to accept Sacramental Application requests...`);
     console.log(`====================================================`);
 });
+
+self.addEventListener('push', event => {
+    const data = event.data ? event.data.json() : {};
+    const title = data.title || 'Parish Update';
+    const options = {
+        body: data.message || 'Your application status has been updated by the secretariat.',
+        icon: '/favicon.webp',
+        badge: '/favicon.webp',
+        data: { url: '/#dashboard' }
+    };
+
+    event.waitUntil(self.registration.showNotification(title, options));
+});
+
+self.addEventListener('notificationclick', event => {
+    event.notification.close();
+    event.waitUntil(clients.openWindow(event.notification.data.url || '/'));
+});
