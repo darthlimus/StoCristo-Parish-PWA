@@ -514,6 +514,53 @@
                 style="width: 100%; padding: 10px; font-weight: bold;">OK</button>
         </div>
     </div>
+
+    <!-- DEDICATED DOCUMENT RESUBMISSION MODAL -->
+    <div id="resubmitDocsModal" class="modal-overlay" style="z-index: 999999;">
+        <div class="modal-box" style="max-width: 500px; padding: 24px; text-align: left;">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #4a0e17; padding-bottom: 10px; margin-bottom: 15px;">
+                <h3 style="color: #4a0e17; margin: 0; font-size: 1.2rem;">📤 Resubmit Lacking Documents</h3>
+                <span class="close-btn" onclick="closeModal('resubmitDocsModal')"
+                    style="cursor: pointer; font-size: 1.5rem; color: #333;">&times;</span>
+            </div>
+
+            <div id="resubmitAppSummary"
+                style="background: #f8f9fa; border-left: 4px solid #d35400; padding: 10px; font-size: 13px; margin-bottom: 15px;">
+                <!-- Dynamic Application Summary & Admin Notes -->
+            </div>
+
+            <form id="resubmitDocsForm" onsubmit="handleResubmitDocsSubmit(event)">
+                <input type="hidden" id="resubmitAppId">
+
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label
+                        style="display: block; font-weight: bold; color: #2c3e50; margin-bottom: 6px; font-size: 0.9rem;">
+                        Attach Missing / Corrected File(s) *
+                    </label>
+                    <div class="inline-drop-zone" onclick="document.getElementById('resubmitFileInput').click()"
+                        style="padding: 15px; border: 2px dashed #abb2b9; text-align: center; cursor: pointer; background: #fafafa;">
+                        <span>📄 Click or drag additional document files here</span>
+                        <input type="file" id="resubmitFileInput" multiple accept=".pdf,.jpg,.jpeg,.png"
+                            style="display:none;" onchange="handleInlineFiles(event, 'resubmitFileList')">
+                    </div>
+                    <div class="file-preview-list" id="resubmitFileList" style="margin-top: 8px;"></div>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                    <button type="button" onclick="closeModal('resubmitDocsModal')"
+                        style="padding: 8px 16px; background: #e0e0e0; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: #333;">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                        style="padding: 8px 16px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
+                        Upload & Resubmit
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         function toggleMobileMenu() {
             const drawer = document.getElementById('mobileDrawer');
@@ -1122,13 +1169,13 @@
                 let html = `
         <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
             <thead>
-                <tr style="text-align: left;">
+                <tr style="text-align: left; border-bottom: 2px solid #ccc;">
                     <th style="padding: 10px;">Ref ID</th>
                     <th style="padding: 10px;">Sacrament</th>
                     <th style="padding: 10px;">Requested Date</th>
                     <th style="padding: 10px;">Confirmed Appointment</th>
                     <th style="padding: 10px;">Status</th>
-                    <th style="padding: 10px;">Parish Secretariat Notes</th>
+                    <th style="padding: 10px;">Action / Remarks</th>
                 </tr>
             </thead>
             <tbody>
@@ -1146,6 +1193,17 @@
                     if (app.status === 'Rejected') statusColor = '#c0392b';
                     if (app.status === 'Needs Revision') statusColor = '#d35400';
 
+                    // Resubmit button conditionally rendered when status is Needs Revision
+                    let actionHtml = `<span style="color: ${app.adminNotes ? '#c0392b' : '#666'};">${notes}</span>`;
+                    if (app.status === 'Needs Revision') {
+                        actionHtml += `
+                    <br>
+                    <button onclick="openResubmitDocsModal('${app.id}')" style="margin-top: 6px; background: #d35400; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">
+                        📤 Upload Lacking Docs
+                    </button>
+                `;
+                    }
+
                     html += `
             <tr style="border-bottom: 1px solid #ddd;">
                 <td style="padding: 10px;"><strong>${app.referenceId}</strong></td>
@@ -1157,11 +1215,11 @@
                         ${app.status}
                     </span>
                 </td>
-                <td style="padding: 10px; color: ${app.adminNotes ? '#c0392b' : '#666'};">
-                    ${notes}
+                <td style="padding: 10px;">
+                    ${actionHtml}
                 </td>
             </tr>
-        `;
+            `;
                 });
 
                 html += `</tbody></table>`;
@@ -1169,6 +1227,95 @@
             } catch (err) {
                 console.error('Error loading user dashboard:', err);
             }
+        }
+
+        // Open Modal to upload additional document files
+        async function openResubmitDocsModal(appId) {
+            const numericId = isNaN(appId) ? appId : Number(appId);
+            const app = await db.applications.get(numericId);
+
+            if (!app) {
+                showAlert('Application record not found.', 'Error');
+                return;
+            }
+
+            document.getElementById('resubmitAppId').value = app.id;
+
+            // Clear previous file picks
+            resetFileInputStore('resubmitFileInput', 'resubmitFileList');
+
+            const summaryEl = document.getElementById('resubmitAppSummary');
+            summaryEl.innerHTML = `
+        <strong>Ref ID:</strong> ${app.referenceId} | <strong>Sacrament:</strong> ${app.sacramentType.toUpperCase()}<br>
+        <strong>Secretariat Remarks:</strong> <span style="color: #c0392b;">${app.adminNotes || 'Please upload the missing document attachments requested by the office.'}</span>
+    `;
+
+            openModal('resubmitDocsModal');
+        }
+
+        // Save resubmitted documents back to Dexie.js and reset status to Pending
+        async function handleResubmitDocsSubmit(event) {
+            event.preventDefault();
+
+            const rawId = document.getElementById('resubmitAppId').value;
+            const appId = isNaN(rawId) ? rawId : Number(rawId);
+
+            const input = document.getElementById('resubmitFileInput');
+            const accumulatedList = window.accumulatedFiles?.['resubmitFileInput'] || [];
+            const filesToProcess = accumulatedList.length > 0 ? accumulatedList : Array.from(input?.files || []);
+
+            if (filesToProcess.length === 0) {
+                showAlert('Please attach at least one document file before submitting.', 'No Files Selected');
+                return;
+            }
+
+            const app = await db.applications.get(appId);
+            if (!app) return;
+
+            const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB limit
+            const ALLOWED_TYPES = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+            const newFiles = [];
+
+            for (let file of filesToProcess) {
+                if (file.size > MAX_FILE_SIZE) {
+                    showAlert(`File "${file.name}" exceeds the 10MB limit.`, 'File Too Large');
+                    return;
+                }
+                if (!ALLOWED_TYPES.includes(file.type)) {
+                    showAlert(`File "${file.name}" is not an accepted format (PDF, JPG, PNG, WEBP).`, 'Invalid Format');
+                    return;
+                }
+                const base64File = await fileToBase64(file);
+                newFiles.push(base64File);
+            }
+
+            // Append new documents to existing documents list
+            const updatedDocuments = [...(app.documents || []), ...newFiles];
+
+            // Build history trail
+            const historyEntry = {
+                oldStatus: app.status || 'Needs Revision',
+                newStatus: 'Pending',
+                adminNote: 'Applicant uploaded additional/revised documents.',
+                changedAt: new Date().toISOString(),
+                changedBy: app.applicantName || 'Applicant'
+            };
+
+            const updatedHistory = app.statusHistory ? [...app.statusHistory, historyEntry] : [historyEntry];
+
+            // Update Dexie database: reset status back to 'Pending' for review
+            await db.applications.update(appId, {
+                documents: updatedDocuments,
+                status: 'Pending',
+                adminNotes: 'Revised documents uploaded by applicant. Pending secretariat review.',
+                statusHistory: updatedHistory
+            });
+
+            closeModal('resubmitDocsModal');
+            closeModal('dashboardModal');
+            showAlert('Your lacking documents have been successfully uploaded and sent to the parish secretariat for re-evaluation!', 'Documents Uploaded');
+
+            await renderUserDashboard();
         }
 
         function autofillUserData() {
@@ -1360,6 +1507,23 @@
                 dropdown.style.display = 'none';
             }
         });
+
+        // Function to view secretariat remarks in a modal
+        function viewParishionerNotes(refId, status, notes) {
+            const titleEl = document.getElementById('customNotesTitle');
+            const subtitleEl = document.getElementById('customNotesSubtitle');
+            const inputGroup = document.getElementById('customNotesInput')?.parentElement;
+            const confirmBtn = document.getElementById('customNotesConfirmBtn');
+
+            if (titleEl) titleEl.textContent = `📋 Secretariat Remarks (${refId})`;
+            if (subtitleEl) subtitleEl.innerHTML = `<strong>Status:</strong> ${status}<br><br><strong>Note from Parish Office:</strong><br>${notes}`;
+
+            // Hide input and confirm button for view-only parishioner mode
+            if (inputGroup) inputGroup.style.display = 'none';
+            if (confirmBtn) confirmBtn.style.display = 'none';
+
+            openModal('customNotesModal');
+        }
     </script>
 </body>
 
