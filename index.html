@@ -221,18 +221,88 @@
                         <label>Contact Phone Number</label>
                         <input type="tel" name="phone" placeholder="09XX-XXX-XXXX">
                     </div>
-                    <div class="form-group">
-                        <label>Preferred Date of Baptism *</label>
-                        <input type="date" name="preferredDate" required>
-                    </div>
                 </div>
+                <!-- DEDICATED FACEBOOK-STYLE SCHEDULING CALENDAR WIDGET -->
+                <div class="fb-calendar-container"
+                    style="background: #ffffff; border: 1px solid #ccd0d5; border-radius: 8px; padding: 16px; margin-bottom: 15px; font-family: Helvetica, Arial, sans-serif; box-shadow: 0 1px 2px rgba(0,0,0,0.1);">
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Birth Certificate Registry Number *</label>
-                        <input type="text" name="birthRegistryNo" required
-                            placeholder="Registry No. as shown on the birth certificate">
+                    <!-- DEDICATED BAPTISM FACEBOOK-STYLE SCHEDULING CALENDAR -->
+                    <div class="fb-calendar-container"
+                        style="background: #ffffff; border: 1px solid #ccd0d5; border-radius: 8px; padding: 16px; margin-bottom: 15px; font-family: Helvetica, Arial, sans-serif;">
+
+                        <!-- Baptism Type Selection (Determines available days & fees) -->
+                        <div style="margin-bottom: 15px;">
+                            <label
+                                style="display: block; font-weight: bold; color: #1c1e21; font-size: 13px; margin-bottom: 6px;">Select
+                                Baptism Type *</label>
+                            <select id="baptismTypeSelect" onchange="onBaptismTypeChanged()"
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px; font-size: 14px;"
+                                required>
+                                <option value="">-- Choose Baptism Type --</option>
+                                <option value="group">Group Baptism (₱500 | Sat & Sun @ 10:00 AM)</option>
+                                <option value="individual">Individual Baptism (₱1,500 | Tue to Fri by appointment)
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- Mandatory Seminar Notice Box -->
+                        <div
+                            style="background: #e7f3ff; border-left: 4px solid #1877f2; padding: 10px; font-size: 12px; color: #1c1e21; margin-bottom: 15px;">
+                            <strong>📌 Mandatory Baptism Seminar:</strong><br>
+                            Held at <strong>San Lorenzo Hall or Catalina Hall</strong> every <strong>Saturday at 4:30
+                                PM</strong>.
+                        </div>
+
+                        <!-- Calendar Month Header -->
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <h4 id="bapMonthYearLabel"
+                                style="margin: 0; color: #1c1e21; font-size: 1.05rem; font-weight: bold;">Month Year
+                            </h4>
+                            <div style="display: flex; gap: 6px;">
+                                <button type="button" onclick="changeBapCalendarMonth(-1)"
+                                    style="background: #e4e6eb; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-weight: bold;">&lt;</button>
+                                <button type="button" onclick="changeBapCalendarMonth(1)"
+                                    style="background: #e4e6eb; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-weight: bold;">&gt;</button>
+                            </div>
+                        </div>
+
+                        <!-- Days of Week Header -->
+                        <div
+                            style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: bold; font-size: 11px; color: #606770; margin-bottom: 6px;">
+                            <div>Sun</div>
+                            <div>Mon</div>
+                            <div>Tue</div>
+                            <div>Wed</div>
+                            <div>Thu</div>
+                            <div>Fri</div>
+                            <div>Sat</div>
+                        </div>
+
+                        <!-- Calendar Grid -->
+                        <div id="bapCalendarGrid"
+                            style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; margin-bottom: 12px;">
+                            <!-- Populated via JS -->
+                        </div>
+
+                        <!-- Selected Date & Timeslot Display Panel -->
+                        <div id="bapTimeslotPanel"
+                            style="border-top: 1px solid #e4e6eb; padding-top: 12px; display: none;">
+                            <div id="bapSelectedDateHeader"
+                                style="font-size: 13px; font-weight: bold; color: #1c1e21; margin-bottom: 8px;"></div>
+                            <div id="bapTimeslotGrid" style="display: grid; grid-template-columns: 1fr; gap: 8px;">
+                                <!-- Populated dynamically based on type -->
+                            </div>
+                        </div>
+
+                        <!-- Hidden Inputs for Form Submission -->
+                        <input type="hidden" id="bapSelectedDateInput" name="preferredDate" required>
+                        <input type="hidden" id="bapSelectedTimeInput" name="confirmedTime" required>
                     </div>
+
+                    <!-- Hidden Inputs for Form Submission -->
+                    <input type="hidden" id="fbSelectedDateInput" name="preferredDate" required>
+                    <input type="hidden" id="fbSelectedTimeInput" name="confirmedTime" required>
                 </div>
 
                 <!-- Dynamic Godparents List -->
@@ -257,6 +327,22 @@
                             onchange="handleInlineFiles(event, 'bapFileList')">
                     </div>
                     <div class="file-preview-list" id="bapFileList"></div>
+                </div>
+
+                <!-- REPUBLIC ACT NO. 10173 (DATA PRIVACY ACT) CONSENT SECTION -->
+                <div class="form-group"
+                    style="background: #f8f9fa; border: 1px solid #ccd0d5; padding: 12px; border-radius: 6px; margin: 15px 0;">
+                    <label
+                        style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer; font-size: 12px; color: #333; font-weight: normal;">
+                        <input type="checkbox" id="privacyConsentCheck" required
+                            style="margin-top: 2px; cursor: pointer;">
+                        <span>
+                            <strong>Data Privacy Consent:</strong> I hereby authorize Santuario Del Sto. Cristo Parish
+                            to collect, process, and store my personal and sacramental data provided in this form in
+                            compliance with the <strong>Philippine Data Privacy Act (RA 10173)</strong>. I understand my
+                            data will be used strictly for parish record-keeping, verification, and ceremony scheduling.
+                        </span>
+                    </label>
                 </div>
 
                 <button type="submit" class="form-submit-btn">Submit Baptism Application</button>
@@ -307,11 +393,62 @@
                     </div>
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Target Wedding Date *</label>
-                        <input type="date" name="preferredDate" required>
+                <!-- DEDICATED WEDDING FACEBOOK-STYLE SCHEDULING CALENDAR -->
+                <div class="fb-calendar-container"
+                    style="background: #ffffff; border: 1px solid #ccd0d5; border-radius: 8px; padding: 16px; margin-bottom: 15px; font-family: Helvetica, Arial, sans-serif;">
+
+                    <div
+                        style="background: #e7f3ff; border-left: 4px solid #1877f2; padding: 10px; font-size: 12px; color: #1c1e21; margin-bottom: 15px;">
+                        <strong>💒 Wedding Schedule Rules:</strong><br>
+                        Available <strong>Tuesday to Saturday</strong>.<br>
+                        Time slots: <strong>10:30 AM</strong> and <strong>3:00 PM</strong> (Strictly 1 slot per time
+                        block).
                     </div>
+
+                    <!-- Calendar Month Header -->
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <h4 id="weddingMonthYearLabel"
+                            style="margin: 0; color: #1c1e21; font-size: 1.05rem; font-weight: bold;">Month Year</h4>
+                        <div style="display: flex; gap: 6px;">
+                            <button type="button" onclick="changeWeddingCalendarMonth(-1)"
+                                style="background: #e4e6eb; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-weight: bold;">&lt;</button>
+                            <button type="button" onclick="changeWeddingCalendarMonth(1)"
+                                style="background: #e4e6eb; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-weight: bold;">&gt;</button>
+                        </div>
+                    </div>
+
+                    <!-- Days of Week Header -->
+                    <div
+                        style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: bold; font-size: 11px; color: #606770; margin-bottom: 6px;">
+                        <div>Sun</div>
+                        <div>Mon</div>
+                        <div>Tue</div>
+                        <div>Wed</div>
+                        <div>Thu</div>
+                        <div>Fri</div>
+                        <div>Sat</div>
+                    </div>
+
+                    <!-- Calendar Grid -->
+                    <div id="weddingCalendarGrid"
+                        style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; margin-bottom: 12px;">
+                        <!-- Populated via JS -->
+                    </div>
+
+                    <!-- Selected Date & Timeslot Display Panel -->
+                    <div id="weddingTimeslotPanel"
+                        style="border-top: 1px solid #e4e6eb; padding-top: 12px; display: none;">
+                        <div id="weddingSelectedDateHeader"
+                            style="font-size: 13px; font-weight: bold; color: #1c1e21; margin-bottom: 8px;"></div>
+                        <div id="weddingTimeslotGrid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Hidden Inputs for Form Submission -->
+                    <input type="hidden" id="weddingSelectedDateInput" name="preferredDate" required>
+                    <input type="hidden" id="weddingSelectedTimeInput" name="confirmedTime" required>
                 </div>
 
                 <!-- Wedding Document Upload Section -->
@@ -330,6 +467,22 @@
                     </div>
                     <div class="file-preview-list" id="wedFileList"></div>
                     <div class="file-preview-list" id="wedFileList"></div>
+                </div>
+
+                <!-- REPUBLIC ACT NO. 10173 (DATA PRIVACY ACT) CONSENT SECTION -->
+                <div class="form-group"
+                    style="background: #f8f9fa; border: 1px solid #ccd0d5; padding: 12px; border-radius: 6px; margin: 15px 0;">
+                    <label
+                        style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer; font-size: 12px; color: #333; font-weight: normal;">
+                        <input type="checkbox" id="privacyConsentCheck" required
+                            style="margin-top: 2px; cursor: pointer;">
+                        <span>
+                            <strong>Data Privacy Consent:</strong> I hereby authorize Santuario Del Sto. Cristo Parish
+                            to collect, process, and store my personal and sacramental data provided in this form in
+                            compliance with the <strong>Philippine Data Privacy Act (RA 10173)</strong>. I understand my
+                            data will be used strictly for parish record-keeping, verification, and ceremony scheduling.
+                        </span>
+                    </label>
                 </div>
 
                 <button type="submit" class="form-submit-btn">Submit Wedding Application</button>
@@ -373,17 +526,99 @@
                         <input type="date" id="dateOfPassing" name="dateOfPassing" onchange="autoSyncFuneralDate()">
                     </div>
                     <div class="form-group">
-                        <label>Requested Funeral Date</label>
-                        <!-- CHANGED name="preferredDate" to name="requestedFuneralDate" -->
-                        <input type="date" id="requestedFuneralDate" name="requestedFuneralDate">
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
                         <label>Contact Phone Number</label>
                         <input type="tel" name="phone" placeholder="09XX-XXX-XXXX">
                     </div>
+                </div>
+
+                <!-- DEDICATED FUNERAL & WAKE FACEBOOK-STYLE SCHEDULING CALENDAR -->
+                <div class="fb-calendar-container"
+                    style="background: #ffffff; border: 1px solid #ccd0d5; border-radius: 8px; padding: 16px; margin-bottom: 15px; font-family: Helvetica, Arial, sans-serif;">
+
+                    <!-- Funeral Service Category Selector -->
+                    <div style="margin-bottom: 12px;">
+                        <label
+                            style="display: block; font-weight: bold; color: #1c1e21; font-size: 13px; margin-bottom: 6px;">Select
+                            Funeral Service Type *</label>
+                        <select id="funeralTypeSelect" onchange="onFuneralTypeChanged()"
+                            style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px; font-size: 14px;"
+                            required>
+                            <option value="">-- Select Service Type --</option>
+                            <option value="blessing">Funeral Blessing in Church (₱100 | Tue to Sun)</option>
+                            <option value="mass">Funeral Mass in Church (₱500 | Tue to Sat Only)</option>
+                            <option value="chapel">Resurrection Chapel Wake / Vigil (₱2,000 - ₱6,000/day)</option>
+                        </select>
+                    </div>
+
+                    <!-- Resurrection Chapel Options (Shown only if Chapel is selected) -->
+                    <div id="chapelOptionsContainer"
+                        style="display: none; background: #f8f9fa; border: 1px solid #e2e8f0; padding: 10px; border-radius: 6px; margin-bottom: 12px; font-size: 13px;">
+                        <label
+                            style="display: block; font-weight: bold; color: #4a0e17; margin-bottom: 4px;">Resurrection
+                            Chapel Setup:</label>
+                        <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                            <input type="checkbox" id="chapelAirconCheck" onchange="updateFuneralFees()"> Include Air
+                            Conditioning (₱6,000 / day instead of ₱2,000)
+                        </label>
+                        <p style="margin: 6px 0 0 0; color: #666; font-size: 11px;">Note: Each family is given a maximum
+                            of 1 week (7 days) for the wake vigil.</p>
+                    </div>
+
+                    <!-- Fee & Schedule Information Notice -->
+                    <div id="funeralInfoNotice"
+                        style="background: #e7f3ff; border-left: 4px solid #1877f2; padding: 10px; font-size: 12px; color: #1c1e21; margin-bottom: 15px;">
+                        Select a funeral service type above to view calendar availability and fees.
+                    </div>
+
+                    <!-- Calendar Month Header -->
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <h4 id="funeralMonthYearLabel"
+                            style="margin: 0; color: #1c1e21; font-size: 1.05rem; font-weight: bold;">Month Year</h4>
+                        <div style="display: flex; gap: 6px;">
+                            <button type="button" onclick="changeFuneralCalendarMonth(-1)"
+                                style="background: #e4e6eb; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-weight: bold;">&lt;</button>
+                            <button type="button" onclick="changeFuneralCalendarMonth(1)"
+                                style="background: #e4e6eb; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-weight: bold;">&gt;</button>
+                        </div>
+                    </div>
+
+                    <!-- Days of Week Header -->
+                    <div
+                        style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: bold; font-size: 11px; color: #606770; margin-bottom: 6px;">
+                        <div>Sun</div>
+                        <div>Mon</div>
+                        <div>Tue</div>
+                        <div>Wed</div>
+                        <div>Thu</div>
+                        <div>Fri</div>
+                        <div>Sat</div>
+                    </div>
+
+                    <!-- Calendar Grid -->
+                    <div id="funeralCalendarGrid"
+                        style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; margin-bottom: 12px;">
+                        <!-- Populated via JS -->
+                    </div>
+
+                    <!-- Selected Date & Summary Panel -->
+                    <div id="funeralTimeslotPanel"
+                        style="border-top: 1px solid #e4e6eb; padding-top: 12px; display: none;">
+                        <div id="funeralSelectedDateHeader"
+                            style="font-size: 13px; font-weight: bold; color: #1c1e21; margin-bottom: 8px;"></div>
+                        <div id="funeralSummaryBox"
+                            style="background: #f0f2f5; padding: 10px; border-radius: 6px; font-size: 13px;">
+                            <!-- Dynamic Fee & Slot confirmation -->
+                        </div>
+                    </div>
+
+                    <!-- Hidden Inputs for Form Submission -->
+                    <input type="hidden" id="funeralSelectedDateInput" name="preferredDate" required>
+                    <input type="hidden" id="funeralSelectedTimeInput" name="confirmedTime" value="18:00 - 21:00">
+                    <input type="hidden" id="funeralCalculatedFeeInput" name="totalFee">
+                </div>
+
+                <div class="form-row">
                     <div class="form-group">
                         <label>Wake Location / Address</label>
                         <input type="text" name="wakeLocation" placeholder="Chapel name or home address">
@@ -403,7 +638,22 @@
                     </div>
                     <div class="file-preview-list" id="funFileList"></div>
                 </div>
-
+                
+                <!-- REPUBLIC ACT NO. 10173 (DATA PRIVACY ACT) CONSENT SECTION -->
+                <div class="form-group"
+                    style="background: #f8f9fa; border: 1px solid #ccd0d5; padding: 12px; border-radius: 6px; margin: 15px 0;">
+                    <label
+                        style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer; font-size: 12px; color: #333; font-weight: normal;">
+                        <input type="checkbox" id="privacyConsentCheck" required
+                            style="margin-top: 2px; cursor: pointer;">
+                        <span>
+                            <strong>Data Privacy Consent:</strong> I hereby authorize Santuario Del Sto. Cristo Parish
+                            to collect, process, and store my personal and sacramental data provided in this form in
+                            compliance with the <strong>Philippine Data Privacy Act (RA 10173)</strong>. I understand my
+                            data will be used strictly for parish record-keeping, verification, and ceremony scheduling.
+                        </span>
+                    </label>
+                </div>
                 <button type="submit" class="form-submit-btn">Submit Funeral Request</button>
             </form>
         </div>
@@ -561,7 +811,75 @@
         </div>
     </div>
 
+
+
     <script>
+
+        // Function to query Dexie.js and check slot capacity (Max 3 slots per time block)
+        async function checkDateAvailability(targetDate, targetTime = null) {
+            if (!targetDate) return true;
+
+            try {
+                // Fetch all confirmed applications for this date
+                const existingApps = await db.applications
+                    .where('confirmedDate')
+                    .equals(targetDate)
+                    .toArray();
+
+                // Filter out rejected ones
+                const activeBookings = existingApps.filter(app => app.status !== 'Rejected');
+
+                const MAX_PER_SLOT = 3; // Max capacity per time slot
+
+                if (targetTime) {
+                    const countForTime = activeBookings.filter(app => app.confirmedTime === targetTime).length;
+                    return countForTime < MAX_PER_SLOT;
+                }
+
+                return activeBookings;
+            } catch (err) {
+                console.error("Error checking availability:", err);
+                return [];
+            }
+        }
+
+        // UI Handler when user changes preferred date
+        async function handleDateSelectionChange(event) {
+            const selectedDate = event.target.value;
+            const statusBox = document.getElementById('slotAvailabilityStatus');
+            if (!selectedDate || !statusBox) return;
+
+            statusBox.innerHTML = `<em>Checking parish calendar for ${selectedDate}...</em>`;
+
+            const activeBookings = await checkDateAvailability(selectedDate);
+
+            if (activeBookings.length === 0) {
+                statusBox.innerHTML = `<span style="color: #27ae60; font-weight: bold;">✓ All standard time slots are fully available on this date.</span>`;
+            } else {
+                // Group bookings by time slot
+                const timeCounts = {};
+                activeBookings.forEach(b => {
+                    const time = b.confirmedTime || 'Unspecified Time';
+                    timeCounts[time] = (timeCounts[time] || 0) + 1;
+                });
+
+                let summaryText = `<span style="color: #d35400; font-weight: bold;">⚠️ Existing reservations on this date:</span><ul style="margin: 4px 0 0 16px; padding: 0;">`;
+                for (const [time, count] of Object.entries(timeCounts)) {
+                    const isFull = count >= 3;
+                    summaryText += `<li>${time}: <strong>${count}/3 slots taken</strong> ${isFull ? '<span style="color:red;">(Fully Booked)</span>' : ''}</li>`;
+                }
+                summaryText += `</ul>`;
+                statusBox.innerHTML = summaryText;
+            }
+        }
+
+        // Bind event listeners to date picker inputs when DOM loads
+        document.addEventListener('DOMContentLoaded', () => {
+            const dateInputs = document.querySelectorAll('input[name="preferredDate"], input[name="requestedFuneralDate"]');
+            dateInputs.forEach(input => {
+                input.addEventListener('change', handleDateSelectionChange);
+            });
+        });
         function toggleMobileMenu() {
             const drawer = document.getElementById('mobileDrawer');
             const overlay = document.getElementById('mobileDrawerOverlay');
@@ -1524,6 +1842,787 @@
 
             openModal('customNotesModal');
         }
+
+        let currentCalDate = new Date();
+        let selectedDateStr = '';
+
+        // Standard Parish Time Blocks
+        const FB_PARISH_SLOTS = [
+            { time: '08:00', label: '8:00 AM' },
+            { time: '10:00', label: '10:00 AM' },
+            { time: '13:30', label: '1:30 PM' },
+            { time: '15:30', label: '3:30 PM' }
+        ];
+
+        async function renderFBCalendar() {
+            const gridEl = document.getElementById('fbCalendarGrid');
+            const labelEl = document.getElementById('calMonthYearLabel');
+            if (!gridEl || !labelEl) return;
+
+            const year = currentCalDate.getFullYear();
+            const month = currentCalDate.getMonth();
+
+            // Set Header label (e.g., "October 2026")
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            labelEl.textContent = `${monthNames[month]} ${year}`;
+
+            // Get first day of month and total days
+            const firstDayIndex = new Date(year, month, 1).getDay();
+            const totalDays = new Date(year, month + 1, 0).getDate();
+            const todayStr = new Date().toISOString().split('T')[0];
+
+            // Fetch all active appointments from Dexium/Dexie to check occupancy across the month
+            let allApps = [];
+            try {
+                if (typeof db !== 'undefined' && db.applications) {
+                    allApps = await db.applications.where('status').notEqual('Rejected').toArray();
+                }
+            } catch (err) {
+                console.error("Error fetching apps for calendar:", err);
+            }
+
+            let html = '';
+
+            // Blank padding cells for previous month offset
+            for (let i = 0; i < firstDayIndex; i++) {
+                html += `<div style="padding: 10px;"></div>`;
+            }
+
+            // Render days of the current month
+            for (let day = 1; day <= totalDays; day++) {
+                const formattedDay = String(day).padStart(2, '0');
+                const formattedMonth = String(month + 1).padStart(2, '0');
+                const dateString = `${year}-${formattedMonth}-${formattedDay}`;
+
+                // Count total bookings on this date across all slots (Max capacity = 4 slots * 3 limit = 12 total daily capacity)
+                const dateBookings = allApps.filter(app => (app.confirmedDate || app.preferredDate) === dateString);
+                const totalBookedCount = dateBookings.length;
+                const isFullyBooked = totalBookedCount >= 12; // 3 per slot * 4 slots
+                const isPast = dateString < todayStr;
+                const isSelected = selectedDateStr === dateString;
+
+                let bgStyle = '#f0f2f5'; // Default available
+                let textStyle = '#050505';
+                let cursorStyle = 'pointer';
+                let badgeText = 'Available';
+                let badgeColor = '#2e7d32';
+
+                if (isPast) {
+                    bgStyle = '#e4e6eb';
+                    textStyle = '#b0b3b8';
+                    cursorStyle = 'not-allowed';
+                    badgeText = 'Past';
+                    badgeColor = '#65676b';
+                } else if (isFullyBooked) {
+                    bgStyle = '#f8d7da';
+                    textStyle = '#721c24';
+                    badgeText = 'Full';
+                    badgeColor = '#c0392b';
+                } else if (totalBookedCount > 0) {
+                    badgeText = `${12 - totalBookedCount} left`;
+                    badgeColor = '#d35400';
+                }
+
+                if (isSelected) {
+                    bgStyle = '#1877f2'; // Facebook Blue for selected date
+                    textStyle = '#ffffff';
+                    badgeColor = '#ffffff';
+                }
+
+                html += `
+            <div onclick="${isPast ? '' : `selectFBCalendarDate('${dateString}')`}" 
+                 style="background: ${bgStyle}; color: ${textStyle}; padding: 8px 4px; border-radius: 6px; cursor: ${cursorStyle}; font-size: 13px; transition: transform 0.1s; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 44px; border: ${isSelected ? '2px solid #000' : '1px solid transparent'};">
+                <strong style="font-size: 14px;">${day}</strong>
+                <span style="font-size: 9px; font-weight: bold; color: ${badgeColor}; margin-top: 2px;">${badgeText}</span>
+            </div>
+        `;
+            }
+
+            gridEl.innerHTML = html;
+        }
+
+        function changeCalendarMonth(direction) {
+            currentCalDate.setMonth(currentCalDate.getMonth() + direction);
+            renderFBCalendar();
+        }
+
+        // When user clicks a specific date on the Facebook-style calendar
+        async function selectFBCalendarDate(dateStr) {
+            selectedDateStr = dateStr;
+            document.getElementById('fbSelectedDateInput').value = dateStr;
+
+            // Re-render calendar grid to highlight the selected date box
+            renderFBCalendar();
+
+            // Show and load time slots panel
+            const panel = document.getElementById('fbTimeslotPanel');
+            const header = document.getElementById('selectedDateHeader');
+            const slotGrid = document.getElementById('fbTimeslotGrid');
+
+            panel.style.display = 'block';
+            header.textContent = `Available Timeslots for ${dateStr}`;
+            slotGrid.innerHTML = `<p style="color: #65676b; font-size: 12px; margin: 0;">Loading timeslots...</p>`;
+
+            try {
+                const existingApps = await db.applications
+                    .where('status')
+                    .notEqual('Rejected')
+                    .toArray();
+
+                const dateApps = existingApps.filter(app => (app.confirmedDate || app.preferredDate) === dateStr);
+                const MAX_PER_SLOT = 3;
+
+                let slotHtml = '';
+                FB_PARISH_SLOTS.forEach(slot => {
+                    const countForSlot = dateApps.filter(app => app.confirmedTime === slot.time || app.confirmedTime === slot.label).length;
+                    const isFull = countForSlot >= MAX_PER_SLOT;
+
+                    if (isFull) {
+                        slotHtml += `
+                    <div style="background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 8px; border-radius: 6px; text-align: center; font-size: 12px; opacity: 0.7; cursor: not-allowed;">
+                        <strong>${slot.label}</strong><br>
+                        <span style="font-size: 10px; font-weight: bold;">Fully Booked</span>
+                    </div>
+                `;
+                    } else {
+                        slotHtml += `
+                    <div onclick="selectFBTimeSlot('${slot.time}', this)" class="fb-time-box" style="background: #e7f3ff; border: 1px solid #1877f2; color: #1877f2; padding: 8px; border-radius: 6px; text-align: center; font-size: 12px; cursor: pointer; transition: all 0.2s;">
+                        <strong>${slot.label}</strong><br>
+                        <span style="font-size: 10px;">${MAX_PER_SLOT - countForSlot} slots left</span>
+                    </div>
+                `;
+                    }
+                });
+
+                slotGrid.innerHTML = slotHtml;
+            } catch (err) {
+                console.error("Error loading time slots:", err);
+                slotGrid.innerHTML = `<p style="color: red; font-size: 12px;">Error loading slots.</p>`;
+            }
+        }
+
+        function selectFBTimeSlot(timeVal, element) {
+            document.querySelectorAll('.fb-time-box').forEach(box => {
+                box.style.background = '#e7f3ff';
+                box.style.color = '#1877f2';
+            });
+
+            element.style.background = '#1877f2';
+            element.style.color = '#ffffff';
+
+            document.getElementById('fbSelectedTimeInput').value = timeVal;
+        }
+
+        // Initialize calendar when modal opens or DOM loads
+        document.addEventListener('DOMContentLoaded', () => {
+            renderFBCalendar();
+        });
+
+        let currentBapCalDate = new Date();
+        let selectedBapDateStr = '';
+
+        function onBaptismTypeChanged() {
+            selectedBapDateStr = '';
+            document.getElementById('bapSelectedDateInput').value = '';
+            document.getElementById('bapSelectedTimeInput').value = '';
+            document.getElementById('bapTimeslotPanel').style.display = 'none';
+            renderBaptismCalendar();
+        }
+
+        async function renderBaptismCalendar() {
+            const gridEl = document.getElementById('bapCalendarGrid');
+            const labelEl = document.getElementById('bapMonthYearLabel');
+            const typeSelect = document.getElementById('baptismTypeSelect');
+
+            if (!gridEl || !labelEl) return;
+
+            const baptismType = typeSelect ? typeSelect.value : '';
+            if (!baptismType) {
+                gridEl.innerHTML = `<div style="grid-column: span 7; color: #707579; font-size: 12px; padding: 15px; text-align: center;">Please select a Baptism Type above first to view available dates.</div>`;
+                labelEl.textContent = 'Select Type';
+                return;
+            }
+
+            const year = currentBapCalDate.getFullYear();
+            const month = currentBapCalDate.getMonth();
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            labelEl.textContent = `${monthNames[month]} ${year}`;
+
+            const firstDayIndex = new Date(year, month, 1).getDay();
+            const totalDays = new Date(year, month + 1, 0).getDate();
+            const todayStr = new Date().toISOString().split('T')[0];
+
+            // Fetch all records from Dexie to inspect manually
+            let allApps = [];
+            try {
+                if (typeof db !== 'undefined' && db.applications) {
+                    allApps = await db.applications.toArray();
+                }
+            } catch (err) {
+                console.error("Error fetching apps from Dexie:", err);
+            }
+
+            let html = '';
+            for (let i = 0; i < firstDayIndex; i++) {
+                html += `<div></div>`;
+            }
+
+            for (let day = 1; day <= totalDays; day++) {
+                const formattedDay = String(day).padStart(2, '0');
+                const formattedMonth = String(month + 1).padStart(2, '0');
+                const dateString = `${year}-${formattedMonth}-${formattedDay}`;
+                const dayOfWeek = new Date(dateString).getDay();
+
+                const isPast = dateString < todayStr;
+                let isAllowedDay = false;
+
+                if (baptismType === 'group') {
+                    isAllowedDay = (dayOfWeek === 0 || dayOfWeek === 6); // Sat & Sun
+                } else if (baptismType === 'individual') {
+                    isAllowedDay = (dayOfWeek >= 2 && dayOfWeek <= 5); // Tue to Fri
+                }
+
+                // Robust matching: check preferredDate, confirmedDate, or nested details.preferredDate
+                const dateBookings = allApps.filter(app => {
+                    const appStatus = (app.status || '').toLowerCase();
+                    // Ignore rejected applications
+                    if (appStatus === 'rejected' || app.archived) return false;
+
+                    const appDate = app.confirmedDate || app.preferredDate || app.details?.preferredDate || app.details?.date || '';
+                    const matchesDate = appDate.startsWith(dateString);
+
+                    // Check if sacrament type is baptism
+                    const isBaptism = (app.sacramentType || '').toLowerCase() === 'baptism';
+
+                    return matchesDate && isBaptism;
+                });
+
+                const bookedCount = dateBookings.length;
+
+                // Capacity: Group = 3 max, Individual = 1 max per day
+                const MAX_CAPACITY = baptismType === 'group' ? 3 : 1;
+                const isFullyBooked = bookedCount >= MAX_CAPACITY;
+                const isSelected = selectedBapDateStr === dateString;
+
+                let bgStyle = '#f0f2f5';
+                let textStyle = '#050505';
+                let cursorStyle = isAllowedDay && !isPast && !isFullyBooked ? 'pointer' : 'not-allowed';
+                let badgeText = isAllowedDay ? 'Available' : 'Closed';
+                let badgeColor = isAllowedDay ? '#2e7d32' : '#8a8d91';
+
+                if (isPast || !isAllowedDay) {
+                    bgStyle = '#f4f2f2';
+                    textStyle = '#b0b3b8';
+                    badgeText = !isAllowedDay ? 'Off Day' : 'Past';
+                } else if (isFullyBooked) {
+                    bgStyle = '#f8d7da';
+                    textStyle = '#721c24';
+                    badgeText = 'Full';
+                    badgeColor = '#c0392b';
+                } else if (bookedCount > 0) {
+                    badgeText = `${MAX_CAPACITY - bookedCount} left`;
+                    badgeColor = '#d35400';
+                }
+
+                if (isSelected) {
+                    bgStyle = '#1877f2';
+                    textStyle = '#ffffff';
+                    badgeColor = '#ffffff';
+                }
+
+                html += `
+            <div onclick="${isPast || !isAllowedDay || isFullyBooked ? '' : `selectBapCalendarDate('${dateString}')`}" 
+                 style="background: ${bgStyle}; color: ${textStyle}; padding: 8px 4px; border-radius: 6px; cursor: ${cursorStyle}; font-size: 13px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 44px; border: ${isSelected ? '2px solid #000' : '1px solid transparent'};">
+                <strong style="font-size: 14px;">${day}</strong>
+                <span style="font-size: 9px; font-weight: bold; color: ${badgeColor}; margin-top: 2px;">${badgeText}</span>
+            </div>
+        `;
+            }
+
+            gridEl.innerHTML = html;
+        }
+        function changeBapCalendarMonth(direction) {
+            currentBapCalDate.setMonth(currentBapCalDate.getMonth() + direction);
+            renderBaptismCalendar();
+        }
+
+        async function selectBapCalendarDate(dateStr) {
+            selectedBapDateStr = dateStr;
+            document.getElementById('bapSelectedDateInput').value = dateStr;
+            renderBaptismCalendar();
+
+            const panel = document.getElementById('bapTimeslotPanel');
+            const header = document.getElementById('bapSelectedDateHeader');
+            const slotGrid = document.getElementById('bapTimeslotGrid');
+            const baptismType = document.getElementById('baptismTypeSelect').value;
+
+            panel.style.display = 'block';
+            header.textContent = `Time Slot for ${dateStr}`;
+
+            try {
+                const existingApps = await db.applications.toArray();
+                const dateApps = existingApps.filter(app => {
+                    const appStatus = (app.status || '').toLowerCase();
+                    if (appStatus === 'rejected' || app.archived) return false;
+                    const appDate = app.confirmedDate || app.preferredDate || '';
+                    const matchesDate = appDate.startsWith(dateStr);
+                    const matchesType = (app.details?.baptismType || app.baptismType || '').toLowerCase() === baptismType;
+                    return matchesDate && matchesType;
+                });
+
+                const MAX_PER_SLOT = baptismType === 'group' ? 3 : 1;
+                const countForSlot = dateApps.length;
+                const isFull = countForSlot >= MAX_PER_SLOT;
+
+                let timeLabel = baptismType === 'group' ? '10:00 AM (Group Baptism - ₱500)' : 'By Appointment (Tuesday - Friday Session - ₱1,500)';
+                let timeValue = baptismType === 'group' ? '10:00' : 'By Appointment';
+
+                if (isFull) {
+                    slotGrid.innerHTML = `
+                <div style="background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 10px; border-radius: 6px; text-align: center; font-size: 13px;">
+                    <strong>${timeLabel}</strong><br><span style="font-size: 11px; font-weight: bold;">Fully Booked (${countForSlot}/${MAX_PER_SLOT})</span>
+                </div>
+            `;
+                } else {
+                    slotGrid.innerHTML = `
+                <div onclick="selectBapTimeSlot('${timeValue}', this)" class="bap-time-box" style="background: #e7f3ff; border: 1px solid #1877f2; color: #1877f2; padding: 12px; border-radius: 6px; text-align: center; font-size: 13px; cursor: pointer;">
+                    <strong>${timeLabel}</strong><br><span style="font-size: 11px;">${MAX_PER_SLOT - countForSlot} slot(s) available</span>
+                </div>
+            `;
+                }
+            } catch (err) {
+                console.error("Error loading slots:", err);
+            }
+        }
+
+        function selectBapTimeSlot(timeVal, element) {
+            document.querySelectorAll('.bap-time-box').forEach(box => {
+                box.style.background = '#e7f3ff';
+                box.style.color = '#1877f2';
+            });
+            element.style.background = '#1877f2';
+            element.style.color = '#ffffff';
+            document.getElementById('bapSelectedTimeInput').value = timeVal;
+        }
+
+        let currentWeddingCalDate = new Date();
+        let selectedWeddingDateStr = '';
+
+        const WEDDING_SLOTS = [
+            { time: '10:30', label: '10:30 AM' },
+            { time: '15:00', label: '3:00 PM' }
+        ];
+
+        async function renderWeddingCalendar() {
+            const gridEl = document.getElementById('weddingCalendarGrid');
+            const labelEl = document.getElementById('weddingMonthYearLabel');
+
+            if (!gridEl || !labelEl) return;
+
+            const year = currentWeddingCalDate.getFullYear();
+            const month = currentWeddingCalDate.getMonth();
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            labelEl.textContent = `${monthNames[month]} ${year}`;
+
+            const firstDayIndex = new Date(year, month, 1).getDay();
+            const totalDays = new Date(year, month + 1, 0).getDate();
+
+            // --- EXACT 30-DAY LEAD TIME CALCULATION ---
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const minBookingDate = new Date(today);
+            minBookingDate.setDate(today.getDate() + 30); // Exactly 30 days from today
+            minBookingDate.setHours(0, 0, 0, 0);
+
+            let allApps = [];
+            try {
+                if (typeof db !== 'undefined' && db.applications) {
+                    allApps = await db.applications.toArray();
+                }
+            } catch (err) {
+                console.error("Error fetching apps from Dexie:", err);
+            }
+
+            let html = '';
+            for (let i = 0; i < firstDayIndex; i++) {
+                html += `<div></div>`;
+            }
+
+            for (let day = 1; day <= totalDays; day++) {
+                const formattedDay = String(day).padStart(2, '0');
+                const formattedMonth = String(month + 1).padStart(2, '0');
+                const dateString = `${year}-${formattedMonth}-${formattedDay}`;
+
+                const cellDate = new Date(dateString);
+                cellDate.setHours(0, 0, 0, 0);
+
+                const dayOfWeek = cellDate.getDay(); // 0 = Sun, 1 = Mon, ..., 6 = Sat
+
+                // Rules: Tue to Sat (2 to 6) AND at least 30 days in advance
+                const isAllowedDay = (dayOfWeek >= 2 && dayOfWeek <= 6);
+                const isTooSoon = cellDate < minBookingDate; // Anything less than 30 days from today
+                const isPast = cellDate < today;
+
+                // Filter all active applications on this date
+                const dateBookings = allApps.filter(app => {
+                    const appStatus = (app.status || '').toLowerCase();
+                    if (appStatus === 'rejected' || app.archived) return false;
+
+                    const appDate = app.confirmedDate || app.preferredDate || app.details?.preferredDate || '';
+                    return appDate.startsWith(dateString);
+                });
+
+                // Check for baptism conflicts on Saturday mornings (10:00 AM group baptisms)
+                const hasBaptismConflict = dateBookings.some(app => {
+                    return (app.sacramentType || '').toLowerCase() === 'baptism';
+                });
+
+                // Count existing weddings on this date (Strictly 1 wedding per day limit)
+                const weddingBookings = dateBookings.filter(app => (app.sacramentType || '').toLowerCase() === 'wedding');
+                const bookedCount = weddingBookings.length;
+                const MAX_CAPACITY = 1;
+                const isFullyBooked = bookedCount >= MAX_CAPACITY;
+                const isSelected = selectedWeddingDateStr === dateString;
+
+                let bgStyle = '#f0f2f5';
+                let textStyle = '#050505';
+                let cursorStyle = isAllowedDay && !isTooSoon && !isFullyBooked && !hasBaptismConflict ? 'pointer' : 'not-allowed';
+                let badgeText = isAllowedDay ? 'Available' : 'Closed';
+                let badgeColor = isAllowedDay ? '#2e7d32' : '#8a8d91';
+
+                // Styling priority for greyed-out / unavailable dates
+                if (isPast) {
+                    bgStyle = '#f4f2f2';
+                    textStyle = '#b0b3b8';
+                    badgeText = 'Past';
+                    badgeColor = '#c0392b';
+                } else if (isTooSoon) {
+                    bgStyle = '#f4f2f2';
+                    textStyle = '#b0b3b8';
+                    badgeText = '< 1 Mo'; // Clearly indicates it's within the 30-day restriction window
+                    badgeColor = '#c0392b';
+                } else if (!isAllowedDay) {
+                    bgStyle = '#f4f2f2';
+                    textStyle = '#b0b3b8';
+                    badgeText = 'Off Day';
+                } else if (isFullyBooked) {
+                    bgStyle = '#f8d7da';
+                    textStyle = '#721c24';
+                    badgeText = 'Fully Booked';
+                    badgeColor = '#c0392b';
+                } else if (hasBaptismConflict && dayOfWeek === 6) {
+                    bgStyle = '#fff3cd';
+                    textStyle = '#856404';
+                    badgeText = 'Baptism Conflict';
+                    badgeColor = '#856404';
+                }
+
+                if (isSelected) {
+                    bgStyle = '#1877f2';
+                    textStyle = '#ffffff';
+                    badgeColor = '#ffffff';
+                }
+
+                const isDisabled = isPast || isTooSoon || !isAllowedDay || isFullyBooked || (hasBaptismConflict && dayOfWeek === 6);
+
+                html += `
+            <div onclick="${isDisabled ? '' : `selectWeddingCalendarDate('${dateString}')`}" 
+                 style="background: ${bgStyle}; color: ${textStyle}; padding: 8px 4px; border-radius: 6px; cursor: ${cursorStyle}; font-size: 13px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 44px; border: ${isSelected ? '2px solid #000' : '1px solid transparent'}; opacity: ${isDisabled && !isPast && !isTooSoon && !isFullyBooked && !!isAllowedDay ? '1' : (isDisabled ? '0.7' : '1')};">
+                <strong style="font-size: 14px;">${day}</strong>
+                <span style="font-size: 9px; font-weight: bold; color: ${badgeColor}; margin-top: 2px;">${badgeText}</span>
+            </div>
+        `;
+            }
+
+            gridEl.innerHTML = html;
+        }
+
+        function changeWeddingCalendarMonth(direction) {
+            currentWeddingCalDate.setMonth(currentWeddingCalDate.getMonth() + direction);
+            renderWeddingCalendar();
+        }
+
+        async function selectWeddingCalendarDate(dateStr) {
+            selectedWeddingDateStr = dateStr;
+            document.getElementById('weddingSelectedDateInput').value = dateStr;
+            renderWeddingCalendar();
+
+            const panel = document.getElementById('weddingTimeslotPanel');
+            const header = document.getElementById('weddingSelectedDateHeader');
+            const slotGrid = document.getElementById('weddingTimeslotGrid');
+
+            panel.style.display = 'block';
+            header.textContent = `Select Preferred Time for ${dateStr} (1 Wedding Max)`;
+
+            try {
+                const existingApps = await db.applications.toArray();
+                const dateApps = existingApps.filter(app => {
+                    const appStatus = (app.status || '').toLowerCase();
+                    if (appStatus === 'rejected' || app.archived) return false;
+                    const appDate = app.confirmedDate || app.preferredDate || app.details?.preferredDate || '';
+                    return appDate.startsWith(dateStr);
+                });
+
+                // Check if any wedding is already booked on this date
+                const isWeddingAlreadyBooked = dateApps.some(app => (app.sacramentType || '').toLowerCase() === 'wedding');
+
+                let slotHtml = '';
+                if (isWeddingAlreadyBooked) {
+                    slotGrid.innerHTML = `
+                <div style="grid-column: span 2; background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 12px; border-radius: 6px; text-align: center; font-size: 13px;">
+                    <strong>Date Fully Booked</strong><br><span style="font-size: 11px;">Only 1 wedding is permitted per day. Please select another date.</span>
+                </div>
+            `;
+                    return;
+                }
+
+                // Render available time slots (10:30 AM or 3:00 PM) for the user to choose their preference
+                WEDDING_SLOTS.forEach(slot => {
+                    slotHtml += `
+                <div onclick="selectWeddingTimeSlot('${slot.time}', this)" class="wedding-time-box" style="background: #e7f3ff; border: 1px solid #1877f2; color: #1877f2; padding: 12px; border-radius: 6px; text-align: center; font-size: 13px; cursor: pointer;">
+                    <strong>${slot.label}</strong><br><span style="font-size: 11px;">Available Slot</span>
+                </div>
+            `;
+                });
+
+                slotGrid.innerHTML = slotHtml;
+            } catch (err) {
+                console.error("Error loading wedding time slots:", err);
+            }
+        }
+
+        function selectWeddingTimeSlot(timeVal, element) {
+            document.querySelectorAll('.wedding-time-box').forEach(box => {
+                box.style.background = '#e7f3ff';
+                box.style.color = '#1877f2';
+            });
+            element.style.background = '#1877f2';
+            element.style.color = '#ffffff';
+            document.getElementById('weddingSelectedTimeInput').value = timeVal;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderWeddingCalendar();
+        });
+
+        let currentFuneralCalDate = new Date();
+        let selectedFuneralDateStr = '';
+
+        function onFuneralTypeChanged() {
+            const type = document.getElementById('funeralTypeSelect').value;
+            const chapelContainer = document.getElementById('chapelOptionsContainer');
+            const notice = document.getElementById('funeralInfoNotice');
+
+            selectedFuneralDateStr = '';
+            document.getElementById('funeralSelectedDateInput').value = '';
+            document.getElementById('funeralTimeslotPanel').style.display = 'none';
+
+            if (type === 'chapel') {
+                chapelContainer.style.display = 'block';
+                notice.innerHTML = `<strong> chapel Reservation:</strong> Resurrection Chapel is available at <strong>₱2,000/day</strong> (or <strong>₱6,000/day with Aircon</strong>). Max 1 week vigil.`;
+            } else if (type === 'blessing') {
+                chapelContainer.style.display = 'none';
+                notice.innerHTML = `<strong>✝️ Funeral Blessing:</strong> Fee is <strong>₱100</strong>. Available Tuesday to Sunday (Coordinate time with Parish Office).`;
+            } else if (type === 'mass') {
+                chapelContainer.style.display = 'none';
+                notice.innerHTML = `<strong>⛪ Funeral Mass:</strong> Fee is <strong>₱500</strong>. Available Tuesday to Saturday (No Funeral Masses on Sundays).`;
+            } else {
+                chapelContainer.style.display = 'none';
+                notice.innerHTML = `Select a funeral service type above to view calendar availability and fees.`;
+            }
+
+            renderFuneralCalendar();
+        }
+
+        function updateFuneralFees() {
+            if (selectedFuneralDateStr) {
+                selectFuneralCalendarDate(selectedFuneralDateStr);
+            }
+        }
+
+        async function renderFuneralCalendar() {
+            const gridEl = document.getElementById('funeralCalendarGrid');
+            const labelEl = document.getElementById('funeralMonthYearLabel');
+            const typeSelect = document.getElementById('funeralTypeSelect');
+
+            if (!gridEl || !labelEl) return;
+
+            const funeralType = typeSelect ? typeSelect.value : '';
+            if (!funeralType) {
+                gridEl.innerHTML = `<div style="grid-column: span 7; color: #707579; font-size: 12px; padding: 15px; text-align: center;">Please select a Funeral Service Type above first.</div>`;
+                labelEl.textContent = 'Select Type';
+                return;
+            }
+
+            const year = currentFuneralCalDate.getFullYear();
+            const month = currentFuneralCalDate.getMonth();
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            labelEl.textContent = `${monthNames[month]} ${year}`;
+
+            const firstDayIndex = new Date(year, month, 1).getDay();
+            const totalDays = new Date(year, month + 1, 0).getDate();
+            const todayStr = new Date().toISOString().split('T')[0];
+
+            let allApps = [];
+            try {
+                if (typeof db !== 'undefined' && db.applications) {
+                    allApps = await db.applications.toArray();
+                }
+            } catch (err) {
+                console.error("Error fetching apps from Dexie:", err);
+            }
+
+            let html = '';
+            for (let i = 0; i < firstDayIndex; i++) {
+                html += `<div></div>`;
+            }
+
+            for (let day = 1; day <= totalDays; day++) {
+                const formattedDay = String(day).padStart(2, '0');
+                const formattedMonth = String(month + 1).padStart(2, '0');
+                const dateString = `${year}-${formattedMonth}-${formattedDay}`;
+                const dayOfWeek = new Date(dateString).getDay(); // 0 = Sun, 1 = Mon, ..., 6 = Sat
+
+                const isPast = dateString < todayStr;
+                let isAllowedDay = true;
+
+                // Rule Validation: 
+                // - Mass: Tuesday to Sat (2 to 6). Sunday (0) is strictly NOT allowed for Funeral Mass.
+                // - Blessing & Chapel: Tuesday to Sunday (2 to 6, plus 0). Monday (1) is parish rest day.
+                if (funeralType === 'mass') {
+                    isAllowedDay = (dayOfWeek >= 2 && dayOfWeek <= 6);
+                } else {
+                    isAllowedDay = (dayOfWeek !== 1); // Allow Tue-Sun, block Mondays
+                }
+
+                // Check occupancy for this date
+                const dateBookings = allApps.filter(app => {
+                    const appStatus = (app.status || '').toLowerCase();
+                    if (appStatus === 'rejected' || app.archived) return false;
+                    const appDate = app.confirmedDate || app.preferredDate || '';
+                    return appDate.startsWith(dateString) && (app.sacramentType || '').toLowerCase() === 'funeral';
+                });
+
+                const bookedCount = dateBookings.length;
+                const MAX_CAPACITY = funeralType === 'chapel' ? 2 : 3; // Chapel capacity vs church slots
+                const isFullyBooked = bookedCount >= MAX_CAPACITY;
+                const isSelected = selectedFuneralDateStr === dateString;
+
+                let bgStyle = '#f0f2f5';
+                let textStyle = '#050505';
+                let cursorStyle = isAllowedDay && !isPast && !isFullyBooked ? 'pointer' : 'not-allowed';
+                let badgeText = isAllowedDay ? 'Available' : 'Closed';
+                let badgeColor = isAllowedDay ? '#2e7d32' : '#8a8d91';
+
+                if (isPast || !isAllowedDay) {
+                    bgStyle = '#f4f2f2';
+                    textStyle = '#b0b3b8';
+                    badgeText = !isAllowedDay ? (dayOfWeek === 1 ? 'Closed (Mon)' : 'No Mass (Sun)') : 'Past';
+                } else if (isFullyBooked) {
+                    bgStyle = '#f8d7da';
+                    textStyle = '#721c24';
+                    badgeText = 'Full';
+                    badgeColor = '#c0392b';
+                }
+
+                if (isSelected) {
+                    bgStyle = '#1877f2';
+                    textStyle = '#ffffff';
+                    badgeColor = '#ffffff';
+                }
+
+                html += `
+            <div onclick="${isPast || !isAllowedDay || isFullyBooked ? '' : `selectFuneralCalendarDate('${dateString}')`}" 
+                 style="background: ${bgStyle}; color: ${textStyle}; padding: 8px 4px; border-radius: 6px; cursor: ${cursorStyle}; font-size: 13px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 44px; border: ${isSelected ? '2px solid #000' : '1px solid transparent'};">
+                <strong style="font-size: 14px;">${day}</strong>
+                <span style="font-size: 9px; font-weight: bold; color: ${badgeColor}; margin-top: 2px;">${badgeText}</span>
+            </div>
+        `;
+            }
+
+            gridEl.innerHTML = html;
+        }
+
+        function changeFuneralCalendarMonth(direction) {
+            currentFuneralCalDate.setMonth(currentFuneralCalDate.getMonth() + direction);
+            renderFuneralCalendar();
+        }
+
+        async function selectFuneralCalendarDate(dateStr) {
+            selectedFuneralDateStr = dateStr;
+            document.getElementById('funeralSelectedDateInput').value = dateStr;
+            renderFuneralCalendar();
+
+            const panel = document.getElementById('funeralTimeslotPanel');
+            const header = document.getElementById('funeralSelectedDateHeader');
+            const summaryBox = document.getElementById('funeralSummaryBox');
+            const funeralType = document.getElementById('funeralTypeSelect').value;
+            const isAircon = document.getElementById('chapelAirconCheck')?.checked || false;
+
+            panel.style.display = 'block';
+            header.textContent = `Select Time Slot for ${dateStr}`;
+
+            let fee = 500;
+            let serviceDesc = 'Funeral Mass';
+
+            if (funeralType === 'blessing') {
+                fee = 100;
+                serviceDesc = 'Funeral Blessing in Church';
+            } else if (funeralType === 'mass') {
+                fee = 500;
+                serviceDesc = 'Funeral Mass in Church';
+            } else if (funeralType === 'chapel') {
+                fee = isAircon ? 6000 : 2000;
+                serviceDesc = isAircon ? 'Resurrection Chapel (With Aircon - ₱6,000/day)' : 'Resurrection Chapel (Standard - ₱2,000/day)';
+            }
+
+            document.getElementById('funeralCalculatedFeeInput').value = fee;
+
+            // Ensure hidden time input exists
+            let timeInput = document.getElementById('funeralSelectedTimeInput');
+            if (!timeInput) {
+                timeInput = document.createElement('input');
+                timeInput.type = 'hidden';
+                timeInput.id = 'funeralSelectedTimeInput';
+                timeInput.name = 'confirmedTime';
+                document.getElementById('funeralForm').appendChild(timeInput);
+            }
+
+            // Render Selectable Time Slot Blocks
+            summaryBox.innerHTML = `
+        <div style="margin-bottom: 8px;">
+            <strong>Service:</strong> ${serviceDesc}<br>
+            <strong>Stipend / Fee:</strong> <span style="color: #27ae60; font-weight: bold;">₱${fee.toLocaleString()} ${funeralType === 'chapel' ? 'per day' : ''}</span>
+        </div>
+        <label style="display: block; font-weight: bold; color: #1c1e21; font-size: 12px; margin-bottom: 6px;">Select Available Time Slot *</label>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <div onclick="selectFuneralTimeSlot('18:00 - 21:00', this)" class="funeral-time-box" style="background: #e7f3ff; border: 1px solid #1877f2; color: #1877f2; padding: 10px; border-radius: 6px; text-align: center; font-size: 12px; cursor: pointer; transition: all 0.2s;">
+                <strong>6:00 PM – 9:00 PM</strong><br><span style="font-size: 10px;">Evening Vigil / Mass</span>
+            </div>
+            <div onclick="selectFuneralTimeSlot('Daytime (Office Schedule)', this)" class="funeral-time-box" style="background: #e7f3ff; border: 1px solid #1877f2; color: #1877f2; padding: 10px; border-radius: 6px; text-align: center; font-size: 12px; cursor: pointer; transition: all 0.2s;">
+                <strong>Daytime Slot</strong><br><span style="font-size: 10px;">Coordinate w/ Office</span>
+            </div>
+        </div>
+    `;
+        }
+
+        function selectFuneralTimeSlot(timeVal, element) {
+            document.querySelectorAll('.funeral-time-box').forEach(box => {
+                box.style.background = '#e7f3ff';
+                box.style.color = '#1877f2';
+                box.style.borderColor = '#1877f2';
+            });
+
+            element.style.background = '#1877f2';
+            element.style.color = '#ffffff';
+            element.style.borderColor = '#104e8b';
+
+            // Set the hidden input value for form submission
+            document.getElementById('funeralSelectedTimeInput').value = timeVal;
+        }
+
+
     </script>
 </body>
 
