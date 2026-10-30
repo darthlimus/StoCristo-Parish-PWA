@@ -490,11 +490,11 @@
         </div>
     </div>
 
-    <!-- 3. FUNERAL APPLICATION FORM -->
+    <!-- 3. FUNERAL APPLICATION FORM (INTERPRET & WAKE RANGE PICKER) -->
     <div class="modal-overlay" id="funeralModal">
         <div class="modal-box">
             <span class="close-btn" onclick="closeModal('funeralModal')">&times;</span>
-            <h2>Funeral Mass / Vigil Request</h2>
+            <h2>Resurrection Chapel Wake & Vigil Request</h2>
             <form id="funeralForm" onsubmit="event.preventDefault(); saveApplicationLocally('funeral', this);">
                 <div class="form-row">
                     <div class="form-group">
@@ -511,8 +511,8 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Deceased Person's Full Name</label>
-                        <input type="text" name="deceasedName" placeholder="Full Name of Deceased">
+                        <label>Deceased Person's Full Name *</label>
+                        <input type="text" name="deceasedName" required placeholder="Full Name of Deceased">
                     </div>
                     <div class="form-group">
                         <label>Age at Death</label>
@@ -522,52 +522,37 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Date of Passing</label>
-                        <input type="date" id="dateOfPassing" name="dateOfPassing" onchange="autoSyncFuneralDate()">
-                    </div>
-                    <div class="form-group">
-                        <label>Contact Phone Number</label>
-                        <input type="tel" name="phone" placeholder="09XX-XXX-XXXX">
+                        <label>Contact Phone Number *</label>
+                        <input type="tel" name="phone" required placeholder="09XX-XXX-XXXX">
                     </div>
                 </div>
 
-                <!-- DEDICATED FUNERAL & WAKE FACEBOOK-STYLE SCHEDULING CALENDAR -->
+                <!-- INTERACTIVE FUNERAL RANGE & CHAPEL CALENDAR WIDGET -->
                 <div class="fb-calendar-container"
                     style="background: #ffffff; border: 1px solid #ccd0d5; border-radius: 8px; padding: 16px; margin-bottom: 15px; font-family: Helvetica, Arial, sans-serif;">
 
-                    <!-- Funeral Service Category Selector -->
-                    <div style="margin-bottom: 12px;">
-                        <label
-                            style="display: block; font-weight: bold; color: #1c1e21; font-size: 13px; margin-bottom: 6px;">Select
-                            Funeral Service Type *</label>
-                        <select id="funeralTypeSelect" onchange="onFuneralTypeChanged()"
-                            style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px; font-size: 14px;"
-                            required>
-                            <option value="">-- Select Service Type --</option>
-                            <option value="blessing">Funeral Blessing in Church (₱100 | Tue to Sun)</option>
-                            <option value="mass">Funeral Mass in Church (₱500 | Tue to Sat Only)</option>
-                            <option value="chapel">Resurrection Chapel Wake / Vigil (₱2,000 - ₱6,000/day)</option>
-                        </select>
-                    </div>
-
-                    <!-- Resurrection Chapel Options (Shown only if Chapel is selected) -->
-                    <div id="chapelOptionsContainer"
-                        style="display: none; background: #f8f9fa; border: 1px solid #e2e8f0; padding: 10px; border-radius: 6px; margin-bottom: 12px; font-size: 13px;">
-                        <label
-                            style="display: block; font-weight: bold; color: #4a0e17; margin-bottom: 4px;">Resurrection
-                            Chapel Setup:</label>
-                        <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
-                            <input type="checkbox" id="chapelAirconCheck" onchange="updateFuneralFees()"> Include Air
-                            Conditioning (₱6,000 / day instead of ₱2,000)
-                        </label>
-                        <p style="margin: 6px 0 0 0; color: #666; font-size: 11px;">Note: Each family is given a maximum
-                            of 1 week (7 days) for the wake vigil.</p>
-                    </div>
-
-                    <!-- Fee & Schedule Information Notice -->
-                    <div id="funeralInfoNotice"
+                    <div
                         style="background: #e7f3ff; border-left: 4px solid #1877f2; padding: 10px; font-size: 12px; color: #1c1e21; margin-bottom: 15px;">
-                        Select a funeral service type above to view calendar availability and fees.
+                        <strong>🕯️ Resurrection Chapel Scheduling:</strong><br>
+                        Select your <strong>Wake Start Date</strong> and <strong>Target Interment Date</strong> below.
+                        The calendar will preview and highlight the occupied span (Max 7 days).
+                    </div>
+
+                    <!-- Setup Options & Range Summary -->
+                    <div
+                        style="background: #f8f9fa; border: 1px solid #e2e8f0; padding: 12px; border-radius: 6px; margin-bottom: 15px;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <label
+                                style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 12px;">
+                                <input type="checkbox" id="chapelAirconCheck" name="includeAircon"
+                                    onchange="updateFuneralSpanCalculation()">
+                                <strong>Include Air Conditioning</strong> (₱6,000/day vs ₱2,000 standard)
+                            </label>
+                        </div>
+                        <div id="funeralFeeNotice" style="font-size: 12px; color: #333; font-weight: bold;">
+                            Please select start and interment dates from the calendar.
+                        </div>
                     </div>
 
                     <!-- Calendar Month Header -->
@@ -598,47 +583,24 @@
                     <!-- Calendar Grid -->
                     <div id="funeralCalendarGrid"
                         style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; margin-bottom: 12px;">
-                        <!-- Populated via JS -->
                     </div>
 
-                    <!-- Selected Date & Summary Panel -->
+                    <!-- Selected Date Summary Panel -->
                     <div id="funeralTimeslotPanel"
-                        style="border-top: 1px solid #e4e6eb; padding-top: 12px; display: none;">
+                        style="border-top: 1px solid #e4e6eb; padding-top: 10px; display: none; font-size: 13px;">
                         <div id="funeralSelectedDateHeader"
-                            style="font-size: 13px; font-weight: bold; color: #1c1e21; margin-bottom: 8px;"></div>
-                        <div id="funeralSummaryBox"
-                            style="background: #f0f2f5; padding: 10px; border-radius: 6px; font-size: 13px;">
-                            <!-- Dynamic Fee & Slot confirmation -->
-                        </div>
+                            style="font-weight: bold; color: #1c1e21; margin-bottom: 4px;"></div>
+                        <div id="funeralSummaryBox" style="color: #555;"></div>
                     </div>
 
                     <!-- Hidden Inputs for Form Submission -->
                     <input type="hidden" id="funeralSelectedDateInput" name="preferredDate" required>
-                    <input type="hidden" id="funeralSelectedTimeInput" name="confirmedTime" value="18:00 - 21:00">
-                    <input type="hidden" id="funeralCalculatedFeeInput" name="totalFee">
+                    <input type="hidden" id="intermentDateInput" name="intermentDate" required>
+                    <input type="hidden" id="wakeDaysInput" name="wakeDays" value="1">
+                    <input type="hidden" id="funeralSelectedTimeInput" name="confirmedTime" value="08:00 - 17:00">
+                    <input type="hidden" id="funeralCalculatedFeeInput" name="totalFee" value="2000">
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Wake Location / Address</label>
-                        <input type="text" name="wakeLocation" placeholder="Chapel name or home address">
-                    </div>
-                </div>
-
-                <!-- Funeral Document Upload Section -->
-                <div class="form-document-section">
-                    <p class="form-section-title">Required Documents</p>
-                    <p class="doc-hint">Please upload the official <strong>Death Certificate</strong> or <strong>Burial
-                            Permit</strong>.</p>
-
-                    <div class="inline-drop-zone" onclick="document.getElementById('funFiles').click()">
-                        <span>✝️ Click or drag files here to attach Funeral Documents</span>
-                        <input type="file" id="funFiles" multiple accept=".pdf,.jpg,.jpeg,.png" style="display:none;"
-                            onchange="handleInlineFiles(event, 'funFileList')">
-                    </div>
-                    <div class="file-preview-list" id="funFileList"></div>
-                </div>
-                
                 <!-- REPUBLIC ACT NO. 10173 (DATA PRIVACY ACT) CONSENT SECTION -->
                 <div class="form-group"
                     style="background: #f8f9fa; border: 1px solid #ccd0d5; padding: 12px; border-radius: 6px; margin: 15px 0;">
@@ -648,62 +610,16 @@
                             style="margin-top: 2px; cursor: pointer;">
                         <span>
                             <strong>Data Privacy Consent:</strong> I hereby authorize Santuario Del Sto. Cristo Parish
-                            to collect, process, and store my personal and sacramental data provided in this form in
-                            compliance with the <strong>Philippine Data Privacy Act (RA 10173)</strong>. I understand my
-                            data will be used strictly for parish record-keeping, verification, and ceremony scheduling.
+                            to collect, process, and store my personal data provided in this form in compliance with the
+                            <strong>Philippine Data Privacy Act (RA 10173)</strong>.
                         </span>
                     </label>
                 </div>
-                <button type="submit" class="form-submit-btn">Submit Funeral Request</button>
+
+                <button type="submit" class="form-submit-btn">Submit Resurrection Chapel Request</button>
             </form>
         </div>
-    </div>
-
-    <!-- 4. ACCOUNT AUTHENTICATION MODAL -->
-    <div id="authModal" class="modal-overlay">
-        <div class="modal-box auth-card">
-            <span class="close-btn" onclick="closeModal('authModal')">&times;</span>
-
-            <div class="auth-tabs">
-                <button id="loginTabBtn" class="tab-btn active" onclick="switchAuthTab('login')">Sign In</button>
-                <button id="registerTabBtn" class="tab-btn" onclick="switchAuthTab('register')">Create Account</button>
-            </div>
-
-            <!-- LOGIN FORM -->
-            <form id="loginForm" class="auth-form" onsubmit="handleLogin(event)">
-                <h2>Welcome Back</h2>
-                <div class="form-group">
-                    <label for="loginEmail">Email Address</label>
-                    <input type="email" id="loginEmail" placeholder="e.g. juan@example.com" required>
-                </div>
-                <div class="form-group">
-                    <label for="loginPassword">Password</label>
-                    <input type="password" id="loginPassword" placeholder="••••••••" required>
-                </div>
-                <button type="submit" class="submit-btn">Login</button>
-            </form>
-
-            <!-- REGISTER FORM -->
-            <form id="registerForm" class="auth-form hidden" onsubmit="handleRegister(event)">
-                <h2>Create an Account</h2>
-                <div class="form-group">
-                    <label for="regFullName">Full Name</label>
-                    <input type="text" id="regFullName" placeholder="e.g. Juan dela Cruz" required>
-                </div>
-                <div class="form-group">
-                    <label for="regEmail">Email Address</label>
-                    <input type="email" id="regEmail" placeholder="e.g. juan@example.com" required>
-                </div>
-                <div class="form-group">
-                    <label for="regPassword">Password</label>
-                    <input type="password" id="regPassword" placeholder="Minimum 6 characters" minlength="6" required>
-                </div>
-                <button type="submit" class="submit-btn">Register</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- 5. USER DASHBOARD MODAL -->
+    </div> <!-- 5. USER DASHBOARD MODAL -->
     <div id="dashboardModal" class="modal-overlay">
         <div class="modal-box modal-large">
             <div class="modal-header">
@@ -717,6 +633,40 @@
             </div>
         </div>
     </div>
+
+    <!-- RESCHEDULE REQUEST MODAL (Parishioner Side) -->
+    <div id="requestReschedModal" class="modal-overlay" style="z-index: 999999;">
+        <div class="modal-box" style="max-width: 500px; padding: 24px; text-align: left;">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #4a0e17; padding-bottom: 10px; margin-bottom: 15px;">
+                <h3 style="color: #4a0e17; margin: 0; font-size: 1.2rem;">📅 Request Schedule Change</h3>
+                <span class="close-btn" onclick="closeModal('requestReschedModal')"
+                    style="cursor: pointer; font-size: 1.5rem; color: #333;">&times;</span>
+            </div>
+            <p style="font-size: 13px; color: #666; margin-bottom: 15px;">Please provide a reason why you need to
+                reschedule your ceremony or appointment.</p>
+
+            <form id="requestReschedForm" onsubmit="submitRescheduleRequest(event)">
+                <input type="hidden" id="reschedAppId">
+                <div style="margin-bottom: 15px;">
+                    <label
+                        style="display: block; font-weight: bold; color: #2c3e50; margin-bottom: 6px; font-size: 0.9rem;">Reason
+                        for Rescheduling *</label>
+                    <textarea id="reschedReasonInput" rows="3" required
+                        style="width: 100%; padding: 8px; border: 1px solid #abb2b9; border-radius: 4px;"
+                        placeholder="e.g., Conflict with family travel or godparent availability..."></textarea>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                    <button type="button" onclick="closeModal('requestReschedModal')"
+                        style="padding: 8px 16px; background: #e0e0e0; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: #333;">Cancel</button>
+                    <button type="submit"
+                        style="padding: 8px 16px; background: #4a0e17; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">Submit
+                        Request</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 
     <!-- 6. SUBMISSION CONFIRMATION MODAL -->
     <div id="confirmationModal" class="modal-overlay">
@@ -972,6 +922,11 @@
                 modal.style.display = 'flex';
                 modal.classList.add('active');
                 autofillUserData();
+
+                // ADD THIS LINE: Automatically generate the funeral calendar when modal opens
+                if (modalId === 'funeralModal' && typeof renderFuneralCalendar === 'function') {
+                    renderFuneralCalendar();
+                }
             }
         }
 
@@ -1196,6 +1151,7 @@
         // Function to handle reading multiple files from the input element
         // --- Inline File Preview Handler (Renders ALL selected files) ---
         // Global store to keep files accumulated across multiple file-picker selections
+        // Global store for file inputs
         window.accumulatedFiles = window.accumulatedFiles || {};
 
         function handleInlineFiles(event, targetListId) {
@@ -1203,26 +1159,21 @@
             const inputId = input.id;
             const incomingFiles = Array.from(input.files);
 
-            // Initialize array for this specific file input if not present
             if (!window.accumulatedFiles[inputId]) {
                 window.accumulatedFiles[inputId] = [];
             }
 
-            // Append new files without overwriting previous selections
+            // Only add files that aren't already in the accumulated list
             incomingFiles.forEach(newFile => {
-                // Prevent adding duplicate files with identical name and size
-                const isDuplicate = window.accumulatedFiles[inputId].some(
+                const isAlreadyAdded = window.accumulatedFiles[inputId].some(
                     existing => existing.name === newFile.name && existing.size === newFile.size
                 );
-                if (!isDuplicate) {
+                if (!isAlreadyAdded) {
                     window.accumulatedFiles[inputId].push(newFile);
                 }
             });
 
-            // Sync accumulated files back to input element using DataTransfer
             syncInputFiles(inputId);
-
-            // Render all accumulated badges
             renderBadges(inputId, targetListId);
         }
 
@@ -1317,7 +1268,7 @@
         const SACRAMENT_DOC_REQUIREMENTS = {
             baptism: { minFiles: 2, label: "PSA Birth Certificate & Parents' Marriage/Baptismal Certificates" },
             wedding: { minFiles: 3, label: "PSA Birth Certificate, CENOMAR & Confirmation Certificate" },
-            funeral: { minFiles: 1, label: "Death Certificate or Burial Permit" }
+            funeral: { minFiles: 0, label: "No documents required for Resurrection Chapel wake." }
         };
 
         async function saveApplicationLocally(sacramentType, formElement) {
@@ -1511,15 +1462,27 @@
                     if (app.status === 'Rejected') statusColor = '#c0392b';
                     if (app.status === 'Needs Revision') statusColor = '#d35400';
 
-                    // Resubmit button conditionally rendered when status is Needs Revision
+                    // Inside renderUserDashboard(), replace the actionHtml logic with this:
                     let actionHtml = `<span style="color: ${app.adminNotes ? '#c0392b' : '#666'};">${notes}</span>`;
+
+                    // If status is Needs Revision, show Lacking Docs button
                     if (app.status === 'Needs Revision') {
                         actionHtml += `
-                    <br>
-                    <button onclick="openResubmitDocsModal('${app.id}')" style="margin-top: 6px; background: #d35400; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">
-                        📤 Upload Lacking Docs
-                    </button>
-                `;
+        <br>
+        <button onclick="openResubmitDocsModal('${app.id}')" style="margin-top: 6px; background: #d35400; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">
+            📤 Upload Lacking Docs
+        </button>
+    `;
+                    }
+
+                    // Allow parishioners to request a reschedule if the application is Approved or Pending
+                    if (app.status === 'Approved' || app.status === 'Pending') {
+                        actionHtml += `
+        <br>
+        <button onclick="openRescheduleRequestModal('${app.id}')" style="margin-top: 6px; background: #1877f2; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">
+            📅 Request Resched
+        </button>
+    `;
                     }
 
                     html += `
@@ -2405,55 +2368,15 @@
         document.addEventListener('DOMContentLoaded', () => {
             renderWeddingCalendar();
         });
-
         let currentFuneralCalDate = new Date();
-        let selectedFuneralDateStr = '';
-
-        function onFuneralTypeChanged() {
-            const type = document.getElementById('funeralTypeSelect').value;
-            const chapelContainer = document.getElementById('chapelOptionsContainer');
-            const notice = document.getElementById('funeralInfoNotice');
-
-            selectedFuneralDateStr = '';
-            document.getElementById('funeralSelectedDateInput').value = '';
-            document.getElementById('funeralTimeslotPanel').style.display = 'none';
-
-            if (type === 'chapel') {
-                chapelContainer.style.display = 'block';
-                notice.innerHTML = `<strong> chapel Reservation:</strong> Resurrection Chapel is available at <strong>₱2,000/day</strong> (or <strong>₱6,000/day with Aircon</strong>). Max 1 week vigil.`;
-            } else if (type === 'blessing') {
-                chapelContainer.style.display = 'none';
-                notice.innerHTML = `<strong>✝️ Funeral Blessing:</strong> Fee is <strong>₱100</strong>. Available Tuesday to Sunday (Coordinate time with Parish Office).`;
-            } else if (type === 'mass') {
-                chapelContainer.style.display = 'none';
-                notice.innerHTML = `<strong>⛪ Funeral Mass:</strong> Fee is <strong>₱500</strong>. Available Tuesday to Saturday (No Funeral Masses on Sundays).`;
-            } else {
-                chapelContainer.style.display = 'none';
-                notice.innerHTML = `Select a funeral service type above to view calendar availability and fees.`;
-            }
-
-            renderFuneralCalendar();
-        }
-
-        function updateFuneralFees() {
-            if (selectedFuneralDateStr) {
-                selectFuneralCalendarDate(selectedFuneralDateStr);
-            }
-        }
+        let funeralWakeStartDate = null;
+        let funeralIntermentDate = null;
 
         async function renderFuneralCalendar() {
             const gridEl = document.getElementById('funeralCalendarGrid');
             const labelEl = document.getElementById('funeralMonthYearLabel');
-            const typeSelect = document.getElementById('funeralTypeSelect');
 
             if (!gridEl || !labelEl) return;
-
-            const funeralType = typeSelect ? typeSelect.value : '';
-            if (!funeralType) {
-                gridEl.innerHTML = `<div style="grid-column: span 7; color: #707579; font-size: 12px; padding: 15px; text-align: center;">Please select a Funeral Service Type above first.</div>`;
-                labelEl.textContent = 'Select Type';
-                return;
-            }
 
             const year = currentFuneralCalDate.getFullYear();
             const month = currentFuneralCalDate.getMonth();
@@ -2464,14 +2387,34 @@
             const totalDays = new Date(year, month + 1, 0).getDate();
             const todayStr = new Date().toISOString().split('T')[0];
 
-            let allApps = [];
+            // Fetch existing active funeral applications to block booked spans
+            let allFuneralApps = [];
             try {
                 if (typeof db !== 'undefined' && db.applications) {
-                    allApps = await db.applications.toArray();
+                    const allApps = await db.applications.toArray();
+                    allFuneralApps = allApps.filter(app => {
+                        const appStatus = (app.status || '').toLowerCase();
+                        if (appStatus === 'rejected' || app.archived) return false;
+                        return (app.sacramentType || '').toLowerCase() === 'funeral';
+                    });
                 }
             } catch (err) {
-                console.error("Error fetching apps from Dexie:", err);
+                console.error("Error fetching funeral apps:", err);
             }
+
+            const occupiedDates = new Set();
+            allFuneralApps.forEach(app => {
+                const startStr = app.confirmedDate || app.preferredDate;
+                const endStr = app.details?.intermentDate || app.intermentDate || startStr;
+                if (!startStr) return;
+
+                let curr = new Date(startStr);
+                let end = new Date(endStr);
+                while (curr <= end) {
+                    occupiedDates.add(curr.toISOString().split('T')[0]);
+                    curr.setDate(curr.getDate() + 1);
+                }
+            });
 
             let html = '';
             for (let i = 0; i < firstDayIndex; i++) {
@@ -2482,59 +2425,52 @@
                 const formattedDay = String(day).padStart(2, '0');
                 const formattedMonth = String(month + 1).padStart(2, '0');
                 const dateString = `${year}-${formattedMonth}-${formattedDay}`;
-                const dayOfWeek = new Date(dateString).getDay(); // 0 = Sun, 1 = Mon, ..., 6 = Sat
+                const dayOfWeek = new Date(dateString).getDay();
 
                 const isPast = dateString < todayStr;
-                let isAllowedDay = true;
+                const isAllowedDay = (dayOfWeek !== 1); // Closed Mondays
+                const isOccupied = occupiedDates.has(dateString);
 
-                // Rule Validation: 
-                // - Mass: Tuesday to Sat (2 to 6). Sunday (0) is strictly NOT allowed for Funeral Mass.
-                // - Blessing & Chapel: Tuesday to Sunday (2 to 6, plus 0). Monday (1) is parish rest day.
-                if (funeralType === 'mass') {
-                    isAllowedDay = (dayOfWeek >= 2 && dayOfWeek <= 6);
-                } else {
-                    isAllowedDay = (dayOfWeek !== 1); // Allow Tue-Sun, block Mondays
+                let isStart = funeralWakeStartDate === dateString;
+                let isEnd = funeralIntermentDate === dateString;
+                let isInSpan = false;
+
+                if (funeralWakeStartDate && funeralIntermentDate) {
+                    isInSpan = dateString > funeralWakeStartDate && dateString < funeralIntermentDate;
                 }
-
-                // Check occupancy for this date
-                const dateBookings = allApps.filter(app => {
-                    const appStatus = (app.status || '').toLowerCase();
-                    if (appStatus === 'rejected' || app.archived) return false;
-                    const appDate = app.confirmedDate || app.preferredDate || '';
-                    return appDate.startsWith(dateString) && (app.sacramentType || '').toLowerCase() === 'funeral';
-                });
-
-                const bookedCount = dateBookings.length;
-                const MAX_CAPACITY = funeralType === 'chapel' ? 2 : 3; // Chapel capacity vs church slots
-                const isFullyBooked = bookedCount >= MAX_CAPACITY;
-                const isSelected = selectedFuneralDateStr === dateString;
 
                 let bgStyle = '#f0f2f5';
                 let textStyle = '#050505';
-                let cursorStyle = isAllowedDay && !isPast && !isFullyBooked ? 'pointer' : 'not-allowed';
+                let cursorStyle = isAllowedDay && !isPast && !isOccupied ? 'pointer' : 'not-allowed';
                 let badgeText = isAllowedDay ? 'Available' : 'Closed';
                 let badgeColor = isAllowedDay ? '#2e7d32' : '#8a8d91';
 
                 if (isPast || !isAllowedDay) {
                     bgStyle = '#f4f2f2';
                     textStyle = '#b0b3b8';
-                    badgeText = !isAllowedDay ? (dayOfWeek === 1 ? 'Closed (Mon)' : 'No Mass (Sun)') : 'Past';
-                } else if (isFullyBooked) {
+                    badgeText = !isAllowedDay ? 'Closed (Mon)' : 'Past';
+                } else if (isOccupied) {
                     bgStyle = '#f8d7da';
                     textStyle = '#721c24';
-                    badgeText = 'Full';
+                    badgeText = 'Occupied';
                     badgeColor = '#c0392b';
                 }
 
-                if (isSelected) {
+                if (isStart || isEnd) {
                     bgStyle = '#1877f2';
                     textStyle = '#ffffff';
+                    badgeText = isStart ? 'Wake Start' : 'Interment';
                     badgeColor = '#ffffff';
+                } else if (isInSpan) {
+                    bgStyle = '#d0e8ff'; // Preview highlight for wake span
+                    textStyle = '#1d4ed8';
+                    badgeText = 'Wake Span';
+                    badgeColor = '#1d4ed8';
                 }
 
                 html += `
-            <div onclick="${isPast || !isAllowedDay || isFullyBooked ? '' : `selectFuneralCalendarDate('${dateString}')`}" 
-                 style="background: ${bgStyle}; color: ${textStyle}; padding: 8px 4px; border-radius: 6px; cursor: ${cursorStyle}; font-size: 13px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 44px; border: ${isSelected ? '2px solid #000' : '1px solid transparent'};">
+            <div onclick="${isPast || !isAllowedDay || isOccupied ? '' : `selectFuneralCalendarDate('${dateString}')`}" 
+                 style="background: ${bgStyle}; color: ${textStyle}; padding: 8px 4px; border-radius: 6px; cursor: ${cursorStyle}; font-size: 13px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 44px; border: ${isStart || isEnd ? '2px solid #000' : '1px solid transparent'};">
                 <strong style="font-size: 14px;">${day}</strong>
                 <span style="font-size: 9px; font-weight: bold; color: ${badgeColor}; margin-top: 2px;">${badgeText}</span>
             </div>
@@ -2550,79 +2486,154 @@
         }
 
         async function selectFuneralCalendarDate(dateStr) {
-            selectedFuneralDateStr = dateStr;
-            document.getElementById('funeralSelectedDateInput').value = dateStr;
+            if (!funeralWakeStartDate || (funeralWakeStartDate && funeralIntermentDate)) {
+                // First click: Set Wake Start Date
+                funeralWakeStartDate = dateStr;
+                funeralIntermentDate = null;
+                document.getElementById('funeralSelectedDateInput').value = dateStr;
+                document.getElementById('intermentDateInput').value = '';
+
+                const panel = document.getElementById('funeralTimeslotPanel');
+                panel.style.display = 'block';
+                document.getElementById('funeralSelectedDateHeader').textContent = `Wake Start: ${dateStr}`;
+                document.getElementById('funeralSummaryBox').innerHTML = `Now select your <strong>Target Interment Date</strong> on the calendar.`;
+                renderFuneralCalendar();
+                return;
+            }
+
+            // Second click: Set Interment Date
+            if (dateStr < funeralWakeStartDate) {
+                showAlert('Interment date cannot be earlier than the wake start date.', 'Invalid Range');
+                return;
+            }
+
+            // Calculate span days
+            let startD = new Date(funeralWakeStartDate);
+            let endD = new Date(dateStr);
+            let diffTime = Math.abs(endD - startD);
+            let wakeDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+            if (wakeDays > 7) {
+                showAlert('Maximum wake duration is 1 week (7 days). Please select an earlier interment date.', 'Duration Exceeded');
+                return;
+            }
+
+            funeralIntermentDate = dateStr;
+            document.getElementById('intermentDateInput').value = dateStr;
+            document.getElementById('wakeDaysInput').value = wakeDays;
+
             renderFuneralCalendar();
+            updateFuneralSpanCalculation();
+        }
+
+        function updateFuneralSpanCalculation() {
+            if (!funeralWakeStartDate || !funeralIntermentDate) return;
+
+            const isAircon = document.getElementById('chapelAirconCheck')?.checked || false;
+            let startD = new Date(funeralWakeStartDate);
+            let endD = new Date(funeralIntermentDate);
+            let wakeDays = Math.round((endD - startD) / (1000 * 60 * 60 * 24)) + 1;
+
+            const ratePerDay = isAircon ? 6000 : 2000;
+            const totalFee = wakeDays * ratePerDay;
+
+            document.getElementById('funeralCalculatedFeeInput').value = totalFee;
 
             const panel = document.getElementById('funeralTimeslotPanel');
-            const header = document.getElementById('funeralSelectedDateHeader');
-            const summaryBox = document.getElementById('funeralSummaryBox');
-            const funeralType = document.getElementById('funeralTypeSelect').value;
-            const isAircon = document.getElementById('chapelAirconCheck')?.checked || false;
-
             panel.style.display = 'block';
-            header.textContent = `Select Time Slot for ${dateStr}`;
-
-            let fee = 500;
-            let serviceDesc = 'Funeral Mass';
-
-            if (funeralType === 'blessing') {
-                fee = 100;
-                serviceDesc = 'Funeral Blessing in Church';
-            } else if (funeralType === 'mass') {
-                fee = 500;
-                serviceDesc = 'Funeral Mass in Church';
-            } else if (funeralType === 'chapel') {
-                fee = isAircon ? 6000 : 2000;
-                serviceDesc = isAircon ? 'Resurrection Chapel (With Aircon - ₱6,000/day)' : 'Resurrection Chapel (Standard - ₱2,000/day)';
-            }
-
-            document.getElementById('funeralCalculatedFeeInput').value = fee;
-
-            // Ensure hidden time input exists
-            let timeInput = document.getElementById('funeralSelectedTimeInput');
-            if (!timeInput) {
-                timeInput = document.createElement('input');
-                timeInput.type = 'hidden';
-                timeInput.id = 'funeralSelectedTimeInput';
-                timeInput.name = 'confirmedTime';
-                document.getElementById('funeralForm').appendChild(timeInput);
-            }
-
-            // Render Selectable Time Slot Blocks
-            summaryBox.innerHTML = `
-        <div style="margin-bottom: 8px;">
-            <strong>Service:</strong> ${serviceDesc}<br>
-            <strong>Stipend / Fee:</strong> <span style="color: #27ae60; font-weight: bold;">₱${fee.toLocaleString()} ${funeralType === 'chapel' ? 'per day' : ''}</span>
-        </div>
-        <label style="display: block; font-weight: bold; color: #1c1e21; font-size: 12px; margin-bottom: 6px;">Select Available Time Slot *</label>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-            <div onclick="selectFuneralTimeSlot('18:00 - 21:00', this)" class="funeral-time-box" style="background: #e7f3ff; border: 1px solid #1877f2; color: #1877f2; padding: 10px; border-radius: 6px; text-align: center; font-size: 12px; cursor: pointer; transition: all 0.2s;">
-                <strong>6:00 PM – 9:00 PM</strong><br><span style="font-size: 10px;">Evening Vigil / Mass</span>
-            </div>
-            <div onclick="selectFuneralTimeSlot('Daytime (Office Schedule)', this)" class="funeral-time-box" style="background: #e7f3ff; border: 1px solid #1877f2; color: #1877f2; padding: 10px; border-radius: 6px; text-align: center; font-size: 12px; cursor: pointer; transition: all 0.2s;">
-                <strong>Daytime Slot</strong><br><span style="font-size: 10px;">Coordinate w/ Office</span>
-            </div>
+            document.getElementById('funeralSelectedDateHeader').textContent = `Resurrection Chapel Reservation (${wakeDays} Days)`;
+            document.getElementById('funeralSummaryBox').innerHTML = `
+        <div style="margin-top: 6px;">
+            <strong>Wake Span:</strong> ${funeralWakeStartDate} to ${funeralIntermentDate} (${wakeDays} Days)<br>
+            <strong>Stipend Total:</strong> <span style="color: #27ae60; font-weight: bold;">₱${totalFee.toLocaleString()}</span> (@ ₱${ratePerDay.toLocaleString()}/day)
         </div>
     `;
         }
 
-        function selectFuneralTimeSlot(timeVal, element) {
-            document.querySelectorAll('.funeral-time-box').forEach(box => {
-                box.style.background = '#e7f3ff';
-                box.style.color = '#1877f2';
-                box.style.borderColor = '#1877f2';
-            });
-
-            element.style.background = '#1877f2';
-            element.style.color = '#ffffff';
-            element.style.borderColor = '#104e8b';
-
-            // Set the hidden input value for form submission
-            document.getElementById('funeralSelectedTimeInput').value = timeVal;
+        function openRescheduleRequestModal(appId) {
+            document.getElementById('reschedAppId').value = appId;
+            document.getElementById('reschedReasonInput').value = '';
+            openModal('requestReschedModal');
         }
 
+        async function submitRescheduleRequest(event) {
+            event.preventDefault();
+            const appId = document.getElementById('reschedAppId').value;
+            const reason = document.getElementById('reschedReasonInput').value;
+            const numericId = isNaN(appId) ? appId : Number(appId);
 
+            const app = await db.applications.get(numericId);
+            if (!app) return;
+
+            // Append to status history or add a reschedule request flag
+            const historyEntry = {
+                oldStatus: app.status || 'Pending',
+                newStatus: 'Reschedule Requested',
+                adminNote: `Parishioner requested reschedule: ${reason}`,
+                changedAt: new Date().toISOString(),
+                changedBy: 'Parishioner'
+            };
+            const updatedHistory = app.statusHistory ? [...app.statusHistory, historyEntry] : [historyEntry];
+
+            await db.applications.update(numericId, {
+                status: 'Reschedule Requested',
+                adminNotes: `Reschedule requested: ${reason}`,
+                statusHistory: updatedHistory
+            });
+
+            closeModal('requestReschedModal');
+            alert('✅ Reschedule request submitted successfully to the parish office.');
+            if (typeof fetchUserApplications === 'function') fetchUserApplications();
+        }
+
+        function updateFuneralFeeCalculation() {
+            const daysInput = document.getElementById('wakeDaysInput');
+            const airconCheck = document.getElementById('chapelAirconCheck');
+            const noticeBox = document.getElementById('funeralFeeNotice');
+            const feeInput = document.getElementById('funeralCalculatedFeeInput');
+            const startDateInput = document.getElementById('dateOfPassing');
+            const intermentInput = document.getElementById('intermentDateInput');
+
+            const days = parseInt(daysInput.value) || 1;
+            const hasAircon = airconCheck.checked;
+            const ratePerDay = hasAircon ? 6000 : 2000;
+            const totalFee = days * ratePerDay;
+
+            feeInput.value = totalFee;
+
+            noticeBox.innerHTML = `Estimated Total Stipend: <strong>₱${totalFee.toLocaleString()}</strong> (${days} Day(s) ${hasAircon ? 'With Aircon @ ₱6,000/day' : 'Standard @ ₱2,000/day'})`;
+
+            // Automatically suggest interment date based on start date + wake days
+            if (startDateInput.value) {
+                let startDate = new Date(startDateInput.value);
+                startDate.setDate(startDate.getDate() + (days - 1));
+                intermentInput.value = startDate.toISOString().split('T')[0];
+            }
+        }
+
+        function updateFuneralSpanCalculation() {
+            if (!funeralWakeStartDate || !funeralIntermentDate) return;
+
+            const isAircon = document.getElementById('chapelAirconCheck')?.checked || false;
+            let startD = new Date(funeralWakeStartDate);
+            let endD = new Date(funeralIntermentDate);
+            let wakeDays = Math.round((endD - startD) / (1000 * 60 * 60 * 24)) + 1;
+
+            const ratePerDay = isAircon ? 6000 : 2000;
+            const totalFee = wakeDays * ratePerDay;
+
+            document.getElementById('funeralCalculatedFeeInput').value = totalFee;
+
+            const panel = document.getElementById('funeralTimeslotPanel');
+            panel.style.display = 'block';
+            document.getElementById('funeralSelectedDateHeader').textContent = `Resurrection Chapel Reservation (${wakeDays} Days)`;
+            document.getElementById('funeralSummaryBox').innerHTML = `
+        <div style="margin-top: 6px;">
+            <strong>Wake Span:</strong> ${funeralWakeStartDate} to ${funeralIntermentDate} (${wakeDays} Days)<br>
+            <strong>Stipend Total:</strong> <span style="color: #27ae60; font-weight: bold;">₱${totalFee.toLocaleString()}</span> (@ ₱${ratePerDay.toLocaleString()}/day)
+        </div>
+    `;
+        }
     </script>
 </body>
 

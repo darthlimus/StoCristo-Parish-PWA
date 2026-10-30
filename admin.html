@@ -72,9 +72,25 @@
             border: 1px solid #ccc;
         }
 
-        .status-pending { background-color: #fff3cd; color: #856404; }
-        .status-approved { background-color: #d4edda; color: #155724; }
-        .status-rejected { background-color: #f8d7da; color: #721c24; }
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-resched {
+            background-color: #e2f0cb;
+            color: #385e00;
+        }
+
+        .status-approved {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-rejected {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
 
         .btn-action {
             background: #6c757d;
@@ -86,7 +102,9 @@
             font-weight: bold;
         }
 
-        .btn-action:hover { opacity: 0.9; }
+        .btn-action:hover {
+            opacity: 0.9;
+        }
 
         /* ========================================== */
         /* RESPONSIVE & LONG TABLE STYLING            */
@@ -103,7 +121,7 @@
             background: #ffffff;
             border: 1px solid #ccd0d5;
             border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
             margin-top: 15px;
         }
 
@@ -112,7 +130,8 @@
             border-collapse: collapse;
             text-align: left;
             font-family: Arial, sans-serif;
-            min-width: 1000px; /* Ensures spacious desktop layout with horizontal scroll on smaller viewports */
+            min-width: 1000px;
+            /* Ensures spacious desktop layout with horizontal scroll on smaller viewports */
         }
 
         .admin-table th {
@@ -145,32 +164,39 @@
     <div id="adminAuthModal" class="modal-overlay active">
         <div class="modal-box" style="max-width: 440px; text-align: center;">
             <h2 style="color: #4a0e17; margin-bottom: 8px;">Parish Portal Sign In</h2>
-            <p style="color: #666; font-size: 13px; margin-bottom: 20px;">Sign in as Priest, Secretary, or use Demo Mode.</p>
+            <p style="color: #666; font-size: 13px; margin-bottom: 20px;">Sign in as Priest, Secretary, or use Demo
+                Mode.</p>
 
             <form id="adminLoginForm" onsubmit="handleAdminLogin(event)">
                 <div style="margin-bottom: 15px; text-align: left;">
                     <label for="adminEmail">Email Address</label>
-                    <input type="email" id="adminEmail" placeholder="priest@parish.com or secretary@parish.com" required style="width: 100%; padding: 8px;">
+                    <input type="email" id="adminEmail" placeholder="priest@parish.com or secretary@parish.com" required
+                        style="width: 100%; padding: 8px;">
                 </div>
 
                 <div style="margin-bottom: 20px; text-align: left;">
                     <label for="adminPassword">Password</label>
-                    <input type="password" id="adminPassword" placeholder="••••••••" required style="width: 100%; padding: 8px;">
+                    <input type="password" id="adminPassword" placeholder="••••••••" required
+                        style="width: 100%; padding: 8px;">
                 </div>
 
-                <button type="submit" style="background: #4a0e17; color: white; border: none; padding: 10px; border-radius: 4px; width: 100%; font-weight: bold; cursor: pointer;">
+                <button type="submit"
+                    style="background: #4a0e17; color: white; border: none; padding: 10px; border-radius: 4px; width: 100%; font-weight: bold; cursor: pointer;">
                     Sign In
                 </button>
             </form>
 
             <!-- ROLE-BASED DEMO LOGIN BUTTONS -->
             <div style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed #ccc; text-align: center;">
-                <p style="font-size: 12px; font-weight: bold; color: #555; margin-bottom: 10px;">⚡ Quick Demo Login (Role Bypass):</p>
+                <p style="font-size: 12px; font-weight: bold; color: #555; margin-bottom: 10px;">⚡ Quick Demo Login
+                    (Role Bypass):</p>
                 <div style="display: flex; gap: 8px;">
-                    <button type="button" onclick="loginAsDemoRole('priest')" style="flex: 1; background: #8e44ad; color: white; border: none; padding: 8px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px;">
+                    <button type="button" onclick="loginAsDemoRole('priest')"
+                        style="flex: 1; background: #8e44ad; color: white; border: none; padding: 8px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px;">
                         ✝️ Login as Priest
                     </button>
-                    <button type="button" onclick="loginAsDemoRole('secretary')" style="flex: 1; background: #1877f2; color: white; border: none; padding: 8px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px;">
+                    <button type="button" onclick="loginAsDemoRole('secretary')"
+                        style="flex: 1; background: #1877f2; color: white; border: none; padding: 8px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px;">
                         📋 Login as Secretary
                     </button>
                 </div>
@@ -178,7 +204,8 @@
         </div>
     </div>
 
-    <header class="admin-nav" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 24px;">
+    <header class="admin-nav"
+        style="display: flex; justify-content: space-between; align-items: center; padding: 12px 24px;">
         <div style="display: flex; align-items: center; gap: 15px;">
             <div class="logo-container">
                 <img src="MiniLogo-1.webp" width="140" height="auto" alt="Santuario Del Sto. Cristo Parish Logo">
@@ -189,7 +216,8 @@
     </header>
 
     <div class="admin-container">
-        <div id="statsSection" class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 25px;">
+        <div id="statsSection" class="stats-grid"
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 25px;">
             <div class="stat-card">
                 <h3>Total Submissions</h3>
                 <p id="totalCount">0</p>
@@ -211,34 +239,57 @@
         <!-- ========================================== -->
         <!-- PRIEST MASTER CALENDAR VIEW (Priest Only)  -->
         <!-- ========================================== -->
-        <div id="priestCalendarSection" class="master-calendar-card" style="display: none; background: #ffffff; border: 1px solid #ccd0d5; border-radius: 8px; padding: 24px; margin-bottom: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); font-family: Arial, sans-serif;">
+        <div id="priestCalendarSection" class="master-calendar-card"
+            style="display: none; background: #ffffff; border: 1px solid #ccd0d5; border-radius: 8px; padding: 24px; margin-bottom: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); font-family: Arial, sans-serif;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                 <div>
                     <h3 style="margin: 0; color: #4a0e17; font-size: 1.2rem;">⛪ Master Parish Sacrament Calendar</h3>
-                    <p style="margin: 4px 0 0 0; font-size: 12px; color: #666;">Comprehensive overview of all booked baptisms, weddings, funerals, and parish seminars.</p>
+                    <p style="margin: 4px 0 0 0; font-size: 12px; color: #666;">Comprehensive overview of all booked
+                        baptisms, weddings, funerals, and parish seminars.</p>
                 </div>
                 <div style="display: flex; gap: 8px; align-items: center;">
-                    <button type="button" onclick="changeMasterCalMonth(-1)" style="background: #e4e6eb; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-weight: bold;">&lt;</button>
-                    <span id="masterCalMonthLabel" style="font-weight: bold; font-size: 15px; min-width: 150px; text-align: center; color: #1c1e21;">Month Year</span>
-                    <button type="button" onclick="changeMasterCalMonth(1)" style="background: #e4e6eb; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-weight: bold;">&gt;</button>
+                    <button type="button" onclick="changeMasterCalMonth(-1)"
+                        style="background: #e4e6eb; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-weight: bold;">&lt;</button>
+                    <span id="masterCalMonthLabel"
+                        style="font-weight: bold; font-size: 15px; min-width: 150px; text-align: center; color: #1c1e21;">Month
+                        Year</span>
+                    <button type="button" onclick="changeMasterCalMonth(1)"
+                        style="background: #e4e6eb; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-weight: bold;">&gt;</button>
                 </div>
             </div>
 
             <div style="display: flex; gap: 15px; margin-bottom: 15px; font-size: 12px; font-weight: bold;">
-                <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 10px; height: 10px; background: #1877f2; border-radius: 50%;"></span> Baptism</span>
-                <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 10px; height: 10px; background: #8e44ad; border-radius: 50%;"></span> Wedding</span>
-                <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 10px; height: 10px; background: #c0392b; border-radius: 50%;"></span> Funeral / Chapel</span>
+                <span style="display: flex; align-items: center; gap: 5px;"><span
+                        style="width: 10px; height: 10px; background: #1877f2; border-radius: 50%;"></span>
+                    Baptism</span>
+                <span style="display: flex; align-items: center; gap: 5px;"><span
+                        style="width: 10px; height: 10px; background: #8e44ad; border-radius: 50%;"></span>
+                    Wedding</span>
+                <span style="display: flex; align-items: center; gap: 5px;"><span
+                        style="width: 10px; height: 10px; background: #c0392b; border-radius: 50%;"></span> Funeral /
+                    Chapel</span>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: bold; font-size: 12px; color: #606770; margin-bottom: 8px;">
-                <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+            <div
+                style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: bold; font-size: 12px; color: #606770; margin-bottom: 8px;">
+                <div>Sun</div>
+                <div>Mon</div>
+                <div>Tue</div>
+                <div>Wed</div>
+                <div>Thu</div>
+                <div>Fri</div>
+                <div>Sat</div>
             </div>
 
-            <div id="masterCalendarGrid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center;"></div>
+            <div id="masterCalendarGrid"
+                style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center;"></div>
 
-            <div id="masterDayInspector" style="margin-top: 15px; border-top: 1px solid #e4e6eb; padding-top: 12px; display: none;">
-                <div id="masterInspectorTitle" style="font-size: 13px; font-weight: bold; color: #1c1e21; margin-bottom: 6px;"></div>
-                <div id="masterInspectorBody" style="background: #f8f9fa; padding: 10px; border-radius: 6px; font-size: 13px; color: #333;"></div>
+            <div id="masterDayInspector"
+                style="margin-top: 15px; border-top: 1px solid #e4e6eb; padding-top: 12px; display: none;">
+                <div id="masterInspectorTitle"
+                    style="font-size: 13px; font-weight: bold; color: #1c1e21; margin-bottom: 6px;"></div>
+                <div id="masterInspectorBody"
+                    style="background: #f8f9fa; padding: 10px; border-radius: 6px; font-size: 13px; color: #333;"></div>
             </div>
         </div>
 
@@ -247,29 +298,41 @@
         <!-- ========================================== -->
         <div id="secretaryTableSection" style="display: block;">
             <div class="table-controls" style="display: flex; gap: 12px; margin-bottom: 15px; flex-wrap: wrap;">
-                <select id="serviceFilter" onchange="renderTable()" style="padding: 8px; border-radius: 4px; border: 1px solid #ccd0d5;">
+                <select id="serviceFilter" onchange="renderTable()"
+                    style="padding: 8px; border-radius: 4px; border: 1px solid #ccd0d5;">
                     <option value="ALL">All Services</option>
                     <option value="baptism">Baptism</option>
                     <option value="wedding">Wedding</option>
                     <option value="funeral">Funeral</option>
                 </select>
 
-                <select id="statusFilter" onchange="renderTable()" style="padding: 8px; border-radius: 4px; border: 1px solid #ccd0d5;">
+                <select id="statusFilter" onchange="renderTable()"
+                    style="padding: 8px; border-radius: 4px; border: 1px solid #ccd0d5;">
                     <option value="ALL">All Statuses</option>
-                    <option value="Pending">Pending</option>
+                    <option value="Reviewing">Reviewing</option>
+                    <option value="To Follow-Up & Upload Lacking Documents">To Follow-Up & Upload Lacking Documents
+                    </option>
+                    <option value="Reviewed & Ready for Payment">Reviewed & Ready for Payment</option>
                     <option value="Needs Revision">Needs Revision</option>
-                    <option value="Approved">Approved</option>
-                    <option value="Rejected">Rejected</option>
+                    <option value="Scheduled for Seminar">Scheduled for Seminar</option>
+                    <option value="Scheduled for Interview & Seminar">Scheduled for Interview & Seminar</option>
+                    <option value="Scheduled for Ceremony">Scheduled for Ceremony</option>
                     <option value="Completed">Completed</option>
+                    <option value="Reschedule Requested">Reschedule Requested</option>
                 </select>
 
-                <input type="text" id="searchInput" onkeyup="renderTable()" placeholder="Search by Ref ID, Name, or Email..." style="padding: 8px 12px; border-radius: 4px; border: 1px solid #ccd0d5; flex: 1; min-width: 240px;">
+                <input type="text" id="searchInput" onkeyup="renderTable()"
+                    placeholder="Search by Ref ID, Name, or Email..."
+                    style="padding: 8px 12px; border-radius: 4px; border: 1px solid #ccd0d5; flex: 1; min-width: 240px;">
             </div>
 
-            <div class="view-group" style="margin-bottom: 15px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                <button id="viewActiveBtn" class="toggle-btn active" onclick="switchView(false)">📥 Active Inbox</button>
-                <button id="viewArchiveBtn" class="toggle-btn" onclick="switchView(true)">📁 Sacramental Archives</button>
-                <button class="refresh-btn" onclick="fetchApplications()" style="margin-left: auto;">🔄 Refresh Submissions</button>
+            <div class="view-group"
+                style="margin-bottom: 15px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <button id="viewActiveBtn" class="toggle-btn active" onclick="switchView(false)">📥 Active
+                    Inbox</button>
+                <button id="viewArchiveBtn" class="toggle-btn" onclick="switchView(true)">📁 Done</button>
+                <button class="refresh-btn" onclick="fetchApplications()" style="margin-left: auto;">🔄 Refresh
+                    Submissions</button>
             </div>
 
             <!-- RESPONSIVE LONG TABLE WRAPPER -->
@@ -288,7 +351,8 @@
                     </thead>
                     <tbody id="applicationsTableBody">
                         <tr>
-                            <td colspan="7" style="text-align: center; padding: 30px; color: #777;">Loading application records...</td>
+                            <td colspan="7" style="text-align: center; padding: 30px; color: #777;">Loading application
+                                records...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -302,34 +366,51 @@
     <div id="adminUpdateModal" class="modal-overlay">
         <div class="modal-box" style="max-width: 650px; text-align: left;">
             <h3 style="color: #4a0e17; margin-bottom: 15px;">Application Details & Workflow Update</h3>
-            <div id="applicantInfoSection" style="background: #f8f9fa; padding: 12px; border-radius: 6px; margin-bottom: 15px; font-size: 14px;"></div>
+            <div id="applicantInfoSection"
+                style="background: #f8f9fa; padding: 12px; border-radius: 6px; margin-bottom: 15px; font-size: 14px;">
+            </div>
             <form id="adminUpdateForm" onsubmit="handleAdminUpdateSubmit(event)">
                 <input type="hidden" id="adminAppId">
                 <div class="form-group" style="margin-bottom: 10px;">
                     <label><strong>Application Status *</strong></label>
+
                     <select id="adminStatusSelect" required style="width: 100%; padding: 8px;">
-                        <option value="Pending">Pending</option>
+                        <option value="Reviewing">Reviewing</option>
+                        <option value="To Follow-Up & Upload Lacking Documents">To Follow-Up & Upload Lacking Documents
+                        </option>
+                        <option value="Reviewed & Ready for Payment">Reviewed & Ready for Payment</option>
                         <option value="Needs Revision">Needs Revision</option>
-                        <option value="Approved">Approved</option>
-                        <option value="Rejected">Rejected</option>
+                        <option value="Scheduled for Seminar">Scheduled for Seminar (Baptism)</option>
+                        <option value="Scheduled for Interview & Seminar">Scheduled for Interview & Seminar (Wedding)
+                        </option>
+                        <option value="Scheduled for Ceremony">Scheduled for Ceremony</option>
                         <option value="Completed">Completed</option>
                     </select>
+
                 </div>
                 <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                    <div style="flex: 1;"><label><strong>Confirmed Date</strong></label><input type="date" id="adminConfirmedDate" style="width: 100%; padding: 8px;"></div>
-                    <div style="flex: 1;"><label><strong>Confirmed Time</strong></label><input type="time" id="adminConfirmedTime" style="width: 100%; padding: 8px;"></div>
+                    <div style="flex: 1;"><label><strong>Confirmed Date</strong></label><input type="date"
+                            id="adminConfirmedDate" style="width: 100%; padding: 8px;"></div>
+                    <div style="flex: 1;"><label><strong>Confirmed Time</strong></label><input type="time"
+                            id="adminConfirmedTime" style="width: 100%; padding: 8px;"></div>
                 </div>
                 <div class="form-group" style="margin-bottom: 10px;">
                     <label><strong>Admin Remarks / Notes</strong></label>
-                    <textarea id="adminNotesInput" rows="3" style="width: 100%; padding: 8px;" placeholder="Add details..."></textarea>
+                    <textarea id="adminNotesInput" rows="3" style="width: 100%; padding: 8px;"
+                        placeholder="Add details..."></textarea>
                 </div>
                 <div style="margin-top: 15px;">
                     <label><strong>Status History & Audit Trail</strong></label>
-                    <div id="statusHistoryContainer" style="max-height: 120px; overflow-y: auto; background: #fff; border: 1px solid #ccc; padding: 8px; font-size: 12px; border-radius: 4px;"></div>
+                    <div id="statusHistoryContainer"
+                        style="max-height: 120px; overflow-y: auto; background: #fff; border: 1px solid #ccc; padding: 8px; font-size: 12px; border-radius: 4px;">
+                    </div>
                 </div>
                 <div style="margin-top: 15px; text-align: right;">
-                    <button type="button" onclick="closeModal('adminUpdateModal')" style="padding: 8px 15px;">Cancel</button>
-                    <button type="submit" style="background: #4a0e17; color: white; padding: 8px 15px; border: none; border-radius: 4px;">Save Changes</button>
+                    <button type="button" onclick="closeModal('adminUpdateModal')"
+                        style="padding: 8px 15px;">Cancel</button>
+                    <button type="submit"
+                        style="background: #4a0e17; color: white; padding: 8px 15px; border: none; border-radius: 4px;">Save
+                        Changes</button>
                 </div>
             </form>
         </div>
@@ -340,36 +421,63 @@
     <!-- ========================================== -->
     <div id="appointmentModal" class="modal-overlay">
         <div class="modal-box" style="max-width: 650px; text-align: left; max-height: 90vh; overflow-y: auto;">
-            <h3 style="color: #4a0e17; margin-bottom: 12px; font-size: 18px; border-bottom: 2px solid #4a0e17; padding-bottom: 8px;">📅 Schedule Sacrament / Seminar Appointment</h3>
-            <div id="appointmentAppSummary" style="background: #f4f6f8; border-left: 4px solid #4a0e17; padding: 10px 12px; margin-bottom: 12px; font-size: 13px; color: #1a1a1a;"></div>
-            
-            <div style="background: #ffffff; border: 1px solid #ccd0d5; border-radius: 8px; padding: 14px; margin-bottom: 15px; font-family: Helvetica, Arial, sans-serif;">
+            <h3
+                style="color: #4a0e17; margin-bottom: 12px; font-size: 18px; border-bottom: 2px solid #4a0e17; padding-bottom: 8px;">
+                📅 Schedule Sacrament / Seminar Appointment</h3>
+            <div id="appointmentAppSummary"
+                style="background: #f4f6f8; border-left: 4px solid #4a0e17; padding: 10px 12px; margin-bottom: 12px; font-size: 13px; color: #1a1a1a;">
+            </div>
+
+            <div
+                style="background: #ffffff; border: 1px solid #ccd0d5; border-radius: 8px; padding: 14px; margin-bottom: 15px; font-family: Helvetica, Arial, sans-serif;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <h4 id="apptCalMonthLabel" style="margin: 0; color: #1c1e21; font-size: 1rem; font-weight: bold;">Month Year</h4>
+                    <h4 id="apptCalMonthLabel" style="margin: 0; color: #1c1e21; font-size: 1rem; font-weight: bold;">
+                        Month Year</h4>
                     <div style="display: flex; gap: 6px;">
-                        <button type="button" onclick="changeApptCalMonth(-1)" style="background: #e4e6eb; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-weight: bold;">&lt;</button>
-                        <button type="button" onclick="changeApptCalMonth(1)" style="background: #e4e6eb; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-weight: bold;">&gt;</button>
+                        <button type="button" onclick="changeApptCalMonth(-1)"
+                            style="background: #e4e6eb; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-weight: bold;">&lt;</button>
+                        <button type="button" onclick="changeApptCalMonth(1)"
+                            style="background: #e4e6eb; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-weight: bold;">&gt;</button>
                     </div>
                 </div>
-                <div style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: bold; font-size: 11px; color: #606770; margin-bottom: 6px;">
-                    <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+                <div
+                    style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: bold; font-size: 11px; color: #606770; margin-bottom: 6px;">
+                    <div>Sun</div>
+                    <div>Mon</div>
+                    <div>Tue</div>
+                    <div>Wed</div>
+                    <div>Thu</div>
+                    <div>Fri</div>
+                    <div>Sat</div>
                 </div>
-                <div id="apptCalendarGrid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; margin-bottom: 10px;"></div>
-                <small style="color: #666; font-size: 11px; display: block; text-align: center;">Click any date to assign it as the confirmed appointment date.</small>
+                <div id="apptCalendarGrid"
+                    style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; margin-bottom: 10px;">
+                </div>
+                <small style="color: #666; font-size: 11px; display: block; text-align: center;">Click any date to
+                    assign it as the confirmed appointment date.</small>
             </div>
 
             <form id="appointmentForm" onsubmit="handleAppointmentSubmit(event)">
                 <input type="hidden" id="apptAppId">
                 <input type="hidden" id="apptSacramentType">
                 <div style="display: flex; gap: 10px; margin-bottom: 12px;">
-                    <div style="flex: 1;"><label>Confirmed Date *</label><input type="date" id="apptConfirmedDate" required onchange="onApptDateManualChange()" style="width: 100%; padding: 8px;"></div>
-                    <div style="flex: 1;"><label>Confirmed Time Slot *</label><input type="text" id="apptConfirmedTime" required readonly style="width: 100%; padding: 8px; background: #e9ecef;" placeholder="Auto-assigned"></div>
+                    <div style="flex: 1;"><label>Confirmed Date *</label><input type="date" id="apptConfirmedDate"
+                            required onchange="onApptDateManualChange()" style="width: 100%; padding: 8px;"></div>
+                    <div style="flex: 1;"><label>Confirmed Time Slot *</label><input type="text" id="apptConfirmedTime"
+                            required readonly style="width: 100%; padding: 8px; background: #e9ecef;"
+                            placeholder="Auto-assigned"></div>
                 </div>
-                <div id="seminarRuleHint" style="background: #e7f3ff; border-left: 4px solid #1877f2; padding: 8px; font-size: 12px; margin-bottom: 12px;">Select a date from calendar above.</div>
-                <div style="margin-bottom: 15px;"><label>Admin Remarks / Schedule Notes</label><textarea id="apptAdminNotes" rows="2" style="width: 100%; padding: 8px;"></textarea></div>
+                <div id="seminarRuleHint"
+                    style="background: #e7f3ff; border-left: 4px solid #1877f2; padding: 8px; font-size: 12px; margin-bottom: 12px;">
+                    Select a date from calendar above.</div>
+                <div style="margin-bottom: 15px;"><label>Admin Remarks / Schedule Notes</label><textarea
+                        id="apptAdminNotes" rows="2" style="width: 100%; padding: 8px;"></textarea></div>
                 <div style="text-align: right; display: flex; justify-content: flex-end; gap: 8px;">
-                    <button type="button" onclick="closeModal('appointmentModal')" style="padding: 8px 16px;">Cancel</button>
-                    <button type="submit" id="apptSubmitBtn" style="padding: 8px 16px; background: #4a0e17; color: white; border: none; border-radius: 4px; font-weight: bold;">💾 Confirm Schedule</button>
+                    <button type="button" onclick="closeModal('appointmentModal')"
+                        style="padding: 8px 16px;">Cancel</button>
+                    <button type="submit" id="apptSubmitBtn"
+                        style="padding: 8px 16px; background: #4a0e17; color: white; border: none; border-radius: 4px; font-weight: bold;">💾
+                        Confirm Schedule</button>
                 </div>
             </form>
         </div>
@@ -379,15 +487,22 @@
     <!-- MODALS: IN-BROWSER DOCUMENT VIEWER         -->
     <!-- ========================================== -->
     <div id="fileViewerModal" class="modal-overlay">
-        <div class="modal-box" style="max-width: 85vw; width: 900px; height: 85vh; display: flex; flex-direction: column; padding: 20px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 2px solid #4a0e17; padding-bottom: 8px;">
+        <div class="modal-box"
+            style="max-width: 85vw; width: 900px; height: 85vh; display: flex; flex-direction: column; padding: 20px;">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 2px solid #4a0e17; padding-bottom: 8px;">
                 <h3 id="fileViewerTitle" style="color: #4a0e17; margin: 0;">📄 Document Preview</h3>
                 <div>
-                    <a id="fileDownloadBtn" href="#" download="" style="background: #1e5631; color: white; padding: 6px 12px; border-radius: 4px; text-decoration: none; margin-right: 8px; font-size: 13px; font-weight: bold;">⬇️ Download</a>
-                    <button type="button" onclick="closeModal('fileViewerModal')" style="padding: 6px 12px; background: #c0392b; color: white; border: none; border-radius: 4px; font-weight: bold;">✕ Close</button>
+                    <a id="fileDownloadBtn" href="#" download=""
+                        style="background: #1e5631; color: white; padding: 6px 12px; border-radius: 4px; text-decoration: none; margin-right: 8px; font-size: 13px; font-weight: bold;">⬇️
+                        Download</a>
+                    <button type="button" onclick="closeModal('fileViewerModal')"
+                        style="padding: 6px 12px; background: #c0392b; color: white; border: none; border-radius: 4px; font-weight: bold;">✕
+                        Close</button>
                 </div>
             </div>
-            <div id="fileViewerContent" style="flex: 1; width: 100%; background: #f0f0f0; border-radius: 6px; display: flex; justify-content: center; align-items: center; overflow: hidden;">
+            <div id="fileViewerContent"
+                style="flex: 1; width: 100%; background: #f0f0f0; border-radius: 6px; display: flex; justify-content: center; align-items: center; overflow: hidden;">
                 <p style="color: #777;">No document loaded.</p>
             </div>
         </div>
@@ -396,8 +511,10 @@
     <div id="customAlertModal" class="modal-overlay" style="z-index: 999999;">
         <div class="modal-box text-center" style="max-width: 420px; padding: 24px;">
             <h3 id="customAlertTitle" style="color: #4a0e17; margin-top: 0; margin-bottom: 12px;">Notification</h3>
-            <p id="customAlertMessage" style="color: #333; font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px;"></p>
-            <button onclick="closeModal('customAlertModal')" style="width: 100%; padding: 10px; font-weight: bold; background: #4a0e17; color: white; border: none; border-radius: 4px;">OK</button>
+            <p id="customAlertMessage" style="color: #333; font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px;">
+            </p>
+            <button onclick="closeModal('customAlertModal')"
+                style="width: 100%; padding: 10px; font-weight: bold; background: #4a0e17; color: white; border: none; border-radius: 4px;">OK</button>
         </div>
     </div>
 
@@ -472,7 +589,7 @@
         }
 
         async function loginAsDemoRole(roleType) {
-            let demoSession = roleType === 'priest' 
+            let demoSession = roleType === 'priest'
                 ? { id: 9001, fullName: 'Rev. Fr. Parish Priest (Demo)', email: 'priest.demo@santuariodelstocristo.com', role: 'priest' }
                 : { id: 9002, fullName: 'Parish Secretary (Demo)', email: 'secretary.demo@santuariodelstocristo.com', role: 'secretary' };
 
@@ -499,7 +616,7 @@
                 if (rawApplicationsData.length === 0) {
                     const sampleApps = [
                         { referenceId: 'BAP-90123', applicantName: 'Maria Santos', applicantEmail: 'maria@example.com', sacramentType: 'baptism', status: 'Pending', preferredDate: '2026-11-15', confirmedDate: '2026-11-15', confirmedTime: '16:30', documents: [{ name: 'Birth_Certificate.pdf', data: 'data:application/pdf;base64,JVBERi0xLjcK...' }, { name: 'Baptismal_Permit.pdf', data: 'data:application/pdf;base64,JVBERi0xLjcK...' }], archived: false, createdAt: new Date().toISOString() },
-                        { referenceId: 'WED-44102', applicantName: 'Marco Villanueva', applicantEmail: 'marco@example.com', sacramentType: 'wedding', status: 'Approved', preferredDate: '2026-12-06', confirmedDate: '2026-12-06', confirmedTime: '08:00 - 17:00', documents: [{ name: 'Marriage_License.pdf', data: 'data:application/pdf;base64,JVBERi0xLjcK...' }], archived: false, createdAt: new Date().toISOString() }, 
+                        { referenceId: 'WED-44102', applicantName: 'Marco Villanueva', applicantEmail: 'marco@example.com', sacramentType: 'wedding', status: 'Approved', preferredDate: '2026-12-06', confirmedDate: '2026-12-06', confirmedTime: '08:00 - 17:00', documents: [{ name: 'Marriage_License.pdf', data: 'data:application/pdf;base64,JVBERi0xLjcK...' }], archived: false, createdAt: new Date().toISOString() },
                         { referenceId: 'FUN-10928', applicantName: 'Teresa Mercado', applicantEmail: 'teresa@example.com', sacramentType: 'funeral', status: 'Completed', preferredDate: '2026-10-10', confirmedDate: '2026-10-10', confirmedTime: '18:00', documents: [{ name: 'Death_Certificate.pdf', data: 'data:application/pdf;base64,JVBERi0xLjcK...' }], archived: false, createdAt: new Date().toISOString() }
                     ];
                     await db.applications.bulkAdd(sampleApps);
@@ -537,7 +654,7 @@
             const statusFilter = (document.getElementById('statusFilter')?.value || 'ALL').toLowerCase();
             const searchInput = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
 
-            const reqConfig = { baptism: 2, wedding: 3, funeral: 1 };
+            const reqConfig = { baptism: 2, wedding: 3, funeral: 0 };
 
             let filtered = rawApplicationsData.filter(app => {
                 const isArchived = Boolean(app.archived);
@@ -568,34 +685,60 @@
                 const dateStr = app.createdAt ? new Date(app.createdAt).toLocaleDateString() : 'N/A';
                 const sacramentTitle = app.sacramentType ? (app.sacramentType.charAt(0).toUpperCase() + app.sacramentType.slice(1)) : 'N/A';
                 const currentStatus = app.status || 'Pending';
-                let badgeClass = currentStatus.toLowerCase() === 'approved' ? 'status-approved' : currentStatus.toLowerCase() === 'rejected' ? 'status-rejected' : 'status-pending';
+                let badgeClass = 'status-pending';
+                const st = currentStatus.toLowerCase();
+                if (st === 'approved') badgeClass = 'status-approved';
+                else if (st === 'rejected') badgeClass = 'status-rejected';
+                else if (st === 'reschedule requested') badgeClass = 'status-resched';
 
                 const targetDate = app.preferredDate || app.targetDate || app.confirmedDate || dateStr;
                 const contactInfo = app.applicantName ? `<strong>${app.applicantName}</strong><br><small style="color:#555;">${app.applicantEmail || ''}</small>` : (app.applicantEmail || app.email || 'N/A');
 
                 // Document Verification Check & Completeness Counters
-                const minRequired = reqConfig[(app.sacramentType || '').toLowerCase()] || 0;
-                const uploadedCount = app.documents ? app.documents.length : 0;
+                const sacramentKey = (app.sacramentType || '').toLowerCase().trim();
+                const minRequired = reqConfig[sacramentKey] !== undefined ? reqConfig[sacramentKey] : 0;
+
+                // Deduplicate documents by name to prevent repeating buttons
+                const uniqueDocs = app.documents && Array.isArray(app.documents) ? Array.from(
+                    new Map(app.documents.map(doc => {
+                        let name = typeof doc === 'string' ? doc : (doc.name || 'Document');
+                        return [name, doc];
+                    })).values()
+                ) : [];
+
+                const uploadedCount = uniqueDocs.length;
                 const isDocComplete = uploadedCount >= minRequired;
 
-                let filesHtml = `<div style="margin-bottom: 4px;"><span style="background: ${isDocComplete ? '#27ae60' : '#e67e22'}; color: white; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">${isDocComplete ? '✓ Complete' : '⚠️ Incomplete'} (${uploadedCount}/${minRequired})</span></div>`;
-
-                if (app.documents && app.documents.length > 0) {
-                    filesHtml += app.documents.map((doc, idx) => {
-                        let docName = typeof doc === 'string' ? `Doc ${idx + 1}` : (doc.name || `Doc ${idx + 1}`);
-                        let docUrl = typeof doc === 'string' ? doc : (doc.data || '#');
-                        let safeDocName = docName.replace(/'/g, "\\'");
-                        return `<div style="margin: 3px 0;"><button type="button" onclick="viewDocument('${safeDocName}', '${docUrl}')" style="background: #0056b3; color: white; border: none; padding: 3px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold;">👁️ View ${docName}</button></div>`;
-                    }).join('');
+                let filesHtml = '';
+                if (minRequired === 0) {
+                    filesHtml = `<div style="margin-bottom: 4px;"><span style="background: #27ae60; color: white; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">✓ No Docs Required</span></div>`;
                 } else {
-                    filesHtml = `<span style="color:#c0392b; font-size:11px; font-weight:bold;">⚠️ Missing (0/${minRequired})</span>`;
+                    filesHtml = `<div style="margin-bottom: 4px;"><span style="background: ${isDocComplete ? '#27ae60' : '#e67e22'}; color: white; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">${isDocComplete ? '✓ Complete' : '⚠️ Incomplete'} (${uploadedCount}/${minRequired})</span></div>`;
+
+                    if (uniqueDocs.length > 0) {
+                        filesHtml += uniqueDocs.map((doc, idx) => {
+                            let docName = typeof doc === 'string' ? `Doc ${idx + 1}` : (doc.name || `Doc ${idx + 1}`);
+                            let docUrl = typeof doc === 'string' ? doc : (doc.data || '#');
+                            let safeDocName = docName.replace(/'/g, "\\'");
+                            return `<div style="margin: 3px 0;"><button type="button" onclick="viewDocument('${safeDocName}', '${docUrl}')" style="background: #0056b3; color: white; border: none; padding: 3px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold;">👁️ View ${docName}</button></div>`;
+                        }).join('');
+                    } else {
+                        filesHtml += `<span style="color:#c0392b; font-size:11px; font-weight:bold;">⚠️ Missing (0/${minRequired})</span>`;
+                    }
                 }
 
                 // Scheduling Guard Button
-                let scheduleBtnHtml = isDocComplete 
-                    ? `<button onclick="openAppointmentModal('${app.id}')" style="background: #1e5631; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">📅 Schedule</button>`
-                    : `<button onclick="showAlert('⚠️ Incomplete Documents: Scheduling is disabled until all required documents (${uploadedCount}/${minRequired}) are uploaded by the applicant.')" style="background: #aab7b8; color: #ffffff; border: none; padding: 6px 10px; border-radius: 4px; cursor: not-allowed; font-size: 12px; font-weight: bold;" title="Missing required document attachments">🚫 Incomplete</button>`;
+                // Document & Payment Verification Check for Scheduling Guard
+                const isPaymentReady = app.paymentConfirmed || (app.status || '').includes('Scheduled') || (app.status || '') === 'Completed';
 
+                let scheduleBtnHtml = '';
+                if (!isDocComplete) {
+                    scheduleBtnHtml = `<button onclick="showAlert('🚫 Action Denied: Documents are still lacking (${uploadedCount}/${minRequired}). Scheduling is disabled until all required documents are uploaded.')" style="background: #aab7b8; color: #ffffff; border: none; padding: 6px 10px; border-radius: 4px; cursor: not-allowed; font-size: 12px; font-weight: bold;" title="Missing required document attachments">🚫 Incomplete</button>`;
+                } else if (!isPaymentReady) {
+                    scheduleBtnHtml = `<button onclick="showAlert('⚠️ Payment Pending: Scheduling is greyed out until payment is confirmed by the parishioner or staff.')" style="background: #e67e22; color: #ffffff; border: none; padding: 6px 10px; border-radius: 4px; cursor: not-allowed; font-size: 12px; font-weight: bold;" title="Payment confirmation pending">⏳ Payment Pending</button>`;
+                } else {
+                    scheduleBtnHtml = `<button onclick="openAppointmentModal('${app.id}')" style="background: #1e5631; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">📅 Schedule</button>`;
+                }
                 html += `
                 <tr style="${app.archived ? 'opacity: 0.7; background-color: #f9f9f9;' : ''}">
                     <td><strong>${app.referenceId || 'N/A'}</strong></td>
@@ -605,11 +748,14 @@
                     <td>${filesHtml}</td>
                     <td>
                         <select onchange="updateApplicationStatus('${app.id}', this.value)" class="status-select ${badgeClass}">
-                            <option value="Pending" ${currentStatus.toLowerCase() === 'pending' ? 'selected' : ''}>Pending</option>
-                            <option value="Needs Revision" ${currentStatus.toLowerCase() === 'needs revision' ? 'selected' : ''}>Needs Revision</option>
-                            <option value="Approved" ${currentStatus.toLowerCase() === 'approved' ? 'selected' : ''}>Approved</option>
-                            <option value="Rejected" ${currentStatus.toLowerCase() === 'rejected' ? 'selected' : ''}>Rejected</option>
-                            <option value="Completed" ${currentStatus.toLowerCase() === 'completed' ? 'selected' : ''}>Completed</option>
+                            <option value="Reviewing" ${currentStatus === 'Reviewing' ? 'selected' : ''}>Reviewing</option>
+                            <option value="To Follow-Up & Upload Lacking Documents" ${currentStatus === 'To Follow-Up & Upload Lacking Documents' ? 'selected' : ''}>To Follow-Up & Upload Lacking Documents</option>
+                            <option value="Reviewed & Ready for Payment" ${currentStatus === 'Reviewed & Ready for Payment' ? 'selected' : ''}>Reviewed & Ready for Payment</option>
+                            <option value="Needs Revision" ${currentStatus === 'Needs Revision' ? 'selected' : ''}>Needs Revision</option>
+                            <option value="Scheduled for Seminar" ${currentStatus === 'Scheduled for Seminar' ? 'selected' : ''}>Scheduled for Seminar</option>
+                            <option value="Scheduled for Interview & Seminar" ${currentStatus === 'Scheduled for Interview & Seminar' ? 'selected' : ''}>Scheduled for Interview & Seminar</option>
+                            <option value="Scheduled for Ceremony" ${currentStatus === 'Scheduled for Ceremony' ? 'selected' : ''}>Scheduled for Ceremony</option>
+                            <option value="Completed" ${currentStatus === 'Completed' ? 'selected' : ''}>Completed</option>
                         </select>
                         ${app.adminNotes ? `<br><small style="color:red; margin-top: 4px; display:block;">Note: ${app.adminNotes}</small>` : ''}
                     </td>
@@ -724,18 +870,27 @@
             let app = rawApplicationsData.find(a => String(a.id) === String(appId)) || await db.applications.get(Number(appId) || appId);
             if (!app) return;
 
-            const reqConfig = { baptism: 2, wedding: 3, funeral: 1 };
-            const minRequired = reqConfig[(app.sacramentType || '').toLowerCase()] || 0;
+            const reqConfig = { baptism: 2, wedding: 3, funeral: 0 };
+            const sacramentKey = (app.sacramentType || '').toLowerCase();
+            const minRequired = reqConfig[sacramentKey] !== undefined ? reqConfig[sacramentKey] : 0;
             const uploadedCount = app.documents ? app.documents.length : 0;
 
+            // 1. Guard: Documents must be complete
             if (uploadedCount < minRequired) {
-                showAlert(`🚫 Action Denied: This ${app.sacramentType.toUpperCase()} request has only ${uploadedCount} of ${minRequired} required documents attached. Per parish guidelines, incomplete applications cannot be scheduled.`);
+                showAlert(`🚫 Action Denied: Documents are still lacking (${uploadedCount}/${minRequired}). The parishioner must upload lacking documents before scheduling can proceed.`);
+                return;
+            }
+
+            // 2. Guard: Payment must be confirmed / marked as ready for payment
+            const statusStr = (app.status || '');
+            if (!app.paymentConfirmed && statusStr !== 'Reviewed & Ready for Payment' && !statusStr.includes('Scheduled')) {
+                showAlert(`⚠️ Payment Pending: Scheduling is greyed out until payment is confirmed by the parishioner or staff (Status: Reviewed & Ready for Payment).`);
                 return;
             }
 
             activeSchedulingApp = app;
             document.getElementById('apptAppId').value = app.id;
-            document.getElementById('apptSacramentType').value = (app.sacramentType || '').toLowerCase();
+            document.getElementById('apptSacramentType').value = sacramentKey;
             document.getElementById('apptConfirmedDate').value = app.confirmedDate || app.preferredDate || '';
             selectedApptDateStr = app.confirmedDate || app.preferredDate || '';
             document.getElementById('apptAdminNotes').value = app.adminNotes || '';
@@ -763,6 +918,41 @@
             const totalDays = new Date(year, month + 1, 0).getDate();
             const sacramentType = (activeSchedulingApp.sacramentType || '').toLowerCase();
 
+            // Determine wake start and interment end dates if this is a funeral
+            let funeralStart = '';
+            let funeralEnd = '';
+            if (sacramentType === 'funeral') {
+                funeralStart = selectedApptDateStr || activeSchedulingApp.confirmedDate || activeSchedulingApp.preferredDate || '';
+                const wakeDays = parseInt(activeSchedulingApp?.details?.wakeDays || activeSchedulingApp?.wakeDays) || 3;
+                if (funeralStart) {
+                    let startD = new Date(funeralStart);
+                    let endD = new Date(startD);
+                    endD.setDate(endD.getDate() + (wakeDays - 1));
+                    funeralEnd = endD.toISOString().split('T')[0];
+                }
+            }
+
+            // Collect all dates occupied by other active funeral spans
+            const occupiedFuneralDates = new Set();
+            if (sacramentType === 'funeral') {
+                rawApplicationsData.forEach(app => {
+                    if (app.archived || (app.status || '').toLowerCase() === 'rejected') return;
+                    if (String(app.id) === String(activeSchedulingApp.id)) return;
+                    if ((app.sacramentType || '').toLowerCase() === 'funeral') {
+                        const start = app.confirmedDate || app.preferredDate;
+                        const end = app.details?.intermentDate || app.intermentDate || start;
+                        if (start) {
+                            let curr = new Date(start);
+                            let finalD = new Date(end);
+                            while (curr <= finalD) {
+                                occupiedFuneralDates.add(curr.toISOString().split('T')[0]);
+                                curr.setDate(curr.getDate() + 1);
+                            }
+                        }
+                    }
+                });
+            }
+
             let html = '';
             for (let i = 0; i < firstDayIndex; i++) { html += `<div></div>`; }
 
@@ -773,22 +963,64 @@
                 const dayOfMonth = cellDate.getDate();
 
                 let isAllowed = true;
-                if (sacramentType === 'baptism') isAllowed = (dayOfWeek === 6); 
-                else if (sacramentType === 'wedding') isAllowed = (dayOfWeek === 0 && dayOfMonth <= 7); 
+                let badgeText = 'Available';
+                let badgeColor = '#2e7d32';
 
-                const isSelected = selectedApptDateStr === dateString;
-                let bgStyle = isSelected ? '#1877f2' : '#f0f2f5';
-                let textStyle = isSelected ? '#ffffff' : '#050505';
-                let badgeText = isAllowed ? 'Available' : 'Closed';
-                let badgeColor = isAllowed ? '#2e7d32' : '#8a8d91';
+                if (sacramentType === 'baptism') {
+                    isAllowed = (dayOfWeek === 6);
+                    badgeText = isAllowed ? 'Available' : 'Sat Only';
+                    badgeColor = isAllowed ? '#2e7d32' : '#8a8d91';
+                } else if (sacramentType === 'wedding') {
+                    isAllowed = (dayOfWeek === 0 && dayOfMonth <= 7);
+                    badgeText = isAllowed ? 'Available' : '1st Sun';
+                    badgeColor = isAllowed ? '#2e7d32' : '#8a8d91';
+                } else if (sacramentType === 'funeral') {
+                    const isClosedMon = (dayOfWeek === 1);
+                    const isOccupied = occupiedFuneralDates.has(dateString);
+                    isAllowed = !isClosedMon && !isOccupied;
 
-                if (!isAllowed) { 
-                    bgStyle = '#f4f2f2'; textStyle = '#b0b3b8'; 
-                    badgeText = sacramentType === 'baptism' ? 'Sat Only' : '1st Sun'; 
+                    if (isClosedMon) {
+                        badgeText = 'Closed (Mon)';
+                        badgeColor = '#8a8d91';
+                    } else if (isOccupied) {
+                        badgeText = 'Occupied';
+                        badgeColor = '#c0392b';
+                    }
+                }
+
+                // Check span highlights for funerals
+                const isStart = sacramentType === 'funeral' && funeralStart === dateString;
+                const isEnd = sacramentType === 'funeral' && funeralEnd === dateString;
+                let isInSpan = false;
+                if (sacramentType === 'funeral' && funeralStart && funeralEnd) {
+                    isInSpan = dateString > funeralStart && dateString < funeralEnd;
+                }
+
+                let bgStyle = '#f0f2f5';
+                let textStyle = '#050505';
+
+                if (isStart || isEnd) {
+                    bgStyle = '#1877f2';
+                    textStyle = '#ffffff';
+                    badgeText = isStart ? 'Wake Start' : 'Interment';
+                    badgeColor = '#ffffff';
+                } else if (isInSpan) {
+                    bgStyle = '#d0e8ff'; // Soft blue highlight for the multi-day span
+                    textStyle = '#1d4ed8';
+                    badgeText = 'Wake Span';
+                    badgeColor = '#1d4ed8';
+                } else if (selectedApptDateStr === dateString && sacramentType !== 'funeral') {
+                    bgStyle = '#1877f2';
+                    textStyle = '#ffffff';
+                }
+
+                if (!isAllowed) {
+                    bgStyle = '#f4f2f2';
+                    textStyle = '#b0b3b8';
                 }
 
                 html += `
-                <div onclick="${isAllowed ? `selectApptCalendarDate('${dateString}')` : ''}" style="background: ${bgStyle}; color: ${textStyle}; padding: 6px 2px; border-radius: 6px; cursor: ${isAllowed ? 'pointer' : 'not-allowed'}; font-size: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 40px;">
+                <div onclick="${isAllowed ? `selectApptCalendarDate('${dateString}')` : ''}" style="background: ${bgStyle}; color: ${textStyle}; padding: 6px 2px; border-radius: 6px; cursor: ${isAllowed ? 'pointer' : 'not-allowed'}; font-size: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 40px; border: ${isStart || isEnd ? '2px solid #000' : '1px solid transparent'};">
                     <strong>${day}</strong>
                     <span style="font-size: 8px; font-weight: bold; color: ${badgeColor};">${badgeText}</span>
                 </div>`;
@@ -812,15 +1044,27 @@
             const sacramentType = document.getElementById('apptSacramentType').value;
             const timeInput = document.getElementById('apptConfirmedTime');
             const hintEl = document.getElementById('seminarRuleHint');
+
             if (sacramentType === 'baptism') {
                 timeInput.value = '16:30';
                 hintEl.textContent = '✓ Saturday 4:30 PM Baptism Seminar & Interview';
             } else if (sacramentType === 'wedding') {
                 timeInput.value = '08:00 - 17:00';
                 hintEl.textContent = '✓ 1st Sunday Pre-Cana Seminar (8:00 AM - 5:00 PM)';
+            } else if (sacramentType === 'funeral') {
+                timeInput.value = '08:00 - 17:00';
+
+                // Retrieve wake duration requested by client (default to 3 days if not specified)
+                const wakeDays = parseInt(activeSchedulingApp?.details?.wakeDays || activeSchedulingApp?.wakeDays) || 3;
+                let startD = new Date(dateStr);
+                let intermentD = new Date(startD);
+                intermentD.setDate(intermentD.getDate() + (wakeDays - 1));
+                const intermentStr = intermentD.toISOString().split('T')[0];
+
+                hintEl.innerHTML = `✓ Resurrection Chapel Vigil Span: <strong>${dateStr}</strong> to <strong>${intermentStr}</strong> (${wakeDays} Days)`;
             } else {
                 timeInput.value = '18:00';
-                hintEl.textContent = '✓ Funeral Evening Vigil Slot';
+                hintEl.textContent = '✓ Evening Vigil Slot';
             }
         }
 
@@ -832,11 +1076,11 @@
             const confirmedTime = document.getElementById('apptConfirmedTime').value;
             const adminNotes = document.getElementById('apptAdminNotes').value;
 
-            await db.applications.update(numericId, { 
-                confirmedDate: confirmedDate, 
-                confirmedTime: confirmedTime, 
+            await db.applications.update(numericId, {
+                confirmedDate: confirmedDate,
+                confirmedTime: confirmedTime,
                 status: 'Approved',
-                adminNotes: adminNotes 
+                adminNotes: adminNotes
             });
             closeModal('appointmentModal');
             fetchApplications();
@@ -994,4 +1238,5 @@
         window.onload = checkAdminSession;
     </script>
 </body>
+
 </html>
