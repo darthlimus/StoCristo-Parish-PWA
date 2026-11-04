@@ -106,9 +106,22 @@
             opacity: 0.9;
         }
 
-        /* ========================================== */
-        /* RESPONSIVE & LONG TABLE STYLING            */
-        /* ========================================== */
+        .toggle-btn {
+            background: #e2e8f0;
+            color: #334155;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .toggle-btn.active {
+            background: #4a0e17;
+            color: white;
+        }
+
         .admin-container {
             max-width: 1400px;
             margin: 0 auto;
@@ -131,7 +144,6 @@
             text-align: left;
             font-family: Arial, sans-serif;
             min-width: 1000px;
-            /* Ensures spacious desktop layout with horizontal scroll on smaller viewports */
         }
 
         .admin-table th {
@@ -186,7 +198,6 @@
                 </button>
             </form>
 
-            <!-- ROLE-BASED DEMO LOGIN BUTTONS -->
             <div style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed #ccc; text-align: center;">
                 <p style="font-size: 12px; font-weight: bold; color: #555; margin-bottom: 10px;">⚡ Quick Demo Login
                     (Role Bypass):</p>
@@ -210,7 +221,7 @@
             <div class="logo-container">
                 <img src="MiniLogo-1.webp" width="140" height="auto" alt="Santuario Del Sto. Cristo Parish Logo">
             </div>
-            <h1 id="dashboardTitle" style="margin: 0; font-size: 1.4rem;">Parish Secretariat Dashboard</h1>
+            <h1 id="dashboardTitle" style="margin: 0; font-size: 1.4rem;">Parish Staff Dashboard</h1>
         </div>
         <div id="adminUserHeader" style="font-size: 14px;"></div>
     </header>
@@ -236,9 +247,7 @@
             </div>
         </div>
 
-        <!-- ========================================== -->
-        <!-- PRIEST MASTER CALENDAR VIEW (Priest Only)  -->
-        <!-- ========================================== -->
+        <!-- PRIEST MASTER CALENDAR VIEW -->
         <div id="priestCalendarSection" class="master-calendar-card"
             style="display: none; background: #ffffff; border: 1px solid #ccd0d5; border-radius: 8px; padding: 24px; margin-bottom: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); font-family: Arial, sans-serif;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
@@ -280,7 +289,6 @@
                 <div>Fri</div>
                 <div>Sat</div>
             </div>
-
             <div id="masterCalendarGrid"
                 style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center;"></div>
 
@@ -293,9 +301,7 @@
             </div>
         </div>
 
-        <!-- ========================================== -->
-        <!-- SECRETARIAT TABLE & CONTROLS (Secretary Only) -->
-        <!-- ========================================== -->
+        <!-- SECRETARIAT TABLE & CONTROLS -->
         <div id="secretaryTableSection" style="display: block;">
             <div class="table-controls" style="display: flex; gap: 12px; margin-bottom: 15px; flex-wrap: wrap;">
                 <select id="serviceFilter" onchange="renderTable()"
@@ -330,50 +336,180 @@
                 style="margin-bottom: 15px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                 <button id="viewActiveBtn" class="toggle-btn active" onclick="switchView(false)">📥 Active
                     Inbox</button>
-                <button id="viewArchiveBtn" class="toggle-btn" onclick="switchView(true)">📁 Done</button>
+                <button id="viewArchiveBtn" class="toggle-btn" onclick="switchView(true)">📁 Marked as done</button>
+                <button type="button" class="toggle-btn" onclick="openWalkInModal()">➕ Walk-In Accommodation</button>
                 <button class="refresh-btn" onclick="fetchApplications()" style="margin-left: auto;">🔄 Refresh
                     Submissions</button>
             </div>
 
-            <!-- RESPONSIVE LONG TABLE WRAPPER -->
-            <div class="table-wrapper">
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 12%;">Ref ID</th>
-                            <th style="width: 12%;">Sacrament</th>
-                            <th style="width: 20%;">Applicant / Contact</th>
-                            <th style="width: 14%;">Target Date</th>
-                            <th style="width: 16%;">Documents Status</th>
-                            <th style="width: 14%;">Status</th>
-                            <th style="width: 12%;">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="applicationsTableBody">
-                        <tr>
-                            <td colspan="7" style="text-align: center; padding: 30px; color: #777;">Loading application
-                                records...</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div id="applicationsTableContainer" style="display: block;">
+                <div class="table-wrapper">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 12%;">Ref ID</th>
+                                <th style="width: 12%;">Sacrament</th>
+                                <th style="width: 20%;">Applicant / Contact</th>
+                                <th style="width: 14%;">Target Date</th>
+                                <th style="width: 16%;">Documents Status</th>
+                                <th style="width: 14%;">Status</th>
+                                <th style="width: 12%;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="applicationsTableBody">
+                            <tr>
+                                <td colspan="7" style="text-align: center; padding: 30px; color: #777;">Loading
+                                    application records...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- MODALS: DETAILS & WORKFLOW UPDATE          -->
-    <!-- ========================================== -->
+    <!-- MODAL: WALK-IN ACCOMMODATION / RESERVATION -->
+    <div id="walkInModal" class="modal-overlay">
+        <div class="modal-box"
+            style="max-width: 680px; text-align: left; max-height: 90vh; overflow-y: auto; padding: 24px;">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #4a0e17; padding-bottom: 10px; margin-bottom: 15px;">
+                <h3 style="color: #4a0e17; margin: 0;">🏛️ Parish Staff: Walk-In Reservation</h3>
+                <button type="button" onclick="closeModal('walkInModal')"
+                    style="background: none; border: none; font-size: 18px; font-weight: bold; cursor: pointer;">✕</button>
+            </div>
+
+            <form onsubmit="handleStaffWalkInSubmit(event, this)">
+                <div style="margin-bottom: 15px;">
+                    <label
+                        style="display: block; font-weight: bold; font-size: 13px; color: #334155; margin-bottom: 6px;">Select
+                        Service Type *</label>
+                    <select id="walkInSacramentType" onchange="renderStaffInteractiveCalendar()" required
+                        style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; background: white;">
+                        <option value="">-- Choose Sacrament Service --</option>
+                        <option value="Group Baptism">Group Baptism (₱500 | Sat & Sun @ 10:00 AM)</option>
+                        <option value="Individual Baptism">Individual Baptism (₱1,500 | Tue-Fri by appointment)</option>
+                        <option value="Wedding">Wedding (₱5,000 | Strict 1 per day, 30 days advance)</option>
+                        <option value="Funeral">Funeral / Resurrection Chapel (Wake-to-Internment Span)</option>
+                    </select>
+                </div>
+
+                <div id="staffServiceNotice"
+                    style="background: #eff6ff; border-left: 4px solid #3b82f6; padding: 12px 16px; border-radius: 4px; margin-bottom: 15px; font-size: 13px; color: #1e3a8a; display: none;">
+                </div>
+
+                <div style="display: flex; gap: 12px; margin-bottom: 15px;">
+                    <div style="display: flex; gap: 12px; margin-bottom: 15px;">
+                        <div style="flex: 1;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 13px; color: #1c1e21; margin-bottom: 6px;">First
+                                Name *</label>
+                            <input type="text" id="regFirstName" name="firstName" required placeholder="Julian"
+                                style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
+                        </div>
+                        <div style="flex: 1;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 13px; color: #1c1e21; margin-bottom: 6px;">Last
+                                Name *</label>
+                            <input type="text" id="regLastName" name="lastName" required placeholder="Santos"
+                                style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
+                        </div>
+                    </div>
+                    <div style="flex: 1;">
+                        <label
+                            style="display: block; font-weight: bold; font-size: 13px; color: #334155; margin-bottom: 6px;">Contact
+                            Phone Number *</label>
+                        <input type="tel" id="walkInPhone" required placeholder="09171234567"
+                            style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;">
+                    </div>
+                </div>
+
+                <div id="funeralDurationGroup"
+                    style="margin-bottom: 15px; display: none; background: #f8fafc; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                    <label
+                        style="display: block; font-weight: bold; font-size: 13px; color: #334155; margin-bottom: 6px;">Wake
+                        Duration (Number of Days in Chapel) *</label>
+                    <input type="number" id="walkInWakeDays" min="1" max="7" value="3"
+                        onchange="renderStaffInteractiveCalendar()"
+                        style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;">
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <span id="staffCalendarMonthLabel"
+                            style="font-weight: bold; font-size: 16px; color: #0f172a;">October 2026</span>
+                        <div>
+                            <button type="button" onclick="changeStaffCalendarMonth(-1)"
+                                style="background: #f1f5f9; border: none; font-weight: bold; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; margin-right: 4px;">&lt;</button>
+                            <button type="button" onclick="changeStaffCalendarMonth(1)"
+                                style="background: #f1f5f9; border: none; font-weight: bold; width: 28px; height: 28px; border-radius: 50%; cursor: pointer;">&gt;</button>
+                        </div>
+                    </div>
+
+                    <div
+                        style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: bold; font-size: 11px; color: #64748b; margin-bottom: 6px;">
+                        <div>Sun</div>
+                        <div>Mon</div>
+                        <div>Tue</div>
+                        <div>Wed</div>
+                        <div>Thu</div>
+                        <div>Fri</div>
+                        <div>Sat</div>
+                    </div>
+                    <div id="staffCalendarGrid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;">
+                    </div>
+                    <input type="hidden" id="selectedStaffWalkInDate" required>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label
+                        style="display: block; font-weight: bold; font-size: 13px; color: #334155; margin-bottom: 6px;">Available
+                        Time Slot *</label>
+                    <select id="walkInTimeSlot" required
+                        style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; background: white;">
+                        <option value="">-- Select Date from Calendar First --</option>
+                    </select>
+                </div>
+
+                <div
+                    style="margin-bottom: 20px; background: #f8fafc; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                    <label
+                        style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; color: #334155;">
+                        <input type="checkbox" id="walkInPaidOTC" checked
+                            style="width: 16px; height: 16px; cursor: pointer;">
+                        <strong>Mark Payment as Settled Over-the-Counter (OTC Cash)</strong>
+                    </label>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 8px;">
+                    <button type="button" onclick="closeModal('walkInModal')"
+                        style="padding: 10px 16px; border: 1px solid #cbd5e1; background: #f1f5f9; border-radius: 6px; font-weight: bold; cursor: pointer;">Cancel</button>
+                    <button type="submit"
+                        style="background: #4a0e17; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: bold; cursor: pointer;">Confirm
+                        and Save Walk-In Booking</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: DETAILS & WORKFLOW UPDATE -->
     <div id="adminUpdateModal" class="modal-overlay">
         <div class="modal-box" style="max-width: 650px; text-align: left;">
-            <h3 style="color: #4a0e17; margin-bottom: 15px;">Application Details & Workflow Update</h3>
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #4a0e17; padding-bottom: 8px; margin-bottom: 15px;">
+                <h3 style="color: #4a0e17; margin: 0;">Application Details & Workflow Update</h3>
+                <button type="button" onclick="closeModal('adminUpdateModal')"
+                    style="background: none; border: none; font-size: 18px; font-weight: bold; cursor: pointer; color: #333;">✕</button>
+            </div>
             <div id="applicantInfoSection"
                 style="background: #f8f9fa; padding: 12px; border-radius: 6px; margin-bottom: 15px; font-size: 14px;">
             </div>
+
             <form id="adminUpdateForm" onsubmit="handleAdminUpdateSubmit(event)">
                 <input type="hidden" id="adminAppId">
                 <div class="form-group" style="margin-bottom: 10px;">
                     <label><strong>Application Status *</strong></label>
-
                     <select id="adminStatusSelect" required style="width: 100%; padding: 8px;">
                         <option value="Reviewing">Reviewing</option>
                         <option value="To Follow-Up & Upload Lacking Documents">To Follow-Up & Upload Lacking Documents
@@ -386,44 +522,52 @@
                         <option value="Scheduled for Ceremony">Scheduled for Ceremony</option>
                         <option value="Completed">Completed</option>
                     </select>
-
                 </div>
+
+                <div class="form-group"
+                    style="margin-bottom: 10px; background: #fff; padding: 10px; border: 1px solid #ccd0d5; border-radius: 4px;">
+                    <label
+                        style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: bold; color: #1a1a1a; margin: 0;">
+                        <input type="checkbox" id="adminPaymentConfirmedCheck"
+                            style="width: 16px; height: 16px; cursor: pointer;">
+                        ✓ Confirm Payment Received (Mark as Paid & Verified)
+                    </label>
+                </div>
+
                 <div style="display: flex; gap: 10px; margin-bottom: 10px;">
                     <div style="flex: 1;"><label><strong>Confirmed Date</strong></label><input type="date"
                             id="adminConfirmedDate" style="width: 100%; padding: 8px;"></div>
                     <div style="flex: 1;"><label><strong>Confirmed Time</strong></label><input type="time"
                             id="adminConfirmedTime" style="width: 100%; padding: 8px;"></div>
                 </div>
-                <div class="form-group" style="margin-bottom: 10px;">
-                    <label><strong>Admin Remarks / Notes</strong></label>
-                    <textarea id="adminNotesInput" rows="3" style="width: 100%; padding: 8px;"
-                        placeholder="Add details..."></textarea>
+
+                <div style="margin-bottom: 15px;">
+                    <label><strong>Admin Remarks / Audit Notes</strong></label>
+                    <textarea id="adminNotesInput" rows="2" style="width: 100%; padding: 8px;"
+                        placeholder="Add internal notes..."></textarea>
                 </div>
-                <div style="margin-top: 15px;">
-                    <label><strong>Status History & Audit Trail</strong></label>
-                    <div id="statusHistoryContainer"
-                        style="max-height: 120px; overflow-y: auto; background: #fff; border: 1px solid #ccc; padding: 8px; font-size: 12px; border-radius: 4px;">
-                    </div>
-                </div>
-                <div style="margin-top: 15px; text-align: right;">
+
+                <div style="text-align: right; display: flex; justify-content: flex-end; gap: 8px;">
                     <button type="button" onclick="closeModal('adminUpdateModal')"
-                        style="padding: 8px 15px;">Cancel</button>
+                        style="padding: 8px 16px;">Cancel</button>
                     <button type="submit"
-                        style="background: #4a0e17; color: white; padding: 8px 15px; border: none; border-radius: 4px;">Save
-                        Changes</button>
+                        style="padding: 8px 16px; background: #4a0e17; color: white; border: none; border-radius: 4px; font-weight: bold;">💾
+                        Save Updates</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- MODALS: APPOINTMENT SCHEDULING CALENDAR    -->
-    <!-- ========================================== -->
+    <!-- MODAL: APPOINTMENT SCHEDULING CALENDAR -->
     <div id="appointmentModal" class="modal-overlay">
         <div class="modal-box" style="max-width: 650px; text-align: left; max-height: 90vh; overflow-y: auto;">
-            <h3
-                style="color: #4a0e17; margin-bottom: 12px; font-size: 18px; border-bottom: 2px solid #4a0e17; padding-bottom: 8px;">
-                📅 Schedule Sacrament / Seminar Appointment</h3>
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #4a0e17; padding-bottom: 8px; margin-bottom: 15px;">
+                <h3 style="color: #4a0e17; margin: 0; font-size: 18px;">📅 Schedule Sacrament / Seminar Appointment</h3>
+                <button type="button" onclick="closeModal('appointmentModal')"
+                    style="background: none; border: none; font-size: 18px; font-weight: bold; cursor: pointer; color: #333;">✕</button>
+            </div>
+
             <div id="appointmentAppSummary"
                 style="background: #f4f6f8; border-left: 4px solid #4a0e17; padding: 10px 12px; margin-bottom: 12px; font-size: 13px; color: #1a1a1a;">
             </div>
@@ -462,7 +606,7 @@
                 <input type="hidden" id="apptSacramentType">
                 <div style="display: flex; gap: 10px; margin-bottom: 12px;">
                     <div style="flex: 1;"><label>Confirmed Date *</label><input type="date" id="apptConfirmedDate"
-                            required onchange="onApptDateManualChange()" style="width: 100%; padding: 8px;"></div>
+                            required style="width: 100%; padding: 8px;"></div>
                     <div style="flex: 1;"><label>Confirmed Time Slot *</label><input type="text" id="apptConfirmedTime"
                             required readonly style="width: 100%; padding: 8px; background: #e9ecef;"
                             placeholder="Auto-assigned"></div>
@@ -483,9 +627,7 @@
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- MODALS: IN-BROWSER DOCUMENT VIEWER         -->
-    <!-- ========================================== -->
+    <!-- MODALS: IN-BROWSER DOCUMENT VIEWER -->
     <div id="fileViewerModal" class="modal-overlay">
         <div class="modal-box"
             style="max-width: 85vw; width: 900px; height: 85vh; display: flex; flex-direction: column; padding: 20px;">
@@ -508,6 +650,7 @@
         </div>
     </div>
 
+    <!-- CUSTOM ALERT MODAL -->
     <div id="customAlertModal" class="modal-overlay" style="z-index: 999999;">
         <div class="modal-box text-center" style="max-width: 420px; padding: 24px;">
             <h3 id="customAlertTitle" style="color: #4a0e17; margin-top: 0; margin-bottom: 12px;">Notification</h3>
@@ -520,8 +663,7 @@
 
     <script>
         const db = new Dexie('ParishPortalDB');
-
-        db.version(3).stores({
+        db.version(4).stores({
             users: '++id, email, fullName, role, createdAt',
             applications: '++id, referenceId, userId, applicantName, applicantEmail, sacramentType, status, preferredDate, confirmedDate, confirmedTime, details, documents, adminNotes, statusHistory, archived, createdAt',
             notifications: '++id, userId, referenceId, title, message, isRead, createdAt'
@@ -529,6 +671,10 @@
 
         let rawApplicationsData = [];
         let showArchivedView = false;
+        let staffCalendarDate = new Date();
+        let currentApptCalDate = new Date();
+        let selectedApptDateStr = '';
+        let activeSchedulingApp = null;
 
         function checkAdminSession() {
             const currentAdmin = JSON.parse(localStorage.getItem('currentAdminUser'));
@@ -550,7 +696,7 @@
                     if (tableSection) tableSection.style.display = 'block';
                     if (statsSection) statsSection.style.display = 'grid';
                     if (masterCalendarSection) masterCalendarSection.style.display = 'none';
-                    if (dashboardTitle) dashboardTitle.textContent = 'Parish Secretary Dashboard';
+                    if (dashboardTitle) dashboardTitle.textContent = 'Parish Staff Dashboard';
                 }
 
                 if (headerContainer) {
@@ -588,19 +734,26 @@
             } catch (err) { console.error("Login error:", err); }
         }
 
-        async function loginAsDemoRole(roleType) {
-            let demoSession = roleType === 'priest'
-                ? { id: 9001, fullName: 'Rev. Fr. Parish Priest (Demo)', email: 'priest.demo@santuariodelstocristo.com', role: 'priest' }
-                : { id: 9002, fullName: 'Parish Secretary (Demo)', email: 'secretary.demo@santuariodelstocristo.com', role: 'secretary' };
+        // Function to handle demo role logins on the admin side
+        function loginAsDemoRole(role) {
+            const demoUser = {
+                id: 'demo-' + role,
+                fullName: `Demo ${role.charAt(0).toUpperCase() + role.slice(1)}`,
+                email: `${role}@parish.com`,
+                role: role
+            };
 
-            try {
-                const existingUser = await db.users.where('email').equalsIgnoreCase(demoSession.email).first();
-                if (!existingUser) {
-                    await db.users.add({ fullName: demoSession.fullName, email: demoSession.email, password: 'demo_password', role: demoSession.role, createdAt: new Date().toISOString() });
-                }
-                localStorage.setItem('currentAdminUser', JSON.stringify(demoSession));
-                checkAdminSession();
-            } catch (err) { console.error("Demo login error:", err); }
+            localStorage.setItem('currentUser', JSON.stringify(demoUser));
+
+            if (typeof showAlert === 'function') {
+                showAlert(`Logged in successfully as Demo ${role}!`, 'Demo Access');
+            } else {
+                alert(`Logged in successfully as Demo ${role}!`);
+            }
+
+            // Refresh staff/admin panel state
+            if (typeof updateHeaderUI === 'function') updateHeaderUI();
+            if (typeof loadAdminDashboard === 'function') loadAdminDashboard();
         }
 
         function logoutAdmin(event) {
@@ -612,17 +765,6 @@
         async function fetchApplications() {
             try {
                 rawApplicationsData = await db.applications.toArray();
-
-                if (rawApplicationsData.length === 0) {
-                    const sampleApps = [
-                        { referenceId: 'BAP-90123', applicantName: 'Maria Santos', applicantEmail: 'maria@example.com', sacramentType: 'baptism', status: 'Pending', preferredDate: '2026-11-15', confirmedDate: '2026-11-15', confirmedTime: '16:30', documents: [{ name: 'Birth_Certificate.pdf', data: 'data:application/pdf;base64,JVBERi0xLjcK...' }, { name: 'Baptismal_Permit.pdf', data: 'data:application/pdf;base64,JVBERi0xLjcK...' }], archived: false, createdAt: new Date().toISOString() },
-                        { referenceId: 'WED-44102', applicantName: 'Marco Villanueva', applicantEmail: 'marco@example.com', sacramentType: 'wedding', status: 'Approved', preferredDate: '2026-12-06', confirmedDate: '2026-12-06', confirmedTime: '08:00 - 17:00', documents: [{ name: 'Marriage_License.pdf', data: 'data:application/pdf;base64,JVBERi0xLjcK...' }], archived: false, createdAt: new Date().toISOString() },
-                        { referenceId: 'FUN-10928', applicantName: 'Teresa Mercado', applicantEmail: 'teresa@example.com', sacramentType: 'funeral', status: 'Completed', preferredDate: '2026-10-10', confirmedDate: '2026-10-10', confirmedTime: '18:00', documents: [{ name: 'Death_Certificate.pdf', data: 'data:application/pdf;base64,JVBERi0xLjcK...' }], archived: false, createdAt: new Date().toISOString() }
-                    ];
-                    await db.applications.bulkAdd(sampleApps);
-                    rawApplicationsData = await db.applications.toArray();
-                }
-
                 updateStats();
                 renderTable();
                 renderMasterParishCalendar();
@@ -632,27 +774,37 @@
         }
 
         function switchView(isArchived) {
-            showArchivedView = isArchived;
-            document.getElementById('viewActiveBtn').classList.toggle('active', !isArchived);
-            document.getElementById('viewArchiveBtn').classList.toggle('active', isArchived);
+            showArchivedView = Boolean(isArchived);
+            const activeBtn = document.getElementById('viewActiveBtn');
+            const archiveBtn = document.getElementById('viewArchiveBtn');
+            const tableContainer = document.getElementById('applicationsTableContainer');
+
+            if (activeBtn) activeBtn.classList.toggle('active', !showArchivedView);
+            if (archiveBtn) archiveBtn.classList.toggle('active', showArchivedView);
+            if (tableContainer) tableContainer.style.display = 'block';
+
             renderTable();
         }
 
         function updateStats() {
             const activeApps = rawApplicationsData.filter(a => !a.archived);
             document.getElementById('totalCount').textContent = activeApps.length;
-            document.getElementById('bapCount').textContent = activeApps.filter(a => (a.sacramentType || '').toLowerCase() === 'baptism').length;
-            document.getElementById('wedCount').textContent = activeApps.filter(a => (a.sacramentType || '').toLowerCase() === 'wedding').length;
-            document.getElementById('funCount').textContent = activeApps.filter(a => (a.sacramentType || '').toLowerCase() === 'funeral').length;
+            document.getElementById('bapCount').textContent = activeApps.filter(a => (a.sacramentType || '').toLowerCase().includes('baptism')).length;
+            document.getElementById('wedCount').textContent = activeApps.filter(a => (a.sacramentType || '').toLowerCase().includes('wedding')).length;
+            document.getElementById('funCount').textContent = activeApps.filter(a => (a.sacramentType || '').toLowerCase().includes('funeral')).length;
         }
 
         function renderTable() {
             const tbody = document.getElementById('applicationsTableBody');
             if (!tbody) return;
 
-            const serviceFilter = (document.getElementById('serviceFilter')?.value || 'ALL').toLowerCase();
-            const statusFilter = (document.getElementById('statusFilter')?.value || 'ALL').toLowerCase();
-            const searchInput = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
+            const serviceFilterEl = document.getElementById('serviceFilter');
+            const statusFilterEl = document.getElementById('statusFilter');
+            const searchInputEl = document.getElementById('searchInput');
+
+            const serviceFilter = (serviceFilterEl ? serviceFilterEl.value : 'ALL').toLowerCase();
+            const statusFilter = (statusFilterEl ? statusFilterEl.value : 'ALL').toLowerCase();
+            const searchInput = (searchInputEl ? searchInputEl.value : '').toLowerCase().trim();
 
             const reqConfig = { baptism: 2, wedding: 3, funeral: 0 };
 
@@ -663,7 +815,7 @@
                 const appService = (app.sacramentType || '').toLowerCase();
                 const appStatus = (app.status || 'pending').toLowerCase();
 
-                if (serviceFilter !== 'all' && appService !== serviceFilter) return false;
+                if (serviceFilter !== 'all' && !appService.includes(serviceFilter)) return false;
                 if (statusFilter !== 'all' && appStatus !== statusFilter) return false;
 
                 if (searchInput !== '') {
@@ -694,11 +846,21 @@
                 const targetDate = app.preferredDate || app.targetDate || app.confirmedDate || dateStr;
                 const contactInfo = app.applicantName ? `<strong>${app.applicantName}</strong><br><small style="color:#555;">${app.applicantEmail || ''}</small>` : (app.applicantEmail || app.email || 'N/A');
 
-                // Document Verification Check & Completeness Counters
-                const sacramentKey = (app.sacramentType || '').toLowerCase().trim();
-                const minRequired = reqConfig[sacramentKey] !== undefined ? reqConfig[sacramentKey] : 0;
+                const isWalkIn = Boolean(app.details?.walkInAccommodation);
+                const hasGuestPriest = app.details?.hasGuestPriest || false;
+                const sacramentKey = (app.sacramentType || '').toLowerCase().includes('baptism') ? 'baptism' : ((app.sacramentType || '').toLowerCase().includes('wedding') ? 'wedding' : 'funeral');
 
-                // Deduplicate documents by name to prevent repeating buttons
+                let minRequired = 0;
+                if (!isWalkIn) {
+                    if (sacramentKey === 'wedding') {
+                        minRequired = hasGuestPriest ? 4 : 3; // 4 if guest priest, 3 standard
+                    } else if (sacramentKey === 'baptism') {
+                        minRequired = 2;
+                    } else {
+                        minRequired = reqConfig[sacramentKey] !== undefined ? reqConfig[sacramentKey] : 0;
+                    }
+                }
+                
                 const uniqueDocs = app.documents && Array.isArray(app.documents) ? Array.from(
                     new Map(app.documents.map(doc => {
                         let name = typeof doc === 'string' ? doc : (doc.name || 'Document');
@@ -720,25 +882,24 @@
                             let docName = typeof doc === 'string' ? `Doc ${idx + 1}` : (doc.name || `Doc ${idx + 1}`);
                             let docUrl = typeof doc === 'string' ? doc : (doc.data || '#');
                             let safeDocName = docName.replace(/'/g, "\\'");
-                            return `<div style="margin: 3px 0;"><button type="button" onclick="viewDocument('${safeDocName}', '${docUrl}')" style="background: #0056b3; color: white; border: none; padding: 3px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold;">👁️ View ${docName}</button></div>`;
+                            return `<div style="margin: 3px 0;"><button type="button" onclick="event.stopPropagation(); viewDocument('${safeDocName}', '${docUrl}')" style="background: #0056b3; color: white; border: none; padding: 3px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold;">👁️ View ${docName}</button></div>`;
                         }).join('');
                     } else {
                         filesHtml += `<span style="color:#c0392b; font-size:11px; font-weight:bold;">⚠️ Missing (0/${minRequired})</span>`;
                     }
                 }
 
-                // Scheduling Guard Button
-                // Document & Payment Verification Check for Scheduling Guard
                 const isPaymentReady = app.paymentConfirmed || (app.status || '').includes('Scheduled') || (app.status || '') === 'Completed';
 
                 let scheduleBtnHtml = '';
                 if (!isDocComplete) {
-                    scheduleBtnHtml = `<button onclick="showAlert('🚫 Action Denied: Documents are still lacking (${uploadedCount}/${minRequired}). Scheduling is disabled until all required documents are uploaded.')" style="background: #aab7b8; color: #ffffff; border: none; padding: 6px 10px; border-radius: 4px; cursor: not-allowed; font-size: 12px; font-weight: bold;" title="Missing required document attachments">🚫 Incomplete</button>`;
+                    scheduleBtnHtml = `<button type="button" onclick="event.stopPropagation(); showAlert('🚫 Action Denied: Documents are still lacking (${uploadedCount}/${minRequired}).')" style="background: #aab7b8; color: #ffffff; border: none; padding: 6px 10px; border-radius: 4px; cursor: not-allowed; font-size: 12px; font-weight: bold;">🚫 Incomplete</button>`;
                 } else if (!isPaymentReady) {
-                    scheduleBtnHtml = `<button onclick="showAlert('⚠️ Payment Pending: Scheduling is greyed out until payment is confirmed by the parishioner or staff.')" style="background: #e67e22; color: #ffffff; border: none; padding: 6px 10px; border-radius: 4px; cursor: not-allowed; font-size: 12px; font-weight: bold;" title="Payment confirmation pending">⏳ Payment Pending</button>`;
+                    scheduleBtnHtml = `<button type="button" onclick="event.stopPropagation(); showAlert('⚠️ Payment Pending: Scheduling is greyed out until payment is confirmed.')" style="background: #e67e22; color: #ffffff; border: none; padding: 6px 10px; border-radius: 4px; cursor: not-allowed; font-size: 12px; font-weight: bold;">⏳ Payment Pending</button>`;
                 } else {
-                    scheduleBtnHtml = `<button onclick="openAppointmentModal('${app.id}')" style="background: #1e5631; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">📅 Schedule</button>`;
+                    scheduleBtnHtml = `<button type="button" onclick="event.stopPropagation(); openAppointmentModal('${app.id}')" style="background: #1e5631; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">📅 Schedule</button>`;
                 }
+
                 html += `
                 <tr style="${app.archived ? 'opacity: 0.7; background-color: #f9f9f9;' : ''}">
                     <td><strong>${app.referenceId || 'N/A'}</strong></td>
@@ -761,9 +922,9 @@
                     </td>
                     <td>
                         <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                            <button onclick="openAdminUpdateModal('${app.id}')" style="background: #4a0e17; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">👁️ Details</button>
+                            <button type="button" onclick="event.stopPropagation(); openAdminUpdateModal('${app.id}')" style="background: #4a0e17; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">👁️ Details</button>
                             ${scheduleBtnHtml}
-                            <button onclick="toggleArchive('${app.id}')" class="btn-action" title="${app.archived ? 'Restore' : 'Archive'}">${app.archived ? '↩️' : '📦Archive'}</button>
+                            <button type="button" onclick="event.stopPropagation(); toggleArchive('${app.id}')" class="btn-action" title="${app.archived ? 'Restore' : 'Archive'}">${app.archived ? '↩️' : '✅ Mark as Done'}</button>
                         </div>
                     </td>
                 </tr>`;
@@ -777,32 +938,95 @@
 
             document.getElementById('adminAppId').value = app.id;
             document.getElementById('adminStatusSelect').value = app.status || 'Pending';
+            document.getElementById('adminPaymentConfirmedCheck').checked = Boolean(app.paymentConfirmed);
             document.getElementById('adminConfirmedDate').value = app.confirmedDate || '';
             document.getElementById('adminConfirmedTime').value = app.confirmedTime || '';
             document.getElementById('adminNotesInput').value = app.adminNotes || '';
 
-            let formattedDetails = 'None';
-            if (app.details && typeof app.details === 'object') {
-                formattedDetails = Object.entries(app.details).map(([k, v]) => `<strong>${k}:</strong> ${v}`).join(' | ');
-            } else if (app.details) {
-                formattedDetails = app.details;
+            // 💡 CLEAN & FORMATTED DETAILS PARSER (Baptism, Wedding, Funeral)
+            let formattedDetails = '<em style="color:#666;">No additional details.</em>';
+            const d = app.details || {};
+            const sType = (app.sacramentType || '').toLowerCase();
+
+            if (d && typeof d === 'object') {
+                if (sType.includes('baptism')) {
+                    formattedDetails = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px;">
+                    <div><strong>👶 Child's Name:</strong> ${d.childName || `${d.childFirstName || ''} ${d.childMiddleInitial || ''} ${d.childLastName || ''}`.trim() || 'N/A'}</div>
+                    <div><strong>📅 Date of Birth:</strong> ${d.dob || 'N/A'}</div>
+                    <div><strong>👨 Father's Name:</strong> ${d.fatherName || `${d.fatherFirstName || ''} ${d.fatherMiddleInitial || ''} ${d.fatherLastName || ''}`.trim() || 'N/A'}</div>
+                    <div><strong>👩 Mother's Maiden Name:</strong> ${d.motherName || `${d.motherFirstName || ''} ${d.motherMiddleInitial || ''} ${d.motherLastName || ''}`.trim() || 'N/A'}</div>
+                    <div><strong>📞 Contact Phone:</strong> ${d.phone || 'N/A'}</div>
+                    <div style="grid-column: span 2;"><strong>👥 Godparents:</strong> ${d.godparents || 'None listed'}</div>
+                </div>
+            `;
+                } else if (sType.includes('wedding')) {
+                    formattedDetails = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px;">
+                    <div><strong>🤵 Groom's Name:</strong> ${d.groomName || `${d.groomFirstName || ''} ${d.groomLastName || ''}`.trim() || 'N/A'} (${d.groomAge || 'N/A'} yrs old, ${d.groomCivilStatus || 'N/A'})</div>
+                    <div><strong>👰 Bride's Name:</strong> ${d.brideName || `${d.brideFirstName || ''} ${d.brideLastName || ''}`.trim() || 'N/A'} (${d.brideAge || 'N/A'} yrs old, ${d.brideCivilStatus || 'N/A'})</div>
+                    <div><strong>🌍 Groom Nationality:</strong> ${d.groomNationality || 'Filipino'}</div>
+                    <div><strong>🌍 Bride Nationality:</strong> ${d.brideNationality || 'Filipino'}</div>
+                </div>
+            `;
+                } else if (sType.includes('funeral')) {
+                    formattedDetails = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px;">
+                    <div><strong>🕊️ Deceased Name:</strong> ${d.deceasedName || `${d.deceasedFirstName || ''} ${d.deceasedLastName || ''}`.trim() || 'N/A'}</div>
+                    <div><strong>📊 Age at Death:</strong> ${d.age || 'N/A'}</div>
+                    <div><strong>📞 Contact Phone:</strong> ${d.phone || 'N/A'}</div>
+                    <div><strong>🕯️ Wake Duration / Span:</strong> ${d.wakeDays || 3} Days (Interment: ${d.intermentDate || app.confirmedDate || 'N/A'})</div>
+                </div>
+            `;
+                } else {
+                    // Fallback for general services
+                    formattedDetails = Object.entries(d).map(([k, v]) => `<div><strong>${k}:</strong> ${v}</div>`).join('');
+                }
+            }
+
+            let docsHtml = '<em style="color:#666; font-size:12px;">No sacramental documents attached.</em>';
+            if (app.documents && app.documents.length > 0) {
+                docsHtml = app.documents.map((doc, idx) => {
+                    let docName = typeof doc === 'string' ? `Document ${idx + 1}` : (doc.name || `Document ${idx + 1}`);
+                    let docUrl = typeof doc === 'string' ? doc : (doc.data || '#');
+                    let safeDocName = docName.replace(/'/g, "\\'");
+                    return `
+            <div style="margin: 4px 0; display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 12px; font-weight: bold;">📄 ${docName}</span>
+                <button type="button" onclick="viewDocument('${safeDocName}', '${docUrl}')" style="background: #0056b3; color: white; border: none; padding: 3px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold;">👁️ View Document</button>
+            </div>`;
+                }).join('');
+            }
+
+            let paymentProofHtml = '<em style="color:#666; font-size: 12px;">No payment receipt uploaded yet.</em>';
+            if (app.paymentProof) {
+                let proofName = app.paymentProof.name || 'GCash_Receipt.png';
+                let proofUrl = app.paymentProof.data || app.paymentProof;
+                let safeProofName = proofName.replace(/'/g, "\\'");
+                paymentProofHtml = `
+        <div style="margin: 4px 0; display: flex; align-items: center; gap: 8px; background: #e8f5e9; padding: 8px; border-radius: 4px; border: 1px solid #c8e6c9;">
+            <span style="font-size: 12px; font-weight: bold; color: #2e7d32;">💳 GCash Receipt: ${proofName}</span>
+            <button type="button" onclick="viewDocument('${safeProofName}', '${proofUrl}')" style="background: #2e7d32; color: white; border: none; padding: 3px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold;">👁️ View Payment Proof</button>
+        </div>`;
             }
 
             document.getElementById('applicantInfoSection').innerHTML = `
-                <div><strong>Ref ID:</strong> <span style="color: #4a0e17; font-weight: bold;">${app.referenceId || 'N/A'}</span> | <strong>Sacrament:</strong> ${app.sacramentType || 'N/A'}</div>
-                <div><strong>Applicant:</strong> ${app.applicantName || app.fullName || 'N/A'} (${app.applicantEmail || app.email || 'N/A'})</div>
-                <div style="margin-top: 5px;"><strong>Details:</strong> ${formattedDetails}</div>
-            `;
-
-            const historyContainer = document.getElementById('statusHistoryContainer');
-            if (app.statusHistory && app.statusHistory.length > 0) {
-                historyContainer.innerHTML = app.statusHistory.map(h => `
-                    <div style="border-bottom: 1px solid #ddd; padding: 4px 0;">
-                        <strong>${h.oldStatus} → ${h.newStatus}</strong> by <em>${h.changedBy || 'Admin'}</em> — ${h.adminNote || ''}
-                    </div>`).join('');
-            } else {
-                historyContainer.innerHTML = '<em style="color: #666;">No audit log recorded yet.</em>';
-            }
+        <div style="margin-bottom: 6px;"><strong>Ref ID:</strong> <span style="color: #4a0e17; font-weight: bold;">${app.referenceId || 'N/A'}</span> | <strong>Sacrament:</strong> ${app.sacramentType || 'N/A'}</div>
+        <div style="margin-bottom: 8px;"><strong>Applicant:</strong> ${app.applicantName || app.fullName || 'N/A'} (${app.applicantEmail || app.email || 'N/A'})</div>
+        <div style="margin-top: 8px; border-top: 1px solid #e2e8f0; padding-top: 8px;">
+            <strong style="color: #4a0e17; display: block; margin-bottom: 4px;">📋 Application Particulars:</strong>
+            ${formattedDetails}
+        </div>
+        <div style="margin-top: 12px; border-top: 1px dashed #ccc; padding-top: 8px;">
+            <strong style="color: #4a0e17; display: block; margin-bottom: 4px;">📂 Sacramental Requirements:</strong>
+            <div style="margin-bottom: 10px;">${docsHtml}</div>
+            <strong style="color: #1e5631; display: block; margin-bottom: 4px;">💳 Payment Proof / GCash Receipt:</strong>
+            <div style="margin-bottom: 8px;">${paymentProofHtml}</div>
+            <div style="font-size: 13px; margin-top: 6px;">
+                Payment Verification Status: <span style="font-weight: bold; color: ${app.paymentConfirmed ? '#27ae60' : '#e67e22'};">${app.paymentConfirmed ? '✓ Confirmed & Paid' : '⏳ Pending Verification'}</span>
+            </div>
+        </div>
+    `;
 
             openModal('adminUpdateModal');
         }
@@ -815,6 +1039,7 @@
             const confirmedDate = document.getElementById('adminConfirmedDate').value;
             const confirmedTime = document.getElementById('adminConfirmedTime').value;
             const adminNotes = document.getElementById('adminNotesInput').value;
+            const paymentConfirmed = document.getElementById('adminPaymentConfirmedCheck').checked;
 
             const app = await db.applications.get(numericId);
             if (!app) return;
@@ -823,7 +1048,7 @@
             const historyEntry = {
                 oldStatus: app.status || 'Pending',
                 newStatus: newStatus,
-                adminNote: adminNotes,
+                adminNote: adminNotes + (paymentConfirmed && !app.paymentConfirmed ? ' [Payment Confirmed]' : ''),
                 changedAt: new Date().toISOString(),
                 changedBy: currentUser.fullName
             };
@@ -831,6 +1056,7 @@
 
             await db.applications.update(numericId, {
                 status: newStatus,
+                paymentConfirmed: paymentConfirmed,
                 confirmedDate: confirmedDate || app.confirmedDate,
                 confirmedTime: confirmedTime || app.confirmedTime,
                 adminNotes: adminNotes,
@@ -859,44 +1085,33 @@
             fetchApplications();
         }
 
-        // ==========================================
-        // APPOINTMENT SCHEDULING CALENDAR MODAL
-        // ==========================================
-        let currentApptCalDate = new Date();
-        let selectedApptDateStr = '';
-        let activeSchedulingApp = null;
-
         async function openAppointmentModal(appId) {
+
             let app = rawApplicationsData.find(a => String(a.id) === String(appId)) || await db.applications.get(Number(appId) || appId);
             if (!app) return;
 
+            // 💡 Bypass document check if it's a staff walk-in accommodation
+            const isWalkIn = Boolean(app.details?.walkInAccommodation);
+
             const reqConfig = { baptism: 2, wedding: 3, funeral: 0 };
-            const sacramentKey = (app.sacramentType || '').toLowerCase();
-            const minRequired = reqConfig[sacramentKey] !== undefined ? reqConfig[sacramentKey] : 0;
-            const uploadedCount = app.documents ? app.documents.length : 0;
+            const sacramentKey = (app.sacramentType || '').toLowerCase().includes('baptism') ? 'baptism' : ((app.sacramentType || '').toLowerCase().includes('wedding') ? 'wedding' : 'funeral');
+            const minRequired = isWalkIn ? 0 : (reqConfig[sacramentKey] || 0);
+            const uploadedCount = app.documents && Array.isArray(app.documents) ? app.documents.length : 0;
 
-            // 1. Guard: Documents must be complete
-            if (uploadedCount < minRequired) {
-                showAlert(`🚫 Action Denied: Documents are still lacking (${uploadedCount}/${minRequired}). The parishioner must upload lacking documents before scheduling can proceed.`);
-                return;
-            }
-
-            // 2. Guard: Payment must be confirmed / marked as ready for payment
-            const statusStr = (app.status || '');
-            if (!app.paymentConfirmed && statusStr !== 'Reviewed & Ready for Payment' && !statusStr.includes('Scheduled')) {
-                showAlert(`⚠️ Payment Pending: Scheduling is greyed out until payment is confirmed by the parishioner or staff (Status: Reviewed & Ready for Payment).`);
+            if (!isWalkIn && minRequired > 0 && uploadedCount < minRequired) {
+                showAlert(`🚫 Action Denied: This application is missing required documents (${uploadedCount}/${minRequired}). Cannot schedule.`);
                 return;
             }
 
             activeSchedulingApp = app;
             document.getElementById('apptAppId').value = app.id;
-            document.getElementById('apptSacramentType').value = sacramentKey;
+            document.getElementById('apptSacramentType').value = (app.sacramentType || '').toLowerCase();
             document.getElementById('apptConfirmedDate').value = app.confirmedDate || app.preferredDate || '';
             selectedApptDateStr = app.confirmedDate || app.preferredDate || '';
             document.getElementById('apptAdminNotes').value = app.adminNotes || '';
 
             document.getElementById('appointmentAppSummary').innerHTML = `
-                <strong>Ref:</strong> ${app.referenceId} | <strong>Sacrament:</strong> ${app.sacramentType} | <strong>Applicant:</strong> ${app.applicantName || app.fullName}
+                <strong>Ref ID:</strong> ${app.referenceId} | <strong>Sacrament:</strong> ${app.sacramentType} | <strong>Applicant:</strong> ${app.applicantName || app.fullName}
             `;
 
             openModal('appointmentModal');
@@ -916,42 +1131,10 @@
 
             const firstDayIndex = new Date(year, month, 1).getDay();
             const totalDays = new Date(year, month + 1, 0).getDate();
+
             const sacramentType = (activeSchedulingApp.sacramentType || '').toLowerCase();
-
-            // Determine wake start and interment end dates if this is a funeral
-            let funeralStart = '';
-            let funeralEnd = '';
-            if (sacramentType === 'funeral') {
-                funeralStart = selectedApptDateStr || activeSchedulingApp.confirmedDate || activeSchedulingApp.preferredDate || '';
-                const wakeDays = parseInt(activeSchedulingApp?.details?.wakeDays || activeSchedulingApp?.wakeDays) || 3;
-                if (funeralStart) {
-                    let startD = new Date(funeralStart);
-                    let endD = new Date(startD);
-                    endD.setDate(endD.getDate() + (wakeDays - 1));
-                    funeralEnd = endD.toISOString().split('T')[0];
-                }
-            }
-
-            // Collect all dates occupied by other active funeral spans
-            const occupiedFuneralDates = new Set();
-            if (sacramentType === 'funeral') {
-                rawApplicationsData.forEach(app => {
-                    if (app.archived || (app.status || '').toLowerCase() === 'rejected') return;
-                    if (String(app.id) === String(activeSchedulingApp.id)) return;
-                    if ((app.sacramentType || '').toLowerCase() === 'funeral') {
-                        const start = app.confirmedDate || app.preferredDate;
-                        const end = app.details?.intermentDate || app.intermentDate || start;
-                        if (start) {
-                            let curr = new Date(start);
-                            let finalD = new Date(end);
-                            while (curr <= finalD) {
-                                occupiedFuneralDates.add(curr.toISOString().split('T')[0]);
-                                curr.setDate(curr.getDate() + 1);
-                            }
-                        }
-                    }
-                });
-            }
+            const isGroupBap = sacramentType.includes('group') || sacramentType === 'baptism';
+            const isIndivBap = sacramentType.includes('individual');
 
             let html = '';
             for (let i = 0; i < firstDayIndex; i++) { html += `<div></div>`; }
@@ -959,60 +1142,34 @@
             for (let day = 1; day <= totalDays; day++) {
                 const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 const cellDate = new Date(dateString);
-                const dayOfWeek = cellDate.getDay();
+                const dayOfWeek = cellDate.getDay(); // 0:Sun, 1:Mon, 2:Tue, 3:Wed, 4:Thu, 5:Fri, 6:Sat
                 const dayOfMonth = cellDate.getDate();
 
                 let isAllowed = true;
                 let badgeText = 'Available';
                 let badgeColor = '#2e7d32';
 
-                if (sacramentType === 'baptism') {
-                    isAllowed = (dayOfWeek === 6);
-                    badgeText = isAllowed ? 'Available' : 'Sat Only';
+                if (isGroupBap) {
+                    // Group Baptism: Sat (6) & Sun (0)
+                    isAllowed = (dayOfWeek === 0 || dayOfWeek === 6);
+                    badgeText = isAllowed ? 'Available' : 'Sat/Sun Only';
                     badgeColor = isAllowed ? '#2e7d32' : '#8a8d91';
-                } else if (sacramentType === 'wedding') {
+                } else if (isIndivBap) {
+                    // Individual Baptism: Tue to Fri (2 to 5)
+                    isAllowed = (dayOfWeek >= 2 && dayOfWeek <= 5);
+                    badgeText = isAllowed ? 'Available' : 'Tue-Fri Only';
+                    badgeColor = isAllowed ? '#2e7d32' : '#8a8d91';
+                } else if (sacramentType.includes('wedding')) {
                     isAllowed = (dayOfWeek === 0 && dayOfMonth <= 7);
                     badgeText = isAllowed ? 'Available' : '1st Sun';
                     badgeColor = isAllowed ? '#2e7d32' : '#8a8d91';
-                } else if (sacramentType === 'funeral') {
-                    const isClosedMon = (dayOfWeek === 1);
-                    const isOccupied = occupiedFuneralDates.has(dateString);
-                    isAllowed = !isClosedMon && !isOccupied;
-
-                    if (isClosedMon) {
-                        badgeText = 'Closed (Mon)';
-                        badgeColor = '#8a8d91';
-                    } else if (isOccupied) {
-                        badgeText = 'Occupied';
-                        badgeColor = '#c0392b';
-                    }
+                } else if (sacramentType.includes('funeral')) {
+                    isAllowed = (dayOfWeek !== 1);
+                    if (!isAllowed) { badgeText = 'Closed (Mon)'; badgeColor = '#8a8d91'; }
                 }
 
-                // Check span highlights for funerals
-                const isStart = sacramentType === 'funeral' && funeralStart === dateString;
-                const isEnd = sacramentType === 'funeral' && funeralEnd === dateString;
-                let isInSpan = false;
-                if (sacramentType === 'funeral' && funeralStart && funeralEnd) {
-                    isInSpan = dateString > funeralStart && dateString < funeralEnd;
-                }
-
-                let bgStyle = '#f0f2f5';
-                let textStyle = '#050505';
-
-                if (isStart || isEnd) {
-                    bgStyle = '#1877f2';
-                    textStyle = '#ffffff';
-                    badgeText = isStart ? 'Wake Start' : 'Interment';
-                    badgeColor = '#ffffff';
-                } else if (isInSpan) {
-                    bgStyle = '#d0e8ff'; // Soft blue highlight for the multi-day span
-                    textStyle = '#1d4ed8';
-                    badgeText = 'Wake Span';
-                    badgeColor = '#1d4ed8';
-                } else if (selectedApptDateStr === dateString && sacramentType !== 'funeral') {
-                    bgStyle = '#1877f2';
-                    textStyle = '#ffffff';
-                }
+                let bgStyle = selectedApptDateStr === dateString ? '#1877f2' : '#f0f2f5';
+                let textStyle = selectedApptDateStr === dateString ? '#ffffff' : '#050505';
 
                 if (!isAllowed) {
                     bgStyle = '#f4f2f2';
@@ -1020,10 +1177,10 @@
                 }
 
                 html += `
-                <div onclick="${isAllowed ? `selectApptCalendarDate('${dateString}')` : ''}" style="background: ${bgStyle}; color: ${textStyle}; padding: 6px 2px; border-radius: 6px; cursor: ${isAllowed ? 'pointer' : 'not-allowed'}; font-size: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 40px; border: ${isStart || isEnd ? '2px solid #000' : '1px solid transparent'};">
-                    <strong>${day}</strong>
-                    <span style="font-size: 8px; font-weight: bold; color: ${badgeColor};">${badgeText}</span>
-                </div>`;
+        <div onclick="${isAllowed ? `selectApptCalendarDate('${dateString}')` : ''}" style="background: ${bgStyle}; color: ${textStyle}; padding: 6px 2px; border-radius: 6px; cursor: ${isAllowed ? 'pointer' : 'not-allowed'}; font-size: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 40px;">
+            <strong>${day}</strong>
+            <span style="font-size: 8px; font-weight: bold; color: ${badgeColor};">${badgeText}</span>
+        </div>`;
             }
             gridEl.innerHTML = html;
         }
@@ -1045,23 +1202,15 @@
             const timeInput = document.getElementById('apptConfirmedTime');
             const hintEl = document.getElementById('seminarRuleHint');
 
-            if (sacramentType === 'baptism') {
+            if (sacramentType.includes('baptism')) {
                 timeInput.value = '16:30';
                 hintEl.textContent = '✓ Saturday 4:30 PM Baptism Seminar & Interview';
-            } else if (sacramentType === 'wedding') {
+            } else if (sacramentType.includes('wedding')) {
                 timeInput.value = '08:00 - 17:00';
                 hintEl.textContent = '✓ 1st Sunday Pre-Cana Seminar (8:00 AM - 5:00 PM)';
-            } else if (sacramentType === 'funeral') {
+            } else if (sacramentType.includes('funeral')) {
                 timeInput.value = '08:00 - 17:00';
-
-                // Retrieve wake duration requested by client (default to 3 days if not specified)
-                const wakeDays = parseInt(activeSchedulingApp?.details?.wakeDays || activeSchedulingApp?.wakeDays) || 3;
-                let startD = new Date(dateStr);
-                let intermentD = new Date(startD);
-                intermentD.setDate(intermentD.getDate() + (wakeDays - 1));
-                const intermentStr = intermentD.toISOString().split('T')[0];
-
-                hintEl.innerHTML = `✓ Resurrection Chapel Vigil Span: <strong>${dateStr}</strong> to <strong>${intermentStr}</strong> (${wakeDays} Days)`;
+                hintEl.innerHTML = `✓ Resurrection Chapel Vigil Slot for <strong>${dateStr}</strong>`;
             } else {
                 timeInput.value = '18:00';
                 hintEl.textContent = '✓ Evening Vigil Slot';
@@ -1086,9 +1235,6 @@
             fetchApplications();
         }
 
-        // ==========================================
-        // DOCUMENT VIEWER LOGIC
-        // ==========================================
         function viewDocument(docName, docData) {
             const titleEl = document.getElementById('fileViewerTitle');
             const contentEl = document.getElementById('fileViewerContent');
@@ -1111,9 +1257,6 @@
             openModal('fileViewerModal');
         }
 
-        // ==========================================
-        // MASTER PARISH CALENDAR LOGIC (Priest View)
-        // ==========================================
         let currentMasterCalDate = new Date();
         let selectedMasterDateStr = '';
 
@@ -1159,31 +1302,22 @@
                     let badgeBg = '#7f8c8d';
                     let label = type.charAt(0).toUpperCase() + type.slice(1);
 
-                    if (type === 'baptism') badgeBg = '#1877f2';
-                    else if (type === 'wedding') badgeBg = '#8e44ad';
-                    else if (type === 'funeral') badgeBg = '#c0392b';
+                    if (type.includes('baptism')) badgeBg = '#1877f2';
+                    else if (type.includes('wedding')) badgeBg = '#8e44ad';
+                    else if (type.includes('funeral')) badgeBg = '#c0392b';
 
-                    eventsHtml += `
-                        <div style="background: ${badgeBg}; color: white; font-size: 10px; font-weight: bold; padding: 2px 4px; border-radius: 3px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${label}: ${app.applicantName || app.fullName}">
-                            ${label}
-                        </div>
-                    `;
+                    eventsHtml += `<div style="background: ${badgeBg}; color: white; font-size: 10px; font-weight: bold; padding: 2px 4px; border-radius: 3px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${label}: ${app.applicantName || app.fullName}">${label}</div>`;
                 });
 
                 html += `
-                    <div onclick="inspectMasterDate('${dateString}')" 
-                         style="background: ${cellBg}; border: ${cellBorder}; border-radius: 6px; padding: 6px; min-height: 85px; cursor: pointer; display: flex; flex-direction: column; justify-content: flex-start; text-align: left; box-sizing: border-box;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                            <strong style="font-size: 14px; color: ${isToday ? '#d35400' : '#1c1e21'}; font-weight: 700;">${day}</strong>
-                            ${dayBookings.length > 0 ? `<span style="font-size: 10px; background: #e4e6eb; color: #1c1e21; padding: 1px 5px; border-radius: 10px; font-weight: bold;">${dayBookings.length}</span>` : ''}
-                        </div>
-                        <div style="margin-top: 4px; overflow-y: auto; max-height: 50px; width: 100%;">
-                            ${eventsHtml}
-                        </div>
+                <div onclick="inspectMasterDate('${dateString}')" style="background: ${cellBg}; border: ${cellBorder}; border-radius: 6px; padding: 6px; min-height: 85px; cursor: pointer; display: flex; flex-direction: column; justify-content: flex-start; text-align: left; box-sizing: border-box;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        <strong style="font-size: 14px; color: ${isToday ? '#d35400' : '#1c1e21'}; font-weight: 700;">${day}</strong>
+                        ${dayBookings.length > 0 ? `<span style="font-size: 10px; background: #e4e6eb; color: #1c1e21; padding: 1px 5px; border-radius: 10px; font-weight: bold;">${dayBookings.length}</span>` : ''}
                     </div>
-                `;
+                    <div style="margin-top: 4px; overflow-y: auto; max-height: 50px; width: 100%;">${eventsHtml}</div>
+                </div>`;
             }
-
             gridEl.innerHTML = html;
         }
 
@@ -1223,16 +1357,517 @@
                 listHtml += `<li><strong>[${type}]</strong> Applicant: ${applicant} — Time: <em>${time}</em> — Status: <span style="color: #27ae60; font-weight: bold;">${status}</span> (Ref: ${app.referenceId})</li>`;
             });
             listHtml += `</ul>`;
-
             bodyEl.innerHTML = listHtml;
         }
 
-        function openModal(id) { document.getElementById(id).classList.add('active'); }
-        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            if (modal) {
+                modal.classList.add('active');
+                modal.style.display = 'flex';
+            }
+        }
+
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            if (modal) {
+                modal.classList.remove('active');
+                modal.style.display = 'none';
+            }
+        }
+
         function showAlert(msg, title = 'Parish Portal Notice') {
             document.getElementById('customAlertTitle').textContent = title;
             document.getElementById('customAlertMessage').textContent = msg;
             openModal('customAlertModal');
+        }
+
+        function openWalkInModal() {
+            openModal('walkInModal');
+            const form = document.getElementById('staffWalkInForm');
+            if (form) form.reset();
+            document.getElementById('selectedStaffWalkInDate').value = '';
+            document.getElementById('walkInTimeSlot').innerHTML = '<option value="">-- Select Date from Calendar First --</option>';
+            renderStaffInteractiveCalendar();
+        }
+
+
+        // Function called by the Prev/Next buttons
+        function changeStaffCalendarMonth(offset) {
+            if (!staffCalendarDate) {
+                staffCalendarDate = new Date();
+            }
+
+            // Shift month forward or backward
+            staffCalendarDate.setMonth(staffCalendarDate.getMonth() + offset);
+
+            // Re-render the calendar grid for the new month
+            if (typeof renderStaffInteractiveCalendar === 'function') {
+                renderStaffInteractiveCalendar();
+            } else {
+                console.warn("renderStaffInteractiveCalendar is not defined.");
+            }
+        }
+
+        async function renderStaffInteractiveCalendar() {
+            const service = document.getElementById('walkInSacramentType').value;
+            const grid = document.getElementById('staffCalendarGrid');
+            const monthLabel = document.getElementById('staffCalendarMonthLabel');
+            const serviceNotice = document.getElementById('staffServiceNotice');
+            const funeralDurationGroup = document.getElementById('funeralDurationGroup');
+
+            if (!service) {
+                grid.innerHTML = '<div style="grid-column: span 7; text-align: center; padding: 30px; color: #94a3b8; font-size: 13px;">Please select a sacrament service above to load calendar availability.</div>';
+                monthLabel.textContent = 'Select Service';
+                serviceNotice.style.display = 'none';
+                funeralDurationGroup.style.display = 'none';
+                return;
+            }
+
+            funeralDurationGroup.style.display = service === 'Funeral' ? 'block' : 'none';
+            serviceNotice.style.display = 'block';
+
+            if (service === 'Group Baptism') {
+                serviceNotice.innerHTML = '📌 <strong>Group Baptism:</strong> Saturdays & Sundays @ 10:00 AM (Max 3 slots).';
+            } else if (service === 'Individual Baptism') {
+                serviceNotice.innerHTML = '📌 <strong>Individual Baptism:</strong> Tuesday to Friday by appointment (Max 1 slot/day).';
+            } else if (service === 'Wedding') {
+                serviceNotice.innerHTML = '💒 <strong>Wedding Rule:</strong> At least 30 days advance notice from today. Strictly 1 per day.';
+            } else if (service === 'Funeral') {
+                serviceNotice.innerHTML = '🕊️ <strong>Resurrection Chapel:</strong> Select wake start date to block out full wake-to-interment span.';
+            }
+
+            const year = staffCalendarDate.getFullYear();
+            const month = staffCalendarDate.getMonth();
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            monthLabel.textContent = `${monthNames[month]} ${year}`;
+
+            let existingApps = [];
+            try {
+                existingApps = await db.applications.toArray();
+            } catch (e) {
+                console.error("Database read error:", e);
+            }
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const totalDays = new Date(year, month + 1, 0).getDate();
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const minWeddingDate = new Date(today);
+            minWeddingDate.setDate(minWeddingDate.getDate() + 30);
+
+            grid.innerHTML = '';
+            for (let i = 0; i < firstDay; i++) {
+                grid.innerHTML += '<div></div>';
+            }
+
+            for (let day = 1; day <= totalDays; day++) {
+                const cellDate = new Date(year, month, day);
+                cellDate.setHours(0, 0, 0, 0);
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+                const dayOfWeek = cellDate.getDay(); // 0:Sun, 1:Mon, 2:Tue, 3:Wed, 4:Thu, 5:Fri, 6:Sat
+                const isPast = cellDate < today;
+
+                let isValidServiceDay = true;
+                let offDayReason = 'Off Day';
+
+                // 💡 STRICT SEPARATE RULES FOR ADMIN WALK-IN:
+                if (service === 'Group Baptism') {
+                    isValidServiceDay = (dayOfWeek === 0 || dayOfWeek === 6); // Sat & Sun only
+                    offDayReason = 'Sat/Sun Only';
+                } else if (service === 'Individual Baptism') {
+                    isValidServiceDay = (dayOfWeek >= 2 && dayOfWeek <= 5); // Tue to Fri only
+                    offDayReason = 'Tue-Fri Only';
+                } else if (service === 'Wedding') {
+                    if (cellDate < minWeddingDate) {
+                        isValidServiceDay = false;
+                        offDayReason = '<30 Days';
+                    } else {
+                        isValidServiceDay = (dayOfWeek >= 2 && dayOfWeek <= 6);
+                    }
+                } else if (service === 'Funeral') {
+                    isValidServiceDay = (dayOfWeek !== 1); // Closed Mondays
+                }
+
+                let isFull = false;
+                if (service === 'Funeral') {
+                    isFull = existingApps.some(app => {
+                        if (!app.sacramentType || !app.sacramentType.toLowerCase().includes('funeral') || (app.status || '').toLowerCase() === 'rejected' || app.archived) return false;
+                        const startStr = app.confirmedDate || app.preferredDate;
+                        const daysCount = parseInt(app.details?.wakeDays || app.wakeDays || 3);
+                        if (!startStr) return false;
+
+                        const startD = new Date(startStr);
+                        const endD = new Date(startD);
+                        endD.setDate(endD.getDate() + (daysCount - 1));
+
+                        return cellDate >= startD && cellDate <= endD;
+                    });
+                } else {
+                    const bookedCount = existingApps.filter(app => {
+                        const active = (app.status || '').toLowerCase() !== 'rejected' && !app.archived;
+                        const appDate = app.confirmedDate || app.preferredDate || '';
+                        const dbType = (app.sacramentType || '').toLowerCase();
+                        const refId = (app.referenceId || '').toUpperCase();
+
+                        if (service === 'Group Baptism') {
+                            return active && (dbType.includes('group') || dbType === 'baptism' || refId.startsWith('GRP')) && appDate.startsWith(dateStr);
+                        } else if (service === 'Individual Baptism') {
+                            return active && (dbType.includes('individual') || refId.startsWith('IND')) && appDate.startsWith(dateStr);
+                        }
+                        return active && dbType.includes(service.toLowerCase()) && appDate.startsWith(dateStr);
+                    }).length;
+
+                    const maxLimit = (service === 'Group Baptism') ? 3 : 1;
+                    isFull = bookedCount >= maxLimit;
+                }
+
+                let statusText = 'Available';
+                let statusColor = '#16a34a';
+                let cellBackground = '#ffffff';
+                let isClickable = true;
+
+                if (isPast) {
+                    statusText = 'Past';
+                    statusColor = '#64748b';
+                    cellBackground = '#f8fafc';
+                    isClickable = false;
+                } else if (!isValidServiceDay) {
+                    statusText = offDayReason;
+                    statusColor = '#64748b';
+                    cellBackground = '#f8fafc';
+                    isClickable = false;
+                } else if (isFull) {
+                    statusText = service === 'Funeral' ? 'Occupied' : 'Fully Booked';
+                    statusColor = '#dc2626';
+                    cellBackground = '#fee2e2';
+                    isClickable = false;
+                }
+
+                const selectedDateVal = document.getElementById('selectedStaffWalkInDate').value;
+                const isSelected = (selectedDateVal === dateStr);
+                if (isSelected && isClickable) {
+                    cellBackground = '#3b82f6';
+                }
+
+                const cell = document.createElement('div');
+                cell.className = 'staff-cal-cell';
+                cell.dataset.date = dateStr;
+                cell.style.cssText = `
+            background: ${cellBackground}; 
+            border: ${isSelected ? '2px solid #1d4ed8' : '1px solid #e2e8f0'}; 
+            border-radius: 6px; 
+            padding: 8px 4px; 
+            min-height: 60px; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+            align-items: center;
+            ${isClickable ? 'cursor: pointer; transition: background 0.2s;' : 'opacity: 0.75; cursor: not-allowed;'}
+        `;
+
+                cell.innerHTML = `
+            <span style="font-weight: bold; font-size: 13px; color: ${isSelected ? '#ffffff' : (isClickable ? '#0f172a' : '#94a3b8')}">${day}</span>
+            <span style="font-size: 10px; font-weight: bold; color: ${isSelected ? '#ffffff' : statusColor}; text-align: center;">${statusText}</span>
+        `;
+
+                if (isClickable) {
+                    cell.onclick = () => selectStaffDate(dateStr, service);
+                }
+
+                grid.appendChild(cell);
+            }
+        }
+
+
+        async function handleStaffWalkInSubmit(event, formElement) {
+            if (event) event.preventDefault();
+
+            if (!formElement) {
+                console.error("Form element reference is missing.");
+                return;
+            }
+
+            const service = formElement.querySelector('#walkInSacramentType')?.value || '';
+            const applicantName = formElement.querySelector('#walkInApplicantName')?.value.trim() || 'Walk-In Parishioner';
+            const phone = formElement.querySelector('#walkInPhone')?.value.trim() || '';
+            const date = formElement.querySelector('#selectedStaffWalkInDate')?.value || '';
+            const time = formElement.querySelector('#walkInTimeSlot')?.value || '';
+            const isPaidOTC = formElement.querySelector('#walkInPaidOTC')?.checked || true;
+            const wakeDays = (service === 'Funeral') ? parseInt(formElement.querySelector('#walkInWakeDays')?.value || 3) : 0;
+
+            if (!date) {
+                alert('Please pick an available date from the interactive calendar grid first.');
+                return;
+            }
+
+            const prefix = service.slice(0, 3).toUpperCase();
+            const referenceId = `WALKIN-${prefix}-${Math.floor(10000 + Math.random() * 90000)}`;
+
+            const walkInData = {
+                referenceId: referenceId,
+                userId: 'STAFF-WALKIN-USER',
+                applicantName: applicantName,
+                applicantEmail: `${applicantName.toLowerCase().replace(/\s+/g, '')}@walkin.parish`,
+                sacramentType: service,
+                status: 'Approved',
+                preferredDate: date,
+                confirmedDate: date,
+                confirmedTime: time,
+                details: { phone: phone, walkInAccommodation: true, wakeDays: wakeDays },
+                documents: [], // Explicitly empty: No digital documents required for staff walk-ins
+                paymentConfirmed: isPaidOTC,
+                adminNotes: 'Manually accommodated on-site via Staff Interactive Calendar. Physical docs verified.',
+                archived: false,
+                createdAt: new Date().toISOString()
+            };
+
+            try {
+                await db.applications.add(walkInData);
+                alert(`✅ Walk-In Confirmed Successfully!\nReference ID: ${referenceId}\nScheduled: ${date} (${time})\n(No digital documents required - Verified on-site)`);
+
+                formElement.reset();
+                document.getElementById('selectedStaffWalkInDate').value = '';
+                renderStaffInteractiveCalendar();
+                if (typeof fetchApplications === 'function') {
+                    fetchApplications();
+                }
+            } catch (err) {
+                console.error('Error saving walk-in:', err);
+                alert('❌ Error saving walk-in to database.');
+            }
+        }
+
+        function selectStaffDate(dateStr, service) {
+            document.getElementById('selectedStaffWalkInDate').value = dateStr;
+
+            document.querySelectorAll('.staff-cal-cell').forEach(cell => {
+                if (cell.dataset.date === dateStr) {
+                    cell.style.background = '#3b82f6';
+                    cell.style.border = '2px solid #1d4ed8';
+                    cell.querySelectorAll('span').forEach(s => s.style.color = '#ffffff');
+                } else {
+                    cell.style.background = '#ffffff';
+                    cell.style.border = '1px solid #e2e8f0';
+                    const spans = cell.querySelectorAll('span');
+                    if (spans[0]) spans[0].style.color = '#0f172a';
+                    if (spans[1]) spans[1].style.color = '#16a34a';
+                }
+            });
+
+            const timeSlotSelect = document.getElementById('walkInTimeSlot');
+            timeSlotSelect.innerHTML = '<option value="">-- Select Time Slot --</option>';
+
+            let slots = [];
+            if (service === 'Group Baptism') slots = ['10:00 AM Session'];
+            else if (service === 'Individual Baptism') slots = ['10:00 AM', '02:00 PM'];
+            else if (service === 'Wedding') slots = ['10:30 AM', '03:00 PM'];
+            else if (service === 'Funeral') slots = ['08:00 AM - 05:00 PM (Chapel Day-Use)'];
+
+            slots.forEach(time => {
+                const option = document.createElement('option');
+                option.value = time;
+                option.textContent = `${dateStr} @ ${time}`;
+                timeSlotSelect.appendChild(option);
+            });
+        }
+
+        let currentBapCalDate = new Date();
+        let selectedBapDateStr = '';
+
+        function onBaptismTypeChanged() {
+            selectedBapDateStr = '';
+            const dateInput = document.getElementById('bapSelectedDateInput');
+            const timeInput = document.getElementById('bapSelectedTimeInput');
+            if (dateInput) dateInput.value = '';
+            if (timeInput) timeInput.value = '';
+
+            const panel = document.getElementById('bapTimeslotPanel');
+            if (panel) panel.style.display = 'none';
+
+            renderBaptismCalendar();
+        }
+
+        async function renderBaptismCalendar() {
+            const gridEl = document.getElementById('bapCalendarGrid');
+            const labelEl = document.getElementById('bapMonthYearLabel');
+            const typeSelect = document.getElementById('baptismTypeSelect');
+
+            if (!gridEl || !labelEl) return;
+
+            const baptismType = typeSelect ? typeSelect.value : ''; // 'group' or 'individual'
+            if (!baptismType) {
+                gridEl.innerHTML = `<div style="grid-column: span 7; color: #707579; font-size: 12px; padding: 15px; text-align: center;">Please select a Baptism Type above first to view available dates.</div>`;
+                labelEl.textContent = 'Select Type';
+                return;
+            }
+
+            const year = currentBapCalDate.getFullYear();
+            const month = currentBapCalDate.getMonth();
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            labelEl.textContent = `${monthNames[month]} ${year}`;
+
+            const firstDayIndex = new Date(year, month, 1).getDay();
+            const totalDays = new Date(year, month + 1, 0).getDate();
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            let allApps = [];
+            try {
+                if (typeof db !== 'undefined' && db.applications) {
+                    allApps = await db.applications.toArray();
+                }
+            } catch (err) {
+                console.error("Error fetching apps from Dexie:", err);
+            }
+
+            let html = '';
+            for (let i = 0; i < firstDayIndex; i++) {
+                html += `<div></div>`;
+            }
+
+            for (let day = 1; day <= totalDays; day++) {
+                const formattedDay = String(day).padStart(2, '0');
+                const formattedMonth = String(month + 1).padStart(2, '0');
+                const dateString = `${year}-${formattedMonth}-${formattedDay}`;
+
+                const cellDate = new Date(year, month, day);
+                cellDate.setHours(0, 0, 0, 0);
+                const dayOfWeek = cellDate.getDay(); // 0:Sun, 1:Mon, 2:Tue, 3:Wed, 4:Thu, 5:Fri, 6:Sat
+
+                const isPast = cellDate < today;
+                let isAllowedDay = false;
+
+                // STRICT SEPARATE RULES:
+                // Group Baptism: Saturday & Sunday only
+                // Individual Baptism: Tuesday to Friday only
+                if (baptismType === 'group') {
+                    isAllowedDay = (dayOfWeek === 0 || dayOfWeek === 6);
+                } else if (baptismType === 'individual') {
+                    isAllowedDay = (dayOfWeek >= 2 && dayOfWeek <= 5);
+                }
+
+                // Count existing bookings for this specific sub-type on this date
+                const dateBookings = allApps.filter(app => {
+                    const appStatus = (app.status || '').toLowerCase();
+                    if (appStatus === 'rejected' || app.archived) return false;
+
+                    const appDate = app.confirmedDate || app.preferredDate || '';
+                    const matchesDate = appDate.startsWith(dateString);
+                    const dbType = (app.sacramentType || '').toLowerCase();
+
+                    if (baptismType === 'group') {
+                        return matchesDate && (dbType.includes('group') || app.referenceId?.startsWith('GRP'));
+                    } else {
+                        return matchesDate && (dbType.includes('individual') || app.referenceId?.startsWith('IND'));
+                    }
+                });
+
+                const bookedCount = dateBookings.length;
+                const MAX_CAPACITY = (baptismType === 'group') ? 3 : 1;
+                const isFullyBooked = bookedCount >= MAX_CAPACITY;
+                const isSelected = selectedBapDateStr === dateString;
+
+                let bgStyle = '#f0f2f5';
+                let textStyle = '#050505';
+                let cursorStyle = isAllowedDay && !isPast && !isFullyBooked ? 'pointer' : 'not-allowed';
+                let badgeText = isAllowedDay ? 'Available' : 'Closed';
+                let badgeColor = isAllowedDay ? '#2e7d32' : '#8a8d91';
+
+                if (isPast || !isAllowedDay) {
+                    bgStyle = '#f4f2f2';
+                    textStyle = '#b0b3b8';
+                    badgeText = !isAllowedDay ? (baptismType === 'group' ? 'Sat/Sun Only' : 'Tue-Fri Only') : 'Past';
+                    badgeColor = '#8a8d91';
+                } else if (isFullyBooked) {
+                    bgStyle = '#f8d7da';
+                    textStyle = '#721c24';
+                    badgeText = 'Full';
+                    badgeColor = '#c0392b';
+                } else if (bookedCount > 0) {
+                    badgeText = `${MAX_CAPACITY - bookedCount} left`;
+                    badgeColor = '#d35400';
+                }
+
+                if (isSelected) {
+                    bgStyle = '#1877f2';
+                    textStyle = '#ffffff';
+                    badgeColor = '#ffffff';
+                }
+
+                const canClick = isAllowedDay && !isPast && !isFullyBooked;
+
+                html += `
+        <div ${canClick ? `onclick="selectBapCalendarDate('${dateString}')"` : ''} 
+             style="background: ${bgStyle}; color: ${textStyle}; padding: 8px 4px; border-radius: 6px; cursor: ${cursorStyle}; font-size: 13px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 44px; border: ${isSelected ? '2px solid #000' : '1px solid transparent'}; opacity: ${canClick ? '1' : '0.65'};">
+            <strong style="font-size: 14px;">${day}</strong>
+            <span style="font-size: 9px; font-weight: bold; color: ${badgeColor}; margin-top: 2px;">${badgeText}</span>
+        </div>`;
+            }
+
+            gridEl.innerHTML = html;
+        }
+
+        async function selectBapCalendarDate(dateStr) {
+            selectedBapDateStr = dateStr;
+            const dateInput = document.getElementById('bapSelectedDateInput');
+            if (dateInput) dateInput.value = dateStr;
+
+            renderBaptismCalendar();
+
+            const panel = document.getElementById('bapTimeslotPanel');
+            const header = document.getElementById('bapSelectedDateHeader');
+            const slotGrid = document.getElementById('bapTimeslotGrid');
+            const typeSelect = document.getElementById('baptismTypeSelect');
+            const baptismType = typeSelect ? typeSelect.value : '';
+
+            if (!panel || !header || !slotGrid) return;
+
+            panel.style.display = 'block';
+            header.textContent = `Time Slot for ${dateStr}`;
+
+            try {
+                const existingApps = await db.applications.toArray();
+                const dateApps = existingApps.filter(app => {
+                    const appStatus = (app.status || '').toLowerCase();
+                    if (appStatus === 'rejected' || app.archived) return false;
+                    const appDate = app.confirmedDate || app.preferredDate || '';
+                    const matchesDate = appDate.startsWith(dateStr);
+                    const dbType = (app.sacramentType || '').toLowerCase();
+
+                    if (baptismType === 'group') {
+                        return matchesDate && (dbType.includes('group') || app.referenceId?.startsWith('GRP'));
+                    } else {
+                        return matchesDate && (dbType.includes('individual') || app.referenceId?.startsWith('IND'));
+                    }
+                });
+
+                const MAX_PER_SLOT = baptismType === 'group' ? 3 : 1;
+                const countForSlot = dateApps.length;
+                const isFull = countForSlot >= MAX_PER_SLOT;
+
+                let timeLabel = baptismType === 'group' ? '10:00 AM (Group Baptism - ₱500)' : '10:00 AM (Tuesday - Friday Session - ₱1,500)';
+                let timeValue = baptismType === 'group' ? '10:00 AM' : 'By Appointment (10:00 AM)';
+
+                if (isFull) {
+                    slotGrid.innerHTML = `
+                <div style="background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 10px; border-radius: 6px; text-align: center; font-size: 13px;">
+                    <strong>${timeLabel}</strong><br><span style="font-size: 11px; font-weight: bold;">Fully Booked (${countForSlot}/${MAX_PER_SLOT})</span>
+                </div>
+            `;
+                } else {
+                    slotGrid.innerHTML = `
+                <div onclick="selectBapTimeSlot('${timeValue}', this)" class="bap-time-box" style="background: #e7f3ff; border: 1px solid #1877f2; color: #1877f2; padding: 12px; border-radius: 6px; text-align: center; font-size: 13px; cursor: pointer;">
+                    <strong>${timeLabel}</strong><br><span style="font-size: 11px;">${MAX_PER_SLOT - countForSlot} slot(s) available</span>
+                </div>
+            `;
+                }
+            } catch (err) {
+                console.error("Error loading slots:", err);
+            }
         }
 
         window.onload = checkAdminSession;
