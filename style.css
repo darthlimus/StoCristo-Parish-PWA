@@ -1528,3 +1528,107 @@ body {
         padding: 10px !important;
     }
 }
+/* ==========================================================================
+   WIDER & CLEAN WHITE MODAL THEME OVERHAUL
+   ========================================================================== */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    padding: 20px;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Wider and Clean White Modal Box */
+.modal-box {
+    background: #ffffff !important;           /* Clean white background */
+    color: #1a1a1a !important;                 /* Dark readable text */
+    border: 1px solid #ccd0d5 !important;      /* Soft neutral border */
+    border-radius: 10px;
+    padding: 35px;
+    width: 95%;
+    max-width: 800px !important;               /* Significantly wider (was 600px) */
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+    font-family: Arial, sans-serif;
+}
+
+/* Modal Headers */
+.modal-box h2, 
+.modal-box h3, 
+.modal-box h4 {
+    color: #4a0e17 !important;                 /* Parish Burgundy Accent */
+    border-bottom: 2px solid #4a0e17;
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+}
+
+/* Form Labels & Text Readability */
+.modal-box label {
+    color: #2c3e50 !important;
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+    display: block;
+}
+
+/* Form Inputs & Textareas on White Theme */
+.modal-box input[type="text"],
+.modal-box input[type="email"],
+.modal-box input[type="tel"],
+.modal-box input[type="number"],
+.modal-box input[type="date"],
+.modal-box select,
+.modal-box textarea {
+    background-color: #ffffff !important;
+    color: #1a1a1a !important;
+    border: 1px solid #abb2b9 !important;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 0.95rem;
+    width: 100%;
+}
+
+.modal-box input:focus,
+.modal-box select:focus,
+.modal-box textarea:focus {
+    border-color: #4a0e17 !important;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(74, 14, 23, 0.1);
+}
+
+/* Close Button (`×`) */
+.modal-box .close-btn {
+    color: #333 !important;
+    font-size: 1.8rem;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    cursor: pointer;
+}
+.modal-box .close-btn:hover {
+    color: #4a0e17 !important;
+}
+
+/* Large Dashboard Modal Width */
+.modal-large {
+    max-width: 1050px !important;
+}
