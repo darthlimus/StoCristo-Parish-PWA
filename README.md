@@ -15,3 +15,7 @@ Conditional Requirements Logic: Marriage contract IF applicable
 QR Pre-verification with Versioning: QR invalid if corrected before dry seal, dry seal retained
 Rule-based reminders for incomplete requirements and seminar
 Why Archived: Irreg/retaker adjustment + office closed during validation + strategic team-up to graduate. Will revisit post-graduation for actual parish deployment.
+
+Use Admin Portal
+
+https://darthlimus.github.io/StoCristo-Parish-PWA/admin
