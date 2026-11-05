@@ -2271,20 +2271,7 @@
                         return;
                     }
 
-                    let html = `
-        <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-            <thead>
-                <tr style="text-align: left; border-bottom: 2px solid #ccc;">
-                    <th style="padding: 10px;">Ref ID</th>
-                    <th style="padding: 10px;">Sacrament</th>
-                    <th style="padding: 10px;">Requested Date</th>
-                    <th style="padding: 10px;">Confirmed Appointment</th>
-                    <th style="padding: 10px;">Status</th>
-                    <th style="padding: 10px;">Action / Remarks</th>
-                </tr>
-            </thead>
-            <tbody>
-        `;
+                    let html = `<div style="display: flex; flex-direction: column; gap: 12px; margin-top: 10px;">`;
 
                     userApps.forEach(app => {
                         const notes = app.adminNotes || app.adminNote || 'No notes yet.';
@@ -2298,66 +2285,82 @@
                         if (app.status === 'Rejected') statusColor = '#c0392b';
                         if (app.status === 'To Follow-Up & Upload Lacking Documents' || app.status === 'Needs Revision') statusColor = '#d35400';
 
-                        let actionHtml = `<span style="color: ${app.adminNotes ? '#c0392b' : '#666'};">${notes}</span>`;
+                        let actionButtonsHtml = '';
 
+                        // 1. Upload Lacking Documents button
                         if (app.status === 'To Follow-Up & Upload Lacking Documents' || app.status === 'Needs Revision') {
-                            actionHtml += `
-        <br>
-        <button onclick="openResubmitDocsModal('${app.id}')" style="margin-top: 6px; background: #d35400; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">
-            📤 Upload Lacking Docs
-        </button>
-    `;
+                            actionButtonsHtml += `
+                    <button onclick="openResubmitDocsModal('${app.id}')" style="background: #d35400; color: white; border: none; padding: 7px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">
+                        📤 Upload Lacking Docs
+                    </button>
+                `;
                         }
-                        // If status requires document follow-up or revision, show the upload button
-                        if (app.status === 'To Follow-Up & Upload Lacking Documents' || app.status === 'Needs Revision') {
-                            actionHtml += `
-        <br>
-        <button onclick="openResubmitDocsModal('${app.id}')" style="margin-top: 6px; background: #d35400; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">
-            📤 Upload Lacking Docs
-        </button>
-        `;
-                        }
-                        // If application is reviewed and ready for payment, show the payment action button
+
+                        // 2. Pay via GCash QR button
                         if (app.status === 'Reviewed & Ready for Payment') {
-                            actionHtml += `
-        <br>
-        <button onclick="openPaymentModal('${app.id}')" style="margin-top: 6px; background: #1e5631; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">
-            💳 Pay via GCash QR
-        </button>
-    `;
-                        }
-                        // Allow parishioners to request a reschedule if the application is Approved or Pending
-                        if (app.status === 'Approved' || app.status === 'Reviewing') {
-                            actionHtml += `
-        <br>
-        <button onclick="openRescheduleRequestModal('${app.id}')" style="margin-top: 6px; background: #1877f2; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">
-            📅 Request Resched
-        </button>
-    `;
+                            actionButtonsHtml += `
+                    <button onclick="openPaymentModal('${app.id}')" style="background: #1e5631; color: white; border: none; padding: 7px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">
+                        💳 Pay via GCash QR
+                    </button>
+                `;
                         }
 
+                        // 3. Request Reschedule button
+                        if (app.status === 'Approved' || app.status === 'Reviewing') {
+                            actionButtonsHtml += `
+                    <button onclick="openRescheduleRequestModal('${app.id}')" style="background: #1877f2; color: white; border: none; padding: 7px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">
+                        📅 Request Resched
+                    </button>
+                `;
+                        }
+
+                        // Build individual mobile-friendly card layout
                         html += `
-            <tr style="border-bottom: 1px solid #ddd;">
-                <td style="padding: 10px;"><strong>${app.referenceId}</strong></td>
-                <td style="padding: 10px; text-transform: capitalize;">${app.sacramentType}</td>
-                <td style="padding: 10px;">${app.preferredDate || 'N/A'}</td>
-                <td style="padding: 10px;">${confirmedText}</td>
-                <td style="padding: 10px;">
-                    <span style="background-color: ${statusColor}; color: white; padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">
-                        ${app.status}
-                    </span>
-                </td>
-                <td style="padding: 10px;">
-                    ${actionHtml}
-                </td>
-            </tr>
+                <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.04); display: flex; flex-direction: column; gap: 10px;">
+                    
+                    <!-- Card Top Row: Ref ID & Status Badge -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px;">
+                        <div>
+                            <span style="font-size: 11px; color: #64748b; display: block; text-transform: uppercase; font-weight: bold;">Reference ID</span>
+                            <strong style="font-size: 15px; color: #4a0e17;">${app.referenceId}</strong>
+                        </div>
+                        <span style="background-color: ${statusColor}; color: white; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; text-align: center;">
+                            ${app.status}
+                        </span>
+                    </div>
+
+                    <!-- Card Body Details -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; font-size: 13px; color: #334155;">
+                        <div>
+                            <span style="color: #64748b; display: block; font-size: 11px;">Sacrament Service</span>
+                            <strong style="text-transform: capitalize; color: #0f172a;">${app.sacramentType}</strong>
+                        </div>
+                        <div>
+                            <span style="color: #64748b; display: block; font-size: 11px;">Requested Date</span>
+                            <span>${app.preferredDate || 'N/A'}</span>
+                        </div>
+                        <div style="grid-column: span 2;">
+                            <span style="color: #64748b; display: block; font-size: 11px;">Confirmed Appointment</span>
+                            <span>${confirmedText}</span>
+                        </div>
+                    </div>
+
+                    <!-- Remarks & Notes Section -->
+                    <div style="background: #f8fafc; border-left: 3px solid #cbd5e1; padding: 8px 10px; border-radius: 4px; font-size: 12px; color: #475569;">
+                        <strong>Remarks / Notes:</strong> ${notes}
+                    </div>
+
+                    <!-- Card Actions / Buttons Row -->
+                    ${actionButtonsHtml ? `<div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; padding-top: 8px; border-top: 1px solid #f1f5f9;">${actionButtonsHtml}</div>` : ''}
+
+                </div>
             `;
                     });
 
-                    html += `</tbody></table>`;
+                    html += `</div>`;
                     container.innerHTML = html;
                 } catch (err) {
-                    console.error('Error loading user dashboard:', err);
+                    console.error('Error loading user dashboard cards:', err);
                 }
             }
 
