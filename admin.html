@@ -813,25 +813,34 @@
         }
 
         // Function to handle demo role logins on the admin side
+        // Corrected function for admin.html
         function loginAsDemoRole(role) {
-            const demoUser = {
+            let fullName = 'Demo Secretary';
+            let email = 'secretary@parish.com';
+
+            if (role === 'priest') {
+                fullName = 'Demo Parish Priest';
+                email = 'priest@parish.com';
+            }
+
+            const demoAdminSession = {
                 id: 'demo-' + role,
-                fullName: `Demo ${role.charAt(0).toUpperCase() + role.slice(1)}`,
-                email: `${role}@parish.com`,
-                role: role
+                fullName: fullName,
+                email: email,
+                role: role // 'priest' or 'secretary'
             };
 
-            localStorage.setItem('currentUser', JSON.stringify(demoUser));
+            // Save under the admin session key expected by checkAdminSession()
+            localStorage.setItem('currentAdminUser', JSON.stringify(demoAdminSession));
 
             if (typeof showAlert === 'function') {
-                showAlert(`Logged in successfully as Demo ${role}!`, 'Demo Access');
+                showAlert(`Logged in successfully as Demo ${role.charAt(0).toUpperCase() + role.slice(1)}!`, 'Demo Access');
             } else {
                 alert(`Logged in successfully as Demo ${role}!`);
             }
 
-            // Refresh staff/admin panel state
-            if (typeof updateHeaderUI === 'function') updateHeaderUI();
-            if (typeof loadAdminDashboard === 'function') loadAdminDashboard();
+            // Refresh the admin session state to load the correct interface views
+            checkAdminSession();
         }
 
         function logoutAdmin(event) {
