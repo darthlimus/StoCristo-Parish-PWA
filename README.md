@@ -1,20 +1,21 @@
 Project: Progressive Web Application for Sto. Cristo Parish with Sacramental Appointment and Parish Service Request, Rule-Based Reminders and QR Verification
 
-Status: Archived for Portfolio (Concept Stage) — Paused due to capstone team realignment for graduation priority.
+Status: Development of frontend stage with the help of the information provided during the mock redemo and client (Santuario Del Sto Cristo Staff)
 
 Initial Validation:
 
-Preliminary review of parish website/FB (Aug 2026)
-Inside info: Baptism first timer requires Child Birth Cert, Baptismal Cert of Both Parents, Marriage Contract if applicable, Seminar 2 weeks before
-Parish Office Contact: Mr. Wilson Lopez
-Source: Parish-affiliated informant (Tita close to Sanctuario)
-Key Innovation Identified:
+Preliminary review of parish website/FB (October 2026)
 
-Conflict-aware scheduling: Funeral Mass (Church/Home) vs Sacramental events sharing same priest/time
-Conditional Requirements Logic: Marriage contract IF applicable
-QR Pre-verification with Versioning: QR invalid if corrected before dry seal, dry seal retained
-Rule-based reminders for incomplete requirements and seminar
-Why Archived: Irreg/retaker adjustment + office closed during validation + strategic team-up to graduate. Will revisit post-graduation for actual parish deployment.
+Inside info: 
+
+Requirements
+Baptism - Child Birth Cert, Baptisimal Cert of Both Parents
+Wedding - Groom and Bride's Birth Cert, Cenomar and Confirmation Certificates, For guest priest, a copy of license to marry is required
+Funeral - No Documents
+
+Interactive Calendar - shows available dates and occupied dates for each services
+
+Parish Office Contact: Kuya Doms and Kuya Joseph (Parish Staff who handles Parish's Website)
 
 Use Admin Portal
 
