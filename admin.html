@@ -8,6 +8,13 @@
     <title>Santuario Del Sto. Cristo - Parish Portal</title>
     <link rel="stylesheet" href="style.css">
     <script src="dexie.js"></script>
+
+    <!-- PWA Manifest & Theme for Admin -->
+    <link rel="manifest" href="./admin-manifest.json">
+    <meta name="theme-color" content="#4a0e17">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
     <style>
         .modal-overlay {
             position: fixed;
@@ -166,6 +173,69 @@
 
         .admin-table tbody tr:hover {
             background-color: #f8f9fa;
+        }
+
+        /* --- Mobile Responsive Rules for admin.html --- */
+        @media screen and (max-width: 768px) {
+
+            /* Admin Layout Header & Containers */
+            body {
+                font-size: 14px;
+            }
+
+            .admin-container,
+            .main-content {
+                padding: 10px !important;
+                margin: 0 !important;
+                width: 100% !important;
+            }
+
+            header.admin-nav {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+                padding: 12px;
+            }
+
+            /* Statistics Grid: 2 columns on tablets, 1 on phones */
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 10px !important;
+            }
+
+            /* Table Controls & Filters */
+            .table-controls,
+            .filter-group {
+                flex-direction: column !important;
+                gap: 8px !important;
+                width: 100%;
+            }
+
+            .table-controls input,
+            .table-controls select {
+                width: 100% !important;
+            }
+
+            /* Make Tables Scrollable Horizontally on Small Screens */
+            table {
+                display: block;
+                width: 100%;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            /* Action Buttons inside Tables */
+            td button,
+            th {
+                font-size: 12px !important;
+                padding: 6px 8px !important;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr !important;
+            }
         }
     </style>
 </head>
@@ -669,6 +739,14 @@
             notifications: '++id, userId, referenceId, title, message, isRead, createdAt'
         });
 
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Admin Service Worker registered!', reg))
+                    .catch(err => console.log('Admin Service Worker registration failed:', err));
+            });
+        }
+
         let rawApplicationsData = [];
         let showArchivedView = false;
         let staffCalendarDate = new Date();
@@ -860,7 +938,7 @@
                         minRequired = reqConfig[sacramentKey] !== undefined ? reqConfig[sacramentKey] : 0;
                     }
                 }
-                
+
                 const uniqueDocs = app.documents && Array.isArray(app.documents) ? Array.from(
                     new Map(app.documents.map(doc => {
                         let name = typeof doc === 'string' ? doc : (doc.name || 'Document');

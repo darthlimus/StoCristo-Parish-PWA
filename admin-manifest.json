@@ -1,0 +1,15 @@
+{
+  "name": "Santuario Del Sto. Cristo Admin",
+  "short_name": "Parish Admin",
+  "start_url": "./admin.html",
+  "display": "standalone",
+  "background_color": "#4a0e17",
+  "theme_color": "#4a0e17",
+  "icons": [
+    {
+      "src": "/favicon.webp",
+      "sizes": "192x192 512x512",
+      "type": "image/webp"
+    }
+  ]
+}

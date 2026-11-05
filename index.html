@@ -54,6 +54,105 @@
         .add-godparent-btn:hover {
             background: rgba(212, 175, 55, 0.12);
         }
+
+        /* --- Mobile Responsive Rules for index.html --- */
+        @media screen and (max-width: 768px) {
+
+            /* Responsive Header & Navigation */
+            header {
+                padding: 10px 15px;
+            }
+
+            .hero-content h1 {
+                font-size: 1.8rem;
+            }
+
+            .hero-content h2 {
+                font-size: 1rem;
+            }
+
+            /* Services Container: Stack cards vertically */
+            .services-container {
+                flex-direction: column;
+                padding: 15px;
+                gap: 15px;
+            }
+
+            .service-card {
+                width: 100% !important;
+                margin-bottom: 10px;
+            }
+
+            /* Modals & Popups: Full width on mobile */
+            .modal-box {
+                width: 92% !important;
+                max-width: 92% !important;
+                margin: 10px auto;
+                padding: 18px !important;
+                max-height: 85vh;
+                overflow-y: auto;
+            }
+
+            /* Form Rows & Inputs: Stack into single column */
+            form .form-row,
+            form div[style*="display: flex"] {
+                flex-direction: column !important;
+                gap: 8px !important;
+            }
+
+            form input,
+            form select,
+            form textarea {
+                width: 100% !important;
+            }
+
+            /* Calendar Grids */
+            .fb-calendar-container {
+                padding: 10px !important;
+            }
+        }
+
+        /* --- Mobile Calendar Overflow Fix --- */
+        @media screen and (max-width: 768px) {
+            .fb-calendar-container {
+                width: 100% !important;
+                box-sizing: border-box !important;
+                padding: 10px !important;
+                overflow-x: hidden !important;
+            }
+
+            /* Ensure calendar grids stay fluid and don't push past container boundaries */
+            #funeralCalendarGrid,
+            #bapCalendarGrid,
+            #weddingCalendarGrid,
+            div[style*="grid-template-columns: repeat(7, 1fr)"] {
+                width: 100% !important;
+                grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+                gap: 2px !important;
+            }
+
+            /* Scale down day cells slightly on small mobile devices for a clean fit */
+            #funeralCalendarGrid>div,
+            #bapCalendarGrid>div,
+            #weddingCalendarGrid>div {
+                padding: 6px 2px !important;
+                min-height: 38px !important;
+                font-size: 11px !important;
+            }
+
+            #funeralCalendarGrid>div strong,
+            #bapCalendarGrid>div strong,
+            #weddingCalendarGrid>div strong {
+                font-size: 12px !important;
+            }
+
+            #funeralCalendarGrid>div span,
+            #bapCalendarGrid>div span,
+            #weddingCalendarGrid>div span {
+                font-size: 8px !important;
+                transform: scale(0.9);
+            }
+        }
     </style>
 </head>
 
@@ -543,8 +642,8 @@
                                 <option value="Annulled">Annulled</option>
                             </select>
                         </div>
-                        <div class="form-group" style="flex: 2;"><input type="text"
-                                name="groomNationality" required placeholder="Nationality" value="Filipino">
+                        <div class="form-group" style="flex: 2;"><input type="text" name="groomNationality" required
+                                placeholder="Nationality" value="Filipino">
                         </div>
                     </div>
 
@@ -573,8 +672,8 @@
                                 <option value="Annulled">Annulled</option>
                             </select>
                         </div>
-                        <div class="form-group" style="flex: 2;"><input type="text"
-                                name="brideNationality" required placeholder="Nationality" value="Filipino">
+                        <div class="form-group" style="flex: 2;"><input type="text" name="brideNationality" required
+                                placeholder="Nationality" value="Filipino">
                         </div>
                     </div>
                     <!-- GUEST PRIEST / OFFICIANT SECTION -->
@@ -1045,66 +1144,47 @@
             </div>
         </div>
 
-        <!-- DEDICATED GCASH PAYMENT & PROOF UPLOAD MODAL -->
-        <div id="paymentModal" class="modal-overlay" style="z-index: 999999;">
-            <div class="modal-box" style="max-width: 500px; padding: 24px; text-align: left;">
+        <!-- GCASH QR PAYMENT MODAL -->
+        <div id="gcashPaymentModal" class="modal-overlay">
+            <div class="modal-box" style="max-width: 420px; text-align: center; padding: 28px;">
+                <h3 style="color: #4a0e17; margin-top: 0;">💳 GCash QR Payment</h3>
+                <p style="font-size: 13px; color: #666; margin-bottom: 15px;">Scan the QR code below using your GCash
+                    app to complete your initial or total fee payment.</p>
+
+                <!-- DYNAMIC TOTAL AMOUNT DISPLAY -->
                 <div
-                    style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #4a0e17; padding-bottom: 10px; margin-bottom: 15px;">
-                    <h3 style="color: #4a0e17; margin: 0; font-size: 1.2rem;">💳 Parish GCash Payment & Proof
-                        Upload
-                    </h3>
-                    <span class="close-btn" onclick="closeModal('paymentModal')"
-                        style="cursor: pointer; font-size: 1.5rem; color: #333;">&times;</span>
+                    style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 12px; border-radius: 6px; margin-bottom: 15px;">
+                    <span style="font-size: 13px; color: #475569; display: block;">Total Amount to Pay:</span>
+                    <!-- Make sure this ID matches your JavaScript -->
+                    <strong id="gcashAmountDisplay" style="font-size: 22px; color: #1e5631;">₱0</strong>
                 </div>
 
-                <div id="paymentAppSummary"
-                    style="background: #f8f9fa; border-left: 4px solid #1877f2; padding: 10px; font-size: 13px; margin-bottom: 15px;">
-                    <!-- Dynamic Application Summary -->
+                <!-- GCash QR Code Image -->
+                <div style="margin-bottom: 15px; display: flex; justify-content: center;">
+                    <svg width="200" height="200" viewBox="0 0 200 200"
+                        style="border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc;">
+                        <rect width="200" height="200" fill="#005ce6" rx="8" />
+                        <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" fill="#ffffff"
+                            font-weight="bold" font-size="20">GCash QR</text>
+                        <text x="50%" y="62%" dominant-baseline="middle" text-anchor="middle" fill="#ffffff"
+                            font-size="12">Santuario Del Sto. Cristo</text>
+                    </svg>
                 </div>
 
-                <!-- Parish GCash QR Code Placeholder Box -->
-                <div
-                    style="text-align: center; margin-bottom: 15px; background: #fdfdfd; border: 1px solid #e2e8f0; padding: 15px; border-radius: 6px;">
-                    <p style="font-weight: bold; margin-bottom: 8px; color: #1e293b;">Scan to Pay via GCash
-                        (Parish QR)
-                    </p>
-                    <div
-                        style="width: 160px; height: 160px; background: #e2e8f0; margin: 0 auto 10px auto; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: 2px dashed #94a3b8;">
-                        <span
-                            style="font-size: 12px; color: #64748b; font-weight: bold; text-align: center; padding: 10px;">[GCash
-                            QR Code Placeholder]</span>
-                    </div>
-                    <p style="font-size: 12px; color: #334155; margin: 2px 0;"><strong>Account Name:</strong>
-                        Santuario
-                        Del Sto. Cristo Parish</p>
-                    <p style="font-size: 12px; color: #334155; margin: 2px 0;"><strong>GCash Number:</strong>
-                        0917-123-4567</p>
+                <div style="margin-bottom: 20px;">
+                    <label
+                        style="display: block; font-size: 12px; font-weight: bold; color: #334155; margin-bottom: 5px; text-align: left;">Upload
+                        GCash Payment Screenshot / Receipt *</label>
+                    <input type="file" id="gcashReceiptFile" accept="image/*" style="width: 100%; font-size: 13px;">
                 </div>
 
-                <form id="paymentProofForm" onsubmit="handlePaymentProofSubmit(event)">
-                    <input type="hidden" id="paymentAppId">
-
-                    <div class="form-group" style="margin-bottom: 15px;">
-                        <label
-                            style="display: block; font-weight: bold; color: #2c3e50; margin-bottom: 5px; font-size: 0.9rem;">Upload
-                            Receipt Screenshot / Proof *</label>
-                        <div class="inline-drop-zone" onclick="document.getElementById('paymentProofFileInput').click()"
-                            style="padding: 12px; border: 2px dashed #abb2b9; text-align: center; cursor: pointer; background: #fafafa; border-radius: 4px;">
-                            <span>📄 Click or drag receipt screenshot here</span>
-                            <input type="file" id="paymentProofFileInput" accept=".pdf,.jpg,.jpeg,.png"
-                                style="display:none;" onchange="handleInlineFiles(event, 'paymentProofFileList')">
-                        </div>
-                        <div class="file-preview-list" id="paymentProofFileList" style="margin-top: 8px;"></div>
-                    </div>
-
-                    <div style="display: flex; justify-content: flex-end; gap: 10px;">
-                        <button type="button" onclick="closeModal('paymentModal')"
-                            style="padding: 8px 16px; background: #e0e0e0; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: #333;">Cancel</button>
-                        <button type="submit"
-                            style="padding: 8px 16px; background: #1e5631; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">Submit
-                            Proof of Payment</button>
-                    </div>
-                </form>
+                <div style="display: flex; gap: 10px;">
+                    <button type="button" onclick="closeModal('gcashPaymentModal')"
+                        style="flex: 1; padding: 10px; border: 1px solid #cbd5e1; background: #f1f5f9; border-radius: 6px; font-weight: bold; cursor: pointer;">Cancel</button>
+                    <button type="button" onclick="submitGcashPayment()"
+                        style="flex: 1; padding: 10px; background: #1e5631; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Submit
+                        Receipt</button>
+                </div>
             </div>
         </div>
 
@@ -3192,9 +3272,12 @@
 
                 const firstDayIndex = new Date(year, month, 1).getDay();
                 const totalDays = new Date(year, month + 1, 0).getDate();
-                const todayStr = new Date().toISOString().split('T')[0];
 
-                // Fetch existing active funeral applications to block booked spans
+                const todayObj = new Date();
+                todayObj.setHours(0, 0, 0, 0);
+                const todayStr = `${todayObj.getFullYear()}-${String(todayObj.getMonth() + 1).padStart(2, '0')}-${String(todayObj.getDate()).padStart(2, '0')}`;
+
+                // Fetch existing active funeral applications to block occupied dates
                 let allFuneralApps = [];
                 try {
                     if (typeof db !== 'undefined' && db.applications) {
@@ -3202,7 +3285,7 @@
                         allFuneralApps = allApps.filter(app => {
                             const appStatus = (app.status || '').toLowerCase();
                             if (appStatus === 'rejected' || app.archived) return false;
-                            return (app.sacramentType || '').toLowerCase() === 'funeral';
+                            return (app.sacramentType || '').toLowerCase().includes('funeral');
                         });
                     }
                 } catch (err) {
@@ -3234,7 +3317,9 @@
                     const dateString = `${year}-${formattedMonth}-${formattedDay}`;
                     const dayOfWeek = new Date(dateString).getDay();
 
+                    const isToday = (dateString === todayStr);
                     const isPast = dateString < todayStr;
+                    const isFuture = dateString > todayStr;
                     const isAllowedDay = (dayOfWeek !== 1); // Closed Mondays
                     const isOccupied = occupiedDates.has(dateString);
 
@@ -3246,17 +3331,46 @@
                         isInSpan = dateString > funeralWakeStartDate && dateString < funeralIntermentDate;
                     }
 
-                    let bgStyle = '#f0f2f5';
-                    let textStyle = '#050505';
-                    let cursorStyle = isAllowedDay && !isPast && !isOccupied ? 'pointer' : 'not-allowed';
+                    let canClick = false;
                     let badgeText = isAllowedDay ? 'Available' : 'Closed';
                     let badgeColor = isAllowedDay ? '#2e7d32' : '#8a8d91';
 
-                    if (isPast || !isAllowedDay) {
+                    // Strict validation: First click only allows Today. Second click allows up to 7 days max.
+                    if (!funeralWakeStartDate || (funeralWakeStartDate && funeralIntermentDate)) {
+                        canClick = isAllowedDay && !isOccupied && isToday;
+                    } else {
+                        const startD = new Date(funeralWakeStartDate);
+                        const maxD = new Date(startD);
+                        maxD.setDate(maxD.getDate() + 6); // Max 7 days total (start + 6)
+                        const maxStr = `${maxD.getFullYear()}-${String(maxD.getMonth() + 1).padStart(2, '0')}-${String(maxD.getDate()).padStart(2, '0')}`;
+
+                        canClick = isAllowedDay && !isOccupied && (dateString >= funeralWakeStartDate) && (dateString <= maxStr);
+                    }
+
+                    let bgStyle = '#f0f2f5';
+                    let textStyle = '#050505';
+
+                    if (isToday && (!funeralWakeStartDate || (funeralWakeStartDate && funeralIntermentDate))) {
+                        bgStyle = '#e8f5e9';
+                        badgeText = 'Today';
+                        badgeColor = '#1b5e20';
+                    }
+
+                    if (!canClick) {
                         bgStyle = '#f4f2f2';
                         textStyle = '#b0b3b8';
-                        badgeText = !isAllowedDay ? 'Closed (Mon)' : 'Past';
-                    } else if (isOccupied) {
+                        if (isFuture && (!funeralWakeStartDate || (funeralWakeStartDate && funeralIntermentDate))) {
+                            badgeText = 'Future';
+                            badgeColor = '#8a8d91';
+                        } else if (isPast) {
+                            badgeText = 'Past';
+                            badgeColor = '#8a8d91';
+                        } else if (!isAllowedDay) {
+                            badgeText = 'Closed (Mon)';
+                        }
+                    }
+
+                    if (isOccupied) {
                         bgStyle = '#f8d7da';
                         textStyle = '#721c24';
                         badgeText = 'Occupied';
@@ -3269,15 +3383,17 @@
                         badgeText = isStart ? 'Wake Start' : 'Interment';
                         badgeColor = '#ffffff';
                     } else if (isInSpan) {
-                        bgStyle = '#d0e8ff'; // Preview highlight for wake span
+                        bgStyle = '#d0e8ff';
                         textStyle = '#1d4ed8';
                         badgeText = 'Wake Span';
                         badgeColor = '#1d4ed8';
                     }
 
+                    const cursorStyle = canClick ? 'pointer' : 'not-allowed';
+
                     html += `
-            <div onclick="${isPast || !isAllowedDay || isOccupied ? '' : `selectFuneralCalendarDate('${dateString}')`}" 
-                 style="background: ${bgStyle}; color: ${textStyle}; padding: 8px 4px; border-radius: 6px; cursor: ${cursorStyle}; font-size: 13px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 44px; border: ${isStart || isEnd ? '2px solid #000' : '1px solid transparent'};">
+            <div onclick="${canClick ? `selectFuneralCalendarDate('${dateString}')` : ''}" 
+                 style="background: ${bgStyle}; color: ${textStyle}; padding: 8px 4px; border-radius: 6px; cursor: ${cursorStyle}; font-size: 13px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 44px; border: ${isToday && (!funeralWakeStartDate || (funeralWakeStartDate && funeralIntermentDate)) ? '2px solid #2e7d32' : (isStart || isEnd ? '2px solid #000' : '1px solid transparent')};">
                 <strong style="font-size: 14px;">${day}</strong>
                 <span style="font-size: 9px; font-weight: bold; color: ${badgeColor}; margin-top: 2px;">${badgeText}</span>
             </div>
@@ -3293,35 +3409,51 @@
             }
 
             async function selectFuneralCalendarDate(dateStr) {
+                const todayObj = new Date();
+                todayObj.setHours(0, 0, 0, 0);
+                const todayStr = `${todayObj.getFullYear()}-${String(todayObj.getMonth() + 1).padStart(2, '0')}-${String(todayObj.getDate()).padStart(2, '0')}`;
+
                 if (!funeralWakeStartDate || (funeralWakeStartDate && funeralIntermentDate)) {
-                    // First click: Set Wake Start Date
+                    // First click: Set Wake Start Date (Strictly Today)
+                    if (dateStr !== todayStr) {
+                        showAlert('Funeral wake start date must be today.', 'Invalid Start Date');
+                        return;
+                    }
+
                     funeralWakeStartDate = dateStr;
                     funeralIntermentDate = null;
                     document.getElementById('funeralSelectedDateInput').value = dateStr;
                     document.getElementById('intermentDateInput').value = '';
 
                     const panel = document.getElementById('funeralTimeslotPanel');
-                    panel.style.display = 'block';
-                    document.getElementById('funeralSelectedDateHeader').textContent = `Wake Start: ${dateStr}`;
-                    document.getElementById('funeralSummaryBox').innerHTML = `Now select your <strong>Target Interment Date</strong> on the calendar.`;
+                    if (panel) panel.style.display = 'block';
+
+                    const headerEl = document.getElementById('funeralSelectedDateHeader');
+                    if (headerEl) headerEl.textContent = `Wake Start: ${dateStr}`;
+
+                    const summaryEl = document.getElementById('funeralSummaryBox');
+                    if (summaryEl) {
+                        summaryEl.innerHTML = `Now select your <strong>Target Interment Date</strong> on the calendar (Max 7 days).`;
+                    }
+
                     renderFuneralCalendar();
                     return;
                 }
 
-                // Second click: Set Interment Date
+                // Second click: Set Target Interment Date
                 if (dateStr < funeralWakeStartDate) {
                     showAlert('Interment date cannot be earlier than the wake start date.', 'Invalid Range');
                     return;
                 }
 
-                // Calculate span days
-                let startD = new Date(funeralWakeStartDate);
-                let endD = new Date(dateStr);
-                let diffTime = Math.abs(endD - startD);
-                let wakeDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+                const startD = new Date(funeralWakeStartDate);
+                const endD = new Date(dateStr);
+                const diffTime = Math.abs(endD - startD);
+                const wakeDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
 
+                // Strict 7-day (1 week) maximum check
                 if (wakeDays > 7) {
-                    showAlert('Maximum wake duration is 1 week (7 days). Please select an earlier interment date.', 'Duration Exceeded');
+                    showAlert('Maximum wake duration is 1 week (7 days). Please select an interment date within 7 days of the wake start date.', 'Max 7 Days Exceeded');
                     return;
                 }
 
@@ -3489,21 +3621,59 @@
                 location.reload();
             }
 
-            // Open GCash payment modal
-            async function openPaymentModal(appId) {
-                const numericId = isNaN(appId) ? appId : Number(appId);
-                const app = await db.applications.get(numericId);
+            async function openPaymentModal(appInput) {
+                let app = appInput;
+
+                // If an ID string or number was passed instead of an object, fetch it from Dexie
+                if (typeof appInput === 'string' || typeof appInput === 'number') {
+                    app = await db.applications.get(Number(appInput));
+                }
+
                 if (!app) return;
 
-                document.getElementById('paymentAppId').value = app.id;
-                resetFileInputStore('paymentProofFileInput', 'paymentProofFileList');
-                // Removed document.getElementById('gcashRefNumInput') since the field was removed
+                // Save app id in hidden input if you have one
+                const appIdInput = document.getElementById('paymentAppId');
+                if (appIdInput) appIdInput.value = app.id || '';
 
-                document.getElementById('paymentAppSummary').innerHTML = `
-        <strong>Ref ID:</strong> ${app.referenceId} | <strong>Sacrament:</strong> ${app.sacramentType.toUpperCase()}
-    `;
+                // Calculate dynamic fee using the application's sacrament type and details
+                const totalAmount = calculateTotalPayment(app.sacramentType, app.details);
+                const formattedAmount = `₱${totalAmount.toLocaleString()}`;
 
-                openModal('paymentModal');
+                // Safely update display elements
+                const amountDisplay = document.getElementById('gcashAmountDisplay');
+                if (amountDisplay) {
+                    amountDisplay.textContent = formattedAmount;
+                }
+
+                const modal = document.getElementById('gcashPaymentModal');
+                if (modal) {
+                    modal.classList.add('active');
+                    modal.style.display = 'flex';
+                }
+            }
+
+            function openGcashPaymentModal(app) {
+                // If app details are missing, grab them directly from the active form inputs on the page!
+                const details = app?.details || {
+                    wakeDays: parseInt(document.getElementById('wakeDaysInput')?.value, 10) || 3,
+                    isAircon: document.getElementById('airconCheckbox')?.checked || false,
+                    hasGuestPriest: document.getElementById('hasGuestPriest')?.checked || false,
+                    baptismType: document.getElementById('baptismTypeSelect')?.value || 'group'
+                };
+
+                const sacramentType = app?.sacramentType || document.getElementById('sacramentTypeField')?.value || 'funeral';
+
+                // Calculate total using the robust function
+                const totalAmount = calculateTotalPayment(sacramentType, details);
+
+                // Update modal display
+                const amountDisplayEl = document.getElementById('gcashAmountDisplay');
+                if (amountDisplayEl) {
+                    amountDisplayEl.textContent = `₱${totalAmount.toLocaleString()}`;
+                }
+
+                // Open modal
+                openModal('gcashPaymentModal');
             }
 
             async function handlePaymentProofSubmit(event) {
@@ -3554,6 +3724,39 @@
                 if (group) {
                     group.style.display = isChecked ? 'block' : 'none';
                 }
+            }
+
+            function calculateTotalPayment(sacramentType, details = {}) {
+                const sType = (sacramentType || '').toLowerCase();
+
+                // 1. Wedding: ₱1,000 base + ₱10,000 extra if guest priest is added
+                if (sType.includes('wedding')) {
+                    let baseFee = 1000;
+                    if (details.hasGuestPriest) {
+                        baseFee += 10000;
+                    }
+                    return baseFee;
+                }
+
+                // 2. Baptism: ₱1,500 for individual, ₱500 for group
+                if (sType.includes('baptism')) {
+                    if (sType.includes('individual') || details.baptismType === 'individual') {
+                        return 1500;
+                    }
+                    return 500; // Group baptism
+                }
+
+                // 3. Funeral: Pure daily rate only (₱2,000 standard or ₱6,000 aircon)
+                if (sType.includes('funeral')) {
+                    const wakeDays = parseInt(details.wakeDays || details.wakeDuration || 3, 10);
+                    // Check both 'isAircon', 'chapelType', and your form checkbox ID 'includeAircon'
+                    const isAircon = Boolean(details.isAircon || details.chapelType === 'aircon' || details.includeAircon);
+                    const ratePerDay = isAircon ? 6000 : 2000;
+
+                    return wakeDays * ratePerDay;
+                }
+
+                return 1000; // Default fallback
             }
         </script>
 </body>
