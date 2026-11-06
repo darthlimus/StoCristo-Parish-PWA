@@ -10,6 +10,7 @@
     <script src="dexie.js"></script>
     <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#800020">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         .godparent-row {
             display: flex;
@@ -292,13 +293,13 @@
                             <label
                                 style="display: block; font-weight: bold; font-size: 13px; color: #2c3e50; margin-bottom: 5px;">Email
                                 Address</label>
-                            <input type="email" id="signInEmail" required placeholder="jodilim@gmail.com"
+                            <input type="email" id="signInEmail" required
                                 style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
                         </div>
                         <div style="margin-bottom: 20px;">
                             <label
                                 style="display: block; font-weight: bold; font-size: 13px; color: #2c3e50; margin-bottom: 5px;">Password</label>
-                            <input type="password" id="signInPassword" required placeholder="••••••••"
+                            <input type="password" id="signInPassword" required
                                 style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
                         </div>
                         <button type="submit"
@@ -410,45 +411,46 @@
                         </div>
                     </div>
 
-                    <!-- 3. FATHER'S INFORMATION -->
-                    <div style="border-top: 1px solid #e2e8f0; padding-top: 16px;">
+                    <!-- Father's Details Section -->
+                    <div style="border-top: 1px solid #e2e8f0; padding-top: 16px; margin-top: 16px;">
                         <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;">Father's Information</h4>
-                        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-                            <div style="flex: 2; min-width: 180px;">
-                                <input type="text" id="fatherFirstName" name="fatherFirstName" required
-                                    placeholder="First Name"
+                        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px;">
+                            <div style="flex: 1; min-width: 200px;">
+                                <label
+                                    style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Father's
+                                    Full Name *</label>
+                                <input type="text" id="fatherName" name="fatherName" required placeholder="Full Name"
                                     style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
                             </div>
-                            <div style="flex: 0.8; min-width: 80px;">
-                                <input type="text" id="fatherMiddleInitial" name="fatherMiddleInitial"
-                                    placeholder="M.I." maxlength="3"
-                                    style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
-                            </div>
-                            <div style="flex: 2; min-width: 180px;">
-                                <input type="text" id="fatherLastName" name="fatherLastName" required
-                                    placeholder="Last Name"
+                            <div style="flex: 1; min-width: 200px;">
+                                <label
+                                    style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Father's
+                                    Place of Birth *</label>
+                                <input type="text" id="fatherBirthplace" name="fatherBirthplace" required
+                                    placeholder="City / Province / Country"
                                     style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
                             </div>
                         </div>
                     </div>
 
-                    <!-- 4. MOTHER'S INFORMATION -->
-                    <div style="border-top: 1px solid #e2e8f0; padding-top: 16px;">
+                    <!-- Mother's Details Section -->
+                    <div style="border-top: 1px solid #e2e8f0; padding-top: 16px; margin-top: 16px;">
                         <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;">Mother's Information</h4>
-                        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-                            <div style="flex: 2; min-width: 180px;">
-                                <input type="text" id="motherFirstName" name="motherFirstName" required
-                                    placeholder="First Name"
+                        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px;">
+                            <div style="flex: 1; min-width: 200px;">
+                                <label
+                                    style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Mother's
+                                    Maiden Name *</label>
+                                <input type="text" id="motherName" name="motherName" required
+                                    placeholder="Full Maiden Name"
                                     style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
                             </div>
-                            <div style="flex: 0.8; min-width: 80px;">
-                                <input type="text" id="motherMiddleInitial" name="motherMiddleInitial"
-                                    placeholder="M.I." maxlength="3"
-                                    style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
-                            </div>
-                            <div style="flex: 2; min-width: 180px;">
-                                <input type="text" id="motherLastName" name="motherLastName" required
-                                    placeholder="Last Name"
+                            <div style="flex: 1; min-width: 200px;">
+                                <label
+                                    style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Mother's
+                                    Place of Birth *</label>
+                                <input type="text" id="motherBirthplace" name="motherBirthplace" required
+                                    placeholder="City / Province / Country"
                                     style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
                             </div>
                         </div>
@@ -463,13 +465,48 @@
 
                         </div>
 
+                        <!-- REQUIRED PRINCIPAL GODPARENTS -->
+                        <div style="border-top: 1px solid #e2e8f0; padding-top: 16px; margin-top: 16px;">
+                            <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;">Principal Godparents
+                                (Required)</h4>
+                            <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px;">
+                                <div style="flex: 1; min-width: 200px;">
+                                    <label
+                                        style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Principal
+                                        Ninong *</label>
+                                    <input type="text" id="principalNinong" name="principalNinong" required
+                                        placeholder="Full Name of Principal Ninong"
+                                        style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
+                                </div>
+                                <div style="flex: 1; min-width: 200px;">
+                                    <label
+                                        style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Principal
+                                        Ninang *</label>
+                                    <input type="text" id="principalNinang" name="principalNinang" required
+                                        placeholder="Full Name of Principal Ninang"
+                                        style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- APPLICANT ADDRESS SECTION -->
                         <div style="border-top: 1px solid #e2e8f0; padding-top: 16px;">
-                            <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;">Godparents (Ninong &
-                                Ninang)</h4>
+                            <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;">Address & Contact</h4>
+                            <div style="margin-bottom: 12px;">
+                                <input type="text" id="applicantAddress" name="address" required
+                                    placeholder="Complete Home Address (House No., Street, Barangay, City)"
+                                    style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
+                            </div>
+                        </div>
+
+                        <!-- ADDITIONAL DYNAMIC GODPARENTS -->
+                        <div style="border-top: 1px solid #e2e8f0; padding-top: 16px;">
+                            <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;">Additional Godparents /
+                                Sponsors (Optional)</h4>
                             <div class="form-group">
                                 <div id="godparentList"></div>
                                 <button type="button" class="add-godparent-btn" onclick="addGodparentRow()">+ Add
-                                    Godparent</button>
+                                    Additional Sponsor</button>
                             </div>
                         </div>
 
@@ -608,12 +645,10 @@
                                     placeholder="Last Name"
                                     style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                             </div>
-                            <div class="form-row" style="margin-bottom: 15px;">
-                                <div class="form-group">
-                                    <input type="email" id="applicantEmail" name="applicantEmail" required
-                                        placeholder="Email Address"
-                                        style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                                </div>
+                            <div style="flex: 1;">
+                                <input type="email" id="applicantEmail" name="applicantEmail" required
+                                    placeholder="Email Address"
+                                    style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                             </div>
                         </div>
                     </div>
@@ -631,7 +666,7 @@
                                 placeholder="Last Name"></div>
                     </div>
 
-                    <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 10px;">
                         <div class="form-group" style="flex: 1;"><input type="number" name="groomAge" required min="18"
                                 placeholder="Age"></div>
                         <div class="form-group" style="flex: 2;">
@@ -643,8 +678,24 @@
                             </select>
                         </div>
                         <div class="form-group" style="flex: 2;"><input type="text" name="groomNationality" required
-                                placeholder="Nationality" value="Filipino">
-                        </div>
+                                placeholder="Nationality" value="Filipino"></div>
+                    </div>
+
+                    <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 10px;">
+                        <div class="form-group" style="flex: 1;"><input type="text" name="groomPlaceOfBirth" required
+                                placeholder="Place of Birth"></div>
+                        <div class="form-group" style="flex: 1;"><input type="text" name="groomOccupation" required
+                                placeholder="Occupation"></div>
+                    </div>
+                    <div class="form-row" style="margin-bottom: 10px;">
+                        <div class="form-group"><input type="text" name="groomPresentResidence" required
+                                placeholder="Present Residence / Address"></div>
+                    </div>
+                    <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <div class="form-group" style="flex: 1;"><input type="text" name="groomFatherName" required
+                                placeholder="Father's Full Name"></div>
+                        <div class="form-group" style="flex: 1;"><input type="text" name="groomMotherName" required
+                                placeholder="Mother's Full Maiden Name"></div>
                     </div>
 
 
@@ -661,10 +712,10 @@
                                 placeholder="Last Name"></div>
                     </div>
 
-                    <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 10px;">
                         <div class="form-group" style="flex: 1;"><input type="number" name="brideAge" required min="18"
                                 placeholder="Age"></div>
-                        <div class="form-group" style="flex: 2;"></label>
+                        <div class="form-group" style="flex: 2;">
                             <select name="brideCivilStatus" required style="width: 100%; padding: 8px;">
                                 <option value="">Civil Status</option>
                                 <option value="Single">Single</option>
@@ -673,9 +724,56 @@
                             </select>
                         </div>
                         <div class="form-group" style="flex: 2;"><input type="text" name="brideNationality" required
-                                placeholder="Nationality" value="Filipino">
-                        </div>
+                                placeholder="Nationality" value="Filipino"></div>
                     </div>
+
+                    <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 10px;">
+                        <div class="form-group" style="flex: 1;"><input type="text" name="bridePlaceOfBirth" required
+                                placeholder="Place of Birth"></div>
+                        <div class="form-group" style="flex: 1;"><input type="text" name="brideOccupation" required
+                                placeholder="Occupation"></div>
+                    </div>
+                    <div class="form-row" style="margin-bottom: 10px;">
+                        <div class="form-group"><input type="text" name="bridePresentResidence" required
+                                placeholder="Present Residence / Address"></div>
+                    </div>
+                    <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <div class="form-group" style="flex: 1;"><input type="text" name="brideFatherName" required
+                                placeholder="Father's Full Name"></div>
+                        <div class="form-group" style="flex: 1;"><input type="text" name="brideMotherName" required
+                                placeholder="Mother's Full Maiden Name"></div>
+                    </div>
+
+
+                    <!-- ========================================== -->
+                    <!-- PRINCIPAL SPONSORS & DYNAMIC OTHERS        -->
+                    <!-- ========================================== -->
+                    <div style="border-top: 1px solid #e2e8f0; padding-top: 16px; margin-top: 16px;">
+                        <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;">Principal Sponsors</h4>
+                        <div style="display: flex; gap: 12px; margin-bottom: 12px;">
+                            <div style="flex: 1;">
+                                <label style="font-size: 11px; font-weight: bold; color: #475569;">Principal Ninong
+                                    *</label>
+                                <input type="text" name="principalNinong" required placeholder="Full Name"
+                                    style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:4px;">
+                            </div>
+                            <div style="flex: 1;">
+                                <label style="font-size: 11px; font-weight: bold; color: #475569;">Principal Ninang
+                                    *</label>
+                                <input type="text" name="principalNinang" required placeholder="Full Name"
+                                    style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:4px;">
+                            </div>
+                        </div>
+
+                        <h4 style="margin: 15px 0 8px 0; color: #4a0e17; font-size: 14px;">Additional Sponsors (Maximum
+                            of 6)</h4>
+                        <div id="weddingSponsorsList"></div>
+                        <button type="button" id="addSponsorBtn" onclick="addWeddingSponsorRow()"
+                            style="background: #f1f5f9; border: 1px dashed #cbd5e1; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; color: #334155; font-weight: bold;">+
+                            Add Additional Sponsor</button>
+                    </div>
+
+
                     <!-- GUEST PRIEST / OFFICIANT SECTION -->
                     <div style="border-top: 1px solid #e2e8f0; padding-top: 16px; margin-top: 16px;">
                         <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;">Wedding Officiant Details</h4>
@@ -690,7 +788,6 @@
                             </label>
                         </div>
 
-                        <!-- Hidden by default until checkbox is checked -->
                         <div id="guestPriestDetailsGroup"
                             style="display: none; background: #f8fafc; padding: 14px; border-radius: 6px; border: 1px solid #e2e8f0;">
                             <div style="margin-bottom: 10px;">
@@ -701,7 +798,6 @@
                                     placeholder="Rev. Fr. Juan Santos (St. Peter Parish)"
                                     style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
                             </div>
-
                             <div
                                 style="background: #fff3cd; border: 1px solid #ffeeba; color: #856404; padding: 10px; border-radius: 4px; font-size: 12px; margin-top: 8px;">
                                 ⚠️ <strong>Guest Priest Requirements:</strong> A copy of the priest's <strong>License to
@@ -711,25 +807,34 @@
                         </div>
                     </div>
 
+                    <!-- ELECTRICITY / VIDEO FEE OPTION -->
+                    <div style="border-top: 1px solid #e2e8f0; padding-top: 16px; margin-top: 16px;">
+                        <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;">Optional Fees & Services</h4>
+                        <div style="background: #f8fafc; padding: 14px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                            <label
+                                style="display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; font-weight: bold; color: #2c3e50;">
+                                <input type="checkbox" id="electricityFee" name="electricityFee" value="1000"
+                                    style="width: 16px; height: 16px; cursor: pointer;">
+                                Include Electricity / Video Fee (+₱1,000) for professional photo/video equipment
+                            </label>
+                        </div>
+                    </div>
+
                     <!-- DEDICATED WEDDING FACEBOOK-STYLE SCHEDULING CALENDAR -->
                     <div class="fb-calendar-container"
-                        style="background: #ffffff; border: 1px solid #ccd0d5; border-radius: 8px; padding: 16px; margin-bottom: 15px; font-family: Helvetica, Arial, sans-serif;">
-
+                        style="background: #ffffff; border: 1px solid #ccd0d5; border-radius: 8px; padding: 16px; margin: 15px 0; font-family: Helvetica, Arial, sans-serif;">
                         <div
                             style="background: #e7f3ff; border-left: 4px solid #1877f2; padding: 10px; font-size: 12px; color: #1c1e21; margin-bottom: 15px;">
                             <strong>💒 Wedding Schedule Rules:</strong><br>
                             Available <strong>Tuesday to Saturday</strong>.<br>
-                            Time slots: <strong>10:30 AM</strong> and <strong>3:00 PM</strong> (Strictly 1 slot
-                            per time
+                            Time slots: <strong>10:30 AM</strong> and <strong>3:00 PM</strong> (Strictly 1 slot per time
                             block).
                         </div>
 
-                        <!-- Calendar Month Header -->
                         <div
                             style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                             <h4 id="weddingMonthYearLabel"
-                                style="margin: 0; color: #1c1e21; font-size: 1.05rem; font-weight: bold;">Month
-                                Year
+                                style="margin: 0; color: #1c1e21; font-size: 1.05rem; font-weight: bold;">Month Year
                             </h4>
                             <div style="display: flex; gap: 6px;">
                                 <button type="button" onclick="changeWeddingCalendarMonth(-1)"
@@ -739,7 +844,6 @@
                             </div>
                         </div>
 
-                        <!-- Days of Week Header -->
                         <div
                             style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: bold; font-size: 11px; color: #606770; margin-bottom: 6px;">
                             <div>Sun</div>
@@ -751,25 +855,18 @@
                             <div>Sat</div>
                         </div>
 
-                        <!-- Calendar Grid -->
                         <div id="weddingCalendarGrid"
                             style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; margin-bottom: 12px;">
-                            <!-- Populated via JS -->
                         </div>
 
-                        <!-- Selected Date & Timeslot Display Panel -->
                         <div id="weddingTimeslotPanel"
                             style="border-top: 1px solid #e4e6eb; padding-top: 12px; display: none;">
                             <div id="weddingSelectedDateHeader"
-                                style="font-size: 13px; font-weight: bold; color: #1c1e21; margin-bottom: 8px;">
-                            </div>
+                                style="font-size: 13px; font-weight: bold; color: #1c1e21; margin-bottom: 8px;"></div>
                             <div id="weddingTimeslotGrid"
-                                style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                                <!-- Populated dynamically -->
-                            </div>
+                                style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;"></div>
                         </div>
 
-                        <!-- Hidden Inputs for Form Submission -->
                         <input type="hidden" id="weddingSelectedDateInput" name="preferredDate" required>
                         <input type="hidden" id="weddingSelectedTimeInput" name="confirmedTime" required>
                     </div>
@@ -781,14 +878,11 @@
                             <strong>CENOMAR</strong>, and <strong>Confirmation Certificates</strong>.
                         </p>
 
-                        <!-- Inside Wedding Modal Document Upload Section -->
                         <div class="inline-drop-zone" onclick="document.getElementById('wedFiles').click()">
                             <span>💍 Click or drag files here to attach Wedding Documents</span>
-                            <!-- ADD "multiple" ATTRIBUTE BELOW -->
                             <input type="file" id="wedFiles" multiple accept=".pdf,.jpg,.jpeg,.png"
                                 style="display:none;" onchange="handleInlineFiles(event, 'wedFileList')">
                         </div>
-                        <div class="file-preview-list" id="wedFileList"></div>
                         <div class="file-preview-list" id="wedFileList"></div>
                     </div>
 
@@ -800,15 +894,11 @@
                             <input type="checkbox" id="privacyConsentCheck" required
                                 style="margin-top: 2px; cursor: pointer;">
                             <span>
-                                <strong>Data Privacy Consent:</strong> I hereby authorize Santuario Del Sto.
-                                Cristo
-                                Parish
-                                to collect, process, and store my personal and sacramental data provided in this
-                                form in
-                                compliance with the <strong>Philippine Data Privacy Act (RA 10173)</strong>. I
-                                understand my
-                                data will be used strictly for parish record-keeping, verification, and ceremony
-                                scheduling.
+                                <strong>Data Privacy Consent:</strong> I hereby authorize Santuario Del Sto. Cristo
+                                Parish to collect, process, and store my personal and sacramental data provided in this
+                                form in compliance with the <strong>Philippine Data Privacy Act (RA 10173)</strong>. I
+                                understand my data will be used strictly for parish record-keeping, verification, and
+                                ceremony scheduling.
                             </span>
                         </label>
                     </div>
@@ -1204,6 +1294,10 @@
             let funeralIntermentDate = null;
 
             document.addEventListener('DOMContentLoaded', () => {
+                lucide.createIcons();
+            });
+
+            document.addEventListener('DOMContentLoaded', () => {
                 // Ensure calendars render on page load
                 if (typeof renderBaptismCalendar === 'function') renderBaptismCalendar();
                 if (typeof renderWeddingCalendar === 'function') renderWeddingCalendar();
@@ -1400,18 +1494,53 @@
                         .filter(Boolean);
                     details.godparents = godparents.length ? godparents.join('; ') : 'None listed';
 
-                } else if (sacramentType === 'wedding') {
-                    details.groomName = `${formElement.querySelector('[name="groomFirstName"]')?.value || ''} ${formElement.querySelector('[name="groomMiddleInitial"]')?.value || ''} ${formElement.querySelector('[name="groomLastName"]')?.value || ''}`.trim();
-                    details.groomAge = formElement.querySelector('[name="groomAge"]')?.value || '';
-                    details.groomCivilStatus = formElement.querySelector('[name="groomCivilStatus"]')?.value || '';
-                    details.groomNationality = formElement.querySelector('[name="groomNationality"]')?.value || '';
+                }
+                else if (sacramentType === 'wedding') {
+                    // Groom Details
+                    sacramentDetails.groomName = `${formElement.querySelector('[name="groomFirstName"]').value} ${formElement.querySelector('[name="groomMiddleInitial"]').value || ''} ${formElement.querySelector('[name="groomLastName"]').value}`.trim();
+                    sacramentDetails.groomAge = formElement.querySelector('[name="groomAge"]').value;
+                    sacramentDetails.groomCivilStatus = formElement.querySelector('[name="groomCivilStatus"]').value;
+                    sacramentDetails.groomNationality = formElement.querySelector('[name="groomNationality"]').value;
+                    sacramentDetails.groomPlaceOfBirth = formElement.querySelector('[name="groomPlaceOfBirth"]').value;
+                    sacramentDetails.groomOccupation = formElement.querySelector('[name="groomOccupation"]').value;
+                    sacramentDetails.groomPresentResidence = formElement.querySelector('[name="groomPresentResidence"]').value;
+                    sacramentDetails.groomFatherName = formElement.querySelector('[name="groomFatherName"]').value;
+                    sacramentDetails.groomMotherName = formElement.querySelector('[name="groomMotherName"]').value;
 
-                    details.brideName = `${formElement.querySelector('[name="brideFirstName"]')?.value || ''} ${formElement.querySelector('[name="brideMiddleInitial"]')?.value || ''} ${formElement.querySelector('[name="brideLastName"]')?.value || ''}`.trim();
-                    details.brideAge = formElement.querySelector('[name="brideAge"]')?.value || '';
-                    details.brideCivilStatus = formElement.querySelector('[name="brideCivilStatus"]')?.value || '';
-                    details.brideNationality = formElement.querySelector('[name="brideNationality"]')?.value || '';
+                    // Bride Details
+                    sacramentDetails.brideName = `${formElement.querySelector('[name="brideFirstName"]').value} ${formElement.querySelector('[name="brideMiddleInitial"]').value || ''} ${formElement.querySelector('[name="brideLastName"]').value}`.trim();
+                    sacramentDetails.brideAge = formElement.querySelector('[name="brideAge"]').value;
+                    sacramentDetails.brideCivilStatus = formElement.querySelector('[name="brideCivilStatus"]').value;
+                    sacramentDetails.brideNationality = formElement.querySelector('[name="brideNationality"]').value;
+                    sacramentDetails.bridePlaceOfBirth = formElement.querySelector('[name="bridePlaceOfBirth"]').value;
+                    sacramentDetails.brideOccupation = formElement.querySelector('[name="brideOccupation"]').value;
+                    sacramentDetails.bridePresentResidence = formElement.querySelector('[name="bridePresentResidence"]').value;
+                    sacramentDetails.brideFatherName = formElement.querySelector('[name="brideFatherName"]').value;
+                    sacramentDetails.brideMotherName = formElement.querySelector('[name="brideMotherName"]').value;
 
-                } else if (sacramentType === 'funeral') {
+                    // Principal Sponsors
+                    sacramentDetails.principalNinong = formElement.querySelector('[name="principalNinong"]').value;
+                    sacramentDetails.principalNinang = formElement.querySelector('[name="principalNinang"]').value;
+
+                    // Dynamic Additional Sponsors (Up to 6)
+                    const additionalSponsors = [];
+                    const sponsorRows = formElement.querySelectorAll('.sponsor-row');
+                    sponsorRows.forEach(row => {
+                        const role = row.querySelector('[name="additionalSponsorRole"]').value;
+                        const name = row.querySelector('[name="additionalSponsorName"]').value.trim();
+                        if (name) {
+                            additionalSponsors.push({ role, name });
+                        }
+                    });
+                    sacramentDetails.additionalSponsors = additionalSponsors;
+
+                    // Guest Priest & Fees Options
+                    sacramentDetails.hasGuestPriest = formElement.querySelector('[name="hasGuestPriest"]')?.checked || false;
+                    sacramentDetails.guestPriestName = sacramentDetails.hasGuestPriest ? formElement.querySelector('[name="guestPriestName"]').value : 'None';
+                    sacramentDetails.electricityFeeIncluded = formElement.querySelector('[name="electricityFee"]')?.checked || false;
+                }
+
+                else if (sacramentType === 'funeral') {
                     details.deceasedName = `${formElement.querySelector('[name="deceasedFirstName"]')?.value || ''} ${formElement.querySelector('[name="deceasedMiddleInitial"]')?.value || ''} ${formElement.querySelector('[name="deceasedLastName"]')?.value || ''}`.trim();
                 }
 
@@ -2096,13 +2225,34 @@
                     details[key] = value;
                 }
 
+                // Inside saveApplicationLocally(sacramentType, formElement):
+
                 if (sacramentType === 'baptism') {
-                    const gpRoles = formData.getAll('godparentRole');
-                    const gpNames = formData.getAll('godparentName');
-                    const godparents = gpNames
-                        .map((name, i) => name.trim() ? `${gpRoles[i] || 'Godparent'}: ${name.trim()}` : '')
+                    const principalNinong = formElement.querySelector('[name="principalNinong"]')?.value.trim() || '';
+                    const principalNinang = formElement.querySelector('[name="principalNinang"]')?.value.trim() || '';
+                    const address = formElement.querySelector('[name="address"]')?.value.trim() || '';
+
+                    // Save explicit fields to details
+                    details.address = address;
+                    details.principalNinong = principalNinong;
+                    details.principalNinang = principalNinang;
+
+                    // Collect additional sponsors
+                    const addRoles = formData.getAll('additionalGodparentRole');
+                    const addNames = formData.getAll('additionalGodparentName');
+
+                    const additionalGodparents = addNames
+                        .map((name, i) => name.trim() ? `${addRoles[i] || 'Sponsor'}: ${name.trim()}` : '')
                         .filter(Boolean);
-                    details.godparents = godparents.length ? godparents.join('; ') : 'None listed';
+
+                    // Format full godparent string summary for admin views
+                    const sponsorList = [
+                        `Principal Ninong: ${principalNinong}`,
+                        `Principal Ninang: ${principalNinang}`,
+                        ...additionalGodparents
+                    ];
+
+                    details.godparents = sponsorList.join('; ');
                 }
 
                 // --- FIX: Extract accurate baptism type (group vs individual) ---
@@ -2111,6 +2261,19 @@
                     const bapSelect = formElement.querySelector('#baptismTypeSelect');
                     const selectedVal = bapSelect ? bapSelect.value : '';
                     actualSacramentType = selectedVal === 'group' ? 'Group Baptism' : (selectedVal === 'individual' ? 'Individual Baptism' : 'Baptism');
+                }
+                // Inside saveApplicationLocally(sacramentType, formElement):
+                if (sacramentType === 'baptism') {
+                    const fatherName = formElement.querySelector('[name="fatherName"]')?.value.trim() || '';
+                    const fatherBirthplace = formElement.querySelector('[name="fatherBirthplace"]')?.value.trim() || '';
+                    const motherName = formElement.querySelector('[name="motherName"]')?.value.trim() || '';
+                    const motherBirthplace = formElement.querySelector('[name="motherBirthplace"]')?.value.trim() || '';
+
+                    // Save into the details object
+                    details.fatherName = fatherName;
+                    details.fatherBirthplace = fatherBirthplace;
+                    details.motherName = motherName;
+                    details.motherBirthplace = motherBirthplace;
                 }
 
                 // Build Reference ID prefix
@@ -2543,7 +2706,28 @@
                     console.error("Error checking application status updates:", err);
                 }
             }
+            function addWeddingSponsorRow() {
+                const list = document.getElementById('weddingSponsorsList');
+                const currentRows = list.getElementsByClassName('sponsor-row').length;
+                if (currentRows >= 6) {
+                    alert('You can only add up to a maximum of 6 additional sponsors.');
+                    return;
+                }
 
+                const row = document.createElement('div');
+                row.className = 'sponsor-row';
+                row.style.cssText = 'display: flex; gap: 8px; margin-bottom: 8px; align-items: center;';
+                row.innerHTML = `
+
+                <input type="text" name="additionalSponsorName" placeholder="Sponsor's Full Name" style="flex: 1; padding: 8px; border-radius: 4px; border: 1px solid #cbd5e1;">
+                 <button type="button" onclick="this.parentElement.remove()" style="background: none; border: none; color: #c0392b; font-size: 1.4rem; cursor: pointer; padding: 0 6px;">&times;</button>
+    `;
+                list.appendChild(row);
+
+                if (list.getElementsByClassName('sponsor-row').length >= 6) {
+                    document.getElementById('addSponsorBtn').style.display = 'none';
+                }
+            }
             // ==========================================
             // DYNAMIC GODPARENT ROWS (BAPTISM)
             // ==========================================
@@ -2552,22 +2736,23 @@
                 if (!list) return;
                 const row = document.createElement('div');
                 row.className = 'godparent-row';
+                row.style.cssText = 'display: flex; gap: 8px; margin-bottom: 8px; align-items: center;';
                 row.innerHTML = `
-                <select name="godparentRole" aria-label="Godparent role">
-                    <option value="Ninong">Ninong</option>
-                    <option value="Ninang">Ninang</option>
-                </select>
-                <input type="text" name="godparentName" placeholder="Godparent's full name">
-                <button type="button" class="remove-godparent-btn" aria-label="Remove godparent"
-                    onclick="this.parentElement.remove()">&times;</button>
-            `;
+        <select name="additionalGodparentRole" aria-label="Godparent role" style="flex: 0 0 110px; padding: 10px; border-radius: 4px; border: 1px solid #ccc;">
+            <option value="Ninong">Ninong</option>
+            <option value="Ninang">Ninang</option>
+        </select>
+        <input type="text" name="additionalGodparentName" placeholder="Additional Sponsor's full name" style="flex: 1; min-width: 0; padding: 10px; border-radius: 4px; border: 1px solid #ccc;">
+        <button type="button" class="remove-godparent-btn" aria-label="Remove godparent"
+            style="background: none; border: none; color: #c0392b; font-size: 1.5rem; cursor: pointer; padding: 0 6px;"
+            onclick="this.parentElement.remove()">&times;</button>
+    `;
                 list.appendChild(row);
             }
 
             function resetGodparentRows() {
                 const list = document.getElementById('godparentList');
                 if (list) list.innerHTML = '';
-                addGodparentRow();
             }
 
             document.addEventListener('DOMContentLoaded', () => addGodparentRow());
@@ -2946,28 +3131,28 @@
                     let bgStyle = '#f0f2f5';
                     let textStyle = '#050505';
                     let cursorStyle = isAllowedDay && !isPast && !isFullyBooked ? 'pointer' : 'not-allowed';
-                    let badgeText = isAllowedDay ? 'Available' : 'Closed';
-                    let badgeColor = isAllowedDay ? '#2e7d32' : '#8a8d91';
+                    let dotColor = '#10b981'; // Green for available
+                    let statusTooltip = isAllowedDay ? 'Available' : 'Closed';
 
                     if (isPast || !isAllowedDay) {
                         bgStyle = '#f4f2f2';
                         textStyle = '#b0b3b8';
-                        badgeText = !isAllowedDay ? (baptismType === 'group' ? 'Sat/Sun Only' : 'Tue-Fri Only') : 'Past';
-                        badgeColor = '#8a8d91';
+                        dotColor = '#94a3b8'; // Grey for unavailable / closed / past
+                        statusTooltip = !isAllowedDay ? (baptismType === 'group' ? 'Sat/Sun Only' : 'Tue-Fri Only') : 'Past';
                     } else if (isFullyBooked) {
                         bgStyle = '#f8d7da';
                         textStyle = '#721c24';
-                        badgeText = 'Full';
-                        badgeColor = '#c0392b';
+                        dotColor = '#ef4444'; // Red for occupied / fully booked
+                        statusTooltip = 'Fully Booked';
                     } else if (bookedCount > 0) {
-                        badgeText = `${MAX_CAPACITY - bookedCount} left`;
-                        badgeColor = '#d35400';
+                        dotColor = '#d35400'; // Orange/Red indicator for partial capacity
+                        statusTooltip = `${MAX_CAPACITY - bookedCount} left`;
                     }
 
                     if (isSelected) {
                         bgStyle = '#1877f2';
                         textStyle = '#ffffff';
-                        badgeColor = '#ffffff';
+                        dotColor = '#ffffff'; // White dot if selected
                     }
 
                     const canClick = isAllowedDay && !isPast && !isFullyBooked;
@@ -2976,11 +3161,11 @@
         <div ${canClick ? `onclick="selectBapCalendarDate('${dateString}')"` : ''} 
              style="background: ${bgStyle}; color: ${textStyle}; padding: 8px 4px; border-radius: 6px; cursor: ${cursorStyle}; font-size: 13px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 44px; border: ${isSelected ? '2px solid #000' : '1px solid transparent'}; opacity: ${canClick ? '1' : '0.65'};">
             <strong style="font-size: 14px;">${day}</strong>
-            <span style="font-size: 9px; font-weight: bold; color: ${badgeColor}; margin-top: 2px;">${badgeText}</span>
+            <span style="width: 7px; height: 7px; background: ${dotColor}; border-radius: 50%; display: inline-block; margin-top: 6px;" title="${statusTooltip}"></span>
         </div>`;
-                }
 
-                gridEl.innerHTML = html;
+                    gridEl.innerHTML = html;
+                }
             }
 
             async function selectBapCalendarDate(dateStr) {
@@ -3144,40 +3329,41 @@
                     let bgStyle = '#f0f2f5';
                     let textStyle = '#050505';
                     let cursorStyle = isAllowedDay && !isTooSoon && !isFullyBooked && !hasBaptismConflict ? 'pointer' : 'not-allowed';
-                    let badgeText = isAllowedDay ? 'Available' : 'Closed';
-                    let badgeColor = isAllowedDay ? '#2e7d32' : '#8a8d91';
+                    let dotColor = '#10b981'; // Green for available
+                    let statusTooltip = 'Available';
 
                     // Styling priority for greyed-out / unavailable dates
                     if (isPast) {
                         bgStyle = '#f4f2f2';
                         textStyle = '#b0b3b8';
-                        badgeText = 'Past';
-                        badgeColor = '#c0392b';
+                        dotColor = '#94a3b8'; // Grey for past
+                        statusTooltip = 'Past';
                     } else if (isTooSoon) {
                         bgStyle = '#f4f2f2';
                         textStyle = '#b0b3b8';
-                        badgeText = '< 1 Mo'; // Clearly indicates it's within the 30-day restriction window
-                        badgeColor = '#c0392b';
+                        dotColor = '#94a3b8'; // Grey for within 30-day window
+                        statusTooltip = 'Less than 1 month notice';
                     } else if (!isAllowedDay) {
                         bgStyle = '#f4f2f2';
                         textStyle = '#b0b3b8';
-                        badgeText = 'Off Day';
+                        dotColor = '#94a3b8'; // Grey for off days
+                        statusTooltip = 'Off Day';
                     } else if (isFullyBooked) {
                         bgStyle = '#f8d7da';
                         textStyle = '#721c24';
-                        badgeText = 'Fully Booked';
-                        badgeColor = '#c0392b';
+                        dotColor = '#ef4444'; // Red for fully booked
+                        statusTooltip = 'Fully Booked';
                     } else if (hasBaptismConflict && dayOfWeek === 6) {
                         bgStyle = '#fff3cd';
                         textStyle = '#856404';
-                        badgeText = 'Baptism Conflict';
-                        badgeColor = '#856404';
+                        dotColor = '#ef4444'; // Red for conflict
+                        statusTooltip = 'Baptism Conflict';
                     }
 
                     if (isSelected) {
                         bgStyle = '#1877f2';
                         textStyle = '#ffffff';
-                        badgeColor = '#ffffff';
+                        dotColor = '#ffffff'; // White dot if selected
                     }
 
                     const isDisabled = isPast || isTooSoon || !isAllowedDay || isFullyBooked || (hasBaptismConflict && dayOfWeek === 6);
@@ -3186,7 +3372,7 @@
             <div onclick="${isDisabled ? '' : `selectWeddingCalendarDate('${dateString}')`}" 
                  style="background: ${bgStyle}; color: ${textStyle}; padding: 8px 4px; border-radius: 6px; cursor: ${cursorStyle}; font-size: 13px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 44px; border: ${isSelected ? '2px solid #000' : '1px solid transparent'}; opacity: ${isDisabled && !isPast && !isTooSoon && !isFullyBooked && !!isAllowedDay ? '1' : (isDisabled ? '0.7' : '1')};">
                 <strong style="font-size: 14px;">${day}</strong>
-                <span style="font-size: 9px; font-weight: bold; color: ${badgeColor}; margin-top: 2px;">${badgeText}</span>
+                <span style="width: 7px; height: 7px; background: ${dotColor}; border-radius: 50%; display: inline-block; margin-top: 6px;" title="${statusTooltip}"></span>
             </div>
         `;
                 }
@@ -3352,44 +3538,45 @@
 
                     let bgStyle = '#f0f2f5';
                     let textStyle = '#050505';
+                    let dotColor = '#10b981'; // Green for available
+                    let statusTooltip = 'Available';
 
                     if (isToday && (!funeralWakeStartDate || (funeralWakeStartDate && funeralIntermentDate))) {
                         bgStyle = '#e8f5e9';
-                        badgeText = 'Today';
-                        badgeColor = '#1b5e20';
+                        dotColor = '#16a34a'; // Bright green for today
+                        statusTooltip = 'Today';
                     }
 
                     if (!canClick) {
                         bgStyle = '#f4f2f2';
                         textStyle = '#b0b3b8';
+                        dotColor = '#94a3b8'; // Grey for unavailable/closed
                         if (isFuture && (!funeralWakeStartDate || (funeralWakeStartDate && funeralIntermentDate))) {
-                            badgeText = 'Future';
-                            badgeColor = '#8a8d91';
+                            statusTooltip = 'Future';
                         } else if (isPast) {
-                            badgeText = 'Past';
-                            badgeColor = '#8a8d91';
+                            statusTooltip = 'Past';
                         } else if (!isAllowedDay) {
-                            badgeText = 'Closed (Mon)';
+                            statusTooltip = 'Closed (Mon)';
                         }
                     }
 
                     if (isOccupied) {
                         bgStyle = '#f8d7da';
                         textStyle = '#721c24';
-                        badgeText = 'Occupied';
-                        badgeColor = '#c0392b';
+                        dotColor = '#ef4444'; // Red for occupied
+                        statusTooltip = 'Occupied';
                     }
 
                     if (isStart || isEnd) {
                         bgStyle = '#1877f2';
                         textStyle = '#ffffff';
-                        badgeText = isStart ? 'Wake Start' : 'Interment';
-                        badgeColor = '#ffffff';
+                        dotColor = '#ffffff'; // White dot for selected start/interment dates
+                        statusTooltip = isStart ? 'Wake Start' : 'Interment';
                     } else if (isInSpan) {
                         bgStyle = '#d0e8ff';
                         textStyle = '#1d4ed8';
-                        badgeText = 'Wake Span';
-                        badgeColor = '#1d4ed8';
+                        dotColor = '#2563eb'; // Blue dot for span
+                        statusTooltip = 'Wake Span';
                     }
 
                     const cursorStyle = canClick ? 'pointer' : 'not-allowed';
@@ -3398,12 +3585,12 @@
             <div onclick="${canClick ? `selectFuneralCalendarDate('${dateString}')` : ''}" 
                  style="background: ${bgStyle}; color: ${textStyle}; padding: 8px 4px; border-radius: 6px; cursor: ${cursorStyle}; font-size: 13px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 44px; border: ${isToday && (!funeralWakeStartDate || (funeralWakeStartDate && funeralIntermentDate)) ? '2px solid #2e7d32' : (isStart || isEnd ? '2px solid #000' : '1px solid transparent')};">
                 <strong style="font-size: 14px;">${day}</strong>
-                <span style="font-size: 9px; font-weight: bold; color: ${badgeColor}; margin-top: 2px;">${badgeText}</span>
+                <span style="width: 7px; height: 7px; background: ${dotColor}; border-radius: 50%; display: inline-block; margin-top: 6px;" title="${statusTooltip}"></span>
             </div>
         `;
-                }
 
-                gridEl.innerHTML = html;
+                    gridEl.innerHTML = html;
+                }
             }
 
             function changeFuneralCalendarMonth(direction) {
