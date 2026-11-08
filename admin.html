@@ -629,10 +629,191 @@
                 padding: 22px !important;
             }
         }
+
+        /* Lightweight local SVG icon system: no icon font, CDN, or runtime scanner. */
+        .ui-icon {
+            width: 1em;
+            height: 1em;
+            display: inline-block;
+            vertical-align: -0.16em;
+            flex: 0 0 auto;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        button .ui-icon,
+        a .ui-icon {
+            margin-right: .32em;
+        }
+
+        .ui-icon-sprite {
+            position: absolute;
+            width: 0;
+            height: 0;
+            overflow: hidden;
+        }
     </style>
 </head>
 
 <body class="admin-body">
+    <svg class="ui-icon-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"
+        style="position:absolute;width:0;height:0;overflow:hidden">
+        <defs>
+            <symbol id="ui-menu" viewBox="0 0 24 24">
+                <path d="M4 6h16M4 12h16M4 18h16" />
+            </symbol>
+            <symbol id="ui-map-pin" viewBox="0 0 24 24">
+                <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" />
+                <circle cx="12" cy="10" r="2.5" />
+            </symbol>
+            <symbol id="ui-phone" viewBox="0 0 24 24">
+                <path
+                    d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.4 19.4 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7l.5 2.8a2 2 0 0 1-.6 1.8L7.2 10a16 16 0 0 0 6 6l1.7-1.8a2 2 0 0 1 1.8-.6l2.8.5a2 2 0 0 1 1.7 1.8Z" />
+            </symbol>
+            <symbol id="ui-mail" viewBox="0 0 24 24">
+                <rect x="3" y="5" width="18" height="14" rx="2" />
+                <path d="m3 7 9 6 9-6" />
+            </symbol>
+            <symbol id="ui-pin" viewBox="0 0 24 24">
+                <path d="M12 17v5M5 3h14l-1 9-6 5-6-5-1-9Z" />
+                <path d="M8 7h8M8 10h5" />
+            </symbol>
+            <symbol id="ui-file" viewBox="0 0 24 24">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" />
+                <path d="M14 2v6h6M8 13h8M8 17h8" />
+            </symbol>
+            <symbol id="ui-alert-triangle" viewBox="0 0 24 24">
+                <path d="m10.3 3.9-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3.1l-8-14a2 2 0 0 0-3.4 0Z" />
+                <path d="M12 9v4m0 4h.01" />
+            </symbol>
+            <symbol id="ui-church" viewBox="0 0 24 24">
+                <path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-7h6v7M12 3V1M10 5h4" />
+            </symbol>
+            <symbol id="ui-calendar" viewBox="0 0 24 24">
+                <rect x="3" y="5" width="18" height="16" rx="2" />
+                <path d="M16 3v4M8 3v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01" />
+            </symbol>
+            <symbol id="ui-bell" viewBox="0 0 24 24">
+                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" />
+            </symbol>
+            <symbol id="ui-lightbulb" viewBox="0 0 24 24">
+                <path
+                    d="M9 18h6m-5 4h4M8 14c-1.3-1-2-2.5-2-4a6 6 0 1 1 12 0c0 1.5-.7 3-2 4-.8.7-1 1.4-1 2h-6c0-.6-.2-1.3-1-2Z" />
+            </symbol>
+            <symbol id="ui-pencil" viewBox="0 0 24 24">
+                <path d="m16 4 4 4M4 20l4-.8L19 8a2.8 2.8 0 0 0-4-4L4 15l0 5Z" />
+            </symbol>
+            <symbol id="ui-log-out" viewBox="0 0 24 24">
+                <path d="M10 17l5-5-5-5M15 12H3" />
+                <path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6" />
+            </symbol>
+            <symbol id="ui-credit-card" viewBox="0 0 24 24">
+                <rect x="2" y="5" width="20" height="14" rx="2" />
+                <path d="M2 10h20M6 15h4" />
+            </symbol>
+            <symbol id="ui-clipboard-list" viewBox="0 0 24 24">
+                <rect x="5" y="4" width="14" height="18" rx="2" />
+                <path d="M9 4V2h6v2M9 10h6M9 14h6M9 18h3" />
+            </symbol>
+            <symbol id="ui-user-round" viewBox="0 0 24 24">
+                <circle cx="12" cy="8" r="4" />
+                <path d="M4 21a8 8 0 0 1 16 0" />
+            </symbol>
+            <symbol id="ui-upload" viewBox="0 0 24 24">
+                <path d="M12 16V4m-5 5 5-5 5 5M4 20h16" />
+            </symbol>
+            <symbol id="ui-check" viewBox="0 0 24 24">
+                <path d="m5 12 4 4L19 6" />
+            </symbol>
+            <symbol id="ui-x" viewBox="0 0 24 24">
+                <path d="m18 6-12 12M6 6l12 12" />
+            </symbol>
+            <symbol id="ui-eye" viewBox="0 0 24 24">
+                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" />
+                <circle cx="12" cy="12" r="3" />
+            </symbol>
+            <symbol id="ui-ban" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9" />
+                <path d="m5.6 5.6 12.8 12.8" />
+            </symbol>
+            <symbol id="ui-folder" viewBox="0 0 24 24">
+                <path d="M3 6a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z" />
+            </symbol>
+            <symbol id="ui-plus" viewBox="0 0 24 24">
+                <path d="M12 5v14M5 12h14" />
+            </symbol>
+            <symbol id="ui-refresh-cw" viewBox="0 0 24 24">
+                <path d="M20 7v5h-5M4 17v-5h5" />
+                <path d="M5.5 9A7 7 0 0 1 18 6l2 6M4 12l2 6a7 7 0 0 0 12.5-3" />
+            </symbol>
+            <symbol id="ui-save" viewBox="0 0 24 24">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z" />
+                <path d="M17 21v-8H7v8M7 3v5h8" />
+            </symbol>
+            <symbol id="ui-key-round" viewBox="0 0 24 24">
+                <circle cx="8" cy="15" r="5" />
+                <path d="m11.5 11.5 8-8L22 6l-2 2 2 2-3 3-2-2-2 2" />
+            </symbol>
+            <symbol id="ui-baby" viewBox="0 0 24 24">
+                <path d="M9 12a3 3 0 1 0 6 0M12 3a2 2 0 1 0 0 4M5 10a7 7 0 0 0 14 0M4 14v2a8 8 0 0 0 16 0v-2" />
+            </symbol>
+            <symbol id="ui-users" viewBox="0 0 24 24">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M10 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM20 8v6m3-3h-6" />
+            </symbol>
+            <symbol id="ui-user" viewBox="0 0 24 24">
+                <circle cx="12" cy="8" r="4" />
+                <path d="M5 21a7 7 0 0 1 14 0" />
+            </symbol>
+            <symbol id="ui-heart-handshake" viewBox="0 0 24 24">
+                <path d="M20.8 8.5c0 4.5-8.8 10-8.8 10S3.2 13 3.2 8.5A4.5 4.5 0 0 1 12 6a4.5 4.5 0 0 1 8.8 2.5Z" />
+                <path d="m8 13 2 2 2-1 2 1 2-2" />
+            </symbol>
+            <symbol id="ui-chart-column" viewBox="0 0 24 24">
+                <path d="M4 20V10m5 10V4m5 16v-7m5 7V7" />
+            </symbol>
+            <symbol id="ui-folder-open" viewBox="0 0 24 24">
+                <path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2l-2 10H4L2 9a2 2 0 0 1 1-2Z" />
+            </symbol>
+            <symbol id="ui-church-cross" viewBox="0 0 24 24">
+                <path d="M12 2v20M7 7h10" />
+                <path d="M4 22h16" />
+            </symbol>
+            <symbol id="ui-clock" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 7v5l3 2" />
+            </symbol>
+            <symbol id="ui-calendar-check" viewBox="0 0 24 24">
+                <rect x="3" y="5" width="18" height="16" rx="2" />
+                <path d="M16 3v4M8 3v4M3 10h18m4 5 2 2 4-4" />
+            </symbol>
+            <symbol id="ui-archive" viewBox="0 0 24 24">
+                <rect x="3" y="4" width="18" height="5" rx="1" />
+                <path d="M5 9v11h14V9m-9 4h4" />
+            </symbol>
+            <symbol id="ui-file-check" viewBox="0 0 24 24">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" />
+                <path d="M14 2v6h6m-12 5 2 2 4-4" />
+            </symbol>
+            <symbol id="ui-shield-check" viewBox="0 0 24 24">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" />
+                <path d="m9 12 2 2 4-4" />
+            </symbol>
+            <symbol id="ui-hand-coins" viewBox="0 0 24 24">
+                <path d="M12 8V4m0 0L9 7m3-3 3 3M4 14h5l2 2h5a2 2 0 0 1 0 4H9l-5-2Zm12-8h3a2 2 0 0 1 2 2v3" />
+            </symbol>
+            <symbol id="ui-sparkles" viewBox="0 0 24 24">
+                <path
+                    d="m12 3 1.5 5.5L19 10l-5.5 1.5L12 17l-1.5-5.5L5 10l5.5-1.5L12 3ZM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16Z" />
+            </symbol>
+            <symbol id="ui-download" viewBox="0 0 24 24">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <path d="m7 10 5 5 5-5M12 15V3" />
+            </symbol>
+        </defs>
+    </svg>
 
     <!-- Secretariat / Priest / Admin Authentication Modal -->
     <div id="adminAuthModal" class="modal-overlay active">
@@ -644,14 +825,12 @@
             <form id="adminLoginForm" onsubmit="handleAdminLogin(event)">
                 <div style="margin-bottom: 15px; text-align: left;">
                     <label for="adminEmail">Email Address</label>
-                    <input type="email" id="adminEmail" placeholder="priest@parish.com or secretary@parish.com" required
-                        style="width: 100%; padding: 8px;">
+                    <input type="email" id="adminEmail" required style="width: 100%; padding: 8px;">
                 </div>
 
                 <div style="margin-bottom: 20px; text-align: left;">
                     <label for="adminPassword">Password</label>
-                    <input type="password" id="adminPassword" placeholder="••••••••" required
-                        style="width: 100%; padding: 8px;">
+                    <input type="password" id="adminPassword" required style="width: 100%; padding: 8px;">
                 </div>
 
                 <button type="submit"
@@ -666,11 +845,15 @@
                 <div style="display: flex; gap: 8px;">
                     <button type="button" onclick="loginAsDemoRole('priest')"
                         style="flex: 1; background: #8e44ad; color: white; border: none; padding: 8px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px;">
-                        ✝️ Login as Priest
+                        <svg class="ui-icon" aria-hidden="true" focusable="false">
+                            <use href="#ui-church-cross"></use>
+                        </svg> Login as Priest
                     </button>
                     <button type="button" onclick="loginAsDemoRole('secretary')"
                         style="flex: 1; background: #1877f2; color: white; border: none; padding: 8px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px;">
-                        📋 Login as Secretary
+                        <svg class="ui-icon" aria-hidden="true" focusable="false">
+                            <use href="#ui-clipboard-list"></use>
+                        </svg> Login as Secretary
                     </button>
                 </div>
             </div>
@@ -714,7 +897,10 @@
             style="display: none; background: #ffffff; border: 1px solid #ccd0d5; border-radius: 8px; padding: 24px; margin-bottom: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); font-family: Arial, sans-serif;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                 <div>
-                    <h3 style="margin: 0; color: #4a0e17; font-size: 1.2rem;">⛪ Master Parish Sacrament Calendar</h3>
+                    <h3 style="margin: 0; color: #4a0e17; font-size: 1.2rem;"><svg class="ui-icon" aria-hidden="true"
+                            focusable="false">
+                            <use href="#ui-church"></use>
+                        </svg> Master Parish Sacrament Calendar</h3>
                     <p style="margin: 4px 0 0 0; font-size: 12px; color: #666;">Comprehensive overview of all booked
                         baptisms, weddings, funerals, and parish seminars.</p>
                 </div>
@@ -796,11 +982,23 @@
 
             <div class="view-group"
                 style="margin-bottom: 15px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                <button id="viewActiveBtn" class="toggle-btn active" onclick="switchView(false)">📥 Active
+                <button id="viewActiveBtn" class="toggle-btn active" onclick="switchView(false)"><svg class="ui-icon"
+                        aria-hidden="true" focusable="false">
+                        <use href="#ui-folder"></use>
+                    </svg> Active
                     Inbox</button>
-                <button id="viewArchiveBtn" class="toggle-btn" onclick="switchView(true)">📁 Marked as done</button>
-                <button type="button" class="toggle-btn" onclick="openWalkInModal()">➕ Walk-In Accommodation</button>
-                <button class="refresh-btn" onclick="fetchApplications()" style="margin-left: auto;">🔄 Refresh
+                <button id="viewArchiveBtn" class="toggle-btn" onclick="switchView(true)"><svg class="ui-icon"
+                        aria-hidden="true" focusable="false">
+                        <use href="#ui-folder"></use>
+                    </svg> Marked as done</button>
+                <button type="button" class="toggle-btn" onclick="openWalkInModal()"><svg class="ui-icon"
+                        aria-hidden="true" focusable="false">
+                        <use href="#ui-plus"></use>
+                    </svg> Walk-In Accommodation</button>
+                <button class="refresh-btn" onclick="fetchApplications()" style="margin-left: auto;"><svg
+                        class="ui-icon" aria-hidden="true" focusable="false">
+                        <use href="#ui-refresh-cw"></use>
+                    </svg> Refresh
                     Submissions</button>
             </div>
 
@@ -830,21 +1028,29 @@
         </div>
     </div>
 
-<!-- MODAL: WALK-IN ACCOMMODATION / RESERVATION -->
+    <!-- MODAL: WALK-IN ACCOMMODATION / RESERVATION -->
     <div id="walkInModal" class="modal-overlay">
         <div class="modal-box"
             style="max-width: 680px; text-align: left; max-height: 90vh; overflow-y: auto; padding: 24px;">
             <div
                 style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #4a0e17; padding-bottom: 10px; margin-bottom: 15px;">
-                <h3 style="color: #4a0e17; margin: 0;">🏛️ Parish Staff: Walk-In Reservation</h3>
+                <h3 style="color: #4a0e17; margin: 0;"><svg class="ui-icon" aria-hidden="true" focusable="false">
+                        <use href="#ui-church"></use>
+                    </svg> Parish Staff: Walk-In Reservation</h3>
                 <button type="button" onclick="closeModal('walkInModal')"
-                    style="background: none; border: none; font-size: 18px; font-weight: bold; cursor: pointer;">✕</button>
+                    style="background: none; border: none; font-size: 18px; font-weight: bold; cursor: pointer;"><svg
+                        class="ui-icon" aria-hidden="true" focusable="false">
+                        <use href="#ui-x"></use>
+                    </svg></button>
             </div>
 
             <form onsubmit="handleStaffWalkInSubmit(event, this)">
                 <div style="margin-bottom: 15px;">
-                    <label style="display: block; font-weight: bold; font-size: 13px; color: #334155; margin-bottom: 6px;">Select Service Type *</label>
-                    <select id="walkInSacramentType" onchange="toggleWalkInServiceForms(); renderStaffInteractiveCalendar();" required
+                    <label
+                        style="display: block; font-weight: bold; font-size: 13px; color: #334155; margin-bottom: 6px;">Select
+                        Service Type *</label>
+                    <select id="walkInSacramentType"
+                        onchange="toggleWalkInServiceForms(); renderStaffInteractiveCalendar();" required
                         style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; background: white;">
                         <option value="">-- Choose Sacrament Service --</option>
                         <option value="Group Baptism">Group Baptism (₱500 | Sat & Sun @ 10:00 AM)</option>
@@ -860,13 +1066,17 @@
 
                 <!-- COMMON APPLICANT CONTACT -->
                 <div style="margin-bottom: 15px;">
-                    <label style="display: block; font-weight: bold; font-size: 13px; color: #334155; margin-bottom: 6px;">Contact Person / Applicant Name *</label>
+                    <label
+                        style="display: block; font-weight: bold; font-size: 13px; color: #334155; margin-bottom: 6px;">Contact
+                        Person / Applicant Name *</label>
                     <input type="text" id="walkInApplicantName" name="applicantName" required placeholder="Full Name"
                         style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                 </div>
 
                 <div style="margin-bottom: 15px;">
-                    <label style="display: block; font-weight: bold; font-size: 13px; color: #334155; margin-bottom: 6px;">Contact Phone Number *</label>
+                    <label
+                        style="display: block; font-weight: bold; font-size: 13px; color: #334155; margin-bottom: 6px;">Contact
+                        Phone Number *</label>
                     <input type="tel" id="walkInPhone" name="phone" required placeholder="09171234567"
                         style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;">
                 </div>
@@ -874,114 +1084,169 @@
                 <!-- ================= SERVICE-SPECIFIC FORMS ================= -->
 
                 <!-- 1. BAPTISM SPECIFIC FIELDS -->
-                <div id="walkInBaptismFields" class="service-walkin-fields" style="display: none; border-top: 1px solid #e2e8f0; padding-top: 12px; margin-bottom: 15px;">
+                <div id="walkInBaptismFields" class="service-walkin-fields"
+                    style="display: none; border-top: 1px solid #e2e8f0; padding-top: 12px; margin-bottom: 15px;">
                     <h5 style="color: #4a0e17; margin: 0 0 8px 0;">Child's Information</h5>
                     <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                        <div style="flex: 2;"><input type="text" name="childFirstName" placeholder="First Name" style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
-                        <div style="flex: 1;"><input type="text" name="childMiddleInitial" maxlength="3" placeholder="M.I." style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
-                        <div style="flex: 2;"><input type="text" name="childLastName" placeholder="Last Name" style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                        <div style="flex: 2;"><input type="text" name="childFirstName" placeholder="First Name"
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                        <div style="flex: 1;"><input type="text" name="childMiddleInitial" maxlength="3"
+                                placeholder="M.I."
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                        <div style="flex: 2;"><input type="text" name="childLastName" placeholder="Last Name"
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
                     </div>
                     <div style="margin-bottom: 10px;">
                         <label style="font-size: 11px; font-weight: bold; color: #475569;">Date of Birth</label>
-                        <input type="date" name="childDob" style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;">
+                        <input type="date" name="childDob"
+                            style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;">
                     </div>
 
                     <h5 style="color: #4a0e17; margin: 12px 0 8px 0;">Father's Information</h5>
                     <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                        <div style="flex: 2;"><input type="text" name="fatherFirstName" placeholder="First Name" style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
-                        <div style="flex: 1;"><input type="text" name="fatherMiddleInitial" maxlength="3" placeholder="M.I." style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
-                        <div style="flex: 2;"><input type="text" name="fatherLastName" placeholder="Last Name" style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                        <div style="flex: 2;"><input type="text" name="fatherFirstName" placeholder="First Name"
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                        <div style="flex: 1;"><input type="text" name="fatherMiddleInitial" maxlength="3"
+                                placeholder="M.I."
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                        <div style="flex: 2;"><input type="text" name="fatherLastName" placeholder="Last Name"
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
                     </div>
 
                     <h5 style="color: #4a0e17; margin: 12px 0 8px 0;">Mother's Maiden Information</h5>
                     <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                        <div style="flex: 2;"><input type="text" name="motherFirstName" placeholder="First Name" style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
-                        <div style="flex: 1;"><input type="text" name="motherMiddleInitial" maxlength="3" placeholder="M.I." style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
-                        <div style="flex: 2;"><input type="text" name="motherLastName" placeholder="Last Name" style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                        <div style="flex: 2;"><input type="text" name="motherFirstName" placeholder="First Name"
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                        <div style="flex: 1;"><input type="text" name="motherMiddleInitial" maxlength="3"
+                                placeholder="M.I."
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                        <div style="flex: 2;"><input type="text" name="motherLastName" placeholder="Last Name"
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
                     </div>
                 </div>
 
                 <!-- 2. WEDDING SPECIFIC FIELDS -->
-                <div id="walkInWeddingFields" class="service-walkin-fields" style="display: none; border-top: 1px solid #e2e8f0; padding-top: 12px; margin-bottom: 15px;">
+                <div id="walkInWeddingFields" class="service-walkin-fields"
+                    style="display: none; border-top: 1px solid #e2e8f0; padding-top: 12px; margin-bottom: 15px;">
                     <h5 style="color: #4a0e17; margin: 0 0 8px 0;">Groom's Information</h5>
                     <div style="display: flex; gap: 10px; margin-bottom: 8px;">
-                        <div style="flex: 2;"><input type="text" name="groomFirstName" placeholder="First Name" style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
-                        <div style="flex: 1;"><input type="text" name="groomMiddleInitial" maxlength="3" placeholder="M.I." style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
-                        <div style="flex: 2;"><input type="text" name="groomLastName" placeholder="Last Name" style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                        <div style="flex: 2;"><input type="text" name="groomFirstName" placeholder="First Name"
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                        <div style="flex: 1;"><input type="text" name="groomMiddleInitial" maxlength="3"
+                                placeholder="M.I."
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                        <div style="flex: 2;"><input type="text" name="groomLastName" placeholder="Last Name"
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
                     </div>
                     <div style="display: flex; gap: 10px; margin-bottom: 8px;">
-                        <div style="flex: 1;"><input type="number" name="groomAge" min="18" placeholder="Age" style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                        <div style="flex: 1;"><input type="number" name="groomAge" min="18" placeholder="Age"
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
                         <div style="flex: 2;">
-                            <select name="groomCivilStatus" style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;">
+                            <select name="groomCivilStatus"
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;">
                                 <option value="">Civil Status</option>
                                 <option value="Single">Single</option>
                                 <option value="Widower">Widower</option>
                                 <option value="Annulled">Annulled</option>
                             </select>
                         </div>
-                        <div style="flex: 2;"><input type="text" name="groomNationality" value="Filipino" placeholder="Nationality" style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                        <div style="flex: 2;"><input type="text" name="groomNationality" value="Filipino"
+                                placeholder="Nationality"
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
                     </div>
                     <div style="display: flex; gap: 10px; margin-bottom: 8px;">
-                        <div style="flex: 1;"><input type="text" name="groomPlaceOfBirth" placeholder="Place of Birth" style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
-                        <div style="flex: 1;"><input type="text" name="groomOccupation" placeholder="Occupation" style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                        <div style="flex: 1;"><input type="text" name="groomPlaceOfBirth" placeholder="Place of Birth"
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                        <div style="flex: 1;"><input type="text" name="groomOccupation" placeholder="Occupation"
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
                     </div>
-                    <div style="margin-bottom: 8px;"><input type="text" name="groomPresentResidence" placeholder="Present Residence / Address" style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                    <div style="margin-bottom: 8px;"><input type="text" name="groomPresentResidence"
+                            placeholder="Present Residence / Address"
+                            style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
                     <div style="display: flex; gap: 10px; margin-bottom: 12px;">
-                        <div style="flex: 1;"><input type="text" name="groomFatherName" placeholder="Father's Full Name" style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
-                        <div style="flex: 1;"><input type="text" name="groomMotherName" placeholder="Mother's Full Maiden Name" style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                        <div style="flex: 1;"><input type="text" name="groomFatherName" placeholder="Father's Full Name"
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                        <div style="flex: 1;"><input type="text" name="groomMotherName"
+                                placeholder="Mother's Full Maiden Name"
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
                     </div>
 
                     <h5 style="color: #4a0e17; margin: 12px 0 8px 0;">Bride's Information</h5>
                     <div style="display: flex; gap: 10px; margin-bottom: 8px;">
-                        <div style="flex: 2;"><input type="text" name="brideFirstName" placeholder="First Name" style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
-                        <div style="flex: 1;"><input type="text" name="brideMiddleInitial" maxlength="3" placeholder="M.I." style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
-                        <div style="flex: 2;"><input type="text" name="brideLastName" placeholder="Last Name" style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                        <div style="flex: 2;"><input type="text" name="brideFirstName" placeholder="First Name"
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                        <div style="flex: 1;"><input type="text" name="brideMiddleInitial" maxlength="3"
+                                placeholder="M.I."
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                        <div style="flex: 2;"><input type="text" name="brideLastName" placeholder="Last Name"
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
                     </div>
                     <div style="display: flex; gap: 10px; margin-bottom: 8px;">
-                        <div style="flex: 1;"><input type="number" name="brideAge" min="18" placeholder="Age" style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                        <div style="flex: 1;"><input type="number" name="brideAge" min="18" placeholder="Age"
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
                         <div style="flex: 2;">
-                            <select name="brideCivilStatus" style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;">
+                            <select name="brideCivilStatus"
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;">
                                 <option value="">Civil Status</option>
                                 <option value="Single">Single</option>
                                 <option value="Widow">Widow</option>
                                 <option value="Annulled">Annulled</option>
                             </select>
                         </div>
-                        <div style="flex: 2;"><input type="text" name="brideNationality" value="Filipino" placeholder="Nationality" style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                        <div style="flex: 2;"><input type="text" name="brideNationality" value="Filipino"
+                                placeholder="Nationality"
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
                     </div>
                     <div style="display: flex; gap: 10px; margin-bottom: 8px;">
-                        <div style="flex: 1;"><input type="text" name="bridePlaceOfBirth" placeholder="Place of Birth" style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
-                        <div style="flex: 1;"><input type="text" name="brideOccupation" placeholder="Occupation" style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                        <div style="flex: 1;"><input type="text" name="bridePlaceOfBirth" placeholder="Place of Birth"
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                        <div style="flex: 1;"><input type="text" name="brideOccupation" placeholder="Occupation"
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
                     </div>
-                    <div style="margin-bottom: 8px;"><input type="text" name="bridePresentResidence" placeholder="Present Residence / Address" style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                    <div style="margin-bottom: 8px;"><input type="text" name="bridePresentResidence"
+                            placeholder="Present Residence / Address"
+                            style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
                     <div style="display: flex; gap: 10px; margin-bottom: 12px;">
-                        <div style="flex: 1;"><input type="text" name="brideFatherName" placeholder="Father's Full Name" style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
-                        <div style="flex: 1;"><input type="text" name="brideMotherName" placeholder="Mother's Full Maiden Name" style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                        <div style="flex: 1;"><input type="text" name="brideFatherName" placeholder="Father's Full Name"
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                        <div style="flex: 1;"><input type="text" name="brideMotherName"
+                                placeholder="Mother's Full Maiden Name"
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
                     </div>
 
-                    <div style="margin-top: 10px; background: #f8fafc; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
-                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: bold; cursor: pointer;">
-                            <input type="checkbox" name="electricityFee" value="1000"> Include Electricity / Video Fee (+₱1,000)
+                    <div
+                        style="margin-top: 10px; background: #f8fafc; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                        <label
+                            style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: bold; cursor: pointer;">
+                            <input type="checkbox" name="electricityFee" value="1000"> Include Electricity / Video Fee
+                            (+₱1,000)
                         </label>
                     </div>
                 </div>
 
                 <!-- 3. FUNERAL SPECIFIC FIELDS -->
-                <div id="walkInFuneralFields" class="service-walkin-fields" style="display: none; border-top: 1px solid #e2e8f0; padding-top: 12px; margin-bottom: 15px;">
+                <div id="walkInFuneralFields" class="service-walkin-fields"
+                    style="display: none; border-top: 1px solid #e2e8f0; padding-top: 12px; margin-bottom: 15px;">
                     <h5 style="color: #4a0e17; margin: 0 0 8px 0;">Deceased Person's Information</h5>
                     <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                        <div style="flex: 2;"><input type="text" name="deceasedFirstName" placeholder="First Name" style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
-                        <div style="flex: 1;"><input type="text" name="deceasedMiddleInitial" maxlength="3" placeholder="M.I." style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
-                        <div style="flex: 2;"><input type="text" name="deceasedLastName" placeholder="Last Name" style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                        <div style="flex: 2;"><input type="text" name="deceasedFirstName" placeholder="First Name"
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                        <div style="flex: 1;"><input type="text" name="deceasedMiddleInitial" maxlength="3"
+                                placeholder="M.I."
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
+                        <div style="flex: 2;"><input type="text" name="deceasedLastName" placeholder="Last Name"
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
                     </div>
                     <div style="display: flex; gap: 10px; margin-bottom: 10px;">
                         <div style="flex: 1;">
                             <label style="font-size: 11px; font-weight: bold; color: #475569;">Age</label>
-                            <input type="number" name="deceasedAge" placeholder="Age" style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;">
+                            <input type="number" name="deceasedAge" placeholder="Age"
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;">
                         </div>
                         <div style="flex: 1;">
                             <label style="font-size: 11px; font-weight: bold; color: #475569;">Date of Death</label>
-                            <input type="date" name="dateOfDeath" style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;">
+                            <input type="date" name="dateOfDeath"
+                                style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;">
                         </div>
                     </div>
                 </div>
@@ -989,15 +1254,19 @@
                 <!-- ================= CALENDAR & SCHEDULING ================= -->
                 <div id="funeralDurationGroup"
                     style="margin-bottom: 15px; display: none; background: #f8fafc; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0;">
-                    <label style="display: block; font-weight: bold; font-size: 13px; color: #334155; margin-bottom: 6px;">Wake Duration (Number of Days in Chapel) *</label>
+                    <label
+                        style="display: block; font-weight: bold; font-size: 13px; color: #334155; margin-bottom: 6px;">Wake
+                        Duration (Number of Days in Chapel) *</label>
                     <input type="number" id="walkInWakeDays" min="1" max="7" value="3"
                         onchange="renderStaffInteractiveCalendar()"
                         style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;">
                 </div>
 
                 <div style="margin-bottom: 15px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <span id="staffCalendarMonthLabel" style="font-weight: bold; font-size: 16px; color: #0f172a;">October 2026</span>
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <span id="staffCalendarMonthLabel"
+                            style="font-weight: bold; font-size: 16px; color: #0f172a;">October 2026</span>
                         <div>
                             <button type="button" onclick="changeStaffCalendarMonth(-1)"
                                 style="background: #f1f5f9; border: none; font-weight: bold; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; margin-right: 4px;">&lt;</button>
@@ -1006,24 +1275,37 @@
                         </div>
                     </div>
 
-                    <div style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: bold; font-size: 11px; color: #64748b; margin-bottom: 6px;">
-                        <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+                    <div
+                        style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: bold; font-size: 11px; color: #64748b; margin-bottom: 6px;">
+                        <div>Sun</div>
+                        <div>Mon</div>
+                        <div>Tue</div>
+                        <div>Wed</div>
+                        <div>Thu</div>
+                        <div>Fri</div>
+                        <div>Sat</div>
                     </div>
-                    <div id="staffCalendarGrid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;"></div>
+                    <div id="staffCalendarGrid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;">
+                    </div>
                     <input type="hidden" id="selectedStaffWalkInDate" required>
                 </div>
 
                 <div style="margin-bottom: 15px;">
-                    <label style="display: block; font-weight: bold; font-size: 13px; color: #334155; margin-bottom: 6px;">Available Time Slot *</label>
+                    <label
+                        style="display: block; font-weight: bold; font-size: 13px; color: #334155; margin-bottom: 6px;">Available
+                        Time Slot *</label>
                     <select id="walkInTimeSlot" required
                         style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; background: white;">
                         <option value="">-- Select Date from Calendar First --</option>
                     </select>
                 </div>
 
-                <div style="margin-bottom: 20px; background: #f8fafc; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
-                    <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; color: #334155;">
-                        <input type="checkbox" id="walkInPaidOTC" checked style="width: 16px; height: 16px; cursor: pointer;">
+                <div
+                    style="margin-bottom: 20px; background: #f8fafc; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                    <label
+                        style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; color: #334155;">
+                        <input type="checkbox" id="walkInPaidOTC" checked
+                            style="width: 16px; height: 16px; cursor: pointer;">
                         <strong>Mark Payment as Settled Over-the-Counter (OTC Cash)</strong>
                     </label>
                 </div>
@@ -1032,7 +1314,8 @@
                     <button type="button" onclick="closeModal('walkInModal')"
                         style="padding: 10px 16px; border: 1px solid #cbd5e1; background: #f1f5f9; border-radius: 6px; font-weight: bold; cursor: pointer;">Cancel</button>
                     <button type="submit"
-                        style="background: #4a0e17; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: bold; cursor: pointer;">Confirm and Save Walk-In Booking</button>
+                        style="background: #4a0e17; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: bold; cursor: pointer;">Confirm
+                        and Save Walk-In Booking</button>
                 </div>
             </form>
         </div>
@@ -1045,7 +1328,10 @@
                 style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #4a0e17; padding-bottom: 8px; margin-bottom: 15px;">
                 <h3 style="color: #4a0e17; margin: 0;">Application Details & Workflow Update</h3>
                 <button type="button" onclick="closeModal('adminUpdateModal')"
-                    style="background: none; border: none; font-size: 18px; font-weight: bold; cursor: pointer; color: #333;">✕</button>
+                    style="background: none; border: none; font-size: 18px; font-weight: bold; cursor: pointer; color: #333;"><svg
+                        class="ui-icon" aria-hidden="true" focusable="false">
+                        <use href="#ui-x"></use>
+                    </svg></button>
             </div>
             <div id="applicantInfoSection"
                 style="background: #f8f9fa; padding: 12px; border-radius: 6px; margin-bottom: 15px; font-size: 14px;">
@@ -1075,7 +1361,9 @@
                         style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: bold; color: #1a1a1a; margin: 0;">
                         <input type="checkbox" id="adminPaymentConfirmedCheck"
                             style="width: 16px; height: 16px; cursor: pointer;">
-                        ✓ Confirm Payment Received (Mark as Paid & Verified)
+                        <svg class="ui-icon" aria-hidden="true" focusable="false">
+                            <use href="#ui-check"></use>
+                        </svg> Confirm Payment Received (Mark as Paid & Verified)
                     </label>
                 </div>
 
@@ -1096,7 +1384,10 @@
                     <button type="button" onclick="closeModal('adminUpdateModal')"
                         style="padding: 8px 16px;">Cancel</button>
                     <button type="submit"
-                        style="padding: 8px 16px; background: #4a0e17; color: white; border: none; border-radius: 4px; font-weight: bold;">💾
+                        style="padding: 8px 16px; background: #4a0e17; color: white; border: none; border-radius: 4px; font-weight: bold;"><svg
+                            class="ui-icon" aria-hidden="true" focusable="false">
+                            <use href="#ui-save"></use>
+                        </svg>
                         Save Updates</button>
                 </div>
             </form>
@@ -1109,9 +1400,14 @@
             style="max-width: 680px; text-align: left; max-height: 90vh; overflow-y: auto; padding: 24px;">
             <div
                 style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #4a0e17; padding-bottom: 10px; margin-bottom: 15px;">
-                <h3 style="color: #4a0e17; margin: 0;">🏛️ Parish Staff: Walk-In Reservation</h3>
+                <h3 style="color: #4a0e17; margin: 0;"><svg class="ui-icon" aria-hidden="true" focusable="false">
+                        <use href="#ui-church"></use>
+                    </svg> Parish Staff: Walk-In Reservation</h3>
                 <button type="button" onclick="closeModal('walkInModal')"
-                    style="background: none; border: none; font-size: 18px; font-weight: bold; cursor: pointer;">✕</button>
+                    style="background: none; border: none; font-size: 18px; font-weight: bold; cursor: pointer;"><svg
+                        class="ui-icon" aria-hidden="true" focusable="false">
+                        <use href="#ui-x"></use>
+                    </svg></button>
             </div>
 
             <form onsubmit="handleStaffWalkInSubmit(event, this)">
@@ -1402,6 +1698,127 @@
         </div>
     </div>
 
+    <!-- MODAL: DOCUMENT & FILE VIEWER -->
+    <div id="fileViewerModal" class="modal-overlay">
+        <div class="modal-box"
+            style="max-width: 800px; height: 85vh; display: flex; flex-direction: column; text-align: left; padding: 20px;">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #4a0e17; padding-bottom: 8px; margin-bottom: 12px;">
+                <h3 id="fileViewerTitle" style="color: #4a0e17; margin: 0; font-size: 1.1rem;">Document Preview</h3>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <a id="fileDownloadBtn" href="#" download
+                        style="background: #1e5631; color: white; padding: 5px 12px; border-radius: 4px; text-decoration: none; font-size: 12px; font-weight: bold;"><svg
+                            class="ui-icon" aria-hidden="true">
+                            <use href="#ui-download"></use>
+                        </svg> Download</a>
+                    <button type="button" onclick="closeModal('fileViewerModal')"
+                        style="background: none; border: none; font-size: 18px; font-weight: bold; cursor: pointer; color: #333;"><svg
+                            class="ui-icon" aria-hidden="true">
+                            <use href="#ui-x"></use>
+                        </svg></button>
+                </div>
+            </div>
+            <div id="fileViewerContent"
+                style="flex: 1; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; overflow: hidden; display: flex; justify-content: center; align-items: center;">
+                <!-- Image or PDF iframe preview renders here -->
+            </div>
+        </div>
+    </div>
+    <!-- MODAL: APPOINTMENT SCHEDULING & CALENDAR -->
+    <div id="appointmentModal" class="modal-overlay">
+        <div class="modal-box"
+            style="max-width: 680px; text-align: left; max-height: 90vh; overflow-y: auto; padding: 24px;">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #4a0e17; padding-bottom: 10px; margin-bottom: 15px;">
+                <h3 style="color: #4a0e17; margin: 0;"><svg class="ui-icon" aria-hidden="true" focusable="false">
+                        <use href="#ui-calendar-check"></use>
+                    </svg> Schedule Sacrament Appointment</h3>
+                <button type="button" onclick="closeModal('appointmentModal')"
+                    style="background: none; border: none; font-size: 18px; font-weight: bold; cursor: pointer;"><svg
+                        class="ui-icon" aria-hidden="true" focusable="false">
+                        <use href="#ui-x"></use>
+                    </svg></button>
+            </div>
+
+            <div id="appointmentAppSummary"
+                style="background: #f8fafc; padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 13px; border: 1px solid #e2e8f0;">
+                <!-- Application summary renders here -->
+            </div>
+
+            <form onsubmit="handleAppointmentSubmit(event)">
+                <input type="hidden" id="apptAppId">
+                <input type="hidden" id="apptSacramentType">
+
+                <!-- Interactive Calendar Picker -->
+                <div style="margin-bottom: 15px;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <span id="apptCalMonthLabel" style="font-weight: bold; font-size: 15px; color: #0f172a;">Month
+                            Year</span>
+                        <div>
+                            <button type="button" onclick="changeApptCalMonth(-1)"
+                                style="background: #f1f5f9; border: none; font-weight: bold; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; margin-right: 4px;">&lt;</button>
+                            <button type="button" onclick="changeApptCalMonth(1)"
+                                style="background: #f1f5f9; border: none; font-weight: bold; width: 28px; height: 28px; border-radius: 50%; cursor: pointer;">&gt;</button>
+                        </div>
+                    </div>
+
+                    <div
+                        style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: bold; font-size: 11px; color: #64748b; margin-bottom: 6px;">
+                        <div>Sun</div>
+                        <div>Mon</div>
+                        <div>Tue</div>
+                        <div>Wed</div>
+                        <div>Thu</div>
+                        <div>Fri</div>
+                        <div>Sat</div>
+                    </div>
+                    <div id="apptCalendarGrid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;">
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <div style="flex: 1;">
+                        <label
+                            style="display: block; font-size: 12px; font-weight: bold; color: #334155; margin-bottom: 4px;">Confirmed
+                            Date *</label>
+                        <input type="date" id="apptConfirmedDate" required
+                            style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px;">
+                    </div>
+                    <div style="flex: 1;">
+                        <label
+                            style="display: block; font-size: 12px; font-weight: bold; color: #334155; margin-bottom: 4px;">Confirmed
+                            Time / Slot *</label>
+                        <input type="text" id="apptConfirmedTime" required placeholder="e.g. 10:00 AM"
+                            style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px;">
+                    </div>
+                </div>
+
+                <div id="seminarRuleHint"
+                    style="background: #eff6ff; border-left: 4px solid #3b82f6; padding: 10px 12px; border-radius: 4px; margin-bottom: 15px; font-size: 12px; color: #1e3a8a;">
+                    Select a date above to view scheduling guidelines.
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label
+                        style="display: block; font-size: 12px; font-weight: bold; color: #334155; margin-bottom: 4px;">Admin
+                        Remarks / Scheduling Notes</label>
+                    <textarea id="apptAdminNotes" rows="2" placeholder="Add instructions or notes for the applicant..."
+                        style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px;"></textarea>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 8px;">
+                    <button type="button" onclick="closeModal('appointmentModal')"
+                        style="padding: 9px 14px; border: 1px solid #cbd5e1; background: #f1f5f9; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px;">Cancel</button>
+                    <button type="submit"
+                        style="background: #1e5631; color: white; border: none; padding: 9px 18px; border-radius: 6px; font-size: 13px; font-weight: bold; cursor: pointer;"><svg
+                            class="ui-icon" aria-hidden="true" focusable="false">
+                            <use href="#ui-check"></use>
+                        </svg> Confirm Schedule & Approve</button>
+                </div>
+            </form>
+        </div>
+    </div>
     <script>
         const db = new Dexie('ParishPortalDB');
         db.version(4).stores({
@@ -1409,14 +1826,6 @@
             applications: '++id, referenceId, userId, applicantName, applicantEmail, sacramentType, status, preferredDate, confirmedDate, confirmedTime, details, documents, adminNotes, statusHistory, archived, createdAt',
             notifications: '++id, userId, referenceId, title, message, isRead, createdAt'
         });
-
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('Admin Service Worker registered!', reg))
-                    .catch(err => console.log('Admin Service Worker registration failed:', err));
-            });
-        }
 
         let rawApplicationsData = [];
         let showArchivedView = false;
@@ -1449,9 +1858,9 @@
                 }
 
                 if (headerContainer) {
-                    let roleBadge = '🔑 Admin';
-                    if (currentAdmin.role === 'priest') roleBadge = '✝️ Parish Priest';
-                    else if (currentAdmin.role === 'secretary') roleBadge = '📋 Parish Secretary';
+                    let roleBadge = '<svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-key-round"></use></svg> Admin';
+                    if (currentAdmin.role === 'priest') roleBadge = '<svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-church-cross"></use></svg> Parish Priest';
+                    else if (currentAdmin.role === 'secretary') roleBadge = '<svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-clipboard-list"></use></svg> Parish Secretary';
 
                     headerContainer.innerHTML = `
                         <span style="color: #d4af37; font-weight: bold; margin-right: 15px;">${roleBadge}: ${currentAdmin.fullName}</span>
@@ -1631,19 +2040,19 @@
 
                 let filesHtml = '';
                 if (minRequired === 0) {
-                    filesHtml = `<div style="margin-bottom: 4px;"><span style="background: #27ae60; color: white; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">✓ No Docs Required</span></div>`;
+                    filesHtml = `<div style="margin-bottom: 4px;"><span style="background: #27ae60; color: white; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-check"></use></svg> No Docs Required</span></div>`;
                 } else {
-                    filesHtml = `<div style="margin-bottom: 4px;"><span style="background: ${isDocComplete ? '#27ae60' : '#e67e22'}; color: white; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">${isDocComplete ? '✓ Complete' : '⚠️ Incomplete'} (${uploadedCount}/${minRequired})</span></div>`;
+                    filesHtml = `<div style="margin-bottom: 4px;"><span style="background: ${isDocComplete ? '#27ae60' : '#e67e22'}; color: white; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">${isDocComplete ? '<svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-check"></use></svg> Complete' : '<svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-alert-triangle"></use></svg> Incomplete'} (${uploadedCount}/${minRequired})</span></div>`;
 
                     if (uniqueDocs.length > 0) {
                         filesHtml += uniqueDocs.map((doc, idx) => {
                             let docName = typeof doc === 'string' ? `Doc ${idx + 1}` : (doc.name || `Doc ${idx + 1}`);
-                            let docUrl = typeof doc === 'string' ? doc : (doc.data || '#');
-                            let safeDocName = docName.replace(/'/g, "\\'");
-                            return `<div style="margin: 3px 0;"><button type="button" onclick="event.stopPropagation(); viewDocument('${safeDocName}', '${docUrl}')" style="background: #0056b3; color: white; border: none; padding: 3px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold;">👁️ View ${docName}</button></div>`;
+                            let docUrl = typeof doc === 'string' ? doc : doc;
+                            let viewerId = registerDocumentForViewer(docName, docUrl);
+                            return `<div style="margin: 3px 0;"><button type="button" onclick="event.stopPropagation(); viewDocumentById('${viewerId}')" style="background: #0056b3; color: white; border: none; padding: 3px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-eye"></use></svg> View ${docName}</button></div>`;
                         }).join('');
                     } else {
-                        filesHtml += `<span style="color:#c0392b; font-size:11px; font-weight:bold;">⚠️ Missing (0/${minRequired})</span>`;
+                        filesHtml += `<span style="color:#c0392b; font-size:11px; font-weight:bold;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-alert-triangle"></use></svg> Missing (0/${minRequired})</span>`;
                     }
                 }
 
@@ -1651,11 +2060,26 @@
 
                 let scheduleBtnHtml = '';
                 if (!isDocComplete) {
-                    scheduleBtnHtml = `<button type="button" onclick="event.stopPropagation(); showAlert('🚫 Action Denied: Documents are still lacking (${uploadedCount}/${minRequired}).')" style="background: #aab7b8; color: #ffffff; border: none; padding: 6px 10px; border-radius: 4px; cursor: not-allowed; font-size: 12px; font-weight: bold;">🚫 Incomplete</button>`;
+                    scheduleBtnHtml = `<button type="button" onclick="event.stopPropagation(); showAlert(' Action Denied: Documents are still lacking (${uploadedCount}/${minRequired}).')" style="background: #aab7b8; color: #ffffff; border: none; padding: 6px 10px; border-radius: 4px; cursor: not-allowed; font-size: 12px; font-weight: bold;">     <svg class="ui-icon"
+         aria-hidden="true"
+         focusable="false"
+         viewBox="0 0 24 24"
+         width="16"
+         height="16"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="2"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <path d="M12 3 2.8 19a1.5 1.5 0 0 0 1.3 2.2h15.8a1.5 1.5 0 0 0 1.3-2.2L12 3Z"/>
+        <path d="M12 9v4"/>
+        <path d="M12 17h.01"/>
+    </svg>
+Incomplete</button>`;
                 } else if (!isPaymentReady) {
-                    scheduleBtnHtml = `<button type="button" onclick="event.stopPropagation(); showAlert('⚠️ Payment Pending: Scheduling is greyed out until payment is confirmed.')" style="background: #e67e22; color: #ffffff; border: none; padding: 6px 10px; border-radius: 4px; cursor: not-allowed; font-size: 12px; font-weight: bold;">⏳ Payment Pending</button>`;
+                    scheduleBtnHtml = `<button type="button" onclick="event.stopPropagation(); showAlert(' Payment Pending: Scheduling is greyed out until payment is confirmed.')" style="background: #e67e22; color: #ffffff; border: none; padding: 6px 10px; border-radius: 4px; cursor: not-allowed; font-size: 12px; font-weight: bold;"> Payment Pending</button>`;
                 } else {
-                    scheduleBtnHtml = `<button type="button" onclick="event.stopPropagation(); openAppointmentModal('${app.id}')" style="background: #1e5631; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">📅 Schedule</button>`;
+                    scheduleBtnHtml = `<button type="button" onclick="event.stopPropagation(); openAppointmentModal('${app.id}')" style="background: #1e5631; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-calendar"></use></svg> Schedule</button>`;
                 }
 
                 html += `
@@ -1680,9 +2104,9 @@
                     </td>
                     <td>
                         <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                            <button type="button" onclick="event.stopPropagation(); openAdminUpdateModal('${app.id}')" style="background: #4a0e17; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">👁️ Details</button>
+                            <button type="button" onclick="event.stopPropagation(); openAdminUpdateModal('${app.id}')" style="background: #4a0e17; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-eye"></use></svg> Details</button>
                             ${scheduleBtnHtml}
-                            <button type="button" onclick="event.stopPropagation(); toggleArchive('${app.id}')" class="btn-action" title="${app.archived ? 'Restore' : 'Archive'}">${app.archived ? '↩️' : '✅ Mark as Done'}</button>
+                            <button type="button" onclick="event.stopPropagation(); toggleArchive('${app.id}')" class="btn-action" title="${app.archived ? 'Restore' : 'Archive'}">${app.archived ? '<svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-refresh-cw"></use></svg>' : '<svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-check"></use></svg> Mark as Done'}</button>
                         </div>
                     </td>
                 </tr>`;
@@ -1701,7 +2125,7 @@
             document.getElementById('adminConfirmedTime').value = app.confirmedTime || '';
             document.getElementById('adminNotesInput').value = app.adminNotes || '';
 
-            // 💡 CLEAN & FORMATTED DETAILS PARSER (Baptism, Wedding, Funeral)
+            //  CLEAN & FORMATTED DETAILS PARSER (Baptism, Wedding, Funeral)
             let formattedDetails = '<em style="color:#666;">No additional details.</em>';
             const d = app.details || {};
             const sType = (app.sacramentType || '').toLowerCase();
@@ -1710,12 +2134,12 @@
                 if (sType.includes('baptism')) {
                     formattedDetails = `
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px;">
-                    <div><strong>👶 Child's Name:</strong> ${d.childName || `${d.childFirstName || ''} ${d.childMiddleInitial || ''} ${d.childLastName || ''}`.trim() || 'N/A'}</div>
-                    <div><strong>📅 Date of Birth:</strong> ${d.dob || 'N/A'}</div>
-                    <div><strong>👨 Father's Name:</strong> ${d.fatherName || `${d.fatherFirstName || ''} ${d.fatherMiddleInitial || ''} ${d.fatherLastName || ''}`.trim() || 'N/A'}</div>
-                    <div><strong>👩 Mother's Maiden Name:</strong> ${d.motherName || `${d.motherFirstName || ''} ${d.motherMiddleInitial || ''} ${d.motherLastName || ''}`.trim() || 'N/A'}</div>
-                    <div><strong>📞 Contact Phone:</strong> ${d.phone || 'N/A'}</div>
-                    <div style="grid-column: span 2;"><strong>👥 Godparents:</strong> ${d.godparents || 'None listed'}</div>
+                    <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-baby"></use></svg> Child's Name:</strong> ${d.childName || `${d.childFirstName || ''} ${d.childMiddleInitial || ''} ${d.childLastName || ''}`.trim() || 'N/A'}</div>
+                    <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-calendar"></use></svg> Date of Birth:</strong> ${d.dob || 'N/A'}</div>
+                    <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-user"></use></svg> Father's Name:</strong> ${d.fatherName || `${d.fatherFirstName || ''} ${d.fatherMiddleInitial || ''} ${d.fatherLastName || ''}`.trim() || 'N/A'}</div>
+                    <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-user"></use></svg> Mother's Maiden Name:</strong> ${d.motherName || `${d.motherFirstName || ''} ${d.motherMiddleInitial || ''} ${d.motherLastName || ''}`.trim() || 'N/A'}</div>
+                    <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-phone"></use></svg> Contact Phone:</strong> ${d.phone || 'N/A'}</div>
+                    <div style="grid-column: span 2;"><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-users"></use></svg> Godparents:</strong> ${d.godparents || 'None listed'}</div>
                 </div>
             `;
                 }
@@ -1731,7 +2155,7 @@
             <!-- GROOM & BRIDE HEADER SUMMARY -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; background: #f8fafc; padding: 10px; border-radius: 6px;">
                 <div>
-                    <strong>🤵 Groom:</strong> ${d.groomName || `${d.groomFirstName || ''} ${d.groomLastName || ''}`.trim() || 'N/A'}<br>
+                    <strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-user-round"></use></svg> Groom:</strong> ${d.groomName || `${d.groomFirstName || ''} ${d.groomLastName || ''}`.trim() || 'N/A'}<br>
                     <strong>Age & Status:</strong> ${d.groomAge || 'N/A'} yrs old, ${d.groomCivilStatus || 'N/A'}<br>
                     <strong>Nationality:</strong> ${d.groomNationality || 'Filipino'}<br>
                     <strong>Place of Birth:</strong> ${d.groomPlaceOfBirth || 'N/A'}<br>
@@ -1740,7 +2164,7 @@
                     <strong>Parents:</strong> ${d.groomFatherName || 'N/A'} & ${d.groomMotherName || 'N/A'}
                 </div>
                 <div>
-                    <strong>👰 Bride:</strong> ${d.brideName || `${d.brideFirstName || ''} ${d.brideLastName || ''}`.trim() || 'N/A'}<br>
+                    <strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-user-round"></use></svg> Bride:</strong> ${d.brideName || `${d.brideFirstName || ''} ${d.brideLastName || ''}`.trim() || 'N/A'}<br>
                     <strong>Age & Status:</strong> ${d.brideAge || 'N/A'} yrs old, ${d.brideCivilStatus || 'N/A'}<br>
                     <strong>Nationality:</strong> ${d.brideNationality || 'Filipino'}<br>
                     <strong>Place of Birth:</strong> ${d.bridePlaceOfBirth || 'N/A'}<br>
@@ -1752,14 +2176,14 @@
 
             <!-- SPONSORS -->
             <div style="margin-bottom: 10px; padding: 8px; background: #fff; border: 1px solid #e2e8f0; border-radius: 6px;">
-                <strong>👥 Principal Sponsors:</strong><br>
+                <strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-users"></use></svg> Principal Sponsors:</strong><br>
                 • ${d.principalNinong || 'N/A'} (Ninong) &nbsp;|&nbsp; • ${d.principalNinang || 'N/A'} (Ninang)<br>
                 <div style="margin-top: 6px;"><strong>Additional Sponsors (Up to 6):</strong><br>${additionalSponsorsHtml}</div>
             </div>
 
             <!-- OFFICIANT & FEES -->
             <div style="padding: 8px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 6px;">
-                <strong>⛪ Officiant & Optional Fees:</strong><br>
+                <strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-church"></use></svg> Officiant & Optional Fees:</strong><br>
                 • <strong>Guest Priest:</strong> ${d.hasGuestPriest ? 'Yes — ' + (d.guestPriestName || 'Provided') : 'No ( Parish Priest )'}<br>
                 • <strong>Electricity / Video Fee (₱1,000):</strong> ${d.electricityFeeIncluded ? 'Included (+₱1,000)' : 'Not Included'}
             </div>
@@ -1770,10 +2194,10 @@
                 else if (sType.includes('funeral')) {
                     formattedDetails = `
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px;">
-                    <div><strong>🕊️ Deceased Name:</strong> ${d.deceasedName || `${d.deceasedFirstName || ''} ${d.deceasedLastName || ''}`.trim() || 'N/A'}</div>
-                    <div><strong>📊 Age at Death:</strong> ${d.age || 'N/A'}</div>
-                    <div><strong>📞 Contact Phone:</strong> ${d.phone || 'N/A'}</div>
-                    <div><strong>🕯️ Wake Duration / Span:</strong> ${d.wakeDays || 3} Days (Interment: ${d.intermentDate || app.confirmedDate || 'N/A'})</div>
+                    <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-heart-handshake"></use></svg> Deceased Name:</strong> ${d.deceasedName || `${d.deceasedFirstName || ''} ${d.deceasedLastName || ''}`.trim() || 'N/A'}</div>
+                    <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-chart-column"></use></svg> Age at Death:</strong> ${d.age || 'N/A'}</div>
+                    <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-phone"></use></svg> Contact Phone:</strong> ${d.phone || 'N/A'}</div>
+                    <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-clock"></use></svg> Wake Duration / Span:</strong> ${d.wakeDays || 3} Days (Interment: ${d.intermentDate || app.confirmedDate || 'N/A'})</div>
                 </div>
             `;
                 } else {
@@ -1786,12 +2210,12 @@
             if (app.documents && app.documents.length > 0) {
                 docsHtml = app.documents.map((doc, idx) => {
                     let docName = typeof doc === 'string' ? `Document ${idx + 1}` : (doc.name || `Document ${idx + 1}`);
-                    let docUrl = typeof doc === 'string' ? doc : (doc.data || '#');
-                    let safeDocName = docName.replace(/'/g, "\\'");
+                    let docUrl = typeof doc === 'string' ? doc : doc;
+                    let viewerId = registerDocumentForViewer(docName, docUrl);
                     return `
             <div style="margin: 4px 0; display: flex; align-items: center; gap: 8px;">
-                <span style="font-size: 12px; font-weight: bold;">📄 ${docName}</span>
-                <button type="button" onclick="viewDocument('${safeDocName}', '${docUrl}')" style="background: #0056b3; color: white; border: none; padding: 3px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold;">👁️ View Document</button>
+                <span style="font-size: 12px; font-weight: bold;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-file"></use></svg> ${docName}</span>
+                <button type="button" onclick="viewDocumentById('${viewerId}')" style="background: #0056b3; color: white; border: none; padding: 3px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-eye"></use></svg> View Document</button>
             </div>`;
                 }).join('');
             }
@@ -1800,11 +2224,11 @@
             if (app.paymentProof) {
                 let proofName = app.paymentProof.name || 'GCash_Receipt.png';
                 let proofUrl = app.paymentProof.data || app.paymentProof;
-                let safeProofName = proofName.replace(/'/g, "\\'");
+                let proofViewerId = registerDocumentForViewer(proofName, proofUrl);
                 paymentProofHtml = `
         <div style="margin: 4px 0; display: flex; align-items: center; gap: 8px; background: #e8f5e9; padding: 8px; border-radius: 4px; border: 1px solid #c8e6c9;">
-            <span style="font-size: 12px; font-weight: bold; color: #2e7d32;">💳 GCash Receipt: ${proofName}</span>
-            <button type="button" onclick="viewDocument('${safeProofName}', '${proofUrl}')" style="background: #2e7d32; color: white; border: none; padding: 3px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold;">👁️ View Payment Proof</button>
+            <span style="font-size: 12px; font-weight: bold; color: #2e7d32;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-credit-card"></use></svg> GCash Receipt: ${proofName}</span>
+            <button type="button" onclick="viewDocumentById('${proofViewerId}')" style="background: #2e7d32; color: white; border: none; padding: 3px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-eye"></use></svg> View Payment Proof</button>
         </div>`;
             }
 
@@ -1812,16 +2236,16 @@
         <div style="margin-bottom: 6px;"><strong>Ref ID:</strong> <span style="color: #4a0e17; font-weight: bold;">${app.referenceId || 'N/A'}</span> | <strong>Sacrament:</strong> ${app.sacramentType || 'N/A'}</div>
         <div style="margin-bottom: 8px;"><strong>Applicant:</strong> ${app.applicantName || app.fullName || 'N/A'} (${app.applicantEmail || app.email || 'N/A'})</div>
         <div style="margin-top: 8px; border-top: 1px solid #e2e8f0; padding-top: 8px;">
-            <strong style="color: #4a0e17; display: block; margin-bottom: 4px;">📋 Application Particulars:</strong>
+            <strong style="color: #4a0e17; display: block; margin-bottom: 4px;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-clipboard-list"></use></svg> Application Particulars:</strong>
             ${formattedDetails}
         </div>
         <div style="margin-top: 12px; border-top: 1px dashed #ccc; padding-top: 8px;">
-            <strong style="color: #4a0e17; display: block; margin-bottom: 4px;">📂 Sacramental Requirements:</strong>
+            <strong style="color: #4a0e17; display: block; margin-bottom: 4px;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-folder-open"></use></svg> Sacramental Requirements:</strong>
             <div style="margin-bottom: 10px;">${docsHtml}</div>
-            <strong style="color: #1e5631; display: block; margin-bottom: 4px;">💳 Payment Proof / GCash Receipt:</strong>
+            <strong style="color: #1e5631; display: block; margin-bottom: 4px;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-credit-card"></use></svg> Payment Proof / GCash Receipt:</strong>
             <div style="margin-bottom: 8px;">${paymentProofHtml}</div>
             <div style="font-size: 13px; margin-top: 6px;">
-                Payment Verification Status: <span style="font-weight: bold; color: ${app.paymentConfirmed ? '#27ae60' : '#e67e22'};">${app.paymentConfirmed ? '✓ Confirmed & Paid' : '⏳ Pending Verification'}</span>
+                Payment Verification Status: <span style="font-weight: bold; color: ${app.paymentConfirmed ? '#27ae60' : '#e67e22'};">${app.paymentConfirmed ? '<svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-check"></use></svg> Confirmed & Paid' : '<svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-clock"></use></svg> Pending Verification'}</span>
             </div>
         </div>
     `;
@@ -1883,44 +2307,21 @@
             fetchApplications();
         }
 
-        async function openAppointmentModal(appId) {
+        let activeSchedulingStage = 'seminar'; // Tracks whether we are scheduling seminar or ceremony
 
-            let app = rawApplicationsData.find(a => String(a.id) === String(appId)) || await db.applications.get(Number(appId) || appId);
-            if (!app) return;
-
-            // 💡 Bypass document check if it's a staff walk-in accommodation
-            const isWalkIn = Boolean(app.details?.walkInAccommodation);
-
-            const reqConfig = { baptism: 2, wedding: 3, funeral: 0 };
-            const sacramentKey = (app.sacramentType || '').toLowerCase().includes('baptism') ? 'baptism' : ((app.sacramentType || '').toLowerCase().includes('wedding') ? 'wedding' : 'funeral');
-            const minRequired = isWalkIn ? 0 : (reqConfig[sacramentKey] || 0);
-            const uploadedCount = app.documents && Array.isArray(app.documents) ? app.documents.length : 0;
-
-            if (!isWalkIn && minRequired > 0 && uploadedCount < minRequired) {
-                showAlert(`🚫 Action Denied: This application is missing required documents (${uploadedCount}/${minRequired}). Cannot schedule.`);
-                return;
+        // Function to handle switching months in the appointment modal calendar
+        function changeApptCalMonth(direction) {
+            if (!currentApptCalDate) {
+                currentApptCalDate = new Date();
             }
-
-            activeSchedulingApp = app;
-            document.getElementById('apptAppId').value = app.id;
-            document.getElementById('apptSacramentType').value = (app.sacramentType || '').toLowerCase();
-            document.getElementById('apptConfirmedDate').value = app.confirmedDate || app.preferredDate || '';
-            selectedApptDateStr = app.confirmedDate || app.preferredDate || '';
-            document.getElementById('apptAdminNotes').value = app.adminNotes || '';
-
-            document.getElementById('appointmentAppSummary').innerHTML = `
-                <strong>Ref ID:</strong> ${app.referenceId} | <strong>Sacrament:</strong> ${app.sacramentType} | <strong>Applicant:</strong> ${app.applicantName || app.fullName}
-            `;
-
-            openModal('appointmentModal');
+            currentApptCalDate.setMonth(currentApptCalDate.getMonth() + direction);
             renderApptCalendar();
-            if (selectedApptDateStr) evaluateAppointmentRules(selectedApptDateStr);
         }
 
         function renderApptCalendar() {
             const gridEl = document.getElementById('apptCalendarGrid');
             const labelEl = document.getElementById('apptCalMonthLabel');
-            if (!gridEl || !activeSchedulingApp) return;
+            if (!gridEl || !labelEl || !activeSchedulingApp) return;
 
             const year = currentApptCalDate.getFullYear();
             const month = currentApptCalDate.getMonth();
@@ -1935,36 +2336,45 @@
             const isIndivBap = sacramentType.includes('individual');
 
             let html = '';
-            for (let i = 0; i < firstDayIndex; i++) { html += `<div></div>`; }
+            for (let i = 0; i < firstDayIndex; i++) {
+                html += `<div></div>`;
+            }
 
             for (let day = 1; day <= totalDays; day++) {
                 const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 const cellDate = new Date(dateString);
-                const dayOfWeek = cellDate.getDay(); // 0:Sun, 1:Mon, 2:Tue, 3:Wed, 4:Thu, 5:Fri, 6:Sat
+                const dayOfWeek = cellDate.getDay();
                 const dayOfMonth = cellDate.getDate();
 
                 let isAllowed = true;
-                let badgeText = 'Available';
+                let badgeText = activeSchedulingStage === 'ceremony' ? 'Ceremony Slot' : 'Seminar Slot';
                 let badgeColor = '#2e7d32';
 
-                if (isGroupBap) {
-                    // Group Baptism: Sat (6) & Sun (0)
-                    isAllowed = (dayOfWeek === 0 || dayOfWeek === 6);
-                    badgeText = isAllowed ? 'Available' : 'Sat/Sun Only';
-                    badgeColor = isAllowed ? '#2e7d32' : '#8a8d91';
-                } else if (isIndivBap) {
-                    // Individual Baptism: Tue to Fri (2 to 5)
-                    isAllowed = (dayOfWeek >= 2 && dayOfWeek <= 5);
-                    badgeText = isAllowed ? 'Available' : 'Tue-Fri Only';
-                    badgeColor = isAllowed ? '#2e7d32' : '#8a8d91';
-                } else if (sacramentType.includes('wedding')) {
-                    isAllowed = (dayOfWeek === 0 && dayOfMonth <= 7);
-                    badgeText = isAllowed ? 'Available' : '1st Sun';
-                    badgeColor = isAllowed ? '#2e7d32' : '#8a8d91';
-                } else if (sacramentType.includes('funeral')) {
-                    isAllowed = (dayOfWeek !== 1);
-                    if (!isAllowed) { badgeText = 'Closed (Mon)'; badgeColor = '#8a8d91'; }
+                if (activeSchedulingStage === 'ceremony') {
+                    if (isGroupBap) {
+                        isAllowed = (dayOfWeek === 0 || dayOfWeek === 6);
+                        badgeText = isAllowed ? 'Group Bap' : 'Sat/Sun Only';
+                    } else if (isIndivBap) {
+                        isAllowed = (dayOfWeek >= 2 && dayOfWeek <= 5);
+                        badgeText = isAllowed ? 'Indiv Bap' : 'Tue-Fri Only';
+                    } else if (sacramentType.includes('wedding')) {
+                        isAllowed = (dayOfWeek >= 2 && dayOfWeek <= 6);
+                        badgeText = isAllowed ? 'Wedding Slot' : 'Restricted';
+                    } else if (sacramentType.includes('funeral')) {
+                        isAllowed = (dayOfWeek !== 1);
+                        badgeText = isAllowed ? 'Chapel Open' : 'Closed (Mon)';
+                    }
+                } else {
+                    if (isGroupBap || isIndivBap) {
+                        isAllowed = (dayOfWeek === 6);
+                        badgeText = isAllowed ? 'Seminar' : 'Sat Only';
+                    } else if (sacramentType.includes('wedding')) {
+                        isAllowed = (dayOfWeek === 0 && dayOfMonth <= 7);
+                        badgeText = isAllowed ? 'Pre-Cana' : '1st Sun Only';
+                    }
                 }
+
+                badgeColor = isAllowed ? '#2e7d32' : '#8a8d91';
 
                 let bgStyle = selectedApptDateStr === dateString ? '#1877f2' : '#f0f2f5';
                 let textStyle = selectedApptDateStr === dateString ? '#ffffff' : '#050505';
@@ -1983,9 +2393,126 @@
             gridEl.innerHTML = html;
         }
 
-        function changeApptCalMonth(direction) {
-            currentApptCalDate.setMonth(currentApptCalDate.getMonth() + direction);
+        async function openAppointmentModal(appId) {
+            let app = rawApplicationsData.find(a => String(a.id) === String(appId)) || await db.applications.get(Number(appId) || appId);
+            if (!app) return;
+
+            activeSchedulingApp = app;
+            const sacramentType = (app.sacramentType || '').toLowerCase();
+            const currentStatus = (app.status || '').toLowerCase();
+
+            let schedulingModeTitle = "Schedule Sacrament Appointment";
+            let defaultTime = "10:00 AM";
+
+            // Determine if we are scheduling a Seminar/Interview or the actual Ceremony
+            if (currentStatus.includes('ceremony')) {
+                activeSchedulingStage = 'ceremony';
+                schedulingModeTitle = `Schedule ${app.sacramentType} Ceremony`;
+            } else {
+                activeSchedulingStage = 'seminar';
+                if (sacramentType.includes('baptism')) {
+                    schedulingModeTitle = "Schedule Baptism Seminar & Interview";
+                    defaultTime = "16:30";
+                } else if (sacramentType.includes('wedding')) {
+                    schedulingModeTitle = "Schedule Pre-Cana Seminar (1st Sunday)";
+                    defaultTime = "08:00 - 17:00";
+                } else {
+                    schedulingModeTitle = "Schedule Seminar / Preparation";
+                }
+            }
+
+            // Update modal header title dynamically
+            const modalHeaderTitle = document.querySelector('#appointmentModal h3');
+            if (modalHeaderTitle) {
+                modalHeaderTitle.innerHTML = `<svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-calendar-check"></use></svg> ${schedulingModeTitle}`;
+            }
+
+            document.getElementById('apptAppId').value = app.id;
+            document.getElementById('apptSacramentType').value = sacramentType;
+            document.getElementById('apptConfirmedDate').value = app.confirmedDate || app.preferredDate || '';
+            document.getElementById('apptConfirmedTime').value = app.confirmedTime || defaultTime;
+
+            selectedApptDateStr = app.confirmedDate || app.preferredDate || '';
+            document.getElementById('apptAdminNotes').value = app.adminNotes || '';
+
+            openModal('appointmentModal');
             renderApptCalendar();
+
+            function renderApptCalendar() {
+                const gridEl = document.getElementById('apptCalendarGrid');
+                const labelEl = document.getElementById('apptCalMonthLabel');
+                if (!gridEl || !activeSchedulingApp) return;
+
+                const year = currentApptCalDate.getFullYear();
+                const month = currentApptCalDate.getMonth();
+                const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                labelEl.textContent = `${monthNames[month]} ${year}`;
+
+                const firstDayIndex = new Date(year, month, 1).getDay();
+                const totalDays = new Date(year, month + 1, 0).getDate();
+
+                const sacramentType = (activeSchedulingApp.sacramentType || '').toLowerCase();
+                const isGroupBap = sacramentType.includes('group') || sacramentType === 'baptism';
+                const isIndivBap = sacramentType.includes('individual');
+
+                let html = '';
+                for (let i = 0; i < firstDayIndex; i++) { html += `<div></div>`; }
+
+                for (let day = 1; day <= totalDays; day++) {
+                    const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    const cellDate = new Date(dateString);
+                    const dayOfWeek = cellDate.getDay();
+                    const dayOfMonth = cellDate.getDate();
+
+                    let isAllowed = true;
+                    let badgeText = activeSchedulingStage === 'ceremony' ? 'Ceremony Slot' : 'Seminar Slot';
+                    let badgeColor = '#2e7d32';
+
+                    if (activeSchedulingStage === 'ceremony') {
+                        // Rules for actual ceremonies
+                        if (isGroupBap) {
+                            isAllowed = (dayOfWeek === 0 || dayOfWeek === 6); // Sat & Sun
+                            badgeText = isAllowed ? 'Group Bap' : 'Sat/Sun Only';
+                        } else if (isIndivBap) {
+                            isAllowed = (dayOfWeek >= 2 && dayOfWeek <= 5); // Tue-Fri
+                            badgeText = isAllowed ? 'Indiv Bap' : 'Tue-Fri Only';
+                        } else if (sacramentType.includes('wedding')) {
+                            // Example ceremony rule: strict scheduling, e.g., Tue-Sat for weddings
+                            isAllowed = (dayOfWeek >= 2 && dayOfWeek <= 6);
+                            badgeText = isAllowed ? 'Wedding Slot' : 'Restricted';
+                        } else if (sacramentType.includes('funeral')) {
+                            isAllowed = (dayOfWeek !== 1); // Not Monday
+                            badgeText = isAllowed ? 'Chapel Open' : 'Closed (Mon)';
+                        }
+                    } else {
+                        // Seminar rules (existing logic)
+                        if (isGroupBap || isIndivBap) {
+                            isAllowed = (dayOfWeek === 6); // Saturday seminar example
+                            badgeText = isAllowed ? 'Seminar' : 'Sat Only';
+                        } else if (sacramentType.includes('wedding')) {
+                            isAllowed = (dayOfWeek === 0 && dayOfMonth <= 7); // 1st Sunday
+                            badgeText = isAllowed ? 'Pre-Cana' : '1st Sun Only';
+                        }
+                    }
+
+                    badgeColor = isAllowed ? '#2e7d32' : '#8a8d91';
+
+                    let bgStyle = selectedApptDateStr === dateString ? '#1877f2' : '#f0f2f5';
+                    let textStyle = selectedApptDateStr === dateString ? '#ffffff' : '#050505';
+
+                    if (!isAllowed) {
+                        bgStyle = '#f4f2f2';
+                        textStyle = '#b0b3b8';
+                    }
+
+                    html += `
+        <div onclick="${isAllowed ? `selectApptCalendarDate('${dateString}')` : ''}" style="background: ${bgStyle}; color: ${textStyle}; padding: 6px 2px; border-radius: 6px; cursor: ${isAllowed ? 'pointer' : 'not-allowed'}; font-size: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 40px;">
+            <strong>${day}</strong>
+            <span style="font-size: 8px; font-weight: bold; color: ${badgeColor};">${badgeText}</span>
+        </div>`;
+                }
+                gridEl.innerHTML = html;
+            }
         }
 
         function selectApptCalendarDate(dateStr) {
@@ -1996,22 +2523,25 @@
         }
 
         function evaluateAppointmentRules(dateStr) {
-            const sacramentType = document.getElementById('apptSacramentType').value;
+            const sacramentTypeEl = document.getElementById('apptSacramentType');
             const timeInput = document.getElementById('apptConfirmedTime');
             const hintEl = document.getElementById('seminarRuleHint');
 
+            // Safely get sacrament type value or fallback to empty string
+            const sacramentType = sacramentTypeEl ? sacramentTypeEl.value.toLowerCase() : '';
+
             if (sacramentType.includes('baptism')) {
-                timeInput.value = '16:30';
-                hintEl.textContent = '✓ Saturday 4:30 PM Baptism Seminar & Interview';
+                if (timeInput) timeInput.value = '16:30';
+                if (hintEl) hintEl.textContent = '✓ Saturday 4:30 PM Baptism Seminar & Interview';
             } else if (sacramentType.includes('wedding')) {
-                timeInput.value = '08:00 - 17:00';
-                hintEl.textContent = '✓ 1st Sunday Pre-Cana Seminar (8:00 AM - 5:00 PM)';
+                if (timeInput) timeInput.value = '08:00 - 17:00';
+                if (hintEl) hintEl.textContent = '✓ 1st Sunday Pre-Cana Seminar (8:00 AM - 5:00 PM)';
             } else if (sacramentType.includes('funeral')) {
-                timeInput.value = '08:00 - 17:00';
-                hintEl.innerHTML = `✓ Resurrection Chapel Vigil Slot for <strong>${dateStr}</strong>`;
+                if (timeInput) timeInput.value = '08:00 - 17:00';
+                if (hintEl) hintEl.innerHTML = `✓ Resurrection Chapel Vigil Slot for <strong>${dateStr}</strong>`;
             } else {
-                timeInput.value = '18:00';
-                hintEl.textContent = '✓ Evening Vigil Slot';
+                if (timeInput) timeInput.value = '18:00';
+                if (hintEl) hintEl.textContent = '✓ Evening Vigil Slot';
             }
         }
 
@@ -2033,24 +2563,83 @@
             fetchApplications();
         }
 
+
+        // Keep uploaded file data out of inline HTML attributes.
+        window.__adminDocumentViewerItems = window.__adminDocumentViewerItems || {};
+        let __adminDocumentViewerCounter = 0;
+        function registerDocumentForViewer(docName, docData) {
+            const id = `admin-doc-${++__adminDocumentViewerCounter}`;
+            window.__adminDocumentViewerItems[id] = { name: docName || 'Document', data: docData };
+            return id;
+        }
+        function viewDocumentById(id) {
+            const item = window.__adminDocumentViewerItems && window.__adminDocumentViewerItems[id];
+            if (!item) {
+                showAlert('The selected document could not be found. Please refresh the application list and try again.');
+                return;
+            }
+            viewDocument(item.name, item.data);
+        }
+
         function viewDocument(docName, docData) {
             const titleEl = document.getElementById('fileViewerTitle');
             const contentEl = document.getElementById('fileViewerContent');
             const downloadBtn = document.getElementById('fileDownloadBtn');
+            if (!contentEl) {
+                showAlert('The document viewer is unavailable. Please refresh the admin page.');
+                return;
+            }
 
-            if (!contentEl) return;
-            if (titleEl) titleEl.textContent = `📄 Preview: ${docName}`;
-            if (downloadBtn) { downloadBtn.href = docData; downloadBtn.download = docName; }
+            let fileName = (docName || 'Document').toString();
+            let fileValue = docData;
+            if (fileValue && typeof fileValue === 'object' && !(fileValue instanceof Blob)) {
+                fileName = fileValue.name || fileName;
+                fileValue = fileValue.data || fileValue.url || fileValue.fileUrl || fileValue.content || '';
+            }
+            if (fileValue instanceof Blob) fileValue = URL.createObjectURL(fileValue);
+            if (typeof fileValue !== 'string') fileValue = '';
 
-            const isImage = docData.startsWith('data:image/') || /\.(jpg|jpeg|png|webp|gif)$/i.test(docName);
-            const isPDF = docData.startsWith('data:application/pdf') || /\.pdf$/i.test(docName);
+            if (titleEl) titleEl.textContent = `Preview: ${fileName}`;
+            contentEl.innerHTML = '';
+
+            if (!fileValue || ['#', 'undefined', 'null'].includes(fileValue)) {
+                contentEl.innerHTML = '<div style="text-align:center;padding:24px;color:#8a2635;"><strong>Preview unavailable</strong><p style="font-size:13px;color:#666;">No valid file data or URL was saved for this document.</p></div>';
+                if (downloadBtn) downloadBtn.style.display = 'none';
+                openModal('fileViewerModal');
+                return;
+            }
+
+            const mimeMatch = fileValue.match(/^data:([^;,]+)/i);
+            const mimeType = mimeMatch ? mimeMatch[1].toLowerCase() : '';
+            const cleanUrl = fileValue.split('?')[0].split('#')[0].toLowerCase();
+            const lowerName = fileName.toLowerCase();
+            const isImage = mimeType.startsWith('image/') || /\.(jpg|jpeg|png|webp|gif|bmp)$/i.test(cleanUrl) || /\.(jpg|jpeg|png|webp|gif|bmp)$/i.test(lowerName);
+            const isPDF = mimeType === 'application/pdf' || /\.pdf$/i.test(cleanUrl) || /\.pdf$/i.test(lowerName);
+
+            if (downloadBtn) {
+                downloadBtn.style.display = 'inline-block';
+                downloadBtn.href = fileValue;
+                downloadBtn.download = fileName;
+                downloadBtn.target = '_blank';
+                downloadBtn.rel = 'noopener';
+            }
 
             if (isImage) {
-                contentEl.innerHTML = `<img src="${docData}" alt="${docName}" style="max-width: 100%; max-height: 100%; object-fit: contain;">`;
+                const img = document.createElement('img');
+                img.src = fileValue;
+                img.alt = fileName;
+                img.style.cssText = 'max-width:100%;max-height:100%;object-fit:contain;display:block;margin:auto;';
+                img.onerror = () => contentEl.innerHTML = '<div style="text-align:center;padding:24px;color:#8a2635;">Unable to load this image. Try downloading the file instead.</div>';
+                contentEl.appendChild(img);
             } else if (isPDF) {
-                contentEl.innerHTML = `<iframe src="${docData}" style="width: 100%; height: 100%; border: none;"></iframe>`;
+                const frame = document.createElement('iframe');
+                frame.src = fileValue;
+                frame.title = `PDF preview: ${fileName}`;
+                frame.style.cssText = 'width:100%;height:100%;min-height:500px;border:0;background:#fff;';
+                frame.setAttribute('loading', 'lazy');
+                contentEl.appendChild(frame);
             } else {
-                contentEl.innerHTML = `<div style="text-align: center; padding: 20px;"><p>Preview format not supported.</p><a href="${docData}" download="${docName}" style="background: #4a0e17; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Download File</a></div>`;
+                contentEl.innerHTML = '<div style="text-align:center;padding:24px;"><strong>Preview not available for this file type.</strong><p style="font-size:13px;color:#666;">Use the Download button to open the uploaded document.</p></div>';
             }
             openModal('fileViewerModal');
         }
@@ -2133,7 +2722,7 @@
             const bodyEl = document.getElementById('masterInspectorBody');
 
             inspector.style.display = 'block';
-            titleEl.textContent = `📋 Parish Schedule Details for ${dateStr}`;
+            titleEl.textContent = ` Parish Schedule Details for ${dateStr}`;
 
             const dayBookings = rawApplicationsData.filter(app => {
                 if (app.archived || (app.status || '').toLowerCase() === 'rejected') return false;
@@ -2226,13 +2815,13 @@
             serviceNotice.style.display = 'block';
 
             if (service === 'Group Baptism') {
-                serviceNotice.innerHTML = '📌 <strong>Group Baptism:</strong> Saturdays & Sundays @ 10:00 AM (Max 3 slots).';
+                serviceNotice.innerHTML = '<svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-pin"></use></svg> <strong>Group Baptism:</strong> Saturdays & Sundays @ 10:00 AM (Max 3 slots).';
             } else if (service === 'Individual Baptism') {
-                serviceNotice.innerHTML = '📌 <strong>Individual Baptism:</strong> Tuesday to Friday by appointment (Max 1 slot/day).';
+                serviceNotice.innerHTML = '<svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-pin"></use></svg> <strong>Individual Baptism:</strong> Tuesday to Friday by appointment (Max 1 slot/day).';
             } else if (service === 'Wedding') {
-                serviceNotice.innerHTML = '💒 <strong>Wedding Rule:</strong> At least 30 days advance notice from today. Strictly 1 per day.';
+                serviceNotice.innerHTML = '<svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-church"></use></svg> <strong>Wedding Rule:</strong> At least 30 days advance notice from today. Strictly 1 per day.';
             } else if (service === 'Funeral') {
-                serviceNotice.innerHTML = '🕊️ <strong>Resurrection Chapel:</strong> Select wake start date to block out full wake-to-interment span.';
+                serviceNotice.innerHTML = '<svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-heart-handshake"></use></svg> <strong>Resurrection Chapel:</strong> Select wake start date to block out full wake-to-interment span.';
             }
 
             const year = staffCalendarDate.getFullYear();
@@ -2271,7 +2860,7 @@
                 let isValidServiceDay = true;
                 let offDayReason = 'Off Day';
 
-                // 💡 STRICT SEPARATE RULES FOR ADMIN WALK-IN:
+                //  STRICT SEPARATE RULES FOR ADMIN WALK-IN:
                 if (service === 'Group Baptism') {
                     isValidServiceDay = (dayOfWeek === 0 || dayOfWeek === 6); // Sat & Sun only
                     offDayReason = 'Sat/Sun Only';
@@ -2424,7 +3013,7 @@
 
             try {
                 await db.applications.add(walkInData);
-                alert(`✅ Walk-In Confirmed Successfully!\nReference ID: ${referenceId}\nScheduled: ${date} (${time})\n(No digital documents required - Verified on-site)`);
+                alert(` Walk-In Confirmed Successfully!\nReference ID: ${referenceId}\nScheduled: ${date} (${time})\n(No digital documents required - Verified on-site)`);
 
                 formElement.reset();
                 document.getElementById('selectedStaffWalkInDate').value = '';
@@ -2434,7 +3023,7 @@
                 }
             } catch (err) {
                 console.error('Error saving walk-in:', err);
-                alert('❌ Error saving walk-in to database.');
+                alert(' Error saving walk-in to database.');
             }
         }
 
