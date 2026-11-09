@@ -655,6 +655,61 @@
             height: 0;
             overflow: hidden;
         }
+
+        /* Priest Selection Cards Grid */
+        .priest-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .priest-card {
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .priest-card:hover {
+            border-color: #991b1b;
+            background: #fdf2f2;
+        }
+
+        .priest-card.selected {
+            border-color: #991b1b;
+            background: #991b1b;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(153, 27, 27, 0.25);
+        }
+
+        .priest-card.selected .priest-card-title,
+        .priest-card.selected .priest-card-subtitle {
+            color: #ffffff !important;
+        }
+
+        .priest-card-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #f1f5f9;
+            color: #4a0e17;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px auto;
+            font-weight: bold;
+            font-size: 16px;
+            border: 1px solid #cbd5e1;
+        }
+
+        .priest-card.selected .priest-card-avatar {
+            background: #ffffff;
+            color: #991b1b;
+        }
     </style>
 </head>
 
@@ -1806,7 +1861,20 @@
                     <textarea id="apptAdminNotes" rows="2" placeholder="Add instructions or notes for the applicant..."
                         style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px;"></textarea>
                 </div>
-
+                <!-- Assigned Priest Card Selector Container (Shown only for Ceremony) -->
+                <div id="priestSectionWrapper" style="margin-bottom: 20px; display: none;">
+                    <label
+                        style="display: block; font-size: 12px; font-weight: bold; color: #334155; margin-bottom: 6px;">
+                        Assign Officiating Priest (Registered in Database) *
+                    </label>
+                    <div id="priestCardsContainer" class="priest-cards-grid">
+                        <div
+                            style="grid-column: span 3; text-align: center; color: #64748b; font-size: 12px; padding: 15px;">
+                            Loading registered priests...
+                        </div>
+                    </div>
+                    <input type="hidden" id="apptAssignedPriestId">
+                </div>
                 <div style="display: flex; justify-content: flex-end; gap: 8px;">
                     <button type="button" onclick="closeModal('appointmentModal')"
                         style="padding: 9px 14px; border: 1px solid #cbd5e1; background: #f1f5f9; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px;">Cancel</button>
@@ -1819,6 +1887,10 @@
             </form>
         </div>
     </div>
+
+
+
+
     <script>
         const db = new Dexie('ParishPortalDB');
         db.version(4).stores({
@@ -2092,13 +2164,13 @@ Incomplete</button>`;
                     <td>
                         <select onchange="updateApplicationStatus('${app.id}', this.value)" class="status-select ${badgeClass}">
                             <option value="Reviewing" ${currentStatus === 'Reviewing' ? 'selected' : ''}>Reviewing</option>
-                            <option value="To Follow-Up & Upload Lacking Documents" ${currentStatus === 'To Follow-Up & Upload Lacking Documents' ? 'selected' : ''}>To Follow-Up & Upload Lacking Documents</option>
-                            <option value="Reviewed & Ready for Payment" ${currentStatus === 'Reviewed & Ready for Payment' ? 'selected' : ''}>Reviewed & Ready for Payment</option>
-                            <option value="Needs Revision" ${currentStatus === 'Needs Revision' ? 'selected' : ''}>Needs Revision</option>
-                            <option value="Scheduled for Seminar" ${currentStatus === 'Scheduled for Seminar' ? 'selected' : ''}>Scheduled for Seminar</option>
-                            <option value="Scheduled for Interview & Seminar" ${currentStatus === 'Scheduled for Interview & Seminar' ? 'selected' : ''}>Scheduled for Interview & Seminar</option>
-                            <option value="Scheduled for Ceremony" ${currentStatus === 'Scheduled for Ceremony' ? 'selected' : ''}>Scheduled for Ceremony</option>
-                            <option value="Completed" ${currentStatus === 'Completed' ? 'selected' : ''}>Completed</option>
+                            <option value="To Follow-Up & Upload Lacking Documents" ${currentStatus.includes('lacking') ? 'selected' : ''}>To Follow-Up & Upload Lacking Documents</option>
+                            <option value="Reviewed & Ready for Payment" ${currentStatus.includes('payment') ? 'selected' : ''}>Reviewed & Ready for Payment</option>
+                            <option value="Needs Revision" ${currentStatus === 'needs revision' ? 'selected' : ''}>Needs Revision</option>
+                            <option value="Scheduled for Seminar" ${currentStatus.includes('seminar') ? 'selected' : ''}>Scheduled for Seminar</option>
+                            <option value="Scheduled for Ceremony" ${currentStatus.includes('ceremony') ? 'selected' : ''}>Scheduled for Ceremony</option>
+                            <option value="Cancelled" ${currentStatus === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+                            <option value="Completed" ${currentStatus === 'completed' ? 'selected' : ''}>Completed</option>
                         </select>
                         ${app.adminNotes ? `<br><small style="color:red; margin-top: 4px; display:block;">Note: ${app.adminNotes}</small>` : ''}
                     </td>
@@ -2318,10 +2390,11 @@ Incomplete</button>`;
             renderApptCalendar();
         }
 
+        // 4. Update renderApptCalendar to highlight funeral spans properly
         function renderApptCalendar() {
             const gridEl = document.getElementById('apptCalendarGrid');
             const labelEl = document.getElementById('apptCalMonthLabel');
-            if (!gridEl || !labelEl || !activeSchedulingApp) return;
+            if (!gridEl || !activeSchedulingApp) return;
 
             const year = currentApptCalDate.getFullYear();
             const month = currentApptCalDate.getMonth();
@@ -2334,15 +2407,29 @@ Incomplete</button>`;
             const sacramentType = (activeSchedulingApp.sacramentType || '').toLowerCase();
             const isGroupBap = sacramentType.includes('group') || sacramentType === 'baptism';
             const isIndivBap = sacramentType.includes('individual');
+            const isFuneral = sacramentType.includes('funeral');
+
+            // Parse funeral span if applicable
+            let funeralStart = null;
+            let funeralEnd = null;
+            if (isFuneral) {
+                const startStr = activeSchedulingApp.preferredDate || activeSchedulingApp.confirmedDate;
+                const wakeDaysCount = parseInt(activeSchedulingApp.details?.wakeDays || activeSchedulingApp.wakeDays || 3);
+                if (startStr) {
+                    funeralStart = new Date(startStr);
+                    funeralStart.setHours(0, 0, 0, 0);
+                    funeralEnd = new Date(funeralStart);
+                    funeralEnd.setDate(funeralEnd.getDate() + (wakeDaysCount - 1));
+                }
+            }
 
             let html = '';
-            for (let i = 0; i < firstDayIndex; i++) {
-                html += `<div></div>`;
-            }
+            for (let i = 0; i < firstDayIndex; i++) { html += `<div></div>`; }
 
             for (let day = 1; day <= totalDays; day++) {
                 const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 const cellDate = new Date(dateString);
+                cellDate.setHours(0, 0, 0, 0);
                 const dayOfWeek = cellDate.getDay();
                 const dayOfMonth = cellDate.getDate();
 
@@ -2350,7 +2437,10 @@ Incomplete</button>`;
                 let badgeText = activeSchedulingStage === 'ceremony' ? 'Ceremony Slot' : 'Seminar Slot';
                 let badgeColor = '#2e7d32';
 
-                if (activeSchedulingStage === 'ceremony') {
+                if (isFuneral) {
+                    isAllowed = (dayOfWeek !== 1); // Chapel open except Monday
+                    badgeText = 'Chapel Slot';
+                } else if (activeSchedulingStage === 'ceremony') {
                     if (isGroupBap) {
                         isAllowed = (dayOfWeek === 0 || dayOfWeek === 6);
                         badgeText = isAllowed ? 'Group Bap' : 'Sat/Sun Only';
@@ -2360,9 +2450,6 @@ Incomplete</button>`;
                     } else if (sacramentType.includes('wedding')) {
                         isAllowed = (dayOfWeek >= 2 && dayOfWeek <= 6);
                         badgeText = isAllowed ? 'Wedding Slot' : 'Restricted';
-                    } else if (sacramentType.includes('funeral')) {
-                        isAllowed = (dayOfWeek !== 1);
-                        badgeText = isAllowed ? 'Chapel Open' : 'Closed (Mon)';
                     }
                 } else {
                     if (isGroupBap || isIndivBap) {
@@ -2379,6 +2466,14 @@ Incomplete</button>`;
                 let bgStyle = selectedApptDateStr === dateString ? '#1877f2' : '#f0f2f5';
                 let textStyle = selectedApptDateStr === dateString ? '#ffffff' : '#050505';
 
+                // Highlight full funeral wake-to-interment span if matched
+                if (isFuneral && funeralStart && funeralEnd && cellDate >= funeralStart && cellDate <= funeralEnd) {
+                    bgStyle = '#d0e8ff';
+                    textStyle = '#1d4ed8';
+                    badgeText = (cellDate.getTime() === funeralStart.getTime()) ? 'Wake Start' : (cellDate.getTime() === funeralEnd.getTime() ? 'Interment' : 'Wake Span');
+                    badgeColor = '#2563eb';
+                }
+
                 if (!isAllowed) {
                     bgStyle = '#f4f2f2';
                     textStyle = '#b0b3b8';
@@ -2393,6 +2488,8 @@ Incomplete</button>`;
             gridEl.innerHTML = html;
         }
 
+        let selectedPriestId = null;
+
         async function openAppointmentModal(appId) {
             let app = rawApplicationsData.find(a => String(a.id) === String(appId)) || await db.applications.get(Number(appId) || appId);
             if (!app) return;
@@ -2404,10 +2501,21 @@ Incomplete</button>`;
             let schedulingModeTitle = "Schedule Sacrament Appointment";
             let defaultTime = "10:00 AM";
 
-            // Determine if we are scheduling a Seminar/Interview or the actual Ceremony
-            if (currentStatus.includes('ceremony')) {
+            // 1. Determine scheduling stage and title
+            if (currentStatus.includes('ceremony') || currentStatus === 'approved') {
                 activeSchedulingStage = 'ceremony';
-                schedulingModeTitle = `Schedule ${app.sacramentType} Ceremony`;
+                if (sacramentType.includes('baptism')) {
+                    schedulingModeTitle = "Schedule Baptism Ceremony";
+                    defaultTime = "10:00 AM";
+                } else if (sacramentType.includes('wedding')) {
+                    schedulingModeTitle = "Schedule Wedding Ceremony";
+                    defaultTime = "15:00";
+                } else if (sacramentType.includes('funeral')) {
+                    schedulingModeTitle = "Schedule Funeral Vigil & Interment";
+                    defaultTime = "08:00 - 17:00";
+                } else {
+                    schedulingModeTitle = `Schedule ${app.sacramentType} Ceremony`;
+                }
             } else {
                 activeSchedulingStage = 'seminar';
                 if (sacramentType.includes('baptism')) {
@@ -2421,7 +2529,6 @@ Incomplete</button>`;
                 }
             }
 
-            // Update modal header title dynamically
             const modalHeaderTitle = document.querySelector('#appointmentModal h3');
             if (modalHeaderTitle) {
                 modalHeaderTitle.innerHTML = `<svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-calendar-check"></use></svg> ${schedulingModeTitle}`;
@@ -2429,90 +2536,127 @@ Incomplete</button>`;
 
             document.getElementById('apptAppId').value = app.id;
             document.getElementById('apptSacramentType').value = sacramentType;
-            document.getElementById('apptConfirmedDate').value = app.confirmedDate || app.preferredDate || '';
             document.getElementById('apptConfirmedTime').value = app.confirmedTime || defaultTime;
-
-            selectedApptDateStr = app.confirmedDate || app.preferredDate || '';
             document.getElementById('apptAdminNotes').value = app.adminNotes || '';
+            selectedPriestId = app.assignedPriest || null;
+
+            // 2. Capture target date & align calendar month view
+            const parishionerTargetDate = app.preferredDate || app.targetDate || app.confirmedDate || '';
+            selectedApptDateStr = parishionerTargetDate;
+            document.getElementById('apptConfirmedDate').value = parishionerTargetDate;
+
+            if (parishionerTargetDate) {
+                const targetDateObj = new Date(parishionerTargetDate);
+                if (!isNaN(targetDateObj)) {
+                    currentApptCalDate = new Date(targetDateObj.getFullYear(), targetDateObj.getMonth(), 1);
+                }
+            } else {
+                currentApptCalDate = new Date();
+            }
+
+            // 3. Conditionally Show/Hide Priest Selector 
+            // (HIDE if it's a seminar/interview, OR if it's a funeral)
+            const priestWrapper = document.getElementById('priestSectionWrapper');
+            const priestInput = document.getElementById('apptAssignedPriestId');
+            const isFuneral = sacramentType.includes('funeral');
+
+            if (activeSchedulingStage === 'ceremony' && !isFuneral) {
+                if (priestWrapper) priestWrapper.style.display = 'block';
+                if (priestInput) priestInput.setAttribute('required', 'required');
+                await renderPriestSelectionCards();
+            } else {
+                // Hide for seminars, interviews, and ALL funeral sacrament appointments
+                if (priestWrapper) priestWrapper.style.display = 'none';
+                if (priestInput) priestInput.removeAttribute('required');
+            }
+
+            // Populate a helpful summary box inside appointment modal showing parishioner's requested span/details
+            const summaryBox = document.getElementById('appointmentAppSummary');
+            if (summaryBox) {
+                let detailsText = `<strong>Applicant:</strong> ${app.applicantName || 'N/A'} | <strong>Requested Date:</strong> ${parishionerTargetDate || 'None'}`;
+                if (isFuneral) {
+                    const wakeSpanDays = app.details?.wakeDays || app.wakeDays || 3;
+                    detailsText += `<br><strong>Funeral Wake Span:</strong> ${wakeSpanDays} Days (Interment: ${app.details?.intermentDate || 'TBD'})`;
+                }
+                summaryBox.innerHTML = detailsText;
+            }
 
             openModal('appointmentModal');
             renderApptCalendar();
+        }
 
-            function renderApptCalendar() {
-                const gridEl = document.getElementById('apptCalendarGrid');
-                const labelEl = document.getElementById('apptCalMonthLabel');
-                if (!gridEl || !activeSchedulingApp) return;
+        // ✅ RENDER PRIEST SELECTION CARDS FROM DATABASE
+        async function renderPriestSelectionCards() {
+            const container = document.getElementById('priestCardsContainer');
+            if (!container) return;
 
-                const year = currentApptCalDate.getFullYear();
-                const month = currentApptCalDate.getMonth();
-                const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-                labelEl.textContent = `${monthNames[month]} ${year}`;
+            try {
+                let priests = await db.users.where('role').equalsIgnoreCase('priest').toArray();
 
-                const firstDayIndex = new Date(year, month, 1).getDay();
-                const totalDays = new Date(year, month + 1, 0).getDate();
-
-                const sacramentType = (activeSchedulingApp.sacramentType || '').toLowerCase();
-                const isGroupBap = sacramentType.includes('group') || sacramentType === 'baptism';
-                const isIndivBap = sacramentType.includes('individual');
+                if (!priests || priests.length === 0) {
+                    priests = [
+                        { id: 'p1', fullName: 'Rev. Fr. Antonio Sergio, OP', role: 'priest' },
+                        { id: 'p2', fullName: 'Rev. Fr. Michael Gomez, OP', role: 'priest' },
+                        { id: 'p3', fullName: 'Rev. Fr. David Santos, OP', role: 'priest' }
+                    ];
+                }
 
                 let html = '';
-                for (let i = 0; i < firstDayIndex; i++) { html += `<div></div>`; }
-
-                for (let day = 1; day <= totalDays; day++) {
-                    const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                    const cellDate = new Date(dateString);
-                    const dayOfWeek = cellDate.getDay();
-                    const dayOfMonth = cellDate.getDate();
-
-                    let isAllowed = true;
-                    let badgeText = activeSchedulingStage === 'ceremony' ? 'Ceremony Slot' : 'Seminar Slot';
-                    let badgeColor = '#2e7d32';
-
-                    if (activeSchedulingStage === 'ceremony') {
-                        // Rules for actual ceremonies
-                        if (isGroupBap) {
-                            isAllowed = (dayOfWeek === 0 || dayOfWeek === 6); // Sat & Sun
-                            badgeText = isAllowed ? 'Group Bap' : 'Sat/Sun Only';
-                        } else if (isIndivBap) {
-                            isAllowed = (dayOfWeek >= 2 && dayOfWeek <= 5); // Tue-Fri
-                            badgeText = isAllowed ? 'Indiv Bap' : 'Tue-Fri Only';
-                        } else if (sacramentType.includes('wedding')) {
-                            // Example ceremony rule: strict scheduling, e.g., Tue-Sat for weddings
-                            isAllowed = (dayOfWeek >= 2 && dayOfWeek <= 6);
-                            badgeText = isAllowed ? 'Wedding Slot' : 'Restricted';
-                        } else if (sacramentType.includes('funeral')) {
-                            isAllowed = (dayOfWeek !== 1); // Not Monday
-                            badgeText = isAllowed ? 'Chapel Open' : 'Closed (Mon)';
-                        }
-                    } else {
-                        // Seminar rules (existing logic)
-                        if (isGroupBap || isIndivBap) {
-                            isAllowed = (dayOfWeek === 6); // Saturday seminar example
-                            badgeText = isAllowed ? 'Seminar' : 'Sat Only';
-                        } else if (sacramentType.includes('wedding')) {
-                            isAllowed = (dayOfWeek === 0 && dayOfMonth <= 7); // 1st Sunday
-                            badgeText = isAllowed ? 'Pre-Cana' : '1st Sun Only';
-                        }
-                    }
-
-                    badgeColor = isAllowed ? '#2e7d32' : '#8a8d91';
-
-                    let bgStyle = selectedApptDateStr === dateString ? '#1877f2' : '#f0f2f5';
-                    let textStyle = selectedApptDateStr === dateString ? '#ffffff' : '#050505';
-
-                    if (!isAllowed) {
-                        bgStyle = '#f4f2f2';
-                        textStyle = '#b0b3b8';
-                    }
+                priests.forEach(priest => {
+                    const isSelected = String(selectedPriestId) === String(priest.id) || String(selectedPriestId) === String(priest.fullName);
+                    const initials = priest.fullName.replace('Rev. Fr.', '').trim().split(' ').map(n => n[0]).join('').substring(0, 2);
 
                     html += `
-        <div onclick="${isAllowed ? `selectApptCalendarDate('${dateString}')` : ''}" style="background: ${bgStyle}; color: ${textStyle}; padding: 6px 2px; border-radius: 6px; cursor: ${isAllowed ? 'pointer' : 'not-allowed'}; font-size: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 40px;">
-            <strong>${day}</strong>
-            <span style="font-size: 8px; font-weight: bold; color: ${badgeColor};">${badgeText}</span>
-        </div>`;
+                <div class="priest-card ${isSelected ? 'selected' : ''}" onclick="selectPriest('${priest.id}', '${priest.fullName.replace(/'/g, "\\'")}')" style="background: ${isSelected ? '#991b1b' : '#ffffff'}; color: ${isSelected ? '#ffffff' : '#1e293b'}; border: 2px solid #991b1b; border-radius: 8px; padding: 10px; text-align: center; cursor: pointer;">
+                    <div style="font-weight: bold; font-size: 13px;">${priest.fullName}</div>
+                    <div style="font-size: 11px; opacity: 0.8;">Parish Priest</div>
+                </div>
+            `;
+                });
+
+                container.innerHTML = html;
+                if (selectedPriestId) {
+                    document.getElementById('apptAssignedPriestId').value = selectedPriestId;
                 }
-                gridEl.innerHTML = html;
+            } catch (err) {
+                console.error("Error loading priests:", err);
             }
+        }
+
+        function selectPriest(priestId, priestName) {
+            selectedPriestId = priestName;
+            document.getElementById('apptAssignedPriestId').value = priestId;
+            renderPriestSelectionCards();
+        }
+
+        // ✅ UPDATE FORM SUBMISSION TO HANDLE STAGE-BASED STATUS & PRIEST
+        async function handleAppointmentSubmit(event) {
+            event.preventDefault();
+            const appId = document.getElementById('apptAppId').value;
+            const numericId = isNaN(appId) ? appId : Number(appId);
+            const confirmedDate = document.getElementById('apptConfirmedDate').value;
+            const confirmedTime = document.getElementById('apptConfirmedTime').value;
+            const adminNotes = document.getElementById('apptAdminNotes').value;
+
+            let updatePayload = {
+                confirmedDate: confirmedDate,
+                confirmedTime: confirmedTime,
+                adminNotes: adminNotes,
+                status: activeSchedulingStage === 'ceremony' ? 'Scheduled for Ceremony' : 'Scheduled for Seminar'
+            };
+
+            if (activeSchedulingStage === 'ceremony') {
+                const assignedPriest = selectedPriestId || document.getElementById('apptAssignedPriestId').value;
+                if (!assignedPriest) {
+                    alert('Please select an officiating priest from the card selector.');
+                    return;
+                }
+                updatePayload.assignedPriest = assignedPriest;
+            }
+
+            await db.applications.update(numericId, updatePayload);
+            closeModal('appointmentModal');
+            fetchApplications();
         }
 
         function selectApptCalendarDate(dateStr) {

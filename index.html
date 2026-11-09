@@ -838,29 +838,35 @@
         </div>
         </div>
 
-<!-- 2. WEDDING APPLICATION FORM -->
+        <!-- 2. WEDDING APPLICATION FORM -->
         <div class="modal-overlay" id="weddingModal">
             <div class="modal-box">
                 <span class="close-btn" onclick="closeModal('weddingModal')">&times;</span>
                 <h2>Wedding Application</h2>
                 <form id="weddingForm" onsubmit="event.preventDefault(); saveApplicationLocally('wedding', this);">
-                    
+
                     <!-- APPLICANT INFORMATION -->
                     <h4 style="color: #4a0e17; margin-top: 15px; margin-bottom: 8px;">Applicant's Information</h4>
                     <div class="form-row">
                         <div style="display: flex; gap: 12px; margin-bottom: 15px; flex-wrap: wrap;">
                             <div style="flex: 1; min-width: 180px;">
-                                <label style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">First Name *</label>
+                                <label
+                                    style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">First
+                                    Name *</label>
                                 <input type="text" id="applicantFirstName" name="applicantFirstName" required
                                     style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                             </div>
                             <div style="flex: 1; min-width: 180px;">
-                                <label style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Last Name *</label>
+                                <label
+                                    style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Last
+                                    Name *</label>
                                 <input type="text" id="applicantLastName" name="applicantLastName" required
                                     style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                             </div>
                             <div style="flex: 1; min-width: 220px;">
-                                <label style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Email Address *</label>
+                                <label
+                                    style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Email
+                                    Address *</label>
                                 <input type="email" id="applicantEmail" name="applicantEmail" required
                                     style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                             </div>
@@ -871,27 +877,41 @@
                     <h4 style="color: #4a0e17; margin-top: 15px; margin-bottom: 8px;">Groom's Information</h4>
                     <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
                         <div class="form-group" style="flex: 2; min-width: 180px;">
-                            <label style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">First Name *</label>
-                            <input type="text" name="groomFirstName" required style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">First
+                                Name *</label>
+                            <input type="text" name="groomFirstName" required
+                                style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                         </div>
                         <div class="form-group" style="flex: 1; min-width: 80px;">
-                            <label style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">M.I.</label>
-                            <input type="text" name="groomMiddleInitial" maxlength="3" style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">M.I.</label>
+                            <input type="text" name="groomMiddleInitial" maxlength="3"
+                                style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                         </div>
                         <div class="form-group" style="flex: 2; min-width: 180px;">
-                            <label style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Last Name *</label>
-                            <input type="text" name="groomLastName" required style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Last
+                                Name *</label>
+                            <input type="text" name="groomLastName" required
+                                style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                         </div>
                     </div>
 
                     <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
                         <div class="form-group" style="flex: 1; min-width: 100px;">
-                            <label style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Age *</label>
-                            <input type="number" name="groomAge" required min="18" style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Age
+                                *</label>
+                            <input type="number" name="groomAge" required min="18"
+                                style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                         </div>
                         <div class="form-group" style="flex: 2; min-width: 160px;">
-                            <label style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Civil Status *</label>
-                            <select name="groomCivilStatus" required style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Civil
+                                Status *</label>
+                            <select name="groomCivilStatus" required
+                                style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                                 <option value="">Select Civil Status</option>
                                 <option value="Single">Single</option>
                                 <option value="Widower">Widower</option>
@@ -899,37 +919,55 @@
                             </select>
                         </div>
                         <div class="form-group" style="flex: 2; min-width: 160px;">
-                            <label style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Nationality *</label>
-                            <input type="text" name="groomNationality" required value="Filipino" style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Nationality
+                                *</label>
+                            <input type="text" name="groomNationality" required value="Filipino"
+                                style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                         </div>
                     </div>
 
                     <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
                         <div class="form-group" style="flex: 1; min-width: 200px;">
-                            <label style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Place of Birth *</label>
-                            <input type="text" name="groomPlaceOfBirth" required style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Place
+                                of Birth *</label>
+                            <input type="text" name="groomPlaceOfBirth" required
+                                style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                         </div>
                         <div class="form-group" style="flex: 1; min-width: 200px;">
-                            <label style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Occupation *</label>
-                            <input type="text" name="groomOccupation" required style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Occupation
+                                *</label>
+                            <input type="text" name="groomOccupation" required
+                                style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                         </div>
                     </div>
 
                     <div class="form-row" style="margin-bottom: 10px;">
                         <div class="form-group">
-                            <label style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Present Residence / Address *</label>
-                            <input type="text" name="groomPresentResidence" required style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Present
+                                Residence / Address *</label>
+                            <input type="text" name="groomPresentResidence" required
+                                style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                         </div>
                     </div>
 
                     <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
                         <div class="form-group" style="flex: 1; min-width: 200px;">
-                            <label style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Father's Full Name *</label>
-                            <input type="text" name="groomFatherName" required style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Father's
+                                Full Name *</label>
+                            <input type="text" name="groomFatherName" required
+                                style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                         </div>
                         <div class="form-group" style="flex: 1; min-width: 200px;">
-                            <label style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Mother's Full Maiden Name *</label>
-                            <input type="text" name="groomMotherName" required style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Mother's
+                                Full Maiden Name *</label>
+                            <input type="text" name="groomMotherName" required
+                                style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                         </div>
                     </div>
 
@@ -937,27 +975,41 @@
                     <h4 style="color: #4a0e17; margin-top: 15px; margin-bottom: 8px;">Bride's Information</h4>
                     <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
                         <div class="form-group" style="flex: 2; min-width: 180px;">
-                            <label style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">First Name *</label>
-                            <input type="text" name="brideFirstName" required style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">First
+                                Name *</label>
+                            <input type="text" name="brideFirstName" required
+                                style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                         </div>
                         <div class="form-group" style="flex: 1; min-width: 80px;">
-                            <label style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">M.I.</label>
-                            <input type="text" name="brideMiddleInitial" maxlength="3" style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">M.I.</label>
+                            <input type="text" name="brideMiddleInitial" maxlength="3"
+                                style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                         </div>
                         <div class="form-group" style="flex: 2; min-width: 180px;">
-                            <label style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Last Name *</label>
-                            <input type="text" name="brideLastName" required style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Last
+                                Name *</label>
+                            <input type="text" name="brideLastName" required
+                                style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                         </div>
                     </div>
 
                     <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
                         <div class="form-group" style="flex: 1; min-width: 100px;">
-                            <label style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Age *</label>
-                            <input type="number" name="brideAge" required min="18" style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Age
+                                *</label>
+                            <input type="number" name="brideAge" required min="18"
+                                style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                         </div>
                         <div class="form-group" style="flex: 2; min-width: 160px;">
-                            <label style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Civil Status *</label>
-                            <select name="brideCivilStatus" required style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Civil
+                                Status *</label>
+                            <select name="brideCivilStatus" required
+                                style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                                 <option value="">Select Civil Status</option>
                                 <option value="Single">Single</option>
                                 <option value="Widow">Widow</option>
@@ -965,37 +1017,55 @@
                             </select>
                         </div>
                         <div class="form-group" style="flex: 2; min-width: 160px;">
-                            <label style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Nationality *</label>
-                            <input type="text" name="brideNationality" required value="Filipino" style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Nationality
+                                *</label>
+                            <input type="text" name="brideNationality" required value="Filipino"
+                                style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                         </div>
                     </div>
 
                     <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
                         <div class="form-group" style="flex: 1; min-width: 200px;">
-                            <label style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Place of Birth *</label>
-                            <input type="text" name="bridePlaceOfBirth" required style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Place
+                                of Birth *</label>
+                            <input type="text" name="bridePlaceOfBirth" required
+                                style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                         </div>
                         <div class="form-group" style="flex: 1; min-width: 200px;">
-                            <label style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Occupation *</label>
-                            <input type="text" name="brideOccupation" required style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Occupation
+                                *</label>
+                            <input type="text" name="brideOccupation" required
+                                style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                         </div>
                     </div>
 
                     <div class="form-row" style="margin-bottom: 10px;">
                         <div class="form-group">
-                            <label style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Present Residence / Address *</label>
-                            <input type="text" name="bridePresentResidence" required style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Present
+                                Residence / Address *</label>
+                            <input type="text" name="bridePresentResidence" required
+                                style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                         </div>
                     </div>
 
                     <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
                         <div class="form-group" style="flex: 1; min-width: 200px;">
-                            <label style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Father's Full Name *</label>
-                            <input type="text" name="brideFatherName" required style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Father's
+                                Full Name *</label>
+                            <input type="text" name="brideFatherName" required
+                                style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                         </div>
                         <div class="form-group" style="flex: 1; min-width: 200px;">
-                            <label style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Mother's Full Maiden Name *</label>
-                            <input type="text" name="brideMotherName" required style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Mother's
+                                Full Maiden Name *</label>
+                            <input type="text" name="brideMotherName" required
+                                style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                         </div>
                     </div>
 
@@ -1004,19 +1074,27 @@
                         <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;">Principal Sponsors</h4>
                         <div style="display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap;">
                             <div style="flex: 1; min-width: 200px;">
-                                <label style="display: block; font-size: 12px; font-weight: bold; color: #2c3e50; margin-bottom: 4px;">Principal Ninong *</label>
-                                <input type="text" name="principalNinong" required style="width:100%; padding:10px 12px; border:1px solid #ccd0d5; border-radius:6px; font-size: 14px;">
+                                <label
+                                    style="display: block; font-size: 12px; font-weight: bold; color: #2c3e50; margin-bottom: 4px;">Principal
+                                    Ninong *</label>
+                                <input type="text" name="principalNinong" required
+                                    style="width:100%; padding:10px 12px; border:1px solid #ccd0d5; border-radius:6px; font-size: 14px;">
                             </div>
                             <div style="flex: 1; min-width: 200px;">
-                                <label style="display: block; font-size: 12px; font-weight: bold; color: #2c3e50; margin-bottom: 4px;">Principal Ninang *</label>
-                                <input type="text" name="principalNinang" required style="width:100%; padding:10px 12px; border:1px solid #ccd0d5; border-radius:6px; font-size: 14px;">
+                                <label
+                                    style="display: block; font-size: 12px; font-weight: bold; color: #2c3e50; margin-bottom: 4px;">Principal
+                                    Ninang *</label>
+                                <input type="text" name="principalNinang" required
+                                    style="width:100%; padding:10px 12px; border:1px solid #ccd0d5; border-radius:6px; font-size: 14px;">
                             </div>
                         </div>
 
-                        <h4 style="margin: 15px 0 8px 0; color: #4a0e17; font-size: 14px;">Additional Sponsors (Maximum of 6)</h4>
+                        <h4 style="margin: 15px 0 8px 0; color: #4a0e17; font-size: 14px;">Additional Sponsors (Maximum
+                            of 6)</h4>
                         <div id="weddingSponsorsList"></div>
                         <button type="button" id="addSponsorBtn" onclick="addWeddingSponsorRow()"
-                            style="background: #f1f5f9; border: 1px dashed #cbd5e1; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; color: #334155; font-weight: bold;">+ Add Additional Sponsor</button>
+                            style="background: #f1f5f9; border: 1px dashed #cbd5e1; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; color: #334155; font-weight: bold;">+
+                            Add Additional Sponsor</button>
                     </div>
 
                     <!-- GUEST PRIEST / OFFICIANT SECTION -->
@@ -1024,7 +1102,8 @@
                         <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;">Wedding Officiant Details</h4>
 
                         <div style="margin-bottom: 12px;">
-                            <label style="display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; font-weight: bold; color: #2c3e50;">
+                            <label
+                                style="display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; font-weight: bold; color: #2c3e50;">
                                 <input type="checkbox" id="hasGuestPriest" name="hasGuestPriest"
                                     onchange="toggleGuestPriestFields()"
                                     style="width: 16px; height: 16px; cursor: pointer;">
@@ -1035,12 +1114,17 @@
                         <div id="guestPriestDetailsGroup"
                             style="display: none; background: #f8fafc; padding: 14px; border-radius: 6px; border: 1px solid #e2e8f0;">
                             <div style="margin-bottom: 10px;">
-                                <label style="display: block; font-weight: bold; font-size: 13px; color: #2c3e50; margin-bottom: 5px;">Guest Priest Full Name & Parish *</label>
+                                <label
+                                    style="display: block; font-weight: bold; font-size: 13px; color: #2c3e50; margin-bottom: 5px;">Guest
+                                    Priest Full Name & Parish *</label>
                                 <input type="text" id="guestPriestName" name="guestPriestName"
                                     style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
                             </div>
-                            <div style="background: #fff3cd; border: 1px solid #ffeeba; color: #856404; padding: 10px; border-radius: 4px; font-size: 12px; margin-top: 8px;">
-                                ⚠️ <strong>Guest Priest Requirements:</strong> A copy of the priest's <strong>License to Marry</strong> must be uploaded below, and a guest priest fee of <strong>₱10,000</strong> applies.
+                            <div
+                                style="background: #fff3cd; border: 1px solid #ffeeba; color: #856404; padding: 10px; border-radius: 4px; font-size: 12px; margin-top: 8px;">
+                                ⚠️ <strong>Guest Priest Requirements:</strong> A copy of the priest's <strong>License to
+                                    Marry</strong> must be uploaded below, and a guest priest fee of
+                                <strong>₱10,000</strong> applies.
                             </div>
                         </div>
                     </div>
@@ -1049,7 +1133,8 @@
                     <div style="border-top: 1px solid #e2e8f0; padding-top: 16px; margin-top: 16px;">
                         <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;">Optional Fees & Services</h4>
                         <div style="background: #f8fafc; padding: 14px; border-radius: 6px; border: 1px solid #e2e8f0;">
-                            <label style="display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; font-weight: bold; color: #2c3e50;">
+                            <label
+                                style="display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; font-weight: bold; color: #2c3e50;">
                                 <input type="checkbox" id="electricityFee" name="electricityFee" value="1000"
                                     style="width: 16px; height: 16px; cursor: pointer;">
                                 Include Electricity / Video Fee (+₱1,000) for professional photo/video equipment
@@ -1060,14 +1145,21 @@
                     <!-- DEDICATED WEDDING SCHEDULING CALENDAR -->
                     <div class="fb-calendar-container"
                         style="background: #ffffff; border: 1px solid #ccd0d5; border-radius: 8px; padding: 16px; margin: 15px 0; font-family: Helvetica, Arial, sans-serif;">
-                        <div style="background: #e7f3ff; border-left: 4px solid #1877f2; padding: 10px; font-size: 12px; color: #1c1e21; margin-bottom: 15px;">
-                            <strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#icon-church"></use></svg> Wedding Schedule Rules:</strong><br>
+                        <div
+                            style="background: #e7f3ff; border-left: 4px solid #1877f2; padding: 10px; font-size: 12px; color: #1c1e21; margin-bottom: 15px;">
+                            <strong><svg class="ui-icon" aria-hidden="true" focusable="false">
+                                    <use href="#icon-church"></use>
+                                </svg> Wedding Schedule Rules:</strong><br>
                             Available <strong>Tuesday to Saturday</strong>.<br>
-                            Time slots: <strong>10:30 AM</strong> and <strong>3:00 PM</strong> (Strictly 1 slot per time block).
+                            Time slots: <strong>10:30 AM</strong> and <strong>3:00 PM</strong> (Strictly 1 slot per time
+                            block).
                         </div>
 
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                            <h4 id="weddingMonthYearLabel" style="margin: 0; color: #1c1e21; font-size: 1.05rem; font-weight: bold;">Month Year</h4>
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <h4 id="weddingMonthYearLabel"
+                                style="margin: 0; color: #1c1e21; font-size: 1.05rem; font-weight: bold;">Month Year
+                            </h4>
                             <div style="display: flex; gap: 6px;">
                                 <button type="button" onclick="changeWeddingCalendarMonth(-1)"
                                     style="background: #e4e6eb; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-weight: bold;">&lt;</button>
@@ -1076,15 +1168,27 @@
                             </div>
                         </div>
 
-                        <div style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: bold; font-size: 11px; color: #606770; margin-bottom: 6px;">
-                            <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+                        <div
+                            style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: bold; font-size: 11px; color: #606770; margin-bottom: 6px;">
+                            <div>Sun</div>
+                            <div>Mon</div>
+                            <div>Tue</div>
+                            <div>Wed</div>
+                            <div>Thu</div>
+                            <div>Fri</div>
+                            <div>Sat</div>
                         </div>
 
-                        <div id="weddingCalendarGrid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; margin-bottom: 12px;"></div>
+                        <div id="weddingCalendarGrid"
+                            style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; margin-bottom: 12px;">
+                        </div>
 
-                        <div id="weddingTimeslotPanel" style="border-top: 1px solid #e4e6eb; padding-top: 12px; display: none;">
-                            <div id="weddingSelectedDateHeader" style="font-size: 13px; font-weight: bold; color: #1c1e21; margin-bottom: 8px;"></div>
-                            <div id="weddingTimeslotGrid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;"></div>
+                        <div id="weddingTimeslotPanel"
+                            style="border-top: 1px solid #e4e6eb; padding-top: 12px; display: none;">
+                            <div id="weddingSelectedDateHeader"
+                                style="font-size: 13px; font-weight: bold; color: #1c1e21; margin-bottom: 8px;"></div>
+                            <div id="weddingTimeslotGrid"
+                                style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;"></div>
                         </div>
 
                         <input type="hidden" id="weddingSelectedDateInput" name="preferredDate" required>
@@ -1095,17 +1199,21 @@
                     <div class="form-document-section">
                         <div class="form-document-section">
                             <p class="form-section-title">Required Wedding Documents</p>
-                            <p class="doc-hint">Please upload clear copies of the required documents (PDF, JPG, PNG):</p>
+                            <p class="doc-hint">Please upload clear copies of the required documents (PDF, JPG, PNG):
+                            </p>
 
                             <!-- 1. PSA Birth Certificates -->
                             <div style="margin-bottom: 15px;">
-                                <label style="display: block; font-weight: bold; font-size: 13px; color: #2c3e50; margin-bottom: 5px;">
+                                <label
+                                    style="display: block; font-weight: bold; font-size: 13px; color: #2c3e50; margin-bottom: 5px;">
                                     1. PSA Birth Certificates (Groom & Bride) *
                                 </label>
                                 <div class="inline-drop-zone"
                                     onclick="document.getElementById('wedBirthCertFiles').click()"
                                     style="border: 2px dashed #cbd5e1; padding: 12px; border-radius: 6px; text-align: center; cursor: pointer; background: #f8fafc;">
-                                    <span><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#icon-file-text"></use></svg> Click or drag PSA Birth Certificates here</span>
+                                    <span><svg class="ui-icon" aria-hidden="true" focusable="false">
+                                            <use href="#icon-file-text"></use>
+                                        </svg> Click or drag PSA Birth Certificates here</span>
                                     <input type="file" id="wedBirthCertFiles" multiple accept=".pdf,.jpg,.jpeg,.png"
                                         style="display:none;" onchange="handleInlineFiles(event, 'wedBirthCertList')">
                                 </div>
@@ -1114,13 +1222,16 @@
 
                             <!-- 2. CENOMAR -->
                             <div style="margin-bottom: 15px;">
-                                <label style="display: block; font-weight: bold; font-size: 13px; color: #2c3e50; margin-bottom: 5px;">
+                                <label
+                                    style="display: block; font-weight: bold; font-size: 13px; color: #2c3e50; margin-bottom: 5px;">
                                     2. CENOMAR (Certificate of No Marriage) *
                                 </label>
                                 <div class="inline-drop-zone"
                                     onclick="document.getElementById('wedCenomarFiles').click()"
                                     style="border: 2px dashed #cbd5e1; padding: 12px; border-radius: 6px; text-align: center; cursor: pointer; background: #f8fafc;">
-                                    <span><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#icon-file-text"></use></svg> Click or drag CENOMAR here</span>
+                                    <span><svg class="ui-icon" aria-hidden="true" focusable="false">
+                                            <use href="#icon-file-text"></use>
+                                        </svg> Click or drag CENOMAR here</span>
                                     <input type="file" id="wedCenomarFiles" multiple accept=".pdf,.jpg,.jpeg,.png"
                                         style="display:none;" onchange="handleInlineFiles(event, 'wedCenomarList')">
                                 </div>
@@ -1129,13 +1240,16 @@
 
                             <!-- 3. New Baptismal & Confirmation Certificates -->
                             <div style="margin-bottom: 15px;">
-                                <label style="display: block; font-weight: bold; font-size: 13px; color: #2c3e50; margin-bottom: 5px;">
+                                <label
+                                    style="display: block; font-weight: bold; font-size: 13px; color: #2c3e50; margin-bottom: 5px;">
                                     3. New Baptismal & Confirmation Certificates (with Marriage Annotation) *
                                 </label>
                                 <div class="inline-drop-zone"
                                     onclick="document.getElementById('wedAnnotationFiles').click()"
                                     style="border: 2px dashed #cbd5e1; padding: 12px; border-radius: 6px; text-align: center; cursor: pointer; background: #f8fafc;">
-                                    <span><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#icon-file-text"></use></svg> Click or drag Annotated Baptismal/Confirmation Certificates here</span>
+                                    <span><svg class="ui-icon" aria-hidden="true" focusable="false">
+                                            <use href="#icon-file-text"></use>
+                                        </svg> Click or drag Annotated Baptismal/Confirmation Certificates here</span>
                                     <input type="file" id="wedAnnotationFiles" multiple accept=".pdf,.jpg,.jpeg,.png"
                                         style="display:none;" onchange="handleInlineFiles(event, 'wedAnnotationList')">
                                 </div>
@@ -1144,13 +1258,16 @@
 
                             <!-- 4. Marriage License / Contract -->
                             <div style="margin-bottom: 15px;">
-                                <label style="display: block; font-weight: bold; font-size: 13px; color: #2c3e50; margin-bottom: 5px;">
+                                <label
+                                    style="display: block; font-weight: bold; font-size: 13px; color: #2c3e50; margin-bottom: 5px;">
                                     4. Marriage License (or Civil Marriage Contract with Registry Number) *
                                 </label>
                                 <div class="inline-drop-zone"
                                     onclick="document.getElementById('wedLicenseFiles').click()"
                                     style="border: 2px dashed #cbd5e1; padding: 12px; border-radius: 6px; text-align: center; cursor: pointer; background: #f8fafc;">
-                                    <span><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#icon-file-text"></use></svg> Click or drag Marriage License / Contract here</span>
+                                    <span><svg class="ui-icon" aria-hidden="true" focusable="false">
+                                            <use href="#icon-file-text"></use>
+                                        </svg> Click or drag Marriage License / Contract here</span>
                                     <input type="file" id="wedLicenseFiles" multiple accept=".pdf,.jpg,.jpeg,.png"
                                         style="display:none;" onchange="handleInlineFiles(event, 'wedLicenseList')">
                                 </div>
@@ -1160,14 +1277,18 @@
                             <!-- GUEST PRIEST LICENSE REQUIREMENT CONTAINER -->
                             <div id="guestPriestDocContainer"
                                 style="display: none; margin-top: 20px; padding: 14px; background: #fffbeb; border: 1px solid #f59e0b; border-radius: 6px;">
-                                <label style="display: block; font-weight: bold; font-size: 13px; color: #b45309; margin-bottom: 5px;">
+                                <label
+                                    style="display: block; font-weight: bold; font-size: 13px; color: #b45309; margin-bottom: 5px;">
                                     5. Guest Priest's License to Marry (Required for Guest Priest) *
                                 </label>
-                                <p style="font-size: 11px; color: #78350f; margin: 0 0 8px 0;">Since you checked the box to bring a guest priest, please upload their official License to Marry document.</p>
+                                <p style="font-size: 11px; color: #78350f; margin: 0 0 8px 0;">Since you checked the box
+                                    to bring a guest priest, please upload their official License to Marry document.</p>
                                 <div class="inline-drop-zone"
                                     onclick="document.getElementById('guestPriestLicenseFiles').click()"
                                     style="border: 2px dashed #f59e0b; padding: 12px; border-radius: 6px; text-align: center; cursor: pointer; background: #fffdf9;">
-                                    <span><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#icon-file-text"></use></svg> Click or drag Guest Priest License to Marry here</span>
+                                    <span><svg class="ui-icon" aria-hidden="true" focusable="false">
+                                            <use href="#icon-file-text"></use>
+                                        </svg> Click or drag Guest Priest License to Marry here</span>
                                     <input type="file" id="guestPriestLicenseFiles" accept=".pdf,.jpg,.jpeg,.png"
                                         style="display:none;"
                                         onchange="handleInlineFiles(event, 'guestPriestLicenseList')">
@@ -1180,10 +1301,16 @@
                     <!-- DATA PRIVACY ACT CONSENT -->
                     <div class="form-group"
                         style="background: #f8f9fa; border: 1px solid #ccd0d5; padding: 12px; border-radius: 6px; margin: 15px 0;">
-                        <label style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer; font-size: 12px; color: #333; font-weight: normal;">
-                            <input type="checkbox" id="privacyConsentCheck" required style="margin-top: 2px; cursor: pointer;">
+                        <label
+                            style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer; font-size: 12px; color: #333; font-weight: normal;">
+                            <input type="checkbox" id="privacyConsentCheck" required
+                                style="margin-top: 2px; cursor: pointer;">
                             <span>
-                                <strong>Data Privacy Consent:</strong> I hereby authorize Santuario Del Sto. Cristo Parish to collect, process, and store my personal and sacramental data provided in this form in compliance with the <strong>Philippine Data Privacy Act (RA 10173)</strong>. I understand my data will be used strictly for parish record-keeping, verification, and ceremony scheduling.
+                                <strong>Data Privacy Consent:</strong> I hereby authorize Santuario Del Sto. Cristo
+                                Parish to collect, process, and store my personal and sacramental data provided in this
+                                form in compliance with the <strong>Philippine Data Privacy Act (RA 10173)</strong>. I
+                                understand my data will be used strictly for parish record-keeping, verification, and
+                                ceremony scheduling.
                             </span>
                         </label>
                     </div>
@@ -1193,57 +1320,83 @@
             </div>
         </div>
 
-        <!-- 3. FUNERAL APPLICATION FORM (INTERPRET & WAKE RANGE PICKER) -->
+        <!-- 3. FUNERAL APPLICATION FORM -->
         <div class="modal-overlay" id="funeralModal">
             <div class="modal-box">
                 <span class="close-btn" onclick="closeModal('funeralModal')">&times;</span>
                 <h2>Resurrection Chapel Wake & Vigil Request</h2>
                 <form id="funeralForm" onsubmit="event.preventDefault(); saveApplicationLocally('funeral', this);">
-                    <!-- Applicant First & Last Name Split Row -->
+
+                    <!-- APPLICANT INFORMATION -->
                     <h4 style="color: #4a0e17; margin-top: 15px; margin-bottom: 8px;">Applicant's Information</h4>
-                    <div style="display: flex; gap: 12px; margin-bottom: 15px;">
-                        <div style="flex: 1;">
+                    <div style="display: flex; gap: 12px; margin-bottom: 15px; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 180px;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">First
+                                Name *</label>
                             <input type="text" id="applicantFirstName" name="applicantFirstName" required
-                                placeholder="First Name"
                                 style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                         </div>
-                        <div style="flex: 1;">
+                        <div style="flex: 1; min-width: 180px;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Last
+                                Name *</label>
                             <input type="text" id="applicantLastName" name="applicantLastName" required
-                                placeholder="Last Name"
                                 style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                         </div>
-                        <div class="form-row" style="margin-bottom: 15px;">
-                            <div class="form-group">
-                                <input type="email" id="applicantEmail" name="applicantEmail" required
-                                    placeholder="Email Address"
-                                    style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                            </div>
+                        <div style="flex: 1; min-width: 220px;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Email
+                                Address *</label>
+                            <input type="email" id="applicantEmail" name="applicantEmail" required
+                                style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                         </div>
                     </div>
 
+                    <!-- DECEASED'S INFORMATION -->
                     <h4 style="color: #4a0e17; margin-top: 15px; margin-bottom: 8px;">Deceased's Information</h4>
-
-                    <div class="form-row">
-                        <!-- Deceased Person's Name -->
-                        <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 12px;">
-                            <div class="form-group" style="flex: 2;"><input type="text" name="deceasedFirstName"
-                                    required placeholder="First Name">
-                            </div>
-                            <div class="form-group" style="flex: 1;"><input type="text" name="deceasedMiddleInitial"
-                                    maxlength="3" placeholder="M.I."></div>
-                            <div class="form-group" style="flex: 2;"><input type="text" name="deceasedLastName" required
-                                    placeholder="Last Name"></div>
+                    <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap;">
+                        <div class="form-group" style="flex: 2; min-width: 180px;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">First
+                                Name *</label>
+                            <input type="text" name="deceasedFirstName" required
+                                style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                         </div>
-                        <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 12px;">
-                            <div class="form-group" style="flex: 2;"><input type="number" name="age"
-                                    placeholder="Age of Death"></div>
+                        <div class="form-group" style="flex: 1; min-width: 80px;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">M.I.</label>
+                            <input type="text" name="deceasedMiddleInitial" maxlength="3"
+                                style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
+                        </div>
+                        <div class="form-group" style="flex: 2; min-width: 180px;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Last
+                                Name *</label>
+                            <input type="text" name="deceasedLastName" required
+                                style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                         </div>
                     </div>
 
+                    <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 12px;">
+                        <div class="form-group" style="flex: 1; max-width: 180px;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Age
+                                of Death *</label>
+                            <input type="number" name="age" required
+                                style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
+                        </div>
+                    </div>
+
+                    <!-- CONTACT NUMBER -->
                     <h4 style="color: #4a0e17; margin-top: 15px; margin-bottom: 8px;">Contact Number</h4>
                     <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 12px;">
-                        <div class="form-group">
-                            <input type="tel" name="phone" required placeholder="09XX-XXX-XXXX">
+                        <div class="form-group" style="flex: 1;">
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Contact
+                                Phone Number *</label>
+                            <input type="tel" name="phone" required
+                                style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
                         </div>
                     </div>
 
@@ -1255,11 +1408,9 @@
                             style="background: #e7f3ff; border-left: 4px solid #1877f2; padding: 10px; font-size: 12px; color: #1c1e21; margin-bottom: 15px;">
                             <strong><svg class="ui-icon" aria-hidden="true" focusable="false">
                                     <use href="#icon-flame"></use>
-                                </svg>️ Resurrection Chapel Scheduling:</strong><br>
-                            Select your <strong>Wake Start Date</strong> and <strong>Target Interment
-                                Date</strong>
-                            below.
-                            The calendar will preview and highlight the occupied span (Max 7 days).
+                                </svg> Resurrection Chapel Scheduling:</strong><br>
+                            Click <strong>Today's Date</strong> to start the wake, then select your <strong>Interment
+                                Date</strong> (Max 7 days).
                         </div>
 
                         <!-- Setup Options & Range Summary -->
@@ -2644,12 +2795,23 @@
 
                         let actionButtonsHtml = '';
 
+                        if (app.status === 'Pending') {
+                            actionButtonsHtml += `
+                            <button onclick="parishionerDeleteApplication('${app.id}')" style="background: #e74c3c; color: white; border: none; padding: 7px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">
+                                Cancel Application
+                            </button>
+                        `;
+                        }
+
                         if (app.status === 'To Follow-Up & Upload Lacking Documents' || app.status === 'Needs Revision') {
                             actionButtonsHtml += `
                                 <button onclick="openResubmitDocsModal('${app.id}')" style="background: #d35400; color: white; border: none; padding: 7px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">
                                     <svg class="ui-icon" aria-hidden="true" focusable="false">
                                             <use href="#icon-file-text"></use>
                                         </svg> Upload Lacking Docs
+                                </button>
+                                <button onclick="parishionerDeleteApplication('${app.id}')" style="background: #e74c3c; color: white; border: none; padding: 7px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">
+                                Cancel Application
                                 </button>
                             `;
                         }
@@ -2662,12 +2824,20 @@
                             `;
                         }
 
-                        if (app.status === 'Approved' || app.status === 'Reviewing') {
+                        else if (app.status === 'Reviewing') {
                             actionButtonsHtml += `
                                 <button onclick="openRescheduleRequestModal('${app.id}')" style="background: #1877f2; color: white; border: none; padding: 7px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">
-                                    <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#icon-calendar-days"></use></svg> Request Resched
+                                    Request Reschedule
                                 </button>
                             `;
+                        }
+
+                        if (app.status === 'Approved') {
+                            actionButtonsHtml += `
+                            <span style="color: #27ae60; font-weight: bold; font-size: 12px; display: inline-flex; align-items: center; gap: 4px;">
+                                🔒 Approved (Rescheduling is locked)
+                            </span>
+                        `;
                         }
 
                         let formattedNotes = notes;
@@ -2724,6 +2894,67 @@
                 }
             }
 
+            async function updateApplicationStatus(appId, newStatus) {
+                if (!appId) {
+                    console.error("Invalid Application ID provided for status update.");
+                    return;
+                }
+
+                // Optional confirmation prompt for cancellations
+                if (newStatus === 'Cancelled') {
+                    const confirmCancel = confirm("Are you sure you want to cancel this application?");
+                    if (!confirmCancel) return;
+                }
+
+                try {
+                    // Handle numeric or string IDs cleanly
+                    const parsedId = isNaN(appId) ? appId : Number(appId);
+
+                    // Fetch current application record from IndexedDB (Dexie)
+                    const app = await db.applications.get(parsedId);
+                    if (!app) {
+                        showAlert('Application not found.', 'Error');
+                        return;
+                    }
+
+                    const currentUser = JSON.parse(localStorage.getItem('currentUser')) || {};
+                    const changedByName = currentUser.name || app.applicantName || 'Applicant';
+
+                    const historyEntry = {
+                        oldStatus: app.status || 'Pending',
+                        newStatus: newStatus,
+                        adminNote: `Status updated to ${newStatus} by user.`,
+                        changedAt: new Date().toISOString(),
+                        changedBy: changedByName
+                    };
+
+                    const updatedHistory = app.statusHistory ? [...app.statusHistory, historyEntry] : [historyEntry];
+
+                    // Update record in database
+                    await db.applications.update(parsedId, {
+                        status: newStatus,
+                        statusHistory: updatedHistory,
+                        updatedAt: new Date().toISOString()
+                    });
+
+                    // Refresh UI dashboard if renderer function exists
+                    if (typeof renderUserDashboard === 'function') {
+                        await renderUserDashboard();
+                    }
+
+                    if (typeof showAlert === 'function') {
+                        showAlert(`Application status has been updated to ${newStatus}.`, 'Status Updated');
+                    } else {
+                        alert(`Application status updated to ${newStatus}.`);
+                    }
+
+                } catch (err) {
+                    console.error("Failed to update application status:", err);
+                    if (typeof showAlert === 'function') {
+                        showAlert('An error occurred while updating the status.', 'Error');
+                    }
+                }
+            }
 
             // Open Modal to upload additional document files
             async function openResubmitDocsModal(appId) {
@@ -3664,7 +3895,7 @@
                 todayObj.setHours(0, 0, 0, 0);
                 const todayStr = `${todayObj.getFullYear()}-${String(todayObj.getMonth() + 1).padStart(2, '0')}-${String(todayObj.getDate()).padStart(2, '0')}`;
 
-                // Fetch existing active funeral applications to block occupied dates
+                // Fetch occupied funeral dates from database
                 let allFuneralApps = [];
                 try {
                     if (typeof db !== 'undefined' && db.applications) {
@@ -3705,9 +3936,6 @@
                     const dayOfWeek = new Date(dateString).getDay();
 
                     const isToday = (dateString === todayStr);
-                    const isPast = dateString < todayStr;
-                    const isFuture = dateString > todayStr;
-                    const isAllowedDay = (dayOfWeek !== 1); // Closed Mondays
                     const isOccupied = occupiedDates.has(dateString);
 
                     let isStart = funeralWakeStartDate === dateString;
@@ -3719,76 +3947,135 @@
                     }
 
                     let canClick = false;
-                    let badgeText = isAllowedDay ? 'Available' : 'Closed';
-                    let badgeColor = isAllowedDay ? '#2e7d32' : '#8a8d91';
+                    let badgeText = 'Closed';
+                    let badgeColor = '#94a3b8';
 
-                    // Strict validation: First click only allows Today. Second click allows up to 7 days max.
-                    if (!funeralWakeStartDate || (funeralWakeStartDate && funeralIntermentDate)) {
-                        canClick = isAllowedDay && !isOccupied && isToday;
-                    } else {
+                    // Availability Rules:
+                    // Stage 1: Only TODAY is clickable as wake start date.
+                    // Stage 2: Only dates up to 7 days from wake start date are selectable.
+                    if (!funeralWakeStartDate) {
+                        if (isToday && !isOccupied) {
+                            canClick = true;
+                            badgeText = 'Available Today';
+                            badgeColor = '#10b981';
+                        }
+                    } else if (funeralWakeStartDate && !funeralIntermentDate) {
                         const startD = new Date(funeralWakeStartDate);
                         const maxD = new Date(startD);
-                        maxD.setDate(maxD.getDate() + 6); // Max 7 days total (start + 6)
+                        maxD.setDate(maxD.getDate() + 6); // 7-day span maximum (Start day + 6)
                         const maxStr = `${maxD.getFullYear()}-${String(maxD.getMonth() + 1).padStart(2, '0')}-${String(maxD.getDate()).padStart(2, '0')}`;
 
-                        canClick = isAllowedDay && !isOccupied && (dateString >= funeralWakeStartDate) && (dateString <= maxStr);
-                    }
-
-                    let bgStyle = '#f0f2f5';
-                    let textStyle = '#050505';
-                    let dotColor = '#10b981'; // Green for available
-                    let statusTooltip = 'Available';
-
-                    if (isToday && (!funeralWakeStartDate || (funeralWakeStartDate && funeralIntermentDate))) {
-                        bgStyle = '#e8f5e9';
-                        dotColor = '#16a34a'; // Bright green for today
-                        statusTooltip = 'Today';
-                    }
-
-                    if (!canClick) {
-                        bgStyle = '#f4f2f2';
-                        textStyle = '#b0b3b8';
-                        dotColor = '#94a3b8'; // Grey for unavailable/closed
-                        if (isFuture && (!funeralWakeStartDate || (funeralWakeStartDate && funeralIntermentDate))) {
-                            statusTooltip = 'Future';
-                        } else if (isPast) {
-                            statusTooltip = 'Past';
-                        } else if (!isAllowedDay) {
-                            statusTooltip = 'Closed (Mon)';
+                        if (dateString >= funeralWakeStartDate && dateString <= maxStr && !isOccupied) {
+                            canClick = true;
+                            badgeText = (dateString === funeralWakeStartDate) ? 'Wake Start' : 'Within 7 Days';
+                            badgeColor = '#1877f2';
                         }
+                    } else {
+                        // Reset selection on click if both dates are already selected
+                        canClick = true;
+                    }
+
+                    let bgStyle = '#f4f2f2';
+                    let textStyle = '#b0b3b8';
+
+                    if (canClick) {
+                        bgStyle = '#f0f2f5';
+                        textStyle = '#050505';
+                    }
+
+                    if (isToday && !funeralWakeStartDate) {
+                        bgStyle = '#e8f5e9';
+                        textStyle = '#1b5e20';
                     }
 
                     if (isOccupied) {
                         bgStyle = '#f8d7da';
                         textStyle = '#721c24';
-                        dotColor = '#ef4444'; // Red for occupied
-                        statusTooltip = 'Occupied';
+                        canClick = false;
+                        badgeText = 'Occupied';
+                        badgeColor = '#ef4444';
                     }
 
                     if (isStart || isEnd) {
                         bgStyle = '#1877f2';
                         textStyle = '#ffffff';
-                        dotColor = '#ffffff'; // White dot for selected start/interment dates
-                        statusTooltip = isStart ? 'Wake Start' : 'Interment';
+                        badgeColor = '#ffffff';
                     } else if (isInSpan) {
                         bgStyle = '#d0e8ff';
                         textStyle = '#1d4ed8';
-                        dotColor = '#2563eb'; // Blue dot for span
-                        statusTooltip = 'Wake Span';
+                        badgeColor = '#2563eb';
                     }
 
                     const cursorStyle = canClick ? 'pointer' : 'not-allowed';
 
                     html += `
             <div onclick="${canClick ? `selectFuneralCalendarDate('${dateString}')` : ''}" 
-                 style="background: ${bgStyle}; color: ${textStyle}; padding: 8px 4px; border-radius: 6px; cursor: ${cursorStyle}; font-size: 13px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 44px; border: ${isToday && (!funeralWakeStartDate || (funeralWakeStartDate && funeralIntermentDate)) ? '2px solid #2e7d32' : (isStart || isEnd ? '2px solid #000' : '1px solid transparent')};">
+                 style="background: ${bgStyle}; color: ${textStyle}; padding: 8px 4px; border-radius: 6px; cursor: ${cursorStyle}; font-size: 13px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 44px; border: ${isToday ? '2px solid #2e7d32' : (isStart || isEnd ? '2px solid #000' : '1px solid transparent')};">
                 <strong style="font-size: 14px;">${day}</strong>
-                <span style="width: 7px; height: 7px; background: ${dotColor}; border-radius: 50%; display: inline-block; margin-top: 6px;" title="${statusTooltip}"></span>
+                <span style="width: 7px; height: 7px; background: ${badgeColor}; border-radius: 50%; display: inline-block; margin-top: 6px;" title="${badgeText}"></span>
             </div>
         `;
-
-                    gridEl.innerHTML = html;
                 }
+
+                gridEl.innerHTML = html;
+            }
+
+            async function selectFuneralCalendarDate(dateStr) {
+                const todayObj = new Date();
+                todayObj.setHours(0, 0, 0, 0);
+                const todayStr = `${todayObj.getFullYear()}-${String(todayObj.getMonth() + 1).padStart(2, '0')}-${String(todayObj.getDate()).padStart(2, '0')}`;
+
+                // Reset range if user clicks again after completing selection
+                if (funeralWakeStartDate && funeralIntermentDate) {
+                    funeralWakeStartDate = null;
+                    funeralIntermentDate = null;
+                    document.getElementById('funeralSelectedDateInput').value = '';
+                    document.getElementById('intermentDateInput').value = '';
+                    renderFuneralCalendar();
+                    return;
+                }
+
+                // Step 1: Set Wake Start Date (Strictly Current Day / Today)
+                if (!funeralWakeStartDate) {
+                    if (dateStr !== todayStr) {
+                        showAlert('Wake start date must be the current day (Today).', 'Invalid Start Date');
+                        return;
+                    }
+
+                    funeralWakeStartDate = dateStr;
+                    document.getElementById('funeralSelectedDateInput').value = dateStr;
+
+                    const panel = document.getElementById('funeralTimeslotPanel');
+                    if (panel) panel.style.display = 'block';
+
+                    document.getElementById('funeralSelectedDateHeader').textContent = `Wake Start: ${dateStr}`;
+                    document.getElementById('funeralSummaryBox').innerHTML = `Now select your <strong>Target Interment Date</strong> (Maximum 7-day span).`;
+
+                    renderFuneralCalendar();
+                    return;
+                }
+
+                // Step 2: Set Target Interment Date (Within 7-day window)
+                if (dateStr < funeralWakeStartDate) {
+                    showAlert('Interment date cannot be earlier than the wake start date.', 'Invalid Range');
+                    return;
+                }
+
+                const startD = new Date(funeralWakeStartDate);
+                const endD = new Date(dateStr);
+                const diffDays = Math.round((endD - startD) / (1000 * 60 * 60 * 24)) + 1;
+
+                if (diffDays > 7) {
+                    showAlert('Maximum wake duration is 7 days. Please select an interment date within 7 days of the wake start date.', '7-Day Span Limit');
+                    return;
+                }
+
+                funeralIntermentDate = dateStr;
+                document.getElementById('intermentDateInput').value = dateStr;
+                document.getElementById('wakeDaysInput').value = diffDays;
+
+                renderFuneralCalendar();
+                updateFuneralSpanCalculation();
             }
 
             function changeFuneralCalendarMonth(direction) {
@@ -4219,6 +4506,47 @@
                 closeModal('gcashPaymentModal');
                 if (typeof renderUserDashboard === 'function') await renderUserDashboard();
                 showAlert('Your GCash payment receipt has been successfully submitted to the parish secretariat for verification!', 'Payment Submitted');
+            }
+
+            function getStatusBadgeStyle(status) {
+                switch ((status || '').toLowerCase()) {
+                    case 'approved': return { bg: '#e8f5e9', color: '#2e7d32' };
+                    case 'pending': return { bg: '#fff8e1', color: '#f57f17' };
+                    case 'upload lacking documents':
+                    case 'needs revision': return { bg: '#fff3e0', color: '#e65100' }; // <-- Orange badge for lacking docs
+                    case 'cancelled': return { bg: '#ffebee', color: '#c62828' }; // <-- Red badge for cancelled
+                    case 'reviewing': return { bg: '#e3f2fd', color: '#1565c0' };
+                    default: return { bg: '#f1f5f9', color: '#475569' };
+                }
+            }
+            async function parishionerDeleteApplication(id) {
+                if (!id) return;
+
+                const confirmDelete = confirm("Are you sure you want to cancel and delete this application? This action cannot be undone.");
+                if (!confirmDelete) return;
+
+                try {
+                    const parsedId = isNaN(id) ? id : Number(id);
+
+                    // Permanently delete the application from Dexie IndexedDB database
+                    await db.applications.delete(parsedId);
+
+                    if (typeof showAlert === 'function') {
+                        showAlert('Your application has been successfully cancelled and deleted.', 'Deleted');
+                    } else {
+                        alert('Your application has been successfully cancelled and deleted.');
+                    }
+
+                    // Refresh the user's dashboard application list
+                    if (typeof loadUserApplications === 'function') {
+                        loadUserApplications();
+                    } else {
+                        location.reload();
+                    }
+                } catch (err) {
+                    console.error("Failed to delete application from database:", err);
+                    alert('An error occurred while trying to delete the application.');
+                }
             }
         </script>
 </body>
