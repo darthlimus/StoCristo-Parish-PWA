@@ -171,6 +171,44 @@
             vertical-align: middle;
         }
 
+        /* Ensure all action buttons in the admin table have equal dimensions and look */
+        /* Equal width proportions for action buttons */
+        .admin-table td .action-btn-group {
+            display: flex;
+            gap: 6px;
+            align-items: stretch;
+            width: 100%;
+            min-width: 240px;
+            /* Ensures enough room for all three buttons to sit side-by-side proportionally */
+        }
+
+        .admin-table td .action-btn-group button,
+        .admin-table td .action-btn-group a {
+            flex: 1 1 0px;
+            /* Forces all buttons to share equal width proportions */
+            min-height: 34px;
+            padding: 6px 8px;
+            font-size: 11.5px;
+            font-weight: 700;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            text-decoration: none;
+            line-height: 1.1;
+            white-space: nowrap;
+            box-sizing: border-box;
+            text-align: center;
+            transition: opacity 0.15s ease;
+        }
+
+        .admin-table td .action-btn-group button:hover {
+            opacity: 0.88;
+        }
+
         .admin-table tbody tr:hover {
             background-color: #f8f9fa;
         }
@@ -2045,7 +2083,7 @@
             const statusFilter = (statusFilterEl ? statusFilterEl.value : 'ALL').toLowerCase();
             const searchInput = (searchInputEl ? searchInputEl.value : '').toLowerCase().trim();
 
-            const reqConfig = { baptism: 2, wedding: 3, funeral: 0 };
+            const reqConfig = { baptism: 3, wedding: 3, funeral: 0 };
 
             let filtered = rawApplicationsData.filter(app => {
                 const isArchived = Boolean(app.archived);
@@ -2092,7 +2130,7 @@
                 let minRequired = 0;
                 if (!isWalkIn) {
                     if (sacramentKey === 'wedding') {
-                        minRequired = hasGuestPriest ? 4 : 3; // 4 if guest priest, 3 standard
+                        minRequired = hasGuestPriest ? 4 : 3;
                     } else if (sacramentKey === 'baptism') {
                         minRequired = 2;
                     } else {
@@ -2107,24 +2145,43 @@
                     })).values()
                 ) : [];
 
-                const uploadedCount = uniqueDocs.length;
+// --- ROBUST DOCUMENT COUNTING FOR ADMIN TABLE ---
+                let uploadedCount = 0;
+                
+                if (app.documents) {
+                    if (Array.isArray(app.documents)) {
+                        const uniqueMap = new Map();
+                        app.documents.forEach(doc => {
+                            let name = typeof doc === 'string' ? doc : (doc.name || doc.fileName || 'Document');
+                            uniqueMap.set(name, doc);
+                        });
+                        uploadedCount = uniqueMap.size;
+                    } else if (typeof app.documents === 'object') {
+                        let totalFiles = 0;
+                        for (const [categoryKey, fileList] of Object.entries(app.documents)) {
+                            if (fileList) {
+                                if (Array.isArray(fileList) && fileList.length > 0) {
+                                    totalFiles += 1;
+                                } else if (typeof fileList === 'object' && Object.keys(fileList).length > 0) {
+                                    totalFiles += 1;
+                                }
+                            }
+                        }
+                        uploadedCount = totalFiles;
+                    }
+                }
+
                 const isDocComplete = uploadedCount >= minRequired;
 
+                // --- CLEAN & COMPACT DOCUMENT STATUS ---
                 let filesHtml = '';
                 if (minRequired === 0) {
-                    filesHtml = `<div style="margin-bottom: 4px;"><span style="background: #27ae60; color: white; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-check"></use></svg> No Docs Required</span></div>`;
+                    filesHtml = `<span style="background: #27ae60; color: white; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-check"></use></svg> Complete</span>`;
                 } else {
-                    filesHtml = `<div style="margin-bottom: 4px;"><span style="background: ${isDocComplete ? '#27ae60' : '#e67e22'}; color: white; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">${isDocComplete ? '<svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-check"></use></svg> Complete' : '<svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-alert-triangle"></use></svg> Incomplete'} (${uploadedCount}/${minRequired})</span></div>`;
-
-                    if (uniqueDocs.length > 0) {
-                        filesHtml += uniqueDocs.map((doc, idx) => {
-                            let docName = typeof doc === 'string' ? `Doc ${idx + 1}` : (doc.name || `Doc ${idx + 1}`);
-                            let docUrl = typeof doc === 'string' ? doc : doc;
-                            let viewerId = registerDocumentForViewer(docName, docUrl);
-                            return `<div style="margin: 3px 0;"><button type="button" onclick="event.stopPropagation(); viewDocumentById('${viewerId}')" style="background: #0056b3; color: white; border: none; padding: 3px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-eye"></use></svg> View ${docName}</button></div>`;
-                        }).join('');
+                    if (isDocComplete) {
+                        filesHtml = `<span style="background: #27ae60; color: white; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-check"></use></svg> Complete (${uploadedCount}/${minRequired})</span>`;
                     } else {
-                        filesHtml += `<span style="color:#c0392b; font-size:11px; font-weight:bold;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-alert-triangle"></use></svg> Missing (0/${minRequired})</span>`;
+                        filesHtml = `<span style="background: #e67e22; color: white; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-alert-triangle"></use></svg> Incomplete (${uploadedCount}/${minRequired})</span>`;
                     }
                 }
 
@@ -2132,26 +2189,18 @@
 
                 let scheduleBtnHtml = '';
                 if (!isDocComplete) {
-                    scheduleBtnHtml = `<button type="button" onclick="event.stopPropagation(); showAlert(' Action Denied: Documents are still lacking (${uploadedCount}/${minRequired}).')" style="background: #aab7b8; color: #ffffff; border: none; padding: 6px 10px; border-radius: 4px; cursor: not-allowed; font-size: 12px; font-weight: bold;">     <svg class="ui-icon"
-         aria-hidden="true"
-         focusable="false"
-         viewBox="0 0 24 24"
-         width="16"
-         height="16"
-         fill="none"
-         stroke="currentColor"
-         stroke-width="2"
-         stroke-linecap="round"
-         stroke-linejoin="round">
-        <path d="M12 3 2.8 19a1.5 1.5 0 0 0 1.3 2.2h15.8a1.5 1.5 0 0 0 1.3-2.2L12 3Z"/>
-        <path d="M12 9v4"/>
-        <path d="M12 17h.01"/>
-    </svg>
-Incomplete</button>`;
+                    scheduleBtnHtml = `<button type="button" onclick="event.stopPropagation(); showAlert('Action Denied: Documents are still lacking (${uploadedCount}/${minRequired}).')" style="background: #aab7b8; color: #ffffff;">Incomplete</button>`;
                 } else if (!isPaymentReady) {
-                    scheduleBtnHtml = `<button type="button" onclick="event.stopPropagation(); showAlert(' Payment Pending: Scheduling is greyed out until payment is confirmed.')" style="background: #e67e22; color: #ffffff; border: none; padding: 6px 10px; border-radius: 4px; cursor: not-allowed; font-size: 12px; font-weight: bold;"> Payment Pending</button>`;
+                    scheduleBtnHtml = `<button type="button" onclick="event.stopPropagation(); showAlert('Payment Pending: Scheduling is greyed out until payment is confirmed.')" style="background: #e67e22; color: #ffffff;">Payment Pending</button>`;
                 } else {
-                    scheduleBtnHtml = `<button type="button" onclick="event.stopPropagation(); openAppointmentModal('${app.id}')" style="background: #1e5631; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-calendar"></use></svg> Schedule</button>`;
+                    scheduleBtnHtml = `<button type="button" onclick="event.stopPropagation(); openAppointmentModal('${app.id}')" style="background: #1e5631; color: #ffffff;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-calendar"></use></svg> Schedule</button>`;
+                }
+
+                let archiveOrDeleteBtnHtml = '';
+                if (app.archived || st === 'cancelled' || st === 'completed') {
+                    archiveOrDeleteBtnHtml = `<button type="button" onclick="event.stopPropagation(); deleteApplicationRecord('${app.id}')" style="background: #c0392b; color: #ffffff;" title="Permanently Delete Record"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-x"></use></svg> Delete</button>`;
+                } else {
+                    archiveOrDeleteBtnHtml = `<button type="button" onclick="event.stopPropagation(); toggleArchive('${app.id}')" class="btn-action" style="background: #6c757d; color: #ffffff;" title="Mark as Done"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-check"></use></svg> Mark as Done</button>`;
                 }
 
                 html += `
@@ -2175,10 +2224,10 @@ Incomplete</button>`;
                         ${app.adminNotes ? `<br><small style="color:red; margin-top: 4px; display:block;">Note: ${app.adminNotes}</small>` : ''}
                     </td>
                     <td>
-                        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                            <button type="button" onclick="event.stopPropagation(); openAdminUpdateModal('${app.id}')" style="background: #4a0e17; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-eye"></use></svg> Details</button>
+                        <div class="action-btn-group">
+                            <button type="button" onclick="event.stopPropagation(); openAdminUpdateModal('${app.id}')" style="background: #4a0e17; color: #ffffff;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-eye"></use></svg> Details</button>
                             ${scheduleBtnHtml}
-                            <button type="button" onclick="event.stopPropagation(); toggleArchive('${app.id}')" class="btn-action" title="${app.archived ? 'Restore' : 'Archive'}">${app.archived ? '<svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-refresh-cw"></use></svg>' : '<svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-check"></use></svg> Mark as Done'}</button>
+                            ${archiveOrDeleteBtnHtml}
                         </div>
                     </td>
                 </tr>`;
@@ -2279,18 +2328,61 @@ Incomplete</button>`;
             }
 
             let docsHtml = '<em style="color:#666; font-size:12px;">No sacramental documents attached.</em>';
-            if (app.documents && app.documents.length > 0) {
-                docsHtml = app.documents.map((doc, idx) => {
-                    let docName = typeof doc === 'string' ? `Document ${idx + 1}` : (doc.name || `Document ${idx + 1}`);
-                    let docUrl = typeof doc === 'string' ? doc : doc;
-                    let viewerId = registerDocumentForViewer(docName, docUrl);
-                    return `
-            <div style="margin: 4px 0; display: flex; align-items: center; gap: 8px;">
-                <span style="font-size: 12px; font-weight: bold;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-file"></use></svg> ${docName}</span>
-                <button type="button" onclick="viewDocumentById('${viewerId}')" style="background: #0056b3; color: white; border: none; padding: 3px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-eye"></use></svg> View Document</button>
-            </div>`;
-                }).join('');
+            
+            if (app.documents) {
+                let docItems = [];
+
+                // Handle if app.documents is an Object (e.g. { "Mother's Baptismal Certificate": [...] })
+                if (!Array.isArray(app.documents) && typeof app.documents === 'object') {
+                    for (const [docLabel, fileList] of Object.entries(app.documents)) {
+                        if (!fileList) continue;
+                        const arr = Array.isArray(fileList) ? fileList : [fileList];
+                        arr.forEach(fileObj => {
+                            if (fileObj) {
+                                docItems.push({
+                                    categoryLabel: docLabel,
+                                    name: fileObj.fileName || fileObj.name || docLabel,
+                                    data: fileObj.fileData || fileObj.url || fileObj.data || ''
+                                });
+                            }
+                        });
+                    }
+                } 
+                // Handle if app.documents is an Array
+                else if (Array.isArray(app.documents) && app.documents.length > 0) {
+                    app.documents.forEach((doc, idx) => {
+                        if (typeof doc === 'string') {
+                            docItems.push({
+                                categoryLabel: doc.documentType || 'Document',
+                                name: `Document ${idx + 1}`,
+                                data: doc
+                            });
+                        } else if (doc) {
+                            docItems.push({
+                                categoryLabel: doc.documentType || doc.documentTitle || 'Document',
+                                name: doc.name || doc.fileName || `Document ${idx + 1}`,
+                                data: doc.data || doc.fileData || ''
+                            });
+                        }
+                    });
+                }
+
+                if (docItems.length > 0) {
+                    docsHtml = docItems.map((item, idx) => {
+                        let docTypeLabel = item.categoryLabel ? `<span style="background: #4a0e17; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; margin-right: 6px; font-weight: bold;">${item.categoryLabel}</span>` : '';
+                        let viewerId = registerDocumentForViewer(item.name, item.data);
+                        return `
+                            <div style="margin: 6px 0; display: flex; align-items: center; justify-content: space-between; background: #fff; padding: 6px 10px; border: 1px solid #e2e8f0; border-radius: 4px;">
+                                <div style="display: flex; align-items: center; gap: 6px; overflow: hidden; max-width: 80%;">
+                                    ${docTypeLabel}
+                                    <span style="font-size: 12px; font-weight: bold; color: #1e293b; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">${item.name}</span>
+                                </div>
+                                <button type="button" onclick="viewDocumentById('${viewerId}')" style="background: #0056b3; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; white-space: nowrap;">View</button>
+                            </div>`;
+                    }).join('');
+                }
             }
+            
 
             let paymentProofHtml = '<em style="color:#666; font-size: 12px;">No payment receipt uploaded yet.</em>';
             if (app.paymentProof) {

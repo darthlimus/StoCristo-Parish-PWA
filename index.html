@@ -476,14 +476,14 @@
                                 <label
                                     style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">First
                                     Name *</label>
-                                <input type="text" id="regFirstName" required placeholder="Julian"
+                                <input type="text" id="regFirstName" required
                                     style="width: 100%; padding: 9px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 13px;">
                             </div>
                             <div style="flex: 1;">
                                 <label
                                     style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Last
                                     Name *</label>
-                                <input type="text" id="regLastName" required placeholder="Santos"
+                                <input type="text" id="regLastName" required
                                     style="width: 100%; padding: 9px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 13px;">
                             </div>
                         </div>
@@ -491,14 +491,14 @@
                             <label
                                 style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Email
                                 Address *</label>
-                            <input type="email" id="regEmail" required placeholder="jodilim@gmail.com"
+                            <input type="email" id="regEmail" required
                                 style="width: 100%; padding: 9px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 13px;">
                         </div>
                         <div style="margin-bottom: 20px;">
                             <label
                                 style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Password
                                 *</label>
-                            <input type="password" id="regPassword" required placeholder="••••••••"
+                            <input type="password" id="regPassword" required
                                 style="width: 100%; padding: 9px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 13px;">
                         </div>
                         <button type="submit"
@@ -1658,13 +1658,11 @@
 
         <!-- RESUBMIT LACKING DOCUMENTS MODAL -->
         <div id="resubmitDocsModal" class="modal-overlay" style="z-index: 999999;">
-            <div class="modal-box" style="max-width: 480px; padding: 24px; text-align: left;">
+            <div class="modal-box"
+                style="max-width: 520px; padding: 24px; text-align: left; max-height: 85vh; overflow-y: auto;">
                 <div
                     style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #4a0e17; padding-bottom: 10px; margin-bottom: 15px;">
-                    <h3 style="color: #4a0e17; margin: 0; font-size: 1.2rem;"><svg class="ui-icon" aria-hidden="true"
-                            focusable="false">
-                            <use href="#icon-file-text"></use>
-                        </svg> Upload Lacking Documents</h3>
+                    <h3 style="color: #4a0e17; margin: 0; font-size: 1.2rem;">Upload Lacking Documents</h3>
                     <span class="close-btn" onclick="closeModal('resubmitDocsModal')"
                         style="cursor: pointer; font-size: 1.5rem; color: #333;">&times;</span>
                 </div>
@@ -1675,18 +1673,11 @@
 
                 <form id="resubmitDocsForm" onsubmit="handleResubmitDocsSubmit(event)">
                     <input type="hidden" id="resubmitAppId">
-                    <div style="margin-bottom: 15px;">
-                        <label style="display: block; font-weight: bold; font-size: 13px; margin-bottom: 6px;">Attach
-                            Required Lacking Documents *</label>
-                        <div class="inline-drop-zone" onclick="document.getElementById('resubmitFileInput').click()"
-                            style="border: 2px dashed #cbd5e1; padding: 15px; border-radius: 6px; text-align: center; cursor: pointer; background: #f8fafc;">
-                            <span>📁 Click or drag files here (PDF, JPG, PNG)</span>
-                            <input type="file" id="resubmitFileInput" multiple accept=".pdf,.jpg,.jpeg,.png"
-                                style="display:none;" onchange="handleInlineFiles(event, 'resubmitFileList')">
-                        </div>
-                        <div class="file-preview-list" id="resubmitFileList" style="margin-top: 8px;"></div>
-                    </div>
-                    <div style="display: flex; justify-content: flex-end; gap: 10px;">
+
+                    <!-- Dynamic Separated Upload Fields Render Here -->
+                    <div id="resubmitDynamicUploadsContainer"></div>
+
+                    <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
                         <button type="button" onclick="closeModal('resubmitDocsModal')"
                             style="padding: 8px 16px; background: #e0e0e0; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">Cancel</button>
                         <button type="submit"
@@ -2448,11 +2439,12 @@
                 handleInlineFiles({ target: input }, targetListId);
             }
 
+            // Helper to convert files to base64 if not already present
             function fileToBase64(file) {
                 return new Promise((resolve, reject) => {
                     const reader = new FileReader();
                     reader.readAsDataURL(file);
-                    reader.onload = () => resolve({ name: file.name, type: file.type, size: file.size, data: reader.result });
+                    reader.onload = () => resolve(reader.result);
                     reader.onerror = error => reject(error);
                 });
             }
@@ -2470,8 +2462,65 @@
                 const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
                 // RENAME VARIABLE ENTIRELY TO AVOID ANY SCOPE OR CACHED CONFLICTS
-                var attachedFiles = [];
+                // --- STANDARDIZED DOCUMENT STORAGE OBJECT ---
+                let attachedFiles = {};
                 var unfulfilledRequirements = [];
+
+                if (sacramentType === 'baptism') {
+                    const birthCertFiles = window.accumulatedFiles?.['bapBirthCertFiles'] || Array.from(document.getElementById('bapBirthCertFiles')?.files || []);
+                    const motherFiles = window.accumulatedFiles?.['bapMotherFiles'] || Array.from(document.getElementById('bapMotherFiles')?.files || []);
+                    const fatherFiles = window.accumulatedFiles?.['bapFatherFiles'] || Array.from(document.getElementById('bapFatherFiles')?.files || []);
+
+                    if (birthCertFiles.length === 0) unfulfilledRequirements.push("Child's Birth Certificate");
+                    if (motherFiles.length === 0) unfulfilledRequirements.push("Mother's Baptismal Certificate");
+                    if (fatherFiles.length === 0) unfulfilledRequirements.push("Father's Baptismal Certificate");
+
+                    attachedFiles["Child's Birth Certificate"] = [];
+                    for (let file of birthCertFiles) {
+                        attachedFiles["Child's Birth Certificate"].push({ fileName: file.name, fileType: file.type, fileData: await fileToBase64(file) });
+                    }
+
+                    attachedFiles["Mother's Baptismal Certificate"] = [];
+                    for (let file of motherFiles) {
+                        attachedFiles["Mother's Baptismal Certificate"].push({ fileName: file.name, fileType: file.type, fileData: await fileToBase64(file) });
+                    }
+
+                    attachedFiles["Father's Baptismal Certificate"] = [];
+                    for (let file of fatherFiles) {
+                        attachedFiles["Father's Baptismal Certificate"].push({ fileName: file.name, fileType: file.type, fileData: await fileToBase64(file) });
+                    }
+                }
+                else if (sacramentType === 'wedding') {
+                    const birthCertFiles = window.accumulatedFiles?.['wedBirthCertFiles'] || Array.from(document.getElementById('wedBirthCertFiles')?.files || []);
+                    const cenomarFiles = window.accumulatedFiles?.['wedCenomarFiles'] || Array.from(document.getElementById('wedCenomarFiles')?.files || []);
+                    const annotationFiles = window.accumulatedFiles?.['wedAnnotationFiles'] || Array.from(document.getElementById('wedAnnotationFiles')?.files || []);
+                    const licenseFiles = window.accumulatedFiles?.['wedLicenseFiles'] || Array.from(document.getElementById('wedLicenseFiles')?.files || []);
+
+                    if (birthCertFiles.length === 0) unfulfilledRequirements.push("PSA Birth Certificates");
+                    if (cenomarFiles.length === 0) unfulfilledRequirements.push("CENOMAR");
+                    if (annotationFiles.length === 0) unfulfilledRequirements.push("New Baptismal & Confirmation Certificates with Marriage Annotation");
+                    if (licenseFiles.length === 0) unfulfilledRequirements.push("Marriage License / Civil Marriage Contract");
+
+                    attachedFiles["PSA Birth Certificate"] = [];
+                    for (let file of birthCertFiles) {
+                        attachedFiles["PSA Birth Certificate"].push({ fileName: file.name, fileType: file.type, fileData: await fileToBase64(file) });
+                    }
+
+                    attachedFiles["CENOMAR"] = [];
+                    for (let file of cenomarFiles) {
+                        attachedFiles["CENOMAR"].push({ fileName: file.name, fileType: file.type, fileData: await fileToBase64(file) });
+                    }
+
+                    attachedFiles["Annotated Baptismal & Confirmation Certificate"] = [];
+                    for (let file of annotationFiles) {
+                        attachedFiles["Annotated Baptismal & Confirmation Certificate"].push({ fileName: file.name, fileType: file.type, fileData: await fileToBase64(file) });
+                    }
+
+                    attachedFiles["Marriage License / Contract"] = [];
+                    for (let file of licenseFiles) {
+                        attachedFiles["Marriage License / Contract"].push({ fileName: file.name, fileType: file.type, fileData: await fileToBase64(file) });
+                    }
+                }
 
                 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB limit
                 const ALLOWED_TYPES = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
@@ -2489,6 +2538,7 @@
                 }
 
                 // 2. FILE VALIDATION & SPECIFIC DOCUMENT CHECKING
+                // Inside saveApplicationLocally() in index.html, when processing baptism files:
                 if (sacramentType === 'baptism') {
                     const birthCertFiles = window.accumulatedFiles?.['bapBirthCertFiles'] || Array.from(document.getElementById('bapBirthCertFiles')?.files || []);
                     const motherFiles = window.accumulatedFiles?.['bapMotherFiles'] || Array.from(document.getElementById('bapMotherFiles')?.files || []);
@@ -2498,48 +2548,58 @@
                     if (motherFiles.length === 0) unfulfilledRequirements.push("Mother's Baptismal Certificate");
                     if (fatherFiles.length === 0) unfulfilledRequirements.push("Father's Baptismal Certificate");
 
-                    const allBaptismFiles = [...birthCertFiles, ...motherFiles, ...fatherFiles];
-                    for (let file of allBaptismFiles) {
-                        if (file.size > MAX_FILE_SIZE) {
-                            showAlert(`❌ File Size Exceeded: "${file.name}" exceeds the 10MB limit.`);
-                            return;
-                        }
-                        if (!ALLOWED_TYPES.includes(file.type)) {
-                            showAlert(`❌ Invalid File Type: "${file.name}" is not an accepted format.`);
-                            return;
-                        }
-                        const base64File = await fileToBase64(file);
-                        attachedFiles.push(base64File);
+                    // Push with explicit type labels
+                    for (let file of birthCertFiles) {
+                        let b64 = await fileToBase64(file);
+                        b64.documentType = "Child's Birth Certificate";
+                        attachedFiles.push(b64);
                     }
-                } else if (sacramentType === 'wedding') {
+                    for (let file of motherFiles) {
+                        let b64 = await fileToBase64(file);
+                        b64.documentType = "Mother's Baptismal Certificate";
+                        attachedFiles.push(b64);
+                    }
+                    for (let file of fatherFiles) {
+                        let b64 = await fileToBase64(file);
+                        b64.documentType = "Father's Baptismal Certificate";
+                        attachedFiles.push(b64);
+                    }
+                }
+
+                else if (sacramentType === 'wedding') {
                     const birthCertFiles = window.accumulatedFiles?.['wedBirthCertFiles'] || Array.from(document.getElementById('wedBirthCertFiles')?.files || []);
                     const cenomarFiles = window.accumulatedFiles?.['wedCenomarFiles'] || Array.from(document.getElementById('wedCenomarFiles')?.files || []);
                     const annotationFiles = window.accumulatedFiles?.['wedAnnotationFiles'] || Array.from(document.getElementById('wedAnnotationFiles')?.files || []);
                     const licenseFiles = window.accumulatedFiles?.['wedLicenseFiles'] || Array.from(document.getElementById('wedLicenseFiles')?.files || []);
 
-                    const hasGuestPriest = formElement.querySelector('[name="hasGuestPriest"]')?.checked || false;
-                    const guestPriestFiles = hasGuestPriest ? (window.accumulatedFiles?.['guestPriestLicenseFiles'] || Array.from(document.getElementById('guestPriestLicenseFiles')?.files || [])) : [];
-
                     if (birthCertFiles.length === 0) unfulfilledRequirements.push("PSA Birth Certificates");
                     if (cenomarFiles.length === 0) unfulfilledRequirements.push("CENOMAR");
                     if (annotationFiles.length === 0) unfulfilledRequirements.push("New Baptismal & Confirmation Certificates with Marriage Annotation");
                     if (licenseFiles.length === 0) unfulfilledRequirements.push("Marriage License / Civil Marriage Contract");
-                    if (hasGuestPriest && guestPriestFiles.length === 0) unfulfilledRequirements.push("Guest Priest's License to Marry");
 
-                    const allWeddingFiles = [...birthCertFiles, ...cenomarFiles, ...annotationFiles, ...licenseFiles, ...guestPriestFiles];
-                    for (let file of allWeddingFiles) {
-                        if (file.size > MAX_FILE_SIZE) {
-                            showAlert(`❌ File Size Exceeded: "${file.name}" exceeds the 10MB limit.`);
-                            return;
-                        }
-                        if (!ALLOWED_TYPES.includes(file.type)) {
-                            showAlert(`❌ Invalid File Type: "${file.name}" is not an accepted format.`);
-                            return;
-                        }
-                        const base64File = await fileToBase64(file);
-                        attachedFiles.push(base64File);
+                    for (let file of birthCertFiles) {
+                        let b64 = await fileToBase64(file);
+                        b64.documentType = "PSA Birth Certificate";
+                        attachedFiles.push(b64);
                     }
-                } else {
+                    for (let file of cenomarFiles) {
+                        let b64 = await fileToBase64(file);
+                        b64.documentType = "CENOMAR";
+                        attachedFiles.push(b64);
+                    }
+                    for (let file of annotationFiles) {
+                        let b64 = await fileToBase64(file);
+                        b64.documentType = "Annotated Baptismal & Confirmation Certificate";
+                        attachedFiles.push(b64);
+                    }
+                    for (let file of licenseFiles) {
+                        let b64 = await fileToBase64(file);
+                        b64.documentType = "Marriage License / Contract";
+                        attachedFiles.push(b64);
+                    }
+                }
+
+                else {
                     const fileInput = formElement.querySelector('input[type="file"]');
                     const inputId = fileInput ? fileInput.id : '';
                     const accumulatedList = window.accumulatedFiles?.[inputId] || [];
@@ -2841,8 +2901,14 @@
                         }
 
                         let formattedNotes = notes;
-                        if ((app.status === 'To Follow-Up & Upload Lacking Documents' || app.status === 'Needs Revision') && app.adminNotes) {
-                            formattedNotes = `<strong style="color: #c0392b;">⚠️ ${app.adminNotes}</strong>`;
+                        // Inside renderUserDashboard() in index.html:
+                        let missingDocsBanner = '';
+                        if ((app.status === 'To Follow-Up & Upload Lacking Documents' || app.status === 'Needs Revision')) {
+                            missingDocsBanner = `
+                                <div style="background: #fdf2f2; border: 1px solid #fecaca; color: #991b1b; padding: 10px; border-radius: 6px; font-size: 12px; margin-top: 8px;">
+                                    <strong>⚠️ Lacking Documents Required:</strong> ${app.adminNotes || 'Please check required uploads and re-submit missing requirements.'}
+                                </div>
+                            `;
                         }
 
                         // Clean, isolated card structure
@@ -2967,80 +3033,216 @@
                 }
 
                 document.getElementById('resubmitAppId').value = app.id;
-
-                // Clear previous file picks
-                resetFileInputStore('resubmitFileInput', 'resubmitFileList');
+                window.resubmissionFilesData = {};
 
                 const summaryEl = document.getElementById('resubmitAppSummary');
                 summaryEl.innerHTML = `
-        <strong>Ref ID:</strong> ${app.referenceId} | <strong>Sacrament:</strong> ${app.sacramentType.toUpperCase()}<br>
-        <strong>Secretariat Remarks:</strong> <span style="color: #c0392b;">${app.adminNotes || 'Please upload the missing document attachments requested by the office.'}</span>
-    `;
+                    <strong>Ref ID:</strong> ${app.referenceId} | <strong>Sacrament:</strong> ${app.sacramentType.toUpperCase()}<br>
+                    <strong>Secretariat Remarks:</strong> <span style="color: #c0392b;">${app.adminNotes || 'Please upload the specific missing documents requested by the office.'}</span>
+                `;
+
+                let missingList = [];
+                const notes = (app.adminNotes || '').toLowerCase();
+
+                if (app.sacramentType === 'wedding') {
+                    // Standard wedding document checks based on what's missing
+                    if (notes.includes('birth certificate')) missingList.push("PSA Birth Certificates");
+                    if (notes.includes('cenomar')) missingList.push("CENOMAR");
+                    if (notes.includes('annotation') || notes.includes('baptismal')) missingList.push("New Baptismal & Confirmation Certificates with Marriage Annotation");
+                    if (notes.includes('license') || notes.includes('contract')) missingList.push("Marriage License / Civil Marriage Contract");
+                    
+                    // Dynamic check: If application details indicate a guest priest was selected or notes mention it
+                    if (app.details?.hasGuestPriest || notes.includes('guest priest') || notes.includes('license to marry')) {
+                        missingList.push("Guest Priest's License to Marry");
+                    }
+                } else {
+                    // Fallback for other sacraments
+                    if (notes.includes('mother')) missingList.push("Mother's Baptismal Certificate");
+                    if (notes.includes('father')) missingList.push("Father's Baptismal Certificate");
+                    if (notes.includes('birth certificate')) missingList.push("Child's Birth Certificate");
+                }
+
+                if (missingList.length === 0) {
+                    missingList = ["Required Lacking Document"];
+                }
+
+                const container = document.getElementById('resubmitDynamicUploadsContainer');
+                if (container) {
+                    let html = '';
+                    missingList.forEach((reqName, idx) => {
+                        const inputId = `resub_file_${idx}`;
+                        const listId = `resub_list_${idx}`;
+                        const safeTitle = reqName.replace(/'/g, "\\'");
+
+                        html += `
+                            <div style="margin-bottom: 15px; background: #fff; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px;">
+                                <label style="display: block; font-weight: bold; font-size: 13px; color: #1e293b; margin-bottom: 6px;">
+                                    ${reqName} *
+                                </label>
+                                <div class="inline-drop-zone" onclick="document.getElementById('${inputId}').click()"
+                                    style="border: 2px dashed #cbd5e1; padding: 12px; border-radius: 6px; text-align: center; cursor: pointer; background: #f8fafc;">
+                                    <span style="font-size: 13px; color: #475569;">📁 Click or drag file for ${reqName}</span>
+                                    <input type="file" id="${inputId}" accept=".pdf,.jpg,.jpeg,.png" style="display:none;" 
+                                        onchange="handleResubInlineFile(event, '${listId}', '${safeTitle}')">
+                                </div>
+                                <div class="file-preview-list" id="${listId}" style="margin-top: 6px;"></div>
+                            </div>
+                        `;
+                    });
+                    container.innerHTML = html;
+                }
 
                 openModal('resubmitDocsModal');
             }
 
+            // Global storage for resubmission files
+            window.resubmissionFilesData = window.resubmissionFilesData || {};
+
+            async function handleResubInlineFile(event, listContainerId, docTitle) {
+                const fileInput = event.target;
+                const files = fileInput.files;
+                const container = document.getElementById(listContainerId);
+
+                if (!container || !files || files.length === 0) return;
+
+                if (!window.resubmissionFilesData[docTitle]) {
+                    window.resubmissionFilesData[docTitle] = [];
+                }
+
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+
+                    if (file.size > 10 * 1024 * 1024) {
+                        showAlert(`File "${file.name}" exceeds the 10MB size limit.`, 'File Too Large');
+                        continue;
+                    }
+
+                    const base64Data = await fileToBase64(file);
+
+                    window.resubmissionFilesData[docTitle].push({
+                        fileName: file.name,
+                        fileType: file.type,
+                        fileData: base64Data,
+                        documentTitle: docTitle
+                    });
+
+                    // Render preview chip
+                    const fileTag = document.createElement('div');
+                    fileTag.style.cssText = "display: flex; align-items: center; justify-content: space-between; background: #fff; border: 1px solid #cbd5e1; padding: 6px 10px; border-radius: 4px; margin-top: 4px; font-size: 12px;";
+                    fileTag.innerHTML = `
+                            <span style="color: #1e293b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 85%;">📄 ${file.name}</span>
+                            <button type="button" onclick="this.parentElement.remove();" style="background: none; border: none; color: #ef4444; cursor: pointer; font-weight: bold;" title="Remove">✕</button>
+                        `;
+                    container.appendChild(fileTag);
+                }
+            }
+
             async function handleResubmitDocsSubmit(event) {
                 event.preventDefault();
+                const rawAppId = document.getElementById('resubmitAppId')?.value;
+                const appId = rawAppId ? (isNaN(rawAppId) ? rawAppId : Number(rawAppId)) : null;
 
-                const rawId = document.getElementById('resubmitAppId').value;
-                const appId = isNaN(rawId) ? rawId : Number(rawId);
-
-                const input = document.getElementById('resubmitFileInput');
-                const accumulatedList = window.accumulatedFiles?.['resubmitFileInput'] || [];
-                const filesToProcess = accumulatedList.length > 0 ? accumulatedList : Array.from(input?.files || []);
-
-                if (filesToProcess.length === 0) {
-                    showAlert('Please attach at least one document file before submitting.', 'No Files Selected');
+                if (!appId) {
+                    showAlert('Application reference not found.', 'Error');
                     return;
                 }
 
                 const app = await db.applications.get(appId);
-                if (!app) return;
-
-                const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB limit
-                const ALLOWED_TYPES = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-                const newFiles = [];
-
-                for (let file of filesToProcess) {
-                    if (file.size > MAX_FILE_SIZE) {
-                        showAlert(`File "${file.name}" exceeds the 10MB limit.`, 'File Too Large');
-                        return;
-                    }
-                    if (!ALLOWED_TYPES.includes(file.type)) {
-                        showAlert(`File "${file.name}" is not an accepted format (PDF, JPG, PNG, WEBP).`, 'Invalid Format');
-                        return;
-                    }
-                    const base64File = await fileToBase64(file);
-                    newFiles.push(base64File);
+                if (!app) {
+                    showAlert('Application not found in database.', 'Error');
+                    return;
                 }
 
-                const updatedDocuments = [...(app.documents || []), ...newFiles];
+                // 1. Safeguard and copy existing documents so we don't lose previously uploaded files
+                let updatedDocs = {};
+                if (app.documents && typeof app.documents === 'object' && !Array.isArray(app.documents)) {
+                    updatedDocs = { ...app.documents };
+                }
+
+                // Helper function to convert file to base64 object
+                async function processFiles(files) {
+                    let arr = [];
+                    for (let file of files) {
+                        arr.push({
+                            fileName: file.name,
+                            fileType: file.type,
+                            fileData: await fileToBase64(file)
+                        });
+                    }
+                    return arr;
+                }
+
+                // 2. Capture newly uploaded files from the resubmission form inputs based on sacrament type
+                if (app.sacramentType === 'baptism') {
+                    const birthCertInput = document.getElementById('resub_bapBirthCertFiles') || document.getElementById('bapBirthCertFiles');
+                    const motherInput = document.getElementById('resub_bapMotherFiles') || document.getElementById('bapMotherFiles');
+                    const fatherInput = document.getElementById('resub_bapFatherFiles') || document.getElementById('bapFatherFiles');
+
+                    if (birthCertInput?.files?.length > 0) {
+                        updatedDocs["Child's Birth Certificate"] = await processFiles(birthCertInput.files);
+                    }
+                    if (motherInput?.files?.length > 0) {
+                        updatedDocs["Mother's Baptismal Certificate"] = await processFiles(motherInput.files);
+                    }
+                    if (fatherInput?.files?.length > 0) {
+                        updatedDocs["Father's Baptismal Certificate"] = await processFiles(fatherInput.files);
+                    }
+                }
+                else if (app.sacramentType === 'wedding') {
+                    const birthCertInput = document.getElementById('resub_wedBirthCertFiles') || document.getElementById('wedBirthCertFiles');
+                    const cenomarInput = document.getElementById('resub_wedCenomarFiles') || document.getElementById('wedCenomarFiles');
+                    const annotationInput = document.getElementById('resub_wedAnnotationFiles') || document.getElementById('wedAnnotationFiles');
+                    const licenseInput = document.getElementById('resub_wedLicenseFiles') || document.getElementById('wedLicenseFiles');
+
+                    if (birthCertInput?.files?.length > 0) {
+                        updatedDocs["PSA Birth Certificate"] = await processFiles(birthCertInput.files);
+                    }
+                    if (cenomarInput?.files?.length > 0) {
+                        updatedDocs["CENOMAR"] = await processFiles(cenomarInput.files);
+                    }
+                    if (annotationInput?.files?.length > 0) {
+                        updatedDocs["Annotated Baptismal & Confirmation Certificate"] = await processFiles(annotationInput.files);
+                    }
+                    if (licenseInput?.files?.length > 0) {
+                        updatedDocs["Marriage License / Contract"] = await processFiles(licenseInput.files);
+                    }
+                }
+
+                // Also merge any accumulated files from window.resubmissionFilesData if active
+                if (window.resubmissionFilesData) {
+                    for (const [title, files] of Object.entries(window.resubmissionFilesData)) {
+                        if (files && files.length > 0) {
+                            updatedDocs[title] = files;
+                        }
+                    }
+                }
 
                 const historyEntry = {
-                    oldStatus: app.status || 'Needs Revision',
-                    newStatus: 'Pending',
-                    adminNote: 'Applicant uploaded additional/revised documents.',
+                    oldStatus: app.status,
+                    newStatus: 'Pending Verification',
+                    adminNote: 'Applicant resubmitted lacking requirements.',
                     changedAt: new Date().toISOString(),
                     changedBy: app.applicantName || 'Applicant'
                 };
 
                 const updatedHistory = app.statusHistory ? [...app.statusHistory, historyEntry] : [historyEntry];
 
-                // Update Dexie database and reset status back to Pending for review
+                // 3. Update database with merged documents and reset status for staff review
                 await db.applications.update(appId, {
-                    documents: updatedDocuments,
-                    status: 'Pending',
-                    adminNotes: 'Revised documents uploaded by applicant. Pending secretariat review.',
-                    statusHistory: updatedHistory
+                    status: 'Pending Verification',
+                    adminNotes: 'Lacking documents uploaded. Ready for re-verification.',
+                    documents: updatedDocs,
+                    statusHistory: updatedHistory,
+                    updatedAt: new Date().toISOString()
                 });
 
+                window.resubmissionFilesData = {};
+
                 closeModal('resubmitDocsModal');
-
-                // Refresh user dashboard immediately so the status badge updates on screen
-                await renderUserDashboard();
-
-                showAlert('Your lacking documents have been successfully uploaded and sent to the parish secretariat for re-evaluation!', 'Documents Uploaded');
+                if (typeof renderUserDashboard === 'function') {
+                    await renderUserDashboard();
+                }
+                showAlert('Your documents have been successfully resubmitted for verification!', 'Success');
             }
 
             function autofillUserData() {
