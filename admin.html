@@ -1088,6 +1088,12 @@
                         aria-hidden="true" focusable="false">
                         <use href="#ui-plus"></use>
                     </svg> Walk-In Accommodation</button>
+                <!-- Example Admin Navigation Tab -->
+                <button onclick="showAdminSeminarAttendanceView()" type="button" class="toggle-btn">
+                    <svg class="ui-icon" aria-hidden="true" focusable="false">
+                        <use href="#icon-qr-code"></use>
+                    </svg> Seminar Attendance
+                </button>
                 <button class="refresh-btn" onclick="fetchApplications()" style="margin-left: auto;"><svg
                         class="ui-icon" aria-hidden="true" focusable="false">
                         <use href="#ui-refresh-cw"></use>
@@ -1439,6 +1445,7 @@
                         <option value="To Follow-Up & Upload Lacking Documents">To Follow-Up & Upload Lacking Documents
                         </option>
                         <option value="Reviewed & Ready for Payment">Reviewed & Ready for Payment</option>
+                        <option value="Reschedule Requested">Reschedule Requested</option>
                         <option value="Needs Revision">Needs Revision</option>
                         <option value="Scheduled for Seminar">Scheduled for Seminar (Baptism)</option>
                         <option value="Scheduled for Interview & Seminar">Scheduled for Interview & Seminar (Wedding)
@@ -1926,8 +1933,126 @@
         </div>
     </div>
 
+    <!-- Admin QR Scanner & Manual Check-In Section -->
+    <div id="adminSeminarAttendanceSection" class="card admin-checkin-card"
+        style="display: none; background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-top: 20px; max-width: 600px; margin-left: auto; margin-right: auto;">
 
+        <!-- Header with Back Button -->
+        <div
+            style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 12px; margin-bottom: 15px;">
+            <h3 style="color: #4a0e17; margin: 0; font-size: 1.15rem; display: flex; align-items: center; gap: 8px;">
+                <svg class="ui-icon" aria-hidden="true" focusable="false" style="width: 20px; height: 20px;">
+                    <use href="#ui-shield-check"></use>
+                </svg>
+                Seminar Attendance Check-In Desk
+            </h3>
+            <button type="button" onclick="showAdminStandardDashboard()"
+                style="background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px;">
+                ← Back to Inbox
+            </button>
+        </div>
 
+        <p style="font-size: 13px; color: #64748b; margin-bottom: 16px;">
+            Scan the parishioner's mobile PWA QR code using your device camera, or enter their Reference ID manually to
+            mark attendance and unlock ceremony scheduling.
+        </p>
+
+        <!-- PWA Mobile Camera Scanner Viewfinder -->
+        <div
+            style="margin-bottom: 20px; text-align: center; background: #0f172a; border-radius: 8px; overflow: hidden; position: relative;">
+            <video id="qrCameraPreview" autoplay playsinline
+                style="width: 100%; max-height: 280px; object-fit: cover; display: none;"></video>
+            <canvas id="qrCanvas" style="display: none;"></canvas>
+
+            <div id="scannerPlaceholder" style="padding: 40px 20px; color: #94a3b8; font-size: 13px;">
+                <svg class="ui-icon" aria-hidden="true" focusable="false"
+                    style="width: 48px; height: 48px; margin-bottom: 8px; stroke: #64748b;">
+                    <use href="#icon-qr-code"></use>
+                </svg>
+                <p style="margin: 0 0 12px 0;">Camera scanner is currently inactive.</p>
+                <button type="button" onclick="startMobileQrScanner()"
+                    style="background: #0f766e; color: white; border: none; padding: 10px 18px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px;">
+                    📷 Start Mobile Camera Scanner
+                </button>
+            </div>
+
+            <div id="scannerActiveControls"
+                style="display: none; padding: 10px; background: rgba(15, 23, 42, 0.8); position: absolute; bottom: 0; left: 0; right: 0;">
+                <button type="button" onclick="stopMobileQrScanner()"
+                    style="background: #ef4444; color: white; border: none; padding: 6px 14px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 12px;">
+                    Stop Camera
+                </button>
+            </div>
+        </div>
+
+        <!-- Manual Entry Fallback Row -->
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <input type="text" id="adminRefInput" placeholder="Enter Ref ID manually (e.g., REF-2026-9482)"
+                style="flex: 1; min-width: 200px; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;" />
+            <button onclick="handleAdminCheckIn()"
+                style="background: #0f766e; color: white; border: none; padding: 10px 18px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; white-space: nowrap;">
+                Check-In
+            </button>
+        </div>
+
+        <!-- Feedback Area -->
+        <div id="checkInFeedback"
+            style="margin-top: 14px; font-size: 13px; font-weight: 500; padding: 10px; border-radius: 6px; display: none;">
+        </div>
+    </div>
+    <!-- MODAL: ADMIN NOTIFICATION CENTER -->
+    <div id="adminNotifModal" class="modal-overlay">
+        <div class="modal-box" style="max-width: 640px; text-align: left; padding: 24px;">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #4a0e17; padding-bottom: 10px; margin-bottom: 15px;">
+                <h3 style="color: #4a0e17; margin: 0; display: flex; align-items: center; gap: 8px;">
+                    <svg class="ui-icon" aria-hidden="true">
+                        <use href="#ui-bell"></use>
+                    </svg> Parish Staff Notifications
+                </h3>
+                <button type="button" onclick="closeModal('adminNotifModal')"
+                    style="background: none; border: none; font-size: 18px; font-weight: bold; cursor: pointer;">
+                    <svg class="ui-icon" aria-hidden="true">
+                        <use href="#ui-x"></use>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Category Filter Tabs -->
+            <div style="display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap;">
+                <button type="button" id="notifTabRecent" class="toggle-btn active"
+                    onclick="switchAdminNotifTab('recent')">
+                    Most Recent (<span id="countNotifRecent">0</span>)
+                </button>
+                <button type="button" id="notifTabResched" class="toggle-btn"
+                    onclick="switchAdminNotifTab('reschedule')">
+                    ⚠️ Reschedule Requests (<span id="countNotifResched">0</span>)
+                </button>
+                <button type="button" id="notifTabDeadline" class="toggle-btn"
+                    onclick="switchAdminNotifTab('deadline')">
+                    ⏰ Near Deadline / Target Date (<span id="countNotifDeadline">0</span>)
+                </button>
+            </div>
+
+            <!-- Notification List Container -->
+            <div id="adminNotifListContainer"
+                style="max-height: 380px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;">
+                <p style="color: #64748b; text-align: center; padding: 20px;">Loading notifications...</p>
+            </div>
+
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 12px; border-top: 1px solid #e2e8f0;">
+                <button type="button" onclick="markAllAdminNotifsRead()"
+                    style="background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; padding: 7px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer;">
+                    Mark All Alerts Read
+                </button>
+                <button type="button" onclick="closeModal('adminNotifModal')"
+                    style="background: #4a0e17; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: bold; cursor: pointer;">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
 
     <script>
         const db = new Dexie('ParishPortalDB');
@@ -1937,12 +2062,227 @@
             notifications: '++id, userId, referenceId, title, message, isRead, createdAt'
         });
 
+
         let rawApplicationsData = [];
         let showArchivedView = false;
         let staffCalendarDate = new Date();
         let currentApptCalDate = new Date();
         let selectedApptDateStr = '';
         let activeSchedulingApp = null;
+        let activeAdminNotifTab = 'recent';
+        let adminNotifCache = { recent: [], reschedule: [], deadline: [] };
+        let lastAdminPushedRef = new Set();
+        let hasShownInitialNotifModal = false; // Ensures auto-popup only happens once per page load/refresh
+
+        async function evaluateAdminNotifications(triggerPush = false) {
+            const apps = await db.applications.toArray();
+            const storedNotifs = await db.notifications.where('userId').equals('ADMIN').toArray();
+
+            const now = new Date();
+            now.setHours(0, 0, 0, 0);
+            const twoDaysAgo = new Date(Date.now() - 48 * 60 * 60 * 1000);
+
+            const recentList = [];
+            const rescheduleList = [];
+            const deadlineList = [];
+
+            apps.forEach(app => {
+                if (app.archived || (app.status || '').toLowerCase() === 'completed' || (app.status || '').toLowerCase() === 'rejected') return;
+
+                const statusLower = (app.status || '').toLowerCase();
+
+                // 1. Check Reschedule Requests
+                if (statusLower.includes('reschedule requested') || app.rescheduleRequested) {
+                    rescheduleList.push({
+                        appId: app.id,
+                        ref: app.referenceId,
+                        title: `Reschedule Request: ${app.sacramentType}`,
+                        detail: `${app.applicantName} requested ${app.requestedNewDate || 'a new date'}. Reason: "${app.rescheduleReason || 'N/A'}"`,
+                        date: app.updatedAt || app.createdAt,
+                        urgent: true
+                    });
+                }
+
+                // 2. Check Near Deadline / Upcoming Target Date (0 to 7 days away)
+                const targetStr = app.confirmedDate || app.preferredDate;
+                if (targetStr) {
+                    const targetDate = new Date(targetStr);
+                    targetDate.setHours(0, 0, 0, 0);
+                    const diffDays = Math.ceil((targetDate - now) / (1000 * 60 * 60 * 24));
+
+                    if (diffDays >= 0 && diffDays <= 7) {
+                        const dayLabel = diffDays === 0 ? 'TODAY' : (diffDays === 1 ? 'Tomorrow' : `in ${diffDays} days`);
+                        deadlineList.push({
+                            appId: app.id,
+                            ref: app.referenceId,
+                            title: `Upcoming Target Date (${dayLabel}): ${app.sacramentType}`,
+                            detail: `${app.applicantName} — Target Date: ${targetStr} (${app.status})`,
+                            date: targetStr,
+                            urgent: diffDays <= 2
+                        });
+                    }
+                }
+
+                // 3. Check Most Recent Submissions (last 48 hours)
+                if (app.createdAt && new Date(app.createdAt) >= twoDaysAgo) {
+                    recentList.push({
+                        appId: app.id,
+                        ref: app.referenceId,
+                        title: `New Submission: ${app.sacramentType}`,
+                        detail: `${app.applicantName} submitted an application (Target: ${targetStr || 'TBD'}).`,
+                        date: app.createdAt,
+                        urgent: false
+                    });
+                }
+            });
+
+            // Also include explicit unread ADMIN notifications from Dexie
+            storedNotifs.filter(n => !n.isRead).forEach(n => {
+                recentList.unshift({
+                    notifId: n.id,
+                    ref: n.referenceId,
+                    title: n.title,
+                    detail: n.message,
+                    date: n.createdAt,
+                    urgent: true
+                });
+            });
+
+            adminNotifCache = {
+                recent: recentList,
+                reschedule: rescheduleList,
+                deadline: deadlineList
+            };
+
+            // Update Badge Count
+            const totalAlerts = rescheduleList.length + deadlineList.length + recentList.length;
+            const badge = document.getElementById('adminNotifBadge');
+            if (badge) {
+                badge.textContent = totalAlerts;
+                badge.style.display = totalAlerts > 0 ? 'inline-block' : 'none';
+            }
+
+            // Update Tab Counters
+            const cRecent = document.getElementById('countNotifRecent');
+            const cResched = document.getElementById('countNotifResched');
+            const cDeadline = document.getElementById('countNotifDeadline');
+            if (cRecent) cRecent.textContent = recentList.length;
+            if (cResched) cResched.textContent = rescheduleList.length;
+            if (cDeadline) cDeadline.textContent = deadlineList.length;
+
+            // Trigger browser push for brand-new reschedule requests or urgent deadlines
+            if (triggerPush) {
+                [...rescheduleList, ...deadlineList.filter(d => d.urgent)].forEach(item => {
+                    const key = `${item.title}-${item.ref}`;
+                    if (!lastAdminPushedRef.has(key)) {
+                        lastAdminPushedRef.add(key);
+                        triggerBrowserPush(item.title, item.detail, key);
+                    }
+                });
+            }
+
+            renderAdminNotifList();
+        }
+
+        function openAdminNotifModal() {
+            initPushNotifications();
+            evaluateAdminNotifications(false);
+            openModal('adminNotifModal');
+        }
+
+        function switchAdminNotifTab(tabName) {
+            activeAdminNotifTab = tabName;
+            document.getElementById('notifTabRecent').classList.toggle('active', tabName === 'recent');
+            document.getElementById('notifTabResched').classList.toggle('active', tabName === 'reschedule');
+            document.getElementById('notifTabDeadline').classList.toggle('active', tabName === 'deadline');
+            renderAdminNotifList();
+        }
+
+        function renderAdminNotifList() {
+            const container = document.getElementById('adminNotifListContainer');
+            if (!container) return;
+
+            const items = adminNotifCache[activeAdminNotifTab] || [];
+            if (items.length === 0) {
+                container.innerHTML = `<div style="text-align: center; padding: 28px; color: #64748b; background: #f8fafc; border-radius: 8px;">No notifications in this category.</div>`;
+                return;
+            }
+
+            container.innerHTML = items.map(item => `
+        <div style="background: ${item.urgent ? '#fffbeb' : '#f8fafc'}; border: 1px solid ${item.urgent ? '#fde68a' : '#e2e8f0'}; border-left: 4px solid ${item.urgent ? '#d97706' : '#4a0e17'}; padding: 12px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+            <div>
+                <div style="font-weight: bold; font-size: 13px; color: #1e293b;">${item.title} <span style="font-size: 11px; color: #64748b;">(${item.ref || 'N/A'})</span></div>
+                <div style="font-size: 12px; color: #475569; margin-top: 3px;">${item.detail}</div>
+            </div>
+            ${item.appId ? `
+                <button type="button" onclick="closeModal('adminNotifModal'); ${activeAdminNotifTab === 'reschedule' ? `openAppointmentModal('${item.appId}')` : `openAdminUpdateModal('${item.appId}')`}"
+                    style="background: #4a0e17; color: white; border: none; padding: 6px 10px; border-radius: 4px; font-size: 11px; font-weight: bold; cursor: pointer; white-space: nowrap;">
+                    ${activeAdminNotifTab === 'reschedule' ? 'Reschedule' : 'Inspect'}
+                </button>
+            ` : ''}
+        </div>
+    `).join('');
+        }
+
+        async function markAllAdminNotifsRead() {
+            const unread = await db.notifications.where('userId').equals('ADMIN').toArray();
+            for (const n of unread) {
+                await db.notifications.update(n.id, { isRead: true });
+            }
+            await evaluateAdminNotifications(false);
+        }
+        async function sendParishionerNotification(userId, referenceId, title, message) {
+            if (!userId || userId === 'STAFF-WALKIN-USER') return;
+            try {
+                await db.notifications.add({
+                    userId: Number(userId) || userId,
+                    referenceId: referenceId,
+                    title: title,
+                    message: message,
+                    isRead: false,
+                    createdAt: new Date().toISOString()
+                });
+            } catch (err) {
+                console.error("Error pushing notification:", err);
+            }
+        }
+
+        // Request browser push permission on page load or first click
+        function initPushNotifications() {
+            if ("Notification" in window && Notification.permission === "default") {
+                Notification.requestPermission();
+            }
+        }
+
+        // Fire native OS/browser push notification
+        function triggerBrowserPush(title, body, tag = 'parish-alert') {
+            if ("Notification" in window && Notification.permission === "granted") {
+                new Notification(title, {
+                    body: body,
+                    icon: '/favicon.webp',
+                    tag: tag
+                });
+            }
+        }
+
+        // Save to Dexie AND push to browser
+        async function dispatchSystemNotification({ targetUserId, referenceId, title, message, category = 'general' }) {
+            try {
+                await db.notifications.add({
+                    userId: targetUserId, // Use 'ADMIN' for parish staff, or user.id for parishioners
+                    referenceId: referenceId,
+                    title: title,
+                    message: message,
+                    category: category, // 'recent' | 'reschedule' | 'deadline' | 'parishioner'
+                    isRead: false,
+                    createdAt: new Date().toISOString()
+                });
+
+                triggerBrowserPush(title, message, `${category}-${referenceId}`);
+            } catch (err) {
+                console.error("Failed to dispatch notification:", err);
+            }
+        }
 
         function checkAdminSession() {
             const currentAdmin = JSON.parse(localStorage.getItem('currentAdminUser'));
@@ -1952,8 +2292,9 @@
             const statsSection = document.getElementById('statsSection');
             const dashboardTitle = document.getElementById('dashboardTitle');
 
-            if (currentAdmin) {
-                closeModal('adminAuthModal');
+                if (currentAdmin) {
+                    closeModal('adminAuthModal');
+                    initPushNotifications();
 
                 if (currentAdmin.role === 'priest') {
                     if (tableSection) tableSection.style.display = 'none';
@@ -1973,6 +2314,10 @@
                     else if (currentAdmin.role === 'secretary') roleBadge = '<svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-clipboard-list"></use></svg> Parish Secretary';
 
                     headerContainer.innerHTML = `
+                    <button type="button" onclick="openAdminNotifModal()" style="position: relative; background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 6px 12px; border-radius: 6px; cursor: pointer; margin-right: 12px; font-weight: bold;">
+                            <svg class="ui-icon" aria-hidden="true"><use href="#ui-bell"></use></svg> Alerts
+                            <span id="adminNotifBadge" style="display: none; position: absolute; top: -6px; right: -6px; background: #eab308; color: #4a0e17; font-size: 11px; font-weight: 800; padding: 2px 6px; border-radius: 999px;">0</span>
+                        </button>
                         <span style="color: #d4af37; font-weight: bold; margin-right: 15px;">${roleBadge}: ${currentAdmin.fullName}</span>
                         <a href="#" onclick="logoutAdmin(event)" style="color: #ff6b6b; font-weight: bold; text-decoration: none;">Logout</a>
                     `;
@@ -2045,6 +2390,27 @@
                 updateStats();
                 renderTable();
                 renderMasterParishCalendar();
+
+                // Evaluate notifications and trigger browser push
+                await evaluateAdminNotifications(true);
+
+                // Auto-open the notification modal once on initial load/refresh if there are alerts
+                if (!hasShownInitialNotifModal) {
+                    hasShownInitialNotifModal = true;
+                    const totalAlerts = adminNotifCache.recent.length + adminNotifCache.reschedule.length + adminNotifCache.deadline.length;
+
+                    if (totalAlerts > 0) {
+                        // Prioritize switching directly to the most urgent tab first
+                        if (adminNotifCache.reschedule.length > 0) {
+                            switchAdminNotifTab('reschedule');
+                        } else if (adminNotifCache.deadline.length > 0) {
+                            switchAdminNotifTab('deadline');
+                        } else {
+                            switchAdminNotifTab('recent');
+                        }
+                        openModal('adminNotifModal');
+                    }
+                }
             } catch (error) {
                 console.error('Error fetching applications:', error);
             }
@@ -2145,9 +2511,9 @@
                     })).values()
                 ) : [];
 
-// --- ROBUST DOCUMENT COUNTING FOR ADMIN TABLE ---
+                // --- ROBUST DOCUMENT COUNTING FOR ADMIN TABLE ---
                 let uploadedCount = 0;
-                
+
                 if (app.documents) {
                     if (Array.isArray(app.documents)) {
                         const uniqueMap = new Map();
@@ -2187,13 +2553,20 @@
 
                 const isPaymentReady = app.paymentConfirmed || (app.status || '').includes('Scheduled') || (app.status || '') === 'Completed';
 
+                // UPDATED CODE: Allows scheduling if docs are complete OR if a reschedule was requested
                 let scheduleBtnHtml = '';
-                if (!isDocComplete) {
+                const isRescheduleReq = (app.status || '').toLowerCase().includes('reschedule requested');
+
+                if (!isDocComplete && !isRescheduleReq) {
                     scheduleBtnHtml = `<button type="button" onclick="event.stopPropagation(); showAlert('Action Denied: Documents are still lacking (${uploadedCount}/${minRequired}).')" style="background: #aab7b8; color: #ffffff;">Incomplete</button>`;
-                } else if (!isPaymentReady) {
+                } else if (!isPaymentReady && !isRescheduleReq) {
                     scheduleBtnHtml = `<button type="button" onclick="event.stopPropagation(); showAlert('Payment Pending: Scheduling is greyed out until payment is confirmed.')" style="background: #e67e22; color: #ffffff;">Payment Pending</button>`;
                 } else {
-                    scheduleBtnHtml = `<button type="button" onclick="event.stopPropagation(); openAppointmentModal('${app.id}')" style="background: #1e5631; color: #ffffff;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-calendar"></use></svg> Schedule</button>`;
+                    // Label button dynamically: show "Reschedule" if it's a reschedule request, otherwise "Schedule"
+                    const btnLabel = isRescheduleReq ? 'Reschedule' : 'Schedule';
+                    const btnBg = isRescheduleReq ? '#b45309' : '#1e5631'; // Amber for reschedule, green for standard schedule
+
+                    scheduleBtnHtml = `<button type="button" onclick="event.stopPropagation(); openAppointmentModal('${app.id}')" style="background: ${btnBg}; color: #ffffff;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-calendar"></use></svg> ${btnLabel}</button>`;
                 }
 
                 let archiveOrDeleteBtnHtml = '';
@@ -2202,6 +2575,8 @@
                 } else {
                     archiveOrDeleteBtnHtml = `<button type="button" onclick="event.stopPropagation(); toggleArchive('${app.id}')" class="btn-action" style="background: #6c757d; color: #ffffff;" title="Mark as Done"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-check"></use></svg> Mark as Done</button>`;
                 }
+
+
 
                 html += `
                 <tr style="${app.archived ? 'opacity: 0.7; background-color: #f9f9f9;' : ''}">
@@ -2212,16 +2587,24 @@
                     <td>${filesHtml}</td>
                     <td>
                         <select onchange="updateApplicationStatus('${app.id}', this.value)" class="status-select ${badgeClass}">
-                            <option value="Reviewing" ${currentStatus === 'Reviewing' ? 'selected' : ''}>Reviewing</option>
+                            <option value="Reviewing" ${currentStatus === 'reviewing' ? 'selected' : ''}>Reviewing</option>
+                            <option value="Reschedule Requested" ${currentStatus.includes('reschedule requested') ? 'selected' : ''}>⚠️ Reschedule Requested</option>
                             <option value="To Follow-Up & Upload Lacking Documents" ${currentStatus.includes('lacking') ? 'selected' : ''}>To Follow-Up & Upload Lacking Documents</option>
                             <option value="Reviewed & Ready for Payment" ${currentStatus.includes('payment') ? 'selected' : ''}>Reviewed & Ready for Payment</option>
                             <option value="Needs Revision" ${currentStatus === 'needs revision' ? 'selected' : ''}>Needs Revision</option>
                             <option value="Scheduled for Seminar" ${currentStatus.includes('seminar') ? 'selected' : ''}>Scheduled for Seminar</option>
                             <option value="Scheduled for Ceremony" ${currentStatus.includes('ceremony') ? 'selected' : ''}>Scheduled for Ceremony</option>
-                            <option value="Cancelled" ${currentStatus === 'cancelled' ? 'selected' : ''}>Cancelled</option>
                             <option value="Completed" ${currentStatus === 'completed' ? 'selected' : ''}>Completed</option>
                         </select>
                         ${app.adminNotes ? `<br><small style="color:red; margin-top: 4px; display:block;">Note: ${app.adminNotes}</small>` : ''}
+
+                        <!-- RESCHEDULE DETAILS CARD -->
+                        ${app.status && app.status.toLowerCase().includes('reschedule requested') && app.requestedNewDate ? `
+                            <div style="background: #fffbeb; border: 1px solid #fde68a; padding: 6px 8px; border-radius: 4px; margin-top: 6px; font-size: 11px; color: #92400e;">
+                                <strong>New Date Requested:</strong> ${app.requestedNewDate}<br>
+                                <strong>Reason:</strong> ${app.rescheduleReason || 'No reason provided'}
+                            </div>
+                        ` : ''}
                     </td>
                     <td>
                         <div class="action-btn-group">
@@ -2254,15 +2637,17 @@
             if (d && typeof d === 'object') {
                 if (sType.includes('baptism')) {
                     formattedDetails = `
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px;">
-                    <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-baby"></use></svg> Child's Name:</strong> ${d.childName || `${d.childFirstName || ''} ${d.childMiddleInitial || ''} ${d.childLastName || ''}`.trim() || 'N/A'}</div>
-                    <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-calendar"></use></svg> Date of Birth:</strong> ${d.dob || 'N/A'}</div>
-                    <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-user"></use></svg> Father's Name:</strong> ${d.fatherName || `${d.fatherFirstName || ''} ${d.fatherMiddleInitial || ''} ${d.fatherLastName || ''}`.trim() || 'N/A'}</div>
-                    <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-user"></use></svg> Mother's Maiden Name:</strong> ${d.motherName || `${d.motherFirstName || ''} ${d.motherMiddleInitial || ''} ${d.motherLastName || ''}`.trim() || 'N/A'}</div>
-                    <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-phone"></use></svg> Contact Phone:</strong> ${d.phone || 'N/A'}</div>
-                    <div style="grid-column: span 2;"><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-users"></use></svg> Godparents:</strong> ${d.godparents || 'None listed'}</div>
-                </div>
-            `;
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px;">
+                            <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-baby"></use></svg> Child's Name:</strong> ${d.childName || `${d.childFirstName || ''} ${d.childMiddleInitial || ''} ${d.childLastName || ''}`.trim() || 'N/A'}</div>
+                            <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-calendar"></use></svg> Date of Birth:</strong> ${d.childDob || d.dob || 'N/A'}</div>
+                            <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-user"></use></svg> Father's Name:</strong> ${d.fatherName || `${d.fatherFirstName || ''} ${d.fatherMiddleInitial || ''} ${d.fatherLastName || ''}`.trim() || 'N/A'}</div>
+                            <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-user"></use></svg> Mother's Maiden Name:</strong> ${d.motherName || `${d.motherFirstName || ''} ${d.motherMiddleInitial || ''} ${d.motherLastName || ''}`.trim() || 'N/A'}</div>
+                            <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-phone"></use></svg> Contact Phone:</strong> ${d.phone || 'N/A'}</div>
+                            <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-church"></use></svg> Married In:</strong> ${d.parentsMarriedIn || 'N/A'}</div>
+                            <div style="grid-column: span 2;"><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-users"></use></svg> Principal Ninong:</strong> ${d.principalNinong || 'None listed'}</div>
+                            <div style="grid-column: span 2;"><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-users"></use></svg> Principal Ninang:</strong> ${d.principalNinang || 'None listed'}</div>
+                        </div>
+                    `;
                 }
                 else if (sType.includes('wedding')) {
                     // Format additional sponsors list if any exist
@@ -2328,7 +2713,7 @@
             }
 
             let docsHtml = '<em style="color:#666; font-size:12px;">No sacramental documents attached.</em>';
-            
+
             if (app.documents) {
                 let docItems = [];
 
@@ -2347,7 +2732,7 @@
                             }
                         });
                     }
-                } 
+                }
                 // Handle if app.documents is an Array
                 else if (Array.isArray(app.documents) && app.documents.length > 0) {
                     app.documents.forEach((doc, idx) => {
@@ -2382,7 +2767,7 @@
                     }).join('');
                 }
             }
-            
+
 
             let paymentProofHtml = '<em style="color:#666; font-size: 12px;">No payment receipt uploaded yet.</em>';
             if (app.paymentProof) {
@@ -2417,6 +2802,26 @@
             openModal('adminUpdateModal');
         }
 
+        function validateAndOpenScheduler(appId) {
+            let app = rawApplicationsData.find(a => String(a.id) === String(appId));
+            if (!app) return;
+
+            const currentStatus = (app.status || '').toLowerCase();
+            const isRescheduleRequest = currentStatus.includes('reschedule') || currentStatus.includes('requesting for rescheduling');
+
+            // Check if documents are incomplete (assuming you have a flag or check like app.documentsComplete === false or checking missing requirements)
+            const hasIncompleteDocs = app.documentsComplete === false || (app.missingDocuments && app.missingDocuments.length > 0);
+
+            // RULE: If it's a regular schedule (not a reschedule request) AND documents are incomplete, block it for seminar/ceremony
+            if (hasIncompleteDocs && !isRescheduleRequest) {
+                showAlert("Cannot schedule seminar or ceremony while documents are incomplete. Please ensure all requirements are submitted or use the 'To Follow-Up & Upload Lacking Documents' status.", "Action Blocked");
+                return;
+            }
+
+            // Otherwise, allow the admin to proceed to the appointment modal
+            openAppointmentModal(appId);
+        }
+
         async function handleAdminUpdateSubmit(event) {
             event.preventDefault();
             const appId = document.getElementById('adminAppId').value;
@@ -2449,6 +2854,17 @@
                 statusHistory: updatedHistory
             });
 
+            // Call right after db.applications.update(...)
+            if (app.userId && app.userId !== 'STAFF-WALKIN-USER') {
+                await dispatchSystemNotification({
+                    targetUserId: Number(app.userId) || app.userId,
+                    referenceId: app.referenceId,
+                    title: `Appointment Update: ${app.sacramentType}`,
+                    message: `Your application (${app.referenceId}) status is now "${newStatus}". ${adminNotes ? 'Note: ' + adminNotes : ''}`,
+                    category: 'parishioner'
+                });
+            }
+
             closeModal('adminUpdateModal');
             fetchApplications();
         }
@@ -2461,6 +2877,17 @@
             }
             await db.applications.update(numericId, { status: newStatus, adminNotes: adminNotes });
             fetchApplications();
+
+            // Call right after db.applications.update(...)
+            if (app.userId && app.userId !== 'STAFF-WALKIN-USER') {
+                await dispatchSystemNotification({
+                    targetUserId: Number(app.userId) || app.userId,
+                    referenceId: app.referenceId,
+                    title: `Appointment Update: ${app.sacramentType}`,
+                    message: `Your application (${app.referenceId}) status is now "${newStatus}". ${adminNotes ? 'Note: ' + adminNotes : ''}`,
+                    category: 'parishioner'
+                });
+            }
         }
 
         async function toggleArchive(id) {
@@ -2482,7 +2909,6 @@
             renderApptCalendar();
         }
 
-        // 4. Update renderApptCalendar to highlight funeral spans properly
         function renderApptCalendar() {
             const gridEl = document.getElementById('apptCalendarGrid');
             const labelEl = document.getElementById('apptCalMonthLabel');
@@ -2501,19 +2927,9 @@
             const isIndivBap = sacramentType.includes('individual');
             const isFuneral = sacramentType.includes('funeral');
 
-            // Parse funeral span if applicable
-            let funeralStart = null;
-            let funeralEnd = null;
-            if (isFuneral) {
-                const startStr = activeSchedulingApp.preferredDate || activeSchedulingApp.confirmedDate;
-                const wakeDaysCount = parseInt(activeSchedulingApp.details?.wakeDays || activeSchedulingApp.wakeDays || 3);
-                if (startStr) {
-                    funeralStart = new Date(startStr);
-                    funeralStart.setHours(0, 0, 0, 0);
-                    funeralEnd = new Date(funeralStart);
-                    funeralEnd.setDate(funeralEnd.getDate() + (wakeDaysCount - 1));
-                }
-            }
+            // Extract original date and requested reschedule date for highlighting
+            const originalDateStr = activeSchedulingApp.confirmedDate || activeSchedulingApp.preferredDate || '';
+            const targetReschedStr = activeSchedulingApp.requestedNewDate || '';
 
             let html = '';
             for (let i = 0; i < firstDayIndex; i++) { html += `<div></div>`; }
@@ -2523,14 +2939,13 @@
                 const cellDate = new Date(dateString);
                 cellDate.setHours(0, 0, 0, 0);
                 const dayOfWeek = cellDate.getDay();
-                const dayOfMonth = cellDate.getDate();
 
                 let isAllowed = true;
                 let badgeText = activeSchedulingStage === 'ceremony' ? 'Ceremony Slot' : 'Seminar Slot';
                 let badgeColor = '#2e7d32';
 
                 if (isFuneral) {
-                    isAllowed = (dayOfWeek !== 1); // Chapel open except Monday
+                    isAllowed = (dayOfWeek !== 1);
                     badgeText = 'Chapel Slot';
                 } else if (activeSchedulingStage === 'ceremony') {
                     if (isGroupBap) {
@@ -2543,36 +2958,47 @@
                         isAllowed = (dayOfWeek >= 2 && dayOfWeek <= 6);
                         badgeText = isAllowed ? 'Wedding Slot' : 'Restricted';
                     }
-                } else {
-                    if (isGroupBap || isIndivBap) {
-                        isAllowed = (dayOfWeek === 6);
-                        badgeText = isAllowed ? 'Seminar' : 'Sat Only';
-                    } else if (sacramentType.includes('wedding')) {
-                        isAllowed = (dayOfWeek === 0 && dayOfMonth <= 7);
-                        badgeText = isAllowed ? 'Pre-Cana' : '1st Sun Only';
-                    }
                 }
 
-                badgeColor = isAllowed ? '#2e7d32' : '#8a8d91';
+                // Default cell styling
+                let bgStyle = '#f0f2f5';
+                let textStyle = '#050505';
+                let borderStyle = '1px solid transparent';
 
-                let bgStyle = selectedApptDateStr === dateString ? '#1877f2' : '#f0f2f5';
-                let textStyle = selectedApptDateStr === dateString ? '#ffffff' : '#050505';
+                // Highlight Logic for Original Date vs Targeted Reschedule Date
+                if (dateString === originalDateStr) {
+                    bgStyle = '#e2e8f0'; // Neutral gray-blue for original date
+                    textStyle = '#1e293b';
+                    borderStyle = '2px dashed #64748b';
+                    badgeText = 'Original Date';
+                    badgeColor = '#475569';
+                }
 
-                // Highlight full funeral wake-to-interment span if matched
-                if (isFuneral && funeralStart && funeralEnd && cellDate >= funeralStart && cellDate <= funeralEnd) {
-                    bgStyle = '#d0e8ff';
-                    textStyle = '#1d4ed8';
-                    badgeText = (cellDate.getTime() === funeralStart.getTime()) ? 'Wake Start' : (cellDate.getTime() === funeralEnd.getTime() ? 'Interment' : 'Wake Span');
-                    badgeColor = '#2563eb';
+                if (dateString === targetReschedStr) {
+                    bgStyle = '#fef3c7'; // Amber highlight for parishioner's requested new date
+                    textStyle = '#92400e';
+                    borderStyle = '2px solid #d97706';
+                    badgeText = 'Requested New';
+                    badgeColor = '#b45309';
+                }
+
+                // If explicitly selected by admin in modal
+                if (selectedApptDateStr === dateString) {
+                    bgStyle = '#1877f2';
+                    textStyle = '#ffffff';
+                    borderStyle = '2px solid #000000';
+                    badgeText = 'Selected';
+                    badgeColor = '#ffffff';
                 }
 
                 if (!isAllowed) {
                     bgStyle = '#f4f2f2';
                     textStyle = '#b0b3b8';
+                    badgeText = 'Closed';
                 }
 
                 html += `
-        <div onclick="${isAllowed ? `selectApptCalendarDate('${dateString}')` : ''}" style="background: ${bgStyle}; color: ${textStyle}; padding: 6px 2px; border-radius: 6px; cursor: ${isAllowed ? 'pointer' : 'not-allowed'}; font-size: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 40px;">
+        <div onclick="${isAllowed ? `selectApptCalendarDate('${dateString}')` : ''}" style="background: ${bgStyle}; color: ${textStyle}; border: ${borderStyle}; padding: 6px 2px; border-radius: 6px; cursor: ${isAllowed ? 'pointer' : 'not-allowed'}; font-size: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 42px;">
             <strong>${day}</strong>
             <span style="font-size: 8px; font-weight: bold; color: ${badgeColor};">${badgeText}</span>
         </div>`;
@@ -2594,21 +3020,27 @@
             let defaultTime = "10:00 AM";
 
             // 1. Determine scheduling stage and title
-            if (currentStatus.includes('ceremony') || currentStatus === 'approved') {
+            // Inside openAppointmentModal(appId)
+            const isRescheduleRequest = currentStatus.includes('reschedule requested');
+
+            // 1. FORCE CEREMONY MODE if it's a reschedule request
+            if (isRescheduleRequest || currentStatus.includes('ceremony') || currentStatus === 'approved') {
                 activeSchedulingStage = 'ceremony';
+
                 if (sacramentType.includes('baptism')) {
-                    schedulingModeTitle = "Schedule Baptism Ceremony";
+                    schedulingModeTitle = isRescheduleRequest ? "Reschedule Baptism Ceremony" : "Schedule Baptism Ceremony";
                     defaultTime = "10:00 AM";
                 } else if (sacramentType.includes('wedding')) {
-                    schedulingModeTitle = "Schedule Wedding Ceremony";
+                    schedulingModeTitle = isRescheduleRequest ? "Reschedule Wedding Ceremony" : "Schedule Wedding Ceremony";
                     defaultTime = "15:00";
                 } else if (sacramentType.includes('funeral')) {
-                    schedulingModeTitle = "Schedule Funeral Vigil & Interment";
+                    schedulingModeTitle = isRescheduleRequest ? "Reschedule Funeral Vigil & Interment" : "Schedule Funeral Vigil & Interment";
                     defaultTime = "08:00 - 17:00";
                 } else {
                     schedulingModeTitle = `Schedule ${app.sacramentType} Ceremony`;
                 }
             } else {
+                // Otherwise, treat as seminar / preparation stage
                 activeSchedulingStage = 'seminar';
                 if (sacramentType.includes('baptism')) {
                     schedulingModeTitle = "Schedule Baptism Seminar & Interview";
@@ -2744,6 +3176,18 @@
                     return;
                 }
                 updatePayload.assignedPriest = assignedPriest;
+            }
+
+            // Fetch the updated record to get userId and referenceId
+            const updatedApp = await db.applications.get(numericId);
+            if (updatedApp && updatedApp.userId && updatedApp.userId !== 'STAFF-WALKIN-USER') {
+                await dispatchSystemNotification({
+                    targetUserId: Number(updatedApp.userId) || updatedApp.userId,
+                    referenceId: updatedApp.referenceId,
+                    title: `Schedule Confirmed (${updatedApp.sacramentType})`,
+                    message: `Your ceremony/seminar is confirmed for ${confirmedDate} at ${confirmedTime}.`,
+                    category: 'parishioner'
+                });
             }
 
             await db.applications.update(numericId, updatePayload);
@@ -3505,6 +3949,155 @@
                 document.getElementById('walkInWeddingFields').style.display = 'block';
             } else if (service === 'Funeral') {
                 document.getElementById('walkInFuneralFields').style.display = 'block';
+            }
+        }
+
+        function showAdminSeminarAttendanceView() {
+            const tableSection = document.getElementById('secretaryTableSection');
+            if (tableSection) tableSection.style.display = 'none';
+
+            const priestCalSection = document.getElementById('priestCalendarSection');
+            if (priestCalSection) priestCalSection.style.display = 'none';
+
+            const statsSection = document.getElementById('statsSection');
+            if (statsSection) statsSection.style.display = 'none';
+
+            const attendanceSection = document.getElementById('adminSeminarAttendanceSection');
+            if (attendanceSection) {
+                attendanceSection.style.display = 'block';
+            }
+        }
+
+        function showAdminStandardDashboard() {
+            stopMobileQrScanner(); // Stop camera when leaving the view
+            checkAdminSession();
+
+            const attendanceSection = document.getElementById('adminSeminarAttendanceSection');
+            if (attendanceSection) {
+                attendanceSection.style.display = 'none';
+            }
+        }
+
+        let mediaStream = null;
+        let scanningInterval = null;
+
+        async function startMobileQrScanner() {
+            const videoElement = document.getElementById('qrCameraPreview');
+            const placeholder = document.getElementById('scannerPlaceholder');
+            const activeControls = document.getElementById('scannerActiveControls');
+            const feedback = document.getElementById('checkInFeedback');
+
+            if (!('BarcodeDetector' in window)) {
+                alert('BarcodeDetector API is not natively supported on this browser/device. Please use manual Reference ID entry below.');
+                return;
+            }
+
+            try {
+                mediaStream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment' } // Prefer back camera on mobile phones
+                });
+
+                videoElement.srcObject = mediaStream;
+                videoElement.style.display = 'block';
+                placeholder.style.display = 'none';
+                activeControls.style.display = 'block';
+
+                const barcodeDetector = new BarcodeDetector({ formats: ['qr_code'] });
+
+                // Continuously scan video frames for a QR code
+                scanningInterval = setInterval(async () => {
+                    if (videoElement.readyState === videoElement.HAVE_ENOUGH_DATA) {
+                        try {
+                            const barcodes = await barcodeDetector.detect(videoElement);
+                            if (barcodes.length > 0) {
+                                const scannedValue = barcodes[0].rawValue;
+                                if (scannedValue) {
+                                    document.getElementById('adminRefInput').value = scannedValue;
+                                    stopMobileQrScanner();
+                                    handleAdminCheckIn(); // Automatically process check-in upon successful scan
+                                }
+                            }
+                        } catch (err) {
+                            // Frame detection error suppression during active scanning
+                        }
+                    }
+                }, 300);
+
+            } catch (err) {
+                console.error('Camera access error:', err);
+                feedback.style.display = 'block';
+                feedback.style.background = '#fef2f2';
+                feedback.style.color = '#dc2626';
+                feedback.innerText = 'Unable to access mobile camera. Please check permissions or use manual entry.';
+            }
+        }
+
+        function stopMobileQrScanner() {
+            if (scanningInterval) {
+                clearInterval(scanningInterval);
+                scanningInterval = null;
+            }
+            if (mediaStream) {
+                mediaStream.getTracks().forEach(track => track.stop());
+                mediaStream = null;
+            }
+            const videoElement = document.getElementById('qrCameraPreview');
+            const placeholder = document.getElementById('scannerPlaceholder');
+            const activeControls = document.getElementById('scannerActiveControls');
+
+            if (videoElement) videoElement.style.display = 'none';
+            if (placeholder) placeholder.style.display = 'block';
+            if (activeControls) activeControls.style.display = 'none';
+        }
+
+        async function handleAdminCheckIn() {
+            const inputField = document.getElementById('adminRefInput');
+            const feedback = document.getElementById('checkInFeedback');
+            const refId = inputField.value.trim();
+
+            feedback.style.display = 'block';
+            if (!refId) {
+                feedback.style.background = '#fef2f2';
+                feedback.style.color = '#dc2626';
+                feedback.innerText = 'Please enter or scan a valid Reference ID.';
+                return;
+            }
+
+            try {
+                // Query Dexie IndexedDB for the matching reference ID
+                let app = await db.applications.where('referenceId').equals(refId).first();
+
+                if (!app) {
+                    feedback.style.background = '#fef2f2';
+                    feedback.style.color = '#dc2626';
+                    feedback.innerText = `No application record found for Reference ID: ${refId}`;
+                    return;
+                }
+
+                const updatedStatus = 'Scheduled for Ceremony';
+
+                // Update the application status in Dexie
+                await db.applications.update(app.id, {
+                    status: updatedStatus,
+                    attendanceConfirmed: true,
+                    updatedAt: new Date().toISOString()
+                });
+
+                feedback.style.background = '#f0fdf4';
+                feedback.style.color = '#16a34a';
+                feedback.innerHTML = `✅ <strong>Success!</strong> Attendance verified for <strong>${refId}</strong> (${app.applicantName || 'Parishioner'}). Status updated to <em>${updatedStatus}</em>.`;
+
+                inputField.value = '';
+
+                // CRITICAL: Refresh the application list table and in-memory state
+                if (typeof fetchApplications === 'function') {
+                    await fetchApplications();
+                }
+            } catch (err) {
+                console.error('Check-in error:', err);
+                feedback.style.background = '#fef2f2';
+                feedback.style.color = '#dc2626';
+                feedback.innerText = 'An error occurred while updating the application status.';
             }
         }
     </script>

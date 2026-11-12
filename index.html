@@ -548,7 +548,7 @@
 
                     <!-- 2. CHILD'S INFORMATION -->
                     <div style="border-top: 1px solid #e2e8f0; padding-top: 16px; margin-top: 16px;">
-                        <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;">Child's Information</h4>
+                        <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;">Name of child</h4>
                         <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px;">
                             <div style="flex: 2; min-width: 180px;">
                                 <label
@@ -583,49 +583,76 @@
 
                     <!-- Father's Details Section -->
                     <div style="border-top: 1px solid #e2e8f0; padding-top: 16px; margin-top: 16px;">
-                        <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;">Father's Information</h4>
+                        <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;"> Name of father
+                        </h4>
                         <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px;">
-                            <div style="flex: 1; min-width: 200px;">
+                            <div style="flex: 2; min-width: 160px;">
                                 <label
-                                    style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Father's
-                                    Full Name *</label>
-                                <input type="text" id="fatherName" name="fatherName" required
+                                    style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">First
+                                    Name </label>
+                                <input type="text" id="fatherFirstName" name="fatherFirstName" required
                                     style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
                             </div>
-                            <div style="flex: 1; min-width: 200px;">
+                            <div style="flex: 0.8; min-width: 60px;">
                                 <label
-                                    style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Father's
-                                    Place of Birth *</label>
-                                <input type="text" id="fatherBirthplace" name="fatherBirthplace" required
+                                    style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">M.I.</label>
+                                <input type="text" id="fatherMiddleInitial" name="fatherMiddleInitial" maxlength="3"
                                     style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
                             </div>
+                            <div style="flex: 2; min-width: 160px;">
+                                <label
+                                    style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Last
+                                    Name *</label>
+                                <input type="text" id="fatherLastName" name="fatherLastName" required
+                                    style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
+                            </div>
+                        </div>
+                        <div>
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Place
+                                of Birth</label>
+                            <input type="text" id="fatherBirthplace" name="fatherBirthplace"
+                                style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
                         </div>
                     </div>
 
                     <!-- Mother's Details Section -->
                     <div style="border-top: 1px solid #e2e8f0; padding-top: 16px; margin-top: 16px;">
-                        <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;">Mother's Information</h4>
+                        <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;">Name of mother</h4>
                         <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px;">
-                            <div style="flex: 1; min-width: 200px;">
+                            <div style="flex: 2; min-width: 160px;">
                                 <label
-                                    style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Mother's
-                                    Maiden Name *</label>
-                                <input type="text" id="motherName" name="motherName" required
+                                    style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">First
+                                    Name *</label>
+                                <input type="text" id="motherFirstName" name="motherFirstName" required
                                     style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
                             </div>
-                            <div style="flex: 1; min-width: 200px;">
+                            <div style="flex: 0.8; min-width: 60px;">
                                 <label
-                                    style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Mother's
-                                    Place of Birth *</label>
-                                <input type="text" id="motherBirthplace" name="motherBirthplace" required
+                                    style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">M.I.</label>
+                                <input type="text" id="motherMiddleInitial" name="motherMiddleInitial" maxlength="3"
+                                    style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
+                            </div>
+                            <div style="flex: 2; min-width: 160px;">
+                                <label
+                                    style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Maiden
+                                    Last Name *</label>
+                                <input type="text" id="motherLastName" name="motherLastName" required
                                     style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
                             </div>
                         </div>
+                        <div>
+                            <label
+                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Place
+                                of Birth</label>
+                            <input type="text" id="motherBirthplace" name="motherBirthplace"
+                                style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
+                        </div>
                     </div>
 
-                    <!-- Contact Number -->
+                    <!-- Contact Number & Married In Section -->
                     <div style="border-top: 1px solid #e2e8f0; padding-top: 16px; margin-top: 16px;">
-                        <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;">Contact Number</h4>
+                        <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;">Contact & Marriage Details</h4>
                         <div style="display: flex; gap: 12px; flex-wrap: wrap;">
                             <div class="form-group" style="flex: 1; min-width: 200px;">
                                 <label
@@ -634,57 +661,56 @@
                                 <input type="tel" name="phone" required
                                     style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
                             </div>
+                            <div class="form-group" style="flex: 1; min-width: 200px;">
+                                <label
+                                    style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Married
+                                    In</label>
+                                <input type="text" id="parentsMarriedIn" name="parentsMarriedIn"
+                                    style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
+                            </div>
                         </div>
                     </div>
 
-                    <!-- REQUIRED PRINCIPAL GODPARENTS -->
+                    <!-- PRINCIPAL SPONSORS (LEFT & RIGHT COLUMNS WITH DYNAMIC ADD BUTTONS) -->
                     <div style="border-top: 1px solid #e2e8f0; padding-top: 16px; margin-top: 16px;">
-                        <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;">Principal Godparents (Required)
-                        </h4>
-                        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px;">
-                            <div style="flex: 1; min-width: 200px;">
+                        <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;">Principal Sponsors</h4>
+
+                        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                            <!-- LEFT COLUMN: PRINCIPAL NINONG + DYNAMIC ADD -->
+                            <div style="flex: 1; min-width: 240px;">
                                 <label
                                     style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Principal
                                     Ninong *</label>
                                 <input type="text" id="principalNinong" name="principalNinong" required
-                                    style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
+                                    style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px; margin-bottom: 8px;">
+
+                                <div id="ninongList"></div>
+                                <button type="button" onclick="addNinongRow()"
+                                    style="background: #e74c3c; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 13px; margin-top: 4px;">
+                                    + Add Ninong
+                                </button>
                             </div>
-                            <div style="flex: 1; min-width: 200px;">
+
+                            <!-- RIGHT COLUMN: PRINCIPAL NINANG + DYNAMIC ADD -->
+                            <div style="flex: 1; min-width: 240px;">
                                 <label
                                     style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Principal
                                     Ninang *</label>
                                 <input type="text" id="principalNinang" name="principalNinang" required
-                                    style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
+                                    style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px; margin-bottom: 8px;">
+
+                                <div id="ninangList"></div>
+                                <button type="button" onclick="addNinangRow()"
+                                    style="background: #e74c3c; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 13px; margin-top: 4px;">
+                                    + Add Ninang
+                                </button>
                             </div>
                         </div>
                     </div>
 
-                    <!-- APPLICANT ADDRESS SECTION -->
-                    <div style="border-top: 1px solid #e2e8f0; padding-top: 16px; margin-top: 16px;">
-                        <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;">Address</h4>
-                        <div style="margin-bottom: 12px;">
-                            <label
-                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Complete
-                                Home Address *</label>
-                            <input type="text" id="applicantAddress" name="address" required
-                                style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
-                        </div>
-                    </div>
-
-                    <!-- ADDITIONAL DYNAMIC GODPARENTS -->
-                    <div style="border-top: 1px solid #e2e8f0; padding-top: 16px; margin-top: 16px;">
-                        <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;">Additional Godparents /
-                            Sponsors (Optional)</h4>
-                        <div class="form-group">
-                            <div id="godparentList"></div>
-                            <button type="button" class="add-godparent-btn" onclick="addGodparentRow()">+ Add Additional
-                                Sponsor</button>
-                        </div>
-                    </div>
-
-                    <!-- Cleaned Baptism Calendar Container in index.html -->
+                    <!-- Calendar Container -->
                     <div class="fb-calendar-container"
-                        style="background: #ffffff; border: 1px solid #ccd0d5; border-radius: 8px; padding: 16px; margin-bottom: 15px; font-family: Helvetica, Arial, sans-serif;">
+                        style="background: #ffffff; border: 1px solid #ccd0d5; border-radius: 8px; padding: 16px; margin: 16px 0; font-family: Helvetica, Arial, sans-serif;">
                         <div style="margin-bottom: 15px;">
                             <label
                                 style="display: block; font-weight: bold; color: #1c1e21; font-size: 13px; margin-bottom: 6px;">Select
@@ -694,27 +720,22 @@
                                 required>
                                 <option value="">-- Choose Baptism Type --</option>
                                 <option value="group">Group Baptism (₱500 | Sat & Sun @ 10:00 AM)</option>
-                                <option value="individual">Individual Baptism (₱1,500 | Tue to Fri by
-                                    appointment)
+                                <option value="individual">Individual Baptism (₱1,500 | Tue to Fri by appointment)
                                 </option>
                             </select>
                         </div>
 
                         <div
                             style="background: #e7f3ff; border-left: 4px solid #1877f2; padding: 10px; font-size: 12px; color: #1c1e21; margin-bottom: 15px;">
-                            <strong><svg class="ui-icon" aria-hidden="true" focusable="false">
-                                    <use href="#icon-pin"></use>
-                                </svg> Mandatory Baptism Seminar:</strong><br>
-                            Held at <strong>San Lorenzo Hall or Catalina Hall</strong> every <strong>Saturday at
-                                4:30
+                            <strong>Mandatory Baptism Seminar:</strong><br>
+                            Held at <strong>San Lorenzo Hall or Catalina Hall</strong> every <strong>Saturday at 4:30
                                 PM</strong>.
                         </div>
 
                         <div
                             style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                             <h4 id="bapMonthYearLabel"
-                                style="margin: 0; color: #1c1e21; font-size: 1.05rem; font-weight: bold;">Month
-                                Year
+                                style="margin: 0; color: #1c1e21; font-size: 1.05rem; font-weight: bold;">Month Year
                             </h4>
                             <div style="display: flex; gap: 6px;">
                                 <button type="button" onclick="changeBapCalendarMonth(-1)"
@@ -742,8 +763,7 @@
                         <div id="bapTimeslotPanel"
                             style="border-top: 1px solid #e4e6eb; padding-top: 12px; display: none;">
                             <div id="bapSelectedDateHeader"
-                                style="font-size: 13px; font-weight: bold; color: #1c1e21; margin-bottom: 8px;">
-                            </div>
+                                style="font-size: 13px; font-weight: bold; color: #1c1e21; margin-bottom: 8px;"></div>
                             <div id="bapTimeslotGrid" style="display: grid; grid-template-columns: 1fr; gap: 8px;">
                             </div>
                         </div>
@@ -752,58 +772,51 @@
                         <input type="hidden" id="bapSelectedTimeInput" name="confirmedTime" required>
                     </div>
 
-
-                    <!-- Baptism Document Upload Section (Separated) -->
+                    <!-- Baptism Document Upload Section -->
                     <div class="form-document-section">
                         <p class="form-section-title">Required Documents</p>
-                        <p class="doc-hint">Please upload clear copies of the following required documents (PDF,
-                            JPG, PNG):</p>
+                        <p class="doc-hint">Please upload clear copies of the following required documents (PDF, JPG,
+                            PNG):</p>
 
-                        <!-- 1. Child's Birth Certificate -->
                         <div style="margin-bottom: 15px;">
                             <label
-                                style="display: block; font-weight: bold; font-size: 13px; color: #2c3e50; margin-bottom: 5px;">
-                                1. Child's Birth Certificate (PSA / LCR) *
-                            </label>
+                                style="display: block; font-weight: bold; font-size: 13px; color: #2c3e50; margin-bottom: 5px;">1.
+                                Child's Birth Certificate (PSA / LCR) *</label>
                             <div class="inline-drop-zone" onclick="document.getElementById('bapBirthCertFiles').click()"
                                 style="border: 2px dashed #cbd5e1; padding: 12px; border-radius: 6px; text-align: center; cursor: pointer; background: #f8fafc;">
                                 <span><svg class="ui-icon" aria-hidden="true" focusable="false">
                                         <use href="#icon-file-text"></use>
-                                    </svg> Click or drag Child's Birth Certificate here</span>
+                                    </svg> </span>
                                 <input type="file" id="bapBirthCertFiles" accept=".pdf,.jpg,.jpeg,.png"
                                     style="display:none;" onchange="handleInlineFiles(event, 'bapBirthCertList')">
                             </div>
                             <div class="file-preview-list" id="bapBirthCertList"></div>
                         </div>
 
-                        <!-- 2. Mother's Baptismal Certificate -->
                         <div style="margin-bottom: 15px;">
                             <label
-                                style="display: block; font-weight: bold; font-size: 13px; color: #2c3e50; margin-bottom: 5px;">
-                                2. Mother's Baptismal Certificate *
-                            </label>
+                                style="display: block; font-weight: bold; font-size: 13px; color: #2c3e50; margin-bottom: 5px;">2.
+                                Mother's Baptismal Certificate *</label>
                             <div class="inline-drop-zone" onclick="document.getElementById('bapMotherFiles').click()"
                                 style="border: 2px dashed #cbd5e1; padding: 12px; border-radius: 6px; text-align: center; cursor: pointer; background: #f8fafc;">
                                 <span><svg class="ui-icon" aria-hidden="true" focusable="false">
                                         <use href="#icon-file-text"></use>
-                                    </svg> Click or drag Mother's Baptismal Certificate here</span>
+                                    </svg></span>
                                 <input type="file" id="bapMotherFiles" accept=".pdf,.jpg,.jpeg,.png"
                                     style="display:none;" onchange="handleInlineFiles(event, 'bapMotherList')">
                             </div>
                             <div class="file-preview-list" id="bapMotherList"></div>
                         </div>
 
-                        <!-- 3. Father's Baptismal Certificate -->
                         <div style="margin-bottom: 15px;">
                             <label
-                                style="display: block; font-weight: bold; font-size: 13px; color: #2c3e50; margin-bottom: 5px;">
-                                3. Father's Baptismal Certificate *
-                            </label>
+                                style="display: block; font-weight: bold; font-size: 13px; color: #2c3e50; margin-bottom: 5px;">3.
+                                Father's Baptismal Certificate *</label>
                             <div class="inline-drop-zone" onclick="document.getElementById('bapFatherFiles').click()"
                                 style="border: 2px dashed #cbd5e1; padding: 12px; border-radius: 6px; text-align: center; cursor: pointer; background: #f8fafc;">
                                 <span><svg class="ui-icon" aria-hidden="true" focusable="false">
                                         <use href="#icon-file-text"></use>
-                                    </svg> Click or drag Father's Baptismal Certificate here</span>
+                                    </svg> </span>
                                 <input type="file" id="bapFatherFiles" accept=".pdf,.jpg,.jpeg,.png"
                                     style="display:none;" onchange="handleInlineFiles(event, 'bapFatherList')">
                             </div>
@@ -811,7 +824,7 @@
                         </div>
                     </div>
 
-                    <!-- REPUBLIC ACT NO. 10173 (DATA PRIVACY ACT) CONSENT SECTION -->
+                    <!-- DATA PRIVACY ACT CONSENT -->
                     <div class="form-group"
                         style="background: #f8f9fa; border: 1px solid #ccd0d5; padding: 12px; border-radius: 6px; margin: 15px 0;">
                         <label
@@ -819,23 +832,16 @@
                             <input type="checkbox" id="privacyConsentCheck" required
                                 style="margin-top: 2px; cursor: pointer;">
                             <span>
-                                <strong>Data Privacy Consent:</strong> I hereby authorize Santuario Del Sto.
-                                Cristo
-                                Parish
-                                to collect, process, and store my personal and sacramental data provided in this
-                                form in
-                                compliance with the <strong>Philippine Data Privacy Act (RA 10173)</strong>. I
-                                understand my
-                                data will be used strictly for parish record-keeping, verification, and ceremony
-                                scheduling.
+                                <strong>Data Privacy Consent:</strong> I hereby authorize Santuario Del Sto. Cristo
+                                Parish to collect, process, and store my personal and sacramental data provided in this
+                                form in compliance with the <strong>Philippine Data Privacy Act (RA 10173)</strong>.
                             </span>
                         </label>
                     </div>
 
                     <button type="submit" class="form-submit-btn">Submit Baptism Application</button>
+                </form>
             </div>
-            </form>
-        </div>
         </div>
 
         <!-- 2. WEDDING APPLICATION FORM -->
@@ -1213,7 +1219,7 @@
                                     style="border: 2px dashed #cbd5e1; padding: 12px; border-radius: 6px; text-align: center; cursor: pointer; background: #f8fafc;">
                                     <span><svg class="ui-icon" aria-hidden="true" focusable="false">
                                             <use href="#icon-file-text"></use>
-                                        </svg> Click or drag PSA Birth Certificates here</span>
+                                        </svg></span>
                                     <input type="file" id="wedBirthCertFiles" multiple accept=".pdf,.jpg,.jpeg,.png"
                                         style="display:none;" onchange="handleInlineFiles(event, 'wedBirthCertList')">
                                 </div>
@@ -1231,7 +1237,7 @@
                                     style="border: 2px dashed #cbd5e1; padding: 12px; border-radius: 6px; text-align: center; cursor: pointer; background: #f8fafc;">
                                     <span><svg class="ui-icon" aria-hidden="true" focusable="false">
                                             <use href="#icon-file-text"></use>
-                                        </svg> Click or drag CENOMAR here</span>
+                                        </svg></span>
                                     <input type="file" id="wedCenomarFiles" multiple accept=".pdf,.jpg,.jpeg,.png"
                                         style="display:none;" onchange="handleInlineFiles(event, 'wedCenomarList')">
                                 </div>
@@ -1249,7 +1255,7 @@
                                     style="border: 2px dashed #cbd5e1; padding: 12px; border-radius: 6px; text-align: center; cursor: pointer; background: #f8fafc;">
                                     <span><svg class="ui-icon" aria-hidden="true" focusable="false">
                                             <use href="#icon-file-text"></use>
-                                        </svg> Click or drag Annotated Baptismal/Confirmation Certificates here</span>
+                                        </svg></span>
                                     <input type="file" id="wedAnnotationFiles" multiple accept=".pdf,.jpg,.jpeg,.png"
                                         style="display:none;" onchange="handleInlineFiles(event, 'wedAnnotationList')">
                                 </div>
@@ -1267,7 +1273,7 @@
                                     style="border: 2px dashed #cbd5e1; padding: 12px; border-radius: 6px; text-align: center; cursor: pointer; background: #f8fafc;">
                                     <span><svg class="ui-icon" aria-hidden="true" focusable="false">
                                             <use href="#icon-file-text"></use>
-                                        </svg> Click or drag Marriage License / Contract here</span>
+                                        </svg></span>
                                     <input type="file" id="wedLicenseFiles" multiple accept=".pdf,.jpg,.jpeg,.png"
                                         style="display:none;" onchange="handleInlineFiles(event, 'wedLicenseList')">
                                 </div>
@@ -1288,7 +1294,7 @@
                                     style="border: 2px dashed #f59e0b; padding: 12px; border-radius: 6px; text-align: center; cursor: pointer; background: #fffdf9;">
                                     <span><svg class="ui-icon" aria-hidden="true" focusable="false">
                                             <use href="#icon-file-text"></use>
-                                        </svg> Click or drag Guest Priest License to Marry here</span>
+                                        </svg></span>
                                     <input type="file" id="guestPriestLicenseFiles" accept=".pdf,.jpg,.jpeg,.png"
                                         style="display:none;"
                                         onchange="handleInlineFiles(event, 'guestPriestLicenseList')">
@@ -1502,53 +1508,62 @@
             </div>
         </div>
 
-        <!-- 5. USER DASHBOARD MODAL -->
         <!-- ========================================== -->
-        <!-- <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#icon-clipboard-list"></use></svg> DEDICATED PARISHIONER DASHBOARD & ACCOUNT MODAL -->
+        <!-- DEDICATED PARISHIONER DASHBOARD & ACCOUNT MODAL -->
         <!-- ========================================== -->
-        <div id="dashboardModal" class="modal-overlay" style="display: none;">
-            <div class="modal-box modal-large" style="max-width: 800px; text-align: left;">
+        <div id="dashboardModal" class="modal-overlay"
+            style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 1050; align-items: center; justify-content: center;">
+            <div class="modal-box modal-large"
+                style="background: #ffffff; width: 90%; max-width: 800px; border-radius: 8px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; text-align: left; position: relative;">
 
                 <!-- Modal Header -->
                 <div
                     style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #4a0e17; padding-bottom: 10px; margin-bottom: 15px;">
-                    <h3 style="color: #4a0e17; margin: 0; font-size: 1.3rem;"><svg class="ui-icon" aria-hidden="true"
-                            focusable="false">
+                    <h3
+                        style="color: #4a0e17; margin: 0; font-size: 1.3rem; display: flex; align-items: center; gap: 8px;">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false" style="width: 20px; height: 20px;">
                             <use href="#icon-clipboard-list"></use>
-                        </svg> My Dashboard & Account Profile</h3>
+                        </svg>
+                        My Dashboard & Account Profile
+                    </h3>
                     <span class="close-btn" onclick="closeModal('dashboardModal')"
-                        style="cursor: pointer; font-size: 1.5rem; color: #333;">&times;</span>
+                        style="cursor: pointer; font-size: 1.5rem; color: #333; font-weight: bold;">&times;</span>
                 </div>
 
                 <!-- Account Info & Profile Summary Card -->
                 <div
                     style="background: #f8f9fa; border: 1px solid #e2e8f0; padding: 15px; border-radius: 6px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
                     <div>
-                        <h4 style="margin: 0 0 4px 0; color: #4a0e17; font-size: 1.1rem;" id="dashUserProfileName"><svg
-                                class="ui-icon" aria-hidden="true" focusable="false">
+                        <h4 style="margin: 0 0 4px 0; color: #4a0e17; font-size: 1.1rem; display: flex; align-items: center; gap: 6px;"
+                            id="dashUserProfileName">
+                            <svg class="ui-icon" aria-hidden="true" focusable="false"
+                                style="width: 16px; height: 16px;">
                                 <use href="#icon-user"></use>
                             </svg>
-                            Parishioner Name</h4>
+                            Parishioner Name
+                        </h4>
                         <p style="margin: 0 0 4px 0; color: #555; font-size: 13px;" id="dashUserProfileEmail">
                             email@domain.com</p>
                         <p style="margin: 0; color: #777; font-size: 11px;">Role: Parishioner Account</p>
                     </div>
                     <div style="display: flex; gap: 10px;">
                         <button onclick="openEditProfileModal()"
-                            style="background: #1877f2; color: white; border: none; padding: 8px 14px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px;">
+                            style="background: #1877f2; color: white; border: none; padding: 8px 14px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px; display: inline-flex; align-items: center; gap: 5px;">
                             <svg class="ui-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"
-                                style="width: 16px; height: 16px; vertical-align: middle;">
+                                style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2;">
                                 <path d="M12 20h9" />
                                 <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L8 18l-4 1 1-4Z" />
                             </svg>
                             Edit Profile
                         </button>
                         <button onclick="logoutUser(event)"
-                            style="background: #ff6b6b; color: white; border: none; padding: 8px 14px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px;"><svg
-                                class="ui-icon" aria-hidden="true" focusable="false">
+                            style="background: #ff6b6b; color: white; border: none; padding: 8px 14px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px; display: inline-flex; align-items: center; gap: 5px;">
+                            <svg class="ui-icon" aria-hidden="true" focusable="false"
+                                style="width: 14px; height: 14px;">
                                 <use href="#icon-log-out"></use>
                             </svg>
-                            Logout</button>
+                            Logout
+                        </button>
                     </div>
                 </div>
 
@@ -1566,22 +1581,57 @@
 
         <!-- RESCHEDULE REQUEST MODAL (Parishioner Side) -->
         <div id="requestReschedModal" class="modal-overlay" style="z-index: 999999;">
-            <div class="modal-box" style="max-width: 500px; padding: 24px; text-align: left;">
+            <div class="modal-box"
+                style="max-width: 520px; padding: 24px; text-align: left; max-height: 90vh; overflow-y: auto;">
                 <div
                     style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #4a0e17; padding-bottom: 10px; margin-bottom: 15px;">
-                    <h3 style="color: #4a0e17; margin: 0; font-size: 1.2rem;"><svg class="ui-icon" aria-hidden="true"
-                            focusable="false">
+                    <h3 style="color: #4a0e17; margin: 0; font-size: 1.2rem;">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false">
                             <use href="#icon-calendar-days"></use>
-                        </svg> Request Schedule Change</h3>
+                        </svg> Request Schedule Change
+                    </h3>
                     <span class="close-btn" onclick="closeModal('requestReschedModal')"
                         style="cursor: pointer; font-size: 1.5rem; color: #333;">&times;</span>
                 </div>
-                <p style="font-size: 13px; color: #666; margin-bottom: 15px;">Please provide a reason why you
-                    need to
-                    reschedule your ceremony or appointment.</p>
+                <p style="font-size: 13px; color: #666; margin-bottom: 15px;">Select your preferred new date from the
+                    calendar below and provide a reason for rescheduling your ceremony or appointment.</p>
 
                 <form id="requestReschedForm" onsubmit="submitRescheduleRequest(event)">
                     <input type="hidden" id="reschedAppId">
+                    <input type="hidden" id="reschedNewDateInput" required>
+
+                    <!-- Interactive Calendar Picker for Rescheduling -->
+                    <div
+                        style="margin-bottom: 15px; border: 1px solid #e2e8f0; padding: 12px; border-radius: 6px; background: #fafafa;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <span id="reschedCalMonthLabel"
+                                style="font-weight: bold; font-size: 14px; color: #4a0e17;">Month Year</span>
+                            <div>
+                                <button type="button" onclick="changeReschedCalMonth(-1)"
+                                    style="background: #f1f5f9; border: none; font-weight: bold; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; margin-right: 4px;">&lt;</button>
+                                <button type="button" onclick="changeReschedCalMonth(1)"
+                                    style="background: #f1f5f9; border: none; font-weight: bold; width: 28px; height: 28px; border-radius: 50%; cursor: pointer;">&gt;</button>
+                            </div>
+                        </div>
+
+                        <div
+                            style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: bold; font-size: 11px; color: #64748b; margin-bottom: 6px;">
+                            <div>Sun</div>
+                            <div>Mon</div>
+                            <div>Tue</div>
+                            <div>Wed</div>
+                            <div>Thu</div>
+                            <div>Fri</div>
+                            <div>Sat</div>
+                        </div>
+                        <div id="reschedCalendarGrid"
+                            style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;"></div>
+                        <div id="reschedSelectedDateDisplay"
+                            style="margin-top: 10px; font-size: 12px; color: #4a0e17; font-weight: bold;">Selected New
+                            Date: None</div>
+                    </div>
+
                     <div style="margin-bottom: 15px;">
                         <label
                             style="display: block; font-weight: bold; color: #2c3e50; margin-bottom: 6px; font-size: 0.9rem;">Reason
@@ -1590,6 +1640,7 @@
                             style="width: 100%; padding: 8px; border: 1px solid #abb2b9; border-radius: 4px;"
                             placeholder="e.g., Conflict with family travel or godparent availability..."></textarea>
                     </div>
+
                     <div style="display: flex; justify-content: flex-end; gap: 10px;">
                         <button type="button" onclick="closeModal('requestReschedModal')"
                             style="padding: 8px 16px; background: #e0e0e0; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: #333;">Cancel</button>
@@ -1771,6 +1822,33 @@
             </div>
         </div>
 
+        <!-- QR Code Modal -->
+        <div id="userSeminarQrModal" class="modal-overlay"
+            style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 99999; align-items: center; justify-content: center;">
+            <div class="modal-box"
+                style="background: white; max-width: 380px; width: 90%; border-radius: 12px; padding: 24px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.15);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <h3 style="margin: 0; color: #4a0e17; font-size: 1.1rem;">Seminar Attendance QR</h3>
+                    <button onclick="closeUserSeminarQrModal()"
+                        style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #64748b;">&times;</button>
+                </div>
+                <p style="font-size: 13px; color: #64748b; margin-bottom: 16px;">Present this QR code to the parish
+                    administrator or scanner at the entrance of the seminar hall.</p>
+
+                <!-- QR Container using an open-source QR generator API or local library -->
+                <div id="qrCodeContainer"
+                    style="background: #f8fafc; padding: 16px; border-radius: 8px; display: inline-block; border: 1px solid #e2e8f0;">
+                    <img id="qrDynamicImage" src="" alt="Attendance QR Code"
+                        style="width: 200px; height: 200px; display: block;" />
+                </div>
+
+                <div style="margin-top: 16px; font-family: monospace; font-size: 14px; font-weight: bold; color: #1e293b;"
+                    id="qrRefDisplay">
+                    REF-2026-9482
+                </div>
+                <p style="font-size: 11px; color: #94a3b8; margin-top: 8px;">Status: Awaiting Check-In</p>
+            </div>
+        </div>
 
         <script>
             // Global State & Calendar Variables
@@ -1785,6 +1863,63 @@
             let currentFuneralCalDate = new Date();
             let funeralWakeStartDate = null;
             let funeralIntermentDate = null;
+            let currentReschedCalDate = new Date();
+            let selectedReschedNewDate = '';
+            let activeReschedApp = null;
+
+            let lastKnownNotifId = 0;
+
+            async function pollParishionerNotifications(currentUserId) {
+                if (!currentUserId) return;
+                const unread = await db.notifications
+                    .where('userId').equals(Number(currentUserId) || currentUserId)
+                    .filter(n => !n.isRead && n.id > lastKnownNotifId)
+                    .toArray();
+
+                unread.forEach(n => {
+                    if (n.id > lastKnownNotifId) lastKnownNotifId = n.id;
+                    triggerBrowserPush(n.title, n.message, `parishioner-${n.id}`);
+                });
+            }
+
+            // Run every 5 seconds when parishioner is logged in
+            setInterval(() => {
+                const user = JSON.parse(localStorage.getItem('currentUser'));
+                if (user) pollParishionerNotifications(user.id);
+            }, 5000);
+
+            // Open modal and initialize calendar to the parishioner's current target date
+            async function openRescheduleRequestModal(appId) {
+                const numericId = isNaN(appId) ? appId : Number(appId);
+                let app = await db.applications.get(numericId);
+                if (!app) {
+                    showAlert('Application record not found.');
+                    return;
+                }
+                activeReschedApp = app;
+
+                document.getElementById('reschedAppId').value = app.id;
+                document.getElementById('reschedReasonInput').value = '';
+                selectedReschedNewDate = '';
+                document.getElementById('reschedNewDateInput').value = '';
+
+                const existingTarget = app.preferredDate || app.targetDate || app.confirmedDate || '';
+                document.getElementById('reschedSelectedDateDisplay').textContent = `Selected New Date: None (Current Target: ${existingTarget || 'None'})`;
+
+                // Shift calendar view to the existing target date's month/year if available
+                if (existingTarget) {
+                    const d = new Date(existingTarget);
+                    if (!isNaN(d)) {
+                        currentReschedCalDate = new Date(d.getFullYear(), d.getMonth(), 1);
+                    }
+                } else {
+                    currentReschedCalDate = new Date();
+                }
+
+                openModal('requestReschedModal');
+                renderReschedCalendar();
+            }
+
 
             document.addEventListener('DOMContentLoaded', () => {
                 if (typeof lucide !== 'undefined' && typeof lucide.createIcons === 'function') {
@@ -1810,6 +1945,287 @@
                     addGodparentRow();
                 }
             });
+
+            // Global state for the reschedule calendar
+
+
+            // 1. Open the modal and initialize data + calendar view
+            async function openRescheduleRequestModal(appId) {
+                const numericId = isNaN(appId) ? appId : Number(appId);
+                let app = await db.applications.get(numericId);
+                if (!app) {
+                    showAlert('Application record not found.');
+                    return;
+                }
+                activeReschedApp = app;
+
+                document.getElementById('reschedAppId').value = app.id;
+                document.getElementById('reschedReasonInput').value = '';
+                selectedReschedNewDate = '';
+                document.getElementById('reschedNewDateInput').value = '';
+                document.getElementById('reschedSelectedDateDisplay').textContent = 'Selected New Date: None';
+
+                const existingTarget = app.preferredDate || app.targetDate || app.confirmedDate || '';
+                if (existingTarget) {
+                    const d = new Date(existingTarget);
+                    if (!isNaN(d)) {
+                        currentReschedCalDate = new Date(d.getFullYear(), d.getMonth(), 1);
+                    }
+                } else {
+                    currentReschedCalDate = new Date();
+                }
+
+                openModal('requestReschedModal');
+                renderReschedCalendar();
+            }
+
+            // 2. Render the interactive calendar grid inside #reschedCalendarGrid
+            async function renderReschedCalendar() {
+                const monthLabel = document.getElementById('reschedCalMonthLabel');
+                const gridContainer = document.getElementById('reschedCalendarGrid');
+                if (!monthLabel || !gridContainer) return;
+
+                const year = currentReschedCalDate.getFullYear();
+                const month = currentReschedCalDate.getMonth();
+
+                const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                monthLabel.textContent = `${monthNames[month]} ${year}`;
+
+                // Fetch applications from Dexie to check sacrament slot conflicts (e.g., Weddings)
+                const sacramentType = activeReschedApp ? activeReschedApp.sacramentType : '';
+                const allApps = await db.applications.toArray();
+
+                const firstDayIndex = new Date(year, month, 1).getDay();
+                const lastDay = new Date(year, month + 1, 0).getDate();
+                const prevLastDay = new Date(year, month, 0).getDate();
+
+                let daysHTML = '';
+                const todayStr = new Date().toISOString().split('T')[0];
+
+                // Trailing days from previous month
+                for (let i = firstDayIndex; i > 0; i--) {
+                    const dayNum = prevLastDay - i + 1;
+                    daysHTML += `<div style="height: 36px; display: flex; align-items: center; justify-content: center; color: #cbd5e1; font-size: 12px;">${dayNum}</div>`;
+                }
+
+                // Days of current month
+                for (let day = 1; day <= lastDay; day++) {
+                    const formattedMonth = String(month + 1).padStart(2, '0');
+                    const formattedDay = String(day).padStart(2, '0');
+                    const dateStr = `${year}-${formattedMonth}-${formattedDay}`;
+
+                    const isPast = dateStr < todayStr;
+
+                    // Check conflicts specific to this sacrament type (e.g., max slot restrictions for weddings)
+                    const bookedOnThisDay = allApps.filter(app =>
+                        app.id !== activeReschedApp?.id &&
+                        (app.confirmedDate === dateStr || app.targetDate === dateStr || app.preferredDate === dateStr) &&
+                        app.status === 'Approved'
+                    );
+
+                    const isSameSacramentBooked = bookedOnThisDay.some(app => app.sacramentType === sacramentType);
+
+                    let cellStyle = "height: 36px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 12px; border-radius: 4px; transition: all 0.2s;";
+                    let clickHandler = `onclick="selectReschedDate('${dateStr}')"`;
+                    let badgeHTML = '';
+
+                    if (isPast) {
+                        cellStyle += " background: #f1f5f9; color: #94a3b8; cursor: not-allowed; opacity: 0.6;";
+                        clickHandler = '';
+                    } else if (isSameSacramentBooked && sacramentType === 'Wedding') {
+                        cellStyle += " background: #fee2e2; color: #ef4444; border: 1px solid #fecaca; cursor: not-allowed;";
+                        badgeHTML = `<span style="font-size: 8px; font-weight: bold;">Full</span>`;
+                        clickHandler = '';
+                    } else if (selectedReschedNewDate === dateStr) {
+                        cellStyle += " background: #4a0e17; color: white; font-weight: bold; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.15);";
+                    } else {
+                        cellStyle += " background: #fff; color: #333; cursor: pointer; border: 1px solid #e2e8f0;";
+                        if (bookedOnThisDay.length > 0) {
+                            badgeHTML = `<span style="font-size: 8px; color: #d97706;">${bookedOnThisDay.length} booked</span>`;
+                        }
+                    }
+
+                    daysHTML += `<div ${clickHandler} style="${cellStyle}">
+            <span>${day}</span>
+            ${badgeHTML}
+        </div>`;
+                }
+
+                gridContainer.innerHTML = daysHTML;
+            }
+
+            // 3. Handle month navigation matching your HTML buttons
+            function changeReschedCalMonth(direction) {
+                currentReschedCalDate.setMonth(currentReschedCalDate.getMonth() + direction);
+                renderReschedCalendar();
+            }
+
+            // 4. Handle clicking a date cell
+            function selectReschedDate(dateStr) {
+                selectedReschedNewDate = dateStr;
+                document.getElementById('reschedNewDateInput').value = dateStr;
+                document.getElementById('reschedSelectedDateDisplay').textContent = `Selected New Date: ${dateStr}`;
+                renderReschedCalendar();
+            }
+
+            // 5. Submit form handler
+            async function submitRescheduleRequest(event) {
+                event.preventDefault();
+                const appId = document.getElementById('reschedAppId').value;
+                const reason = document.getElementById('reschedReasonInput').value;
+                const newDate = document.getElementById('reschedNewDateInput').value;
+
+                if (!newDate) {
+                    showAlert('Please click and select your preferred new date from the calendar grid.');
+                    return;
+                }
+
+                const numericId = isNaN(appId) ? appId : Number(appId);
+                let app = await db.applications.get(numericId);
+                if (!app) {
+                    showAlert('Application record not found.');
+                    return;
+                }
+
+                const historyEntry = {
+                    oldStatus: app.status || 'Pending',
+                    newStatus: 'Reschedule Requested',
+                    adminNote: `Parishioner requested reschedule to ${newDate}. Reason: ${reason}`,
+                    changedAt: new Date().toISOString(),
+                    changedBy: app.applicantName || 'Parishioner'
+                };
+                const updatedHistory = app.statusHistory ? [...app.statusHistory, historyEntry] : [historyEntry];
+
+                await db.applications.update(numericId, {
+                    rescheduleRequested: true,
+                    rescheduleReason: reason,
+                    requestedNewDate: newDate,
+                    status: 'Reschedule Requested',
+                    statusHistory: updatedHistory,
+                    updatedAt: new Date().toISOString()
+                });
+
+                showAlert('Your schedule change request has been submitted successfully!', 'Success');
+                closeModal('requestReschedModal');
+
+                if (typeof renderUserDashboard === 'function') {
+                    await renderUserDashboard();
+                }
+
+            }
+
+            // Handle date selection click
+            function selectReschedCalendarDate(dateString) {
+                selectedReschedNewDate = dateString;
+                document.getElementById('reschedNewDateInput').value = dateString;
+                document.getElementById('reschedSelectedDateDisplay').textContent = `Selected New Date: ${dateString}`;
+                renderReschedCalendar();
+            }
+
+            // Submit request and make sure it reflects on the admin side
+async function submitRescheduleRequest(event) {
+                event.preventDefault();
+                const appId = document.getElementById('reschedAppId').value;
+                const reason = document.getElementById('reschedReasonInput').value;
+                const newDate = document.getElementById('reschedNewDateInput').value;
+
+                if (!newDate) {
+                    showAlert('Please select your preferred new date from the calendar.');
+                    return;
+                }
+
+                const numericId = isNaN(appId) ? appId : Number(appId);
+                let app = await db.applications.get(numericId);
+                if (!app) {
+                    showAlert('Application record not found.');
+                    return;
+                }
+
+                // Prepare status history entry for audit trail
+                const historyEntry = {
+                    oldStatus: app.status || 'Pending',
+                    newStatus: 'Reschedule Requested',
+                    adminNote: `Parishioner requested reschedule to ${newDate}. Reason: ${reason}`,
+                    changedAt: new Date().toISOString(),
+                    changedBy: app.applicantName || 'Parishioner'
+                };
+                const updatedHistory = app.statusHistory ? [...app.statusHistory, historyEntry] : [historyEntry];
+
+                // Update fields so admin dashboard picks up the reschedule request and requested date
+                await db.applications.update(numericId, {
+                    rescheduleRequested: true,
+                    rescheduleReason: reason,
+                    requestedNewDate: newDate,
+                    status: 'Reschedule Requested',
+                    statusHistory: updatedHistory,
+                    updatedAt: new Date().toISOString()
+                });
+
+                // 🔔 INTEGRATED NOTIFICATION DISPATCH FOR ADMIN
+                await dispatchSystemNotification({
+                    targetUserId: 'ADMIN',
+                    referenceId: app.referenceId,
+                    title: `⚠️ Reschedule Request: ${app.sacramentType || 'Ceremony'}`,
+                    message: `${app.applicantName || 'Parishioner'} requested a new date (${newDate}). Reason: ${reason}`,
+                    category: 'reschedule'
+                });
+
+                showAlert('Your reschedule request has been submitted successfully and will now reflect on the admin dashboard.', 'Success');
+                closeModal('requestReschedModal');
+
+                // Refresh the parishioner dashboard cards
+                if (typeof renderUserDashboard === 'function') {
+                    await renderUserDashboard();
+                }
+            }
+
+            async function openAttendanceQrModal(appId) {
+                try {
+                    const queryId = isNaN(appId) ? appId : Number(appId);
+                    const app = await db.applications.get(queryId);
+
+                    if (!app) {
+                        alert('Application record not found.');
+                        return;
+                    }
+
+                    const qrText = encodeURIComponent(app.referenceId);
+                    const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${qrText}`;
+
+                    let modal = document.getElementById('attendanceQrModal');
+                    if (!modal) {
+                        modal = document.createElement('div');
+                        modal.id = 'attendanceQrModal';
+                        // CRITICAL FIX: Extremely high z-index to guarantee it sits above the dashboard modal (1050)
+                        modal.style.cssText = 'position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 999999;';
+                        document.body.appendChild(modal);
+                    } else {
+                        modal.style.display = 'flex';
+                    }
+
+                    modal.innerHTML = `
+                        <div style="background: white; padding: 24px; border-radius: 12px; max-width: 320px; width: 100%; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
+                            <h3 style="margin-top: 0; color: #4a0e17; font-size: 16px;">Attendance QR Code</h3>
+                            <p style="font-size: 12px; color: #64748b; margin-bottom: 15px;">Present this QR code at the parish entrance during your seminar or check-in.</p>
+                            <div style="background: #f8fafc; padding: 15px; border-radius: 8px; display: inline-block; border: 1px solid #e2e8f0;">
+                                <img src="${qrCodeUrl}" alt="QR Code for ${app.referenceId}" style="width: 180px; height: 180px; display: block;" />
+                            </div>
+                            <div style="margin-top: 12px; font-weight: bold; color: #0f172a; font-size: 14px;">${app.referenceId}</div>
+                            <div style="font-size: 12px; color: #475569; text-transform: capitalize; margin-bottom: 20px;">${app.sacramentType}</div>
+                            <button onclick="document.getElementById('attendanceQrModal').style.display = 'none'" style="background: #cbd5e1; color: #0f172a; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: bold; width: 100%;">
+                                Close
+                            </button>
+                        </div>
+                    `;
+                } catch (err) {
+                    console.error('Error opening attendance QR modal:', err);
+                    alert('Could not generate attendance QR code.');
+                }
+            }
+
+            function closeUserSeminarQrModal() {
+                document.getElementById('userSeminarQrModal').style.display = 'none';
+            }
 
             // Function to query Dexie.js and check slot capacity (Max 3 slots per time block)
             async function checkDateAvailability(targetDate, targetTime = null) {
@@ -1910,6 +2326,7 @@
                 if (event) event.preventDefault();
 
                 const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                const modal = document.getElementById(modalId);
 
                 const protectedModals = [
                     'baptismModal',
@@ -1927,7 +2344,6 @@
                     return;
                 }
 
-                const modal = document.getElementById(modalId);
                 if (modal) {
                     modal.style.display = 'flex';
                     modal.classList.add('active');
@@ -1936,6 +2352,24 @@
                     // ADD THIS LINE: Automatically generate the funeral calendar when modal opens
                     if (modalId === 'funeralModal' && typeof renderFuneralCalendar === 'function') {
                         renderFuneralCalendar();
+                    }
+                }
+
+                if (modal) {
+                    modal.style.display = 'block'; // or your custom active class logic
+
+                    // AUTO-TRIGGER: If the reschedule modal opens, force-render the calendar immediately!
+                    if (modalId === 'requestReschedModal') {
+                        // Fallback: if activeReschedApp wasn't set, grab the first active user application
+                        if (!activeReschedApp && typeof db !== 'undefined') {
+                            db.applications.toArray().then(apps => {
+                                // Grab the first pending/approved app as a fallback
+                                activeReschedApp = apps[apps.length - 1] || {};
+                                renderReschedCalendar();
+                            });
+                        } else {
+                            renderReschedCalendar();
+                        }
                     }
                 }
             }
@@ -2423,7 +2857,21 @@
 
             // --- Remove Individual File from FileList ---
             function removeInlineFile(inputId, indexToRemove, targetListId) {
-                const input = document.getElementById(inputId);
+                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
+                let attachedFiles = {};
+                let unfulfilledRequirements = [];
+
+                // 1. Declare actualSacramentType and details right at the very top
+                let actualSacramentType = sacramentType;
+                const formData = new FormData(formElement);
+                const details = {};
+
+                for (let [key, value] of formData.entries()) {
+                    if (['applicantName', 'applicantEmail', 'preferredDate', 'godparentRole', 'godparentName'].includes(key)) continue;
+                    details[key] = value;
+                }
+
                 const dt = new DataTransfer(); // Used to manipulate FileList programmatically
                 const { files } = input;
 
@@ -2460,66 +2908,35 @@
             };
             async function saveApplicationLocally(sacramentType, formElement) {
                 const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                let actualSacramentType = sacramentType;
 
-                // RENAME VARIABLE ENTIRELY TO AVOID ANY SCOPE OR CACHED CONFLICTS
-                // --- STANDARDIZED DOCUMENT STORAGE OBJECT ---
-                let attachedFiles = {};
+                // ✅ 1. DECLARE ALL BASE VARIABLES HERE AT THE VERY TOP SAFELY
+                let appDetails = {};
+                let attachedFiles = []; // Initialized as an array so .push() works globally
                 var unfulfilledRequirements = [];
 
+                // Baptism Type selection
                 if (sacramentType === 'baptism') {
-                    const birthCertFiles = window.accumulatedFiles?.['bapBirthCertFiles'] || Array.from(document.getElementById('bapBirthCertFiles')?.files || []);
-                    const motherFiles = window.accumulatedFiles?.['bapMotherFiles'] || Array.from(document.getElementById('bapMotherFiles')?.files || []);
-                    const fatherFiles = window.accumulatedFiles?.['bapFatherFiles'] || Array.from(document.getElementById('bapFatherFiles')?.files || []);
+                    const bapSelect = formElement.querySelector('#baptismTypeSelect');
+                    const selectedVal = bapSelect ? bapSelect.value : '';
+                    actualSacramentType = selectedVal === 'group' ? 'Group Baptism' : (selectedVal === 'individual' ? 'Individual Baptism' : 'Baptism');
 
-                    if (birthCertFiles.length === 0) unfulfilledRequirements.push("Child's Birth Certificate");
-                    if (motherFiles.length === 0) unfulfilledRequirements.push("Mother's Baptismal Certificate");
-                    if (fatherFiles.length === 0) unfulfilledRequirements.push("Father's Baptismal Certificate");
+                    let ninongs = [];
+                    const mainNinong = formElement.querySelector('#principalNinong')?.value.trim();
+                    if (mainNinong) ninongs.push(mainNinong);
+                    formElement.querySelectorAll('input[name="additionalNinong"]').forEach(input => {
+                        if (input.value.trim()) ninongs.push(input.value.trim());
+                    });
 
-                    attachedFiles["Child's Birth Certificate"] = [];
-                    for (let file of birthCertFiles) {
-                        attachedFiles["Child's Birth Certificate"].push({ fileName: file.name, fileType: file.type, fileData: await fileToBase64(file) });
-                    }
+                    let ninangs = [];
+                    const mainNinang = formElement.querySelector('#principalNinang')?.value.trim();
+                    if (mainNinang) ninangs.push(mainNinang);
+                    formElement.querySelectorAll('input[name="additionalNinang"]').forEach(input => {
+                        if (input.value.trim()) ninangs.push(input.value.trim());
+                    });
 
-                    attachedFiles["Mother's Baptismal Certificate"] = [];
-                    for (let file of motherFiles) {
-                        attachedFiles["Mother's Baptismal Certificate"].push({ fileName: file.name, fileType: file.type, fileData: await fileToBase64(file) });
-                    }
-
-                    attachedFiles["Father's Baptismal Certificate"] = [];
-                    for (let file of fatherFiles) {
-                        attachedFiles["Father's Baptismal Certificate"].push({ fileName: file.name, fileType: file.type, fileData: await fileToBase64(file) });
-                    }
-                }
-                else if (sacramentType === 'wedding') {
-                    const birthCertFiles = window.accumulatedFiles?.['wedBirthCertFiles'] || Array.from(document.getElementById('wedBirthCertFiles')?.files || []);
-                    const cenomarFiles = window.accumulatedFiles?.['wedCenomarFiles'] || Array.from(document.getElementById('wedCenomarFiles')?.files || []);
-                    const annotationFiles = window.accumulatedFiles?.['wedAnnotationFiles'] || Array.from(document.getElementById('wedAnnotationFiles')?.files || []);
-                    const licenseFiles = window.accumulatedFiles?.['wedLicenseFiles'] || Array.from(document.getElementById('wedLicenseFiles')?.files || []);
-
-                    if (birthCertFiles.length === 0) unfulfilledRequirements.push("PSA Birth Certificates");
-                    if (cenomarFiles.length === 0) unfulfilledRequirements.push("CENOMAR");
-                    if (annotationFiles.length === 0) unfulfilledRequirements.push("New Baptismal & Confirmation Certificates with Marriage Annotation");
-                    if (licenseFiles.length === 0) unfulfilledRequirements.push("Marriage License / Civil Marriage Contract");
-
-                    attachedFiles["PSA Birth Certificate"] = [];
-                    for (let file of birthCertFiles) {
-                        attachedFiles["PSA Birth Certificate"].push({ fileName: file.name, fileType: file.type, fileData: await fileToBase64(file) });
-                    }
-
-                    attachedFiles["CENOMAR"] = [];
-                    for (let file of cenomarFiles) {
-                        attachedFiles["CENOMAR"].push({ fileName: file.name, fileType: file.type, fileData: await fileToBase64(file) });
-                    }
-
-                    attachedFiles["Annotated Baptismal & Confirmation Certificate"] = [];
-                    for (let file of annotationFiles) {
-                        attachedFiles["Annotated Baptismal & Confirmation Certificate"].push({ fileName: file.name, fileType: file.type, fileData: await fileToBase64(file) });
-                    }
-
-                    attachedFiles["Marriage License / Contract"] = [];
-                    for (let file of licenseFiles) {
-                        attachedFiles["Marriage License / Contract"].push({ fileName: file.name, fileType: file.type, fileData: await fileToBase64(file) });
-                    }
+                    appDetails.principalNinong = ninongs.join(', ');
+                    appDetails.principalNinang = ninangs.join(', ');
                 }
 
                 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB limit
@@ -2537,8 +2954,7 @@
                     return;
                 }
 
-                // 2. FILE VALIDATION & SPECIFIC DOCUMENT CHECKING
-                // Inside saveApplicationLocally() in index.html, when processing baptism files:
+                // ✅ 2. FILE VALIDATION & PUSHING TO attachedFiles ARRAY
                 if (sacramentType === 'baptism') {
                     const birthCertFiles = window.accumulatedFiles?.['bapBirthCertFiles'] || Array.from(document.getElementById('bapBirthCertFiles')?.files || []);
                     const motherFiles = window.accumulatedFiles?.['bapMotherFiles'] || Array.from(document.getElementById('bapMotherFiles')?.files || []);
@@ -2548,7 +2964,6 @@
                     if (motherFiles.length === 0) unfulfilledRequirements.push("Mother's Baptismal Certificate");
                     if (fatherFiles.length === 0) unfulfilledRequirements.push("Father's Baptismal Certificate");
 
-                    // Push with explicit type labels
                     for (let file of birthCertFiles) {
                         let b64 = await fileToBase64(file);
                         b64.documentType = "Child's Birth Certificate";
@@ -2565,7 +2980,6 @@
                         attachedFiles.push(b64);
                     }
                 }
-
                 else if (sacramentType === 'wedding') {
                     const birthCertFiles = window.accumulatedFiles?.['wedBirthCertFiles'] || Array.from(document.getElementById('wedBirthCertFiles')?.files || []);
                     const cenomarFiles = window.accumulatedFiles?.['wedCenomarFiles'] || Array.from(document.getElementById('wedCenomarFiles')?.files || []);
@@ -2598,7 +3012,6 @@
                         attachedFiles.push(b64);
                     }
                 }
-
                 else {
                     const fileInput = formElement.querySelector('input[type="file"]');
                     const inputId = fileInput ? fileInput.id : '';
@@ -2626,62 +3039,51 @@
 
                 // Build Form Details Payload
                 const formData = new FormData(formElement);
-                const details = {};
                 for (let [key, value] of formData.entries()) {
                     if (['applicantName', 'applicantEmail', 'preferredDate', 'godparentRole', 'godparentName'].includes(key)) continue;
-                    details[key] = value;
+                    appDetails[key] = value;
                 }
 
-                let actualSacramentType = sacramentType;
-                if (sacramentType === 'baptism') {
-                    const bapSelect = formElement.querySelector('#baptismTypeSelect');
-                    const selectedVal = bapSelect ? bapSelect.value : '';
-                    actualSacramentType = selectedVal === 'group' ? 'Group Baptism' : (selectedVal === 'individual' ? 'Individual Baptism' : 'Baptism');
-                }
-                else if (sacramentType === 'wedding') {
-                    // Groom Information
+                if (sacramentType === 'wedding') {
                     const groomFirst = formElement.querySelector('[name="groomFirstName"]')?.value || '';
                     const groomMI = formElement.querySelector('[name="groomMiddleInitial"]')?.value || '';
                     const groomLast = formElement.querySelector('[name="groomLastName"]')?.value || '';
-                    details.groomName = `${groomFirst} ${groomMI} ${groomLast}`.replace(/\s+/g, ' ').trim();
-                    details.groomAge = formElement.querySelector('[name="groomAge"]')?.value || '';
-                    details.groomCivilStatus = formElement.querySelector('[name="groomCivilStatus"]')?.value || '';
-                    details.groomNationality = formElement.querySelector('[name="groomNationality"]')?.value || '';
-                    details.groomPlaceOfBirth = formElement.querySelector('[name="groomPlaceOfBirth"]')?.value || '';
-                    details.groomOccupation = formElement.querySelector('[name="groomOccupation"]')?.value || '';
-                    details.groomPresentResidence = formElement.querySelector('[name="groomPresentResidence"]')?.value || '';
-                    details.groomFatherName = formElement.querySelector('[name="groomFatherName"]')?.value || '';
-                    details.groomMotherName = formElement.querySelector('[name="groomMotherName"]')?.value || '';
+                    appDetails.groomName = `${groomFirst} ${groomMI} ${groomLast}`.replace(/\s+/g, ' ').trim();
+                    appDetails.groomAge = formElement.querySelector('[name="groomAge"]')?.value || '';
+                    appDetails.groomCivilStatus = formElement.querySelector('[name="groomCivilStatus"]')?.value || '';
+                    appDetails.groomNationality = formElement.querySelector('[name="groomNationality"]')?.value || '';
+                    appDetails.groomPlaceOfBirth = formElement.querySelector('[name="groomPlaceOfBirth"]')?.value || '';
+                    appDetails.groomOccupation = formElement.querySelector('[name="groomOccupation"]')?.value || '';
+                    appDetails.groomPresentResidence = formElement.querySelector('[name="groomPresentResidence"]')?.value || '';
+                    appDetails.groomFatherName = formElement.querySelector('[name="groomFatherName"]')?.value || '';
+                    appDetails.groomMotherName = formElement.querySelector('[name="groomMotherName"]')?.value || '';
 
-                    // Bride Information
                     const brideFirst = formElement.querySelector('[name="brideFirstName"]')?.value || '';
                     const brideMI = formElement.querySelector('[name="brideMiddleInitial"]')?.value || '';
                     const brideLast = formElement.querySelector('[name="brideLastName"]')?.value || '';
-                    details.brideName = `${brideFirst} ${brideMI} ${brideLast}`.replace(/\s+/g, ' ').trim();
-                    details.brideAge = formElement.querySelector('[name="brideAge"]')?.value || '';
-                    details.brideCivilStatus = formElement.querySelector('[name="brideCivilStatus"]')?.value || '';
-                    details.brideNationality = formElement.querySelector('[name="brideNationality"]')?.value || '';
-                    details.bridePlaceOfBirth = formElement.querySelector('[name="bridePlaceOfBirth"]')?.value || '';
-                    details.brideOccupation = formElement.querySelector('[name="brideOccupation"]')?.value || '';
-                    details.bridePresentResidence = formElement.querySelector('[name="bridePresentResidence"]')?.value || '';
-                    details.brideFatherName = formElement.querySelector('[name="brideFatherName"]')?.value || '';
-                    details.brideMotherName = formElement.querySelector('[name="brideMotherName"]')?.value || '';
+                    appDetails.brideName = `${brideFirst} ${brideMI} ${brideLast}`.replace(/\s+/g, ' ').trim();
+                    appDetails.brideAge = formElement.querySelector('[name="brideAge"]')?.value || '';
+                    appDetails.brideCivilStatus = formElement.querySelector('[name="brideCivilStatus"]')?.value || '';
+                    appDetails.brideNationality = formElement.querySelector('[name="brideNationality"]')?.value || '';
+                    appDetails.bridePlaceOfBirth = formElement.querySelector('[name="bridePlaceOfBirth"]')?.value || '';
+                    appDetails.brideOccupation = formElement.querySelector('[name="brideOccupation"]')?.value || '';
+                    appDetails.bridePresentResidence = formElement.querySelector('[name="bridePresentResidence"]')?.value || '';
+                    appDetails.brideFatherName = formElement.querySelector('[name="brideFatherName"]')?.value || '';
+                    appDetails.brideMotherName = formElement.querySelector('[name="brideMotherName"]')?.value || '';
 
-                    // Principal Sponsors & Dynamic Sponsors
-                    details.principalNinong = formElement.querySelector('[name="principalNinong"]')?.value || '';
-                    details.principalNinang = formElement.querySelector('[name="principalNinang"]')?.value || '';
+                    appDetails.principalNinong = formElement.querySelector('[name="principalNinong"]')?.value || '';
+                    appDetails.principalNinang = formElement.querySelector('[name="principalNinang"]')?.value || '';
 
                     const additionalSponsors = [];
                     formElement.querySelectorAll('.sponsor-row').forEach(row => {
                         const name = row.querySelector('[name="additionalSponsorName"]')?.value.trim();
                         if (name) additionalSponsors.push({ name });
                     });
-                    details.additionalSponsors = additionalSponsors;
+                    appDetails.additionalSponsors = additionalSponsors;
 
-                    // Officiant & Optional Fees
-                    details.hasGuestPriest = formElement.querySelector('[name="hasGuestPriest"]')?.checked || false;
-                    details.guestPriestName = details.hasGuestPriest ? (formElement.querySelector('[name="guestPriestName"]')?.value || 'None') : 'None';
-                    details.electricityFeeIncluded = formElement.querySelector('[name="electricityFee"]')?.checked || false;
+                    appDetails.hasGuestPriest = formElement.querySelector('[name="hasGuestPriest"]')?.checked || false;
+                    appDetails.guestPriestName = appDetails.hasGuestPriest ? (formElement.querySelector('[name="guestPriestName"]')?.value || 'None') : 'None';
+                    appDetails.electricityFeeIncluded = formElement.querySelector('[name="electricityFee"]')?.checked || false;
                 }
 
                 let prefix = 'BAP';
@@ -2702,8 +3104,8 @@
                     preferredDate: preferredDate,
                     confirmedDate: null,
                     confirmedTime: formElement.querySelector('[name="confirmedTime"]')?.value || null,
-                    details: details,
-                    documents: attachedFiles,
+                    details: appDetails,
+                    documents: attachedFiles, // ✅ Uses the initialized attachedFiles array properly
                     paymentConfirmed: false,
                     adminNotes: adminNotesText,
                     archived: false,
@@ -2852,38 +3254,41 @@
                         if (app.status === 'Completed') statusColor = '#2980b9';
                         if (app.status === 'Rejected') statusColor = '#c0392b';
                         if (app.status === 'To Follow-Up & Upload Lacking Documents' || app.status === 'Needs Revision') statusColor = '#d35400';
+                        if (app.status === 'Scheduled for Seminar' || app.status === 'Scheduled for Ceremony') statusColor = '#8e44ad';
 
                         let actionButtonsHtml = '';
 
+                        // 1. Pending Status: Cancel Application
                         if (app.status === 'Pending') {
                             actionButtonsHtml += `
-                            <button onclick="parishionerDeleteApplication('${app.id}')" style="background: #e74c3c; color: white; border: none; padding: 7px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">
-                                Cancel Application
-                            </button>
-                        `;
-                        }
-
-                        if (app.status === 'To Follow-Up & Upload Lacking Documents' || app.status === 'Needs Revision') {
-                            actionButtonsHtml += `
-                                <button onclick="openResubmitDocsModal('${app.id}')" style="background: #d35400; color: white; border: none; padding: 7px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">
-                                    <svg class="ui-icon" aria-hidden="true" focusable="false">
-                                            <use href="#icon-file-text"></use>
-                                        </svg> Upload Lacking Docs
-                                </button>
                                 <button onclick="parishionerDeleteApplication('${app.id}')" style="background: #e74c3c; color: white; border: none; padding: 7px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">
-                                Cancel Application
+                                    Cancel Application
                                 </button>
                             `;
                         }
 
+                        // 2. Lacking Documents or Needs Revision Status
+                        if (app.status === 'To Follow-Up & Upload Lacking Documents' || app.status === 'Needs Revision') {
+                            actionButtonsHtml += `
+                                <button onclick="openResubmitDocsModal('${app.id}')" style="background: #d35400; color: white; border: none; padding: 7px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; display: inline-flex; align-items: center; gap: 4px;">
+                                    <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#icon-file-text"></use></svg> Upload Lacking Docs
+                                </button>
+                                <button onclick="parishionerDeleteApplication('${app.id}')" style="background: #e74c3c; color: white; border: none; padding: 7px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">
+                                    Cancel Application
+                                </button>
+                            `;
+                        }
+
+                        // 3. Payment Status
                         if (app.status === 'Reviewed & Ready for Payment') {
                             actionButtonsHtml += `
-                                <button onclick="openPaymentModal('${app.id}')" style="background: #1e5631; color: white; border: none; padding: 7px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">
+                                <button onclick="openPaymentModal('${app.id}')" style="background: #1e5631; color: white; border: none; padding: 7px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; display: inline-flex; align-items: center; gap: 4px;">
                                     <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#icon-credit-card"></use></svg> Pay via GCash QR
                                 </button>
                             `;
                         }
 
+                        // 4. Reviewing Status: Reschedule Request
                         else if (app.status === 'Reviewing') {
                             actionButtonsHtml += `
                                 <button onclick="openRescheduleRequestModal('${app.id}')" style="background: #1877f2; color: white; border: none; padding: 7px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">
@@ -2892,18 +3297,27 @@
                             `;
                         }
 
+                        // 5. Seminar / Ceremony Scheduled Status: Attendance QR Code Card Action
+                        if (app.status === 'Scheduled for Seminar' || app.status === 'Seminar Completed') {
+                            actionButtonsHtml += `
+                                <button onclick="openAttendanceQrModal('${app.id}')" style="background: #4a0e17; color: white; border: none; padding: 7px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; display: inline-flex; align-items: center; gap: 4px;">
+                                    <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#icon-qr-code"></use></svg> View Attendance QR
+                                </button>
+                            `;
+                        }
+
+                        // 6. Approved Status: Lock Rescheduling
                         if (app.status === 'Approved') {
                             actionButtonsHtml += `
-                            <span style="color: #27ae60; font-weight: bold; font-size: 12px; display: inline-flex; align-items: center; gap: 4px;">
-                                🔒 Approved (Rescheduling is locked)
-                            </span>
-                        `;
+                                <span style="color: #27ae60; font-weight: bold; font-size: 12px; display: inline-flex; align-items: center; gap: 4px;">
+                                    🔒 Approved (Rescheduling is locked)
+                                </span>
+                            `;
                         }
 
                         let formattedNotes = notes;
-                        // Inside renderUserDashboard() in index.html:
                         let missingDocsBanner = '';
-                        if ((app.status === 'To Follow-Up & Upload Lacking Documents' || app.status === 'Needs Revision')) {
+                        if (app.status === 'To Follow-Up & Upload Lacking Documents' || app.status === 'Needs Revision') {
                             missingDocsBanner = `
                                 <div style="background: #fdf2f2; border: 1px solid #fecaca; color: #991b1b; padding: 10px; border-radius: 6px; font-size: 12px; margin-top: 8px;">
                                     <strong>⚠️ Lacking Documents Required:</strong> ${app.adminNotes || 'Please check required uploads and re-submit missing requirements.'}
@@ -2936,11 +3350,17 @@
                                     <span style="color: #64748b; display: block; font-size: 11px;">Requested Date</span>
                                     <span>${app.preferredDate || 'N/A'}</span>
                                 </div>
-                                <div style="grid-column: span 2;">
+                                    <div>
+                                        <span style="color: #64748b; display: block; font-size: 11px;">Assigned Priest</span>
+                                        <strong style="color: #0f172a;">${app.assignedPriest || app.details?.assignedPriest || 'To be assigned by Parish'}</strong>
+                                    </div>
+                                <div>
                                     <span style="color: #64748b; display: block; font-size: 11px;">Confirmed Appointment</span>
                                     <span>${confirmedText}</span>
                                 </div>
                             </div>
+
+                            ${missingDocsBanner}
 
                             <!-- Remarks & Notes Section -->
                             <div style="background: #f8fafc; border-left: 3px solid #cbd5e1; padding: 8px 10px; border-radius: 4px; font-size: 12px; color: #475569;">
@@ -3050,7 +3470,7 @@
                     if (notes.includes('cenomar')) missingList.push("CENOMAR");
                     if (notes.includes('annotation') || notes.includes('baptismal')) missingList.push("New Baptismal & Confirmation Certificates with Marriage Annotation");
                     if (notes.includes('license') || notes.includes('contract')) missingList.push("Marriage License / Civil Marriage Contract");
-                    
+
                     // Dynamic check: If application details indicate a guest priest was selected or notes mention it
                     if (app.details?.hasGuestPriest || notes.includes('guest priest') || notes.includes('license to marry')) {
                         missingList.push("Guest Priest's License to Marry");
@@ -3362,31 +3782,41 @@
             // ==========================================
             // DYNAMIC GODPARENT ROWS (BAPTISM)
             // ==========================================
-            function addGodparentRow() {
-                const list = document.getElementById('godparentList');
+            // Dynamic Godparent Row Adder for Baptism
+            function addNinongRow() {
+                const list = document.getElementById('ninongList');
                 if (!list) return;
                 const row = document.createElement('div');
-                row.className = 'godparent-row';
-                row.style.cssText = 'display: flex; gap: 8px; margin-bottom: 8px; align-items: center;';
+                row.style.cssText = 'display: flex; gap: 6px; margin-bottom: 6px; align-items: center;';
                 row.innerHTML = `
-        <select name="additionalGodparentRole" aria-label="Godparent role" style="flex: 0 0 110px; padding: 10px; border-radius: 4px; border: 1px solid #ccc;">
-            <option value="Ninong">Ninong</option>
-            <option value="Ninang">Ninang</option>
-        </select>
-        <input type="text" name="additionalGodparentName" placeholder="Additional Sponsor's full name" style="flex: 1; min-width: 0; padding: 10px; border-radius: 4px; border: 1px solid #ccc;">
-        <button type="button" class="remove-godparent-btn" aria-label="Remove godparent"
-            style="background: none; border: none; color: #c0392b; font-size: 1.5rem; cursor: pointer; padding: 0 6px;"
-            onclick="this.parentElement.remove()">&times;</button>
-    `;
+                    <input type="text" name="additionalNinong" placeholder="Additional Ninong full name" style="flex: 1; padding: 8px; border-radius: 4px; border: 1px solid #ccc; font-size: 13px;">
+                    <button type="button" aria-label="Remove Ninong" style="background: none; border: none; color: #c0392b; font-size: 1.3rem; cursor: pointer;" onclick="this.parentElement.remove()">&times;</button>
+                `;
                 list.appendChild(row);
             }
+
+            function addNinangRow() {
+                const list = document.getElementById('ninangList');
+                if (!list) return;
+                const row = document.createElement('div');
+                row.style.cssText = 'display: flex; gap: 6px; margin-bottom: 6px; align-items: center;';
+                row.innerHTML = `
+                    <input type="text" name="additionalNinang" placeholder="Additional Ninang full name" style="flex: 1; padding: 8px; border-radius: 4px; border: 1px solid #ccc; font-size: 13px;">
+                    <button type="button" aria-label="Remove Ninang" style="background: none; border: none; color: #c0392b; font-size: 1.3rem; cursor: pointer;" onclick="this.parentElement.remove()">&times;</button>
+                `;
+                list.appendChild(row);
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                if (document.getElementById('godparentList') && document.getElementById('godparentList').children.length === 0) {
+                    addGodparentRow();
+                }
+            });
 
             function resetGodparentRows() {
                 const list = document.getElementById('godparentList');
                 if (list) list.innerHTML = '';
             }
-
-            document.addEventListener('DOMContentLoaded', () => addGodparentRow());
 
             // Auto-populates Requested Funeral Date when Date of Passing changes
             function autoSyncFuneralDate() {
@@ -4376,30 +4806,47 @@
                 event.preventDefault();
                 const appId = document.getElementById('reschedAppId').value;
                 const reason = document.getElementById('reschedReasonInput').value;
+                const newDate = document.getElementById('reschedNewDateInput').value;
+
+                if (!newDate) {
+                    showAlert('Please select your preferred new date from the calendar.');
+                    return;
+                }
+
                 const numericId = isNaN(appId) ? appId : Number(appId);
+                let app = await db.applications.get(numericId);
+                if (!app) {
+                    showAlert('Application record not found.');
+                    return;
+                }
 
-                const app = await db.applications.get(numericId);
-                if (!app) return;
-
-                // Append to status history or add a reschedule request flag
+                // 1. Log the history trail
                 const historyEntry = {
                     oldStatus: app.status || 'Pending',
                     newStatus: 'Reschedule Requested',
-                    adminNote: `Parishioner requested reschedule: ${reason}`,
+                    adminNote: `Parishioner requested reschedule to ${newDate}. Reason: ${reason}`,
                     changedAt: new Date().toISOString(),
-                    changedBy: 'Parishioner'
+                    changedBy: app.applicantName || 'Parishioner'
                 };
                 const updatedHistory = app.statusHistory ? [...app.statusHistory, historyEntry] : [historyEntry];
 
+                // 2. Update Dexie with explicit fields that the admin dashboard looks for
                 await db.applications.update(numericId, {
-                    status: 'Reschedule Requested',
-                    adminNotes: `Reschedule requested: ${reason}`,
-                    statusHistory: updatedHistory
+                    status: 'Reschedule Requested',          // Sets the core status filter for admin
+                    rescheduleRequested: true,               // Flag for admin UI conditional checks
+                    rescheduleReason: reason,                // The reason text
+                    requestedNewDate: newDate,               // The date requested by the parishioner
+                    statusHistory: updatedHistory,
+                    updatedAt: new Date().toISOString()
                 });
 
+                showAlert('Your reschedule request has been submitted to the parish office successfully!', 'Success');
                 closeModal('requestReschedModal');
-                alert('✅ Reschedule request submitted successfully to the parish office.');
-                if (typeof fetchUserApplications === 'function') fetchUserApplications();
+
+                // Refresh parishioner dashboard
+                if (typeof renderUserDashboard === 'function') {
+                    await renderUserDashboard();
+                }
             }
 
             function updateFuneralFeeCalculation() {
@@ -4714,13 +5161,13 @@
                 switch ((status || '').toLowerCase()) {
                     case 'approved': return { bg: '#e8f5e9', color: '#2e7d32' };
                     case 'pending': return { bg: '#fff8e1', color: '#f57f17' };
-                    case 'upload lacking documents':
-                    case 'needs revision': return { bg: '#fff3e0', color: '#e65100' }; // <-- Orange badge for lacking docs
-                    case 'cancelled': return { bg: '#ffebee', color: '#c62828' }; // <-- Red badge for cancelled
+                    case 'reschedule requested': return { bg: '#fff3cd', color: '#856404' }; // ⚠️ Amber/Yellow highlight for reschedule
+                    case 'cancelled': return { bg: '#ffebee', color: '#c62828' };
                     case 'reviewing': return { bg: '#e3f2fd', color: '#1565c0' };
                     default: return { bg: '#f1f5f9', color: '#475569' };
                 }
             }
+
             async function parishionerDeleteApplication(id) {
                 if (!id) return;
 
