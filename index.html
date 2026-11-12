@@ -11,6 +11,78 @@
     <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#800020">
     <style>
+        /* --- Global Centered Modal Fix --- */
+        /* --- Global Centered Modal Fix & Width Adjustment --- */
+        .modal-overlay {
+            display: none;
+            position: fixed !important;
+            inset: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            background: rgba(0, 0, 0, 0.5) !important;
+            z-index: 9999 !important;
+            align-items: center !important;
+            justify-content: center !important;
+            overflow-y: auto !important;
+            padding: 20px !important;
+            box-sizing: border-box !important;
+        }
+
+        .modal-overlay.active,
+        .modal-overlay[style*="display: flex"],
+        .modal-overlay[style*="display: block"] {
+            display: flex !important;
+        }
+
+        .modal-box {
+            background: #ffffff !important;
+            border-radius: 8px !important;
+            padding: 28px !important;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25) !important;
+            max-height: 88vh !important;
+            overflow-y: auto !important;
+            text-align: left !important;
+            position: relative !important;
+            margin: auto !important;
+            width: 92% !important;
+            max-width: 1050px !important;
+            /* Increased width so it's not too thin */
+            box-sizing: border-box !important;
+        }
+        #customAlertModal .modal-box,
+        #confirmationModal .modal-box,
+        #authModal .modal-box {
+            max-width: 480px !important;
+        }
+        .modal-overlay.active,
+        .modal-overlay[style*="display: flex"],
+        .modal-overlay[style*="display: block"] {
+            display: flex !important;
+        }
+
+        .modal-box {
+            background: #ffffff !important;
+            border-radius: 8px !important;
+            padding: 24px !important;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25) !important;
+            max-height: 85vh !important;
+            overflow-y: auto !important;
+            text-align: left !important;
+            position: relative !important;
+            margin: auto !important;
+            width: 100% !important;
+            max-width: 600px !important;
+            box-sizing: border-box !important;
+        }
+
+        /* Specific wider sizes for large dashboards/forms */
+        #dashboardModal .modal-box,
+        #baptismModal .modal-box,
+        #weddingModal .modal-box,
+        #funeralModal .modal-box {
+            max-width: 800px !important;
+        }
+
         .godparent-row {
             display: flex;
             gap: 8px;
@@ -2123,7 +2195,7 @@
             }
 
             // Submit request and make sure it reflects on the admin side
-async function submitRescheduleRequest(event) {
+            async function submitRescheduleRequest(event) {
                 event.preventDefault();
                 const appId = document.getElementById('reschedAppId').value;
                 const reason = document.getElementById('reschedReasonInput').value;
