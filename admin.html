@@ -17,16 +17,15 @@
 
     <style>
         .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.65);
             display: none;
-            justify-content: center;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1050;
             align-items: center;
-            z-index: 99999;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 20px;
         }
 
         .modal-overlay.active {
@@ -35,15 +34,14 @@
 
         .modal-box {
             background: #ffffff;
-            color: #1a1a1a;
-            padding: 28px;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 680px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-            max-height: 85vh;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            max-height: 90vh;
             overflow-y: auto;
-            font-family: Arial, sans-serif;
+            text-align: left;
+            position: relative;
+            margin: auto;
         }
 
         .modal-box label {
@@ -68,7 +66,7 @@
         .modal-box input:focus,
         .modal-box select:focus,
         .modal-box textarea:focus {
-            border-color: #4a0e17 !important;
+            border-color: #991b1b !important;
             outline: none;
         }
 
@@ -99,18 +97,232 @@
             color: #721c24;
         }
 
-        .btn-action {
-            background: #6c757d;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
+        /* =========================================================
+           ADMIN DASHBOARD SIDE NAV & UNIFIED #991b1b THEME
+           ========================================================= */
+        :root {
+            --parish-burgundy: #991b1b;
+            --parish-gold: #eab308;
+            --admin-bg: #f8f7f5;
+            --admin-surface: #ffffff;
+            --admin-text: #292524;
+            --admin-muted: #78716c;
+            --admin-border: #e7e5e4;
+            --admin-shadow: 0 4px 16px rgba(41, 37, 36, .06);
         }
 
-        .btn-action:hover {
-            opacity: 0.9;
+        body.admin-body {
+            background: var(--admin-bg) !important;
+            color: var(--admin-text) !important;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Top Header Bar */
+        header.admin-nav {
+            background: #991b1b !important;
+            color: #fff !important;
+            min-height: 70px;
+            padding: 12px 24px !important;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, .15);
+            border-bottom: 4px solid var(--parish-gold);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        body.admin-body #dashboardTitle {
+            color: #fff !important;
+            font-size: 1.25rem !important;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        /* Hamburger Menu Button */
+        /* Hide hamburger button by default on desktop */
+        .hamburger-btn {
+            display: none !important;
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-size: 1.8rem;
+            cursor: pointer;
+            padding: 4px 8px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Show hamburger button only on mobile screens */
+        @media screen and (max-width: 768px) {
+            .hamburger-btn {
+                display: inline-flex !important;
+            }
+        }
+
+        /* Sliding Side Navigation Drawer */
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 9998;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .drawer-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .mobile-drawer {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 300px;
+            height: 100vh;
+            background-color: #991b1b;
+            border-left: 2px solid var(--parish-gold);
+            z-index: 9999;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+            transition: right 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff;
+        }
+
+        .mobile-drawer.active {
+            right: 0;
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 20px;
+            border-bottom: 1px solid rgba(234, 179, 8, 0.3);
+        }
+
+        .drawer-header h3 {
+            color: var(--parish-gold);
+            margin: 0;
+            font-size: 1.15rem;
+        }
+
+        .close-drawer-btn {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-size: 1.8rem;
+            cursor: pointer;
+        }
+
+        .drawer-links {
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            gap: 12px;
+        }
+
+        .drawer-links a,
+        .drawer-links button {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 10px 0;
+            background: none;
+            border: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .drawer-links a:hover,
+        .drawer-links button:hover {
+            color: var(--parish-gold);
+        }
+
+        .admin-container {
+            max-width: 1400px !important;
+            margin: 20px auto !important;
+            padding: 0 20px !important;
+            box-sizing: border-box;
+            width: 100%;
+            flex: 1;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+            gap: 16px !important;
+            margin-bottom: 24px !important;
+            width: 100%;
+        }
+
+        .stat-card {
+            background: var(--admin-surface) !important;
+            border: 1px solid var(--admin-border) !important;
+            border-top: 4px solid #991b1b !important;
+            border-radius: 10px !important;
+            padding: 18px 20px !important;
+            box-shadow: var(--admin-shadow) !important;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            color: var(--admin-muted) !important;
+            font-size: 0.85rem !important;
+            font-weight: 650 !important;
+            text-transform: uppercase;
+            margin-bottom: 8px !important;
+        }
+
+        .stat-card p {
+            color: #991b1b !important;
+            font-size: 1.8rem !important;
+            font-weight: 750 !important;
+            margin: 0 !important;
+        }
+
+        .table-controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+            background: var(--admin-surface);
+            border: 1px solid var(--admin-border);
+            border-radius: 10px;
+            padding: 14px;
+            box-shadow: var(--admin-shadow);
+        }
+
+        .table-controls select,
+        .table-controls input {
+            padding: 9px 12px !important;
+            border-radius: 6px !important;
+            border: 1px solid #cbd5e1 !important;
+            font-size: 14px !important;
+            background: #fff !important;
+        }
+
+        .view-group {
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
         .toggle-btn {
@@ -125,23 +337,27 @@
         }
 
         .toggle-btn.active {
-            background: #4a0e17;
+            background: #991b1b;
             color: white;
         }
 
-        .admin-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
+        .refresh-btn {
+            background: #991b1b !important;
+            color: white !important;
+            border: none;
+            padding: 9px 16px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
         }
 
         .table-wrapper {
             width: 100%;
             overflow-x: auto;
             background: #ffffff;
-            border: 1px solid #ccd0d5;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--admin-border);
+            border-radius: 10px;
+            box-shadow: var(--admin-shadow);
             margin-top: 15px;
         }
 
@@ -149,43 +365,41 @@
             width: 100%;
             border-collapse: collapse;
             text-align: left;
-            font-family: Arial, sans-serif;
+            font-size: 13px;
             min-width: 1000px;
         }
 
         .admin-table th {
-            background-color: #4a0e17;
+            background-color: #991b1b !important;
             color: #ffffff;
             padding: 14px 16px;
-            font-size: 13px;
             font-weight: bold;
-            letter-spacing: 0.5px;
-            border-bottom: 2px solid #33090f;
+            border-bottom: 3px solid var(--parish-gold);
+            white-space: nowrap;
         }
 
         .admin-table td {
             padding: 14px 16px;
             border-bottom: 1px solid #e4e6eb;
-            font-size: 13px;
             color: #1c1e21;
             vertical-align: middle;
         }
 
-        /* Ensure all action buttons in the admin table have equal dimensions and look */
-        /* Equal width proportions for action buttons */
+        .admin-table tbody tr:hover {
+            background-color: #fcfbfa;
+        }
+
         .admin-table td .action-btn-group {
             display: flex;
             gap: 6px;
             align-items: stretch;
             width: 100%;
             min-width: 240px;
-            /* Ensures enough room for all three buttons to sit side-by-side proportionally */
         }
 
         .admin-table td .action-btn-group button,
         .admin-table td .action-btn-group a {
             flex: 1 1 0px;
-            /* Forces all buttons to share equal width proportions */
             min-height: 34px;
             padding: 6px 8px;
             font-size: 11.5px;
@@ -198,75 +412,28 @@
             justify-content: center;
             gap: 4px;
             text-decoration: none;
-            line-height: 1.1;
             white-space: nowrap;
-            box-sizing: border-box;
-            text-align: center;
-            transition: opacity 0.15s ease;
         }
 
-        .admin-table td .action-btn-group button:hover {
-            opacity: 0.88;
-        }
-
-        .admin-table tbody tr:hover {
-            background-color: #f8f9fa;
-        }
-
-        /* --- Mobile Responsive Rules for admin.html --- */
         @media screen and (max-width: 768px) {
-
-            /* Admin Layout Header & Containers */
-            body {
-                font-size: 14px;
-            }
-
-            .admin-container,
-            .main-content {
+            .admin-container {
                 padding: 10px !important;
-                margin: 0 !important;
-                width: 100% !important;
+                margin: 10px auto !important;
             }
 
-            header.admin-nav {
-                flex-direction: column;
-                gap: 10px;
-                text-align: center;
-                padding: 12px;
-            }
-
-            /* Statistics Grid: 2 columns on tablets, 1 on phones */
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr) !important;
                 gap: 10px !important;
             }
 
-            /* Table Controls & Filters */
-            .table-controls,
-            .filter-group {
-                flex-direction: column !important;
-                gap: 8px !important;
-                width: 100%;
+            .table-controls {
+                flex-direction: column;
+                align-items: stretch;
             }
 
-            .table-controls input,
-            .table-controls select {
+            .table-controls select,
+            .table-controls input {
                 width: 100% !important;
-            }
-
-            /* Make Tables Scrollable Horizontally on Small Screens */
-            table {
-                display: block;
-                width: 100%;
-                overflow-x: auto;
-                white-space: nowrap;
-            }
-
-            /* Action Buttons inside Tables */
-            td button,
-            th {
-                font-size: 12px !important;
-                padding: 6px 8px !important;
             }
         }
 
@@ -276,399 +443,6 @@
             }
         }
 
-        /* =========================================================
-           ADMIN DASHBOARD UI REFRESH
-           Palette matched to index.html:
-           Burgundy #991b1b / Deep burgundy #800020 / Gold #eab308
-           ========================================================= */
-        :root {
-            --parish-burgundy: #991b1b;
-            --parish-deep: #800020;
-            --parish-gold: #eab308;
-            --admin-bg: #f8f7f5;
-            --admin-surface: #ffffff;
-            --admin-text: #292524;
-            --admin-muted: #78716c;
-            --admin-border: #e7e5e4;
-            --admin-shadow: 0 5px 18px rgba(41, 37, 36, .07);
-        }
-
-        body.admin-body {
-            background: var(--admin-bg) !important;
-            color: var(--admin-text) !important;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
-            line-height: 1.55;
-        }
-
-        body.admin-body input,
-        body.admin-body select,
-        body.admin-body textarea,
-        body.admin-body button {
-            font: inherit;
-        }
-
-        body.admin-body header.admin-nav {
-            background: var(--parish-burgundy) !important;
-            color: #fff !important;
-            min-height: 78px;
-            padding: 12px clamp(16px, 4vw, 42px) !important;
-            gap: 18px;
-            flex-wrap: wrap;
-            box-shadow: 0 3px 12px rgba(0, 0, 0, .13);
-            border-bottom: 4px solid var(--parish-gold);
-        }
-
-        body.admin-body #dashboardTitle {
-            color: #fff !important;
-            font-size: clamp(1.05rem, 2vw, 1.45rem) !important;
-            font-weight: 700;
-            letter-spacing: .1px;
-        }
-
-        body.admin-body #adminUserHeader {
-            color: #fff !important;
-        }
-
-        .admin-container {
-            max-width: 1500px !important;
-            padding: clamp(14px, 2.5vw, 30px) !important;
-        }
-
-        .stats-grid {
-            gap: 18px !important;
-            margin-bottom: 26px !important;
-        }
-
-        .stat-card {
-            background: var(--admin-surface) !important;
-            border: 1px solid var(--admin-border) !important;
-            border-top: 4px solid var(--parish-burgundy) !important;
-            border-radius: 12px !important;
-            padding: 19px 21px !important;
-            box-shadow: var(--admin-shadow) !important;
-            min-height: 112px;
-        }
-
-        .stat-card h3 {
-            color: var(--admin-muted) !important;
-            font-size: .82rem !important;
-            font-weight: 650 !important;
-            letter-spacing: .25px;
-            margin-bottom: 8px !important;
-        }
-
-        .stat-card p {
-            color: var(--parish-deep) !important;
-            font-size: 1.9rem !important;
-            line-height: 1.15;
-            font-weight: 750 !important;
-            margin: 0 !important;
-        }
-
-        .master-calendar-card,
-        #secretaryTableSection {
-            border-radius: 12px;
-        }
-
-        .master-calendar-card {
-            border: 1px solid var(--admin-border) !important;
-            box-shadow: var(--admin-shadow) !important;
-        }
-
-        .master-calendar-card h3 {
-            color: var(--parish-deep) !important;
-            font-weight: 750;
-        }
-
-        #masterCalMonthLabel {
-            color: var(--admin-text) !important;
-        }
-
-        #masterCalendarGrid>div {
-            border-radius: 7px;
-            min-height: 68px;
-            padding: 7px 3px;
-        }
-
-        .table-controls {
-            align-items: center;
-            background: var(--admin-surface);
-            border: 1px solid var(--admin-border);
-            border-radius: 12px;
-            padding: 15px;
-            box-shadow: 0 2px 8px rgba(41, 37, 36, .035);
-        }
-
-        .table-controls input,
-        .table-controls select,
-        .admin-body input:not([type="checkbox"]):not([type="radio"]),
-        .admin-body select,
-        .admin-body textarea {
-            min-height: 42px;
-            padding: 9px 12px !important;
-            color: var(--admin-text) !important;
-            background: #fff !important;
-            border: 1px solid #d6d3d1 !important;
-            border-radius: 7px !important;
-            font-size: 14px !important;
-            transition: border-color .18s ease, box-shadow .18s ease;
-        }
-
-        .admin-body input:focus,
-        .admin-body select:focus,
-        .admin-body textarea:focus {
-            outline: none !important;
-            border-color: var(--parish-burgundy) !important;
-            box-shadow: 0 0 0 3px rgba(153, 27, 27, .12) !important;
-        }
-
-        .view-group {
-            gap: 9px !important;
-        }
-
-        .toggle-btn,
-        .refresh-btn,
-        .btn-action {
-            min-height: 39px;
-            border-radius: 7px !important;
-            padding: 9px 14px !important;
-            font-size: 13px !important;
-            font-weight: 650 !important;
-            transition: background .18s ease, transform .18s ease, box-shadow .18s ease;
-        }
-
-        .toggle-btn {
-            background: #f1efed !important;
-            color: #57534e !important;
-            border: 1px solid #e7e5e4 !important;
-        }
-
-        .toggle-btn:hover {
-            background: #e7e5e4 !important;
-        }
-
-        .toggle-btn.active,
-        .refresh-btn {
-            background: var(--parish-burgundy) !important;
-            color: #fff !important;
-            border: 1px solid var(--parish-burgundy) !important;
-        }
-
-        .refresh-btn {
-            cursor: pointer;
-            padding: 9px 16px !important;
-            border-radius: 7px !important;
-            font-weight: 700;
-        }
-
-        .toggle-btn:hover,
-        .refresh-btn:hover,
-        .btn-action:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 3px 9px rgba(0, 0, 0, .10);
-        }
-
-        .table-wrapper {
-            margin-top: 0 !important;
-            border: 1px solid var(--admin-border) !important;
-            border-radius: 12px !important;
-            box-shadow: var(--admin-shadow) !important;
-        }
-
-        .admin-table {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
-            min-width: 1080px;
-        }
-
-        .admin-table th {
-            background: var(--parish-burgundy) !important;
-            color: #fff !important;
-            padding: 15px 14px !important;
-            font-size: 12px !important;
-            text-transform: uppercase;
-            letter-spacing: .45px;
-            border-bottom: 3px solid var(--parish-gold) !important;
-            white-space: nowrap;
-        }
-
-        .admin-table td {
-            padding: 14px !important;
-            color: #44403c !important;
-            font-size: 13px !important;
-            line-height: 1.45;
-            border-bottom: 1px solid #eeeae7 !important;
-        }
-
-        .admin-table tbody tr:nth-child(even) {
-            background: #fcfbfa;
-        }
-
-        .admin-table tbody tr:hover {
-            background: #fff7ed !important;
-        }
-
-        .status-select {
-            max-width: 230px;
-            min-height: 36px;
-            padding: 7px 9px !important;
-            font-size: 12px !important;
-        }
-
-        .btn-action {
-            background: var(--parish-burgundy) !important;
-            color: #fff !important;
-            border: 0 !important;
-        }
-
-        .modal-overlay {
-            padding: 16px;
-            background: rgba(35, 18, 18, .68) !important;
-            backdrop-filter: blur(3px);
-        }
-
-        .modal-box {
-            border: 1px solid rgba(153, 27, 27, .12);
-            border-top: 5px solid var(--parish-burgundy);
-            border-radius: 13px !important;
-            box-shadow: 0 18px 55px rgba(0, 0, 0, .24) !important;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
-        }
-
-        .modal-box h2,
-        .modal-box h3 {
-            color: var(--parish-deep) !important;
-        }
-
-        .modal-box label {
-            color: #44403c !important;
-            font-weight: 650 !important;
-            line-height: 1.4;
-        }
-
-        .modal-box button[type="submit"],
-        .modal-box button.primary,
-        .modal-box .primary-btn {
-            background: var(--parish-burgundy) !important;
-            color: #fff !important;
-        }
-
-        #adminAuthModal .modal-box {
-            max-width: 460px !important;
-            padding: 32px !important;
-        }
-
-        #adminAuthModal h2 {
-            font-size: 1.45rem;
-            margin-top: 2px;
-        }
-
-        #adminAuthModal button[type="submit"] {
-            min-height: 44px;
-            background: var(--parish-burgundy) !important;
-            border-radius: 7px !important;
-            font-size: 14px;
-        }
-
-        #adminAuthModal button[onclick*="loginAsDemoRole"] {
-            min-height: 42px;
-            background: #6b2028 !important;
-            border: 1px solid #8d4249 !important;
-            border-radius: 7px !important;
-        }
-
-        #adminAuthModal button[onclick*="loginAsDemoRole"]:last-child {
-            background: #8a5a12 !important;
-            border-color: #a87924 !important;
-        }
-
-        /* Improve clarity for long status and document labels */
-        .admin-table td,
-        .admin-table th {
-            overflow-wrap: anywhere;
-        }
-
-        /* Responsive layout */
-        @media (max-width: 768px) {
-            body.admin-body header.admin-nav {
-                justify-content: center !important;
-                text-align: center;
-            }
-
-            body.admin-body header.admin-nav>div {
-                justify-content: center;
-                flex-wrap: wrap;
-            }
-
-            .admin-container {
-                padding: 12px !important;
-            }
-
-            .stats-grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-                gap: 10px !important;
-            }
-
-            .stat-card {
-                padding: 14px !important;
-                min-height: 98px;
-            }
-
-            .stat-card p {
-                font-size: 1.55rem !important;
-            }
-
-            .table-controls {
-                align-items: stretch;
-            }
-
-            .view-group {
-                align-items: stretch !important;
-            }
-
-            .view-group button {
-                flex: 1 1 145px;
-            }
-
-            .refresh-btn {
-                margin-left: 0 !important;
-            }
-
-            .master-calendar-card {
-                padding: 14px !important;
-                overflow-x: auto;
-            }
-
-            .master-calendar-card>div:first-child {
-                flex-wrap: wrap;
-                gap: 12px;
-            }
-
-            #masterCalendarGrid {
-                min-width: 420px;
-            }
-
-            .modal-box {
-                width: min(96%, 680px) !important;
-                max-width: 96% !important;
-                padding: 19px !important;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .stats-grid {
-                grid-template-columns: 1fr 1fr !important;
-            }
-
-            #dashboardTitle {
-                font-size: 1rem !important;
-            }
-
-            #adminAuthModal .modal-box {
-                padding: 22px !important;
-            }
-        }
-
-        /* Lightweight local SVG icon system: no icon font, CDN, or runtime scanner. */
         .ui-icon {
             width: 1em;
             height: 1em;
@@ -694,61 +468,46 @@
             overflow: hidden;
         }
 
-        /* Priest Selection Cards Grid */
-        .priest-cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 12px;
-            margin-top: 8px;
-        }
+        @media screen and (max-width: 768px) {
 
-        .priest-card {
-            background: #ffffff;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 12px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
+            /* Sticky Circular Floating Action Button for Refresh on Mobile */
+            .refresh-btn {
+                position: fixed !important;
+                bottom: calc(20px + env(safe-area-inset-bottom)) !important;
+                right: 20px !important;
+                width: 56px !important;
+                height: 56px !important;
+                min-height: 56px !important;
+                border-radius: 50% !important;
+                padding: 0 !important;
+                display: inline-flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                background: #991b1b !important;
+                color: #ffffff !important;
+                border: 2px solid #eab308 !important;
+                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35) !important;
+                z-index: 990 !important;
+                margin: 0 !important;
+                transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+            }
 
-        .priest-card:hover {
-            border-color: #991b1b;
-            background: #fdf2f2;
-        }
+            .refresh-btn:active {
+                transform: scale(0.92) !important;
+            }
 
-        .priest-card.selected {
-            border-color: #991b1b;
-            background: #991b1b;
-            color: #ffffff;
-            box-shadow: 0 4px 12px rgba(153, 27, 27, 0.25);
-        }
+            .refresh-btn .refresh-btn-text {
+                display: none !important;
+            }
 
-        .priest-card.selected .priest-card-title,
-        .priest-card.selected .priest-card-subtitle {
-            color: #ffffff !important;
-        }
-
-        .priest-card-avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: #f1f5f9;
-            color: #4a0e17;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 8px auto;
-            font-weight: bold;
-            font-size: 16px;
-            border: 1px solid #cbd5e1;
-        }
-
-        .priest-card.selected .priest-card-avatar {
-            background: #ffffff;
-            color: #991b1b;
+            .refresh-btn .ui-icon {
+                margin-right: 0 !important;
+                width: 24px !important;
+                height: 24px !important;
+            }
         }
     </style>
+
 </head>
 
 <body class="admin-body">
@@ -911,7 +670,7 @@
     <!-- Secretariat / Priest / Admin Authentication Modal -->
     <div id="adminAuthModal" class="modal-overlay active">
         <div class="modal-box" style="max-width: 440px; text-align: center;">
-            <h2 style="color: #4a0e17; margin-bottom: 8px;">Parish Portal Sign In</h2>
+            <h2 style="color: #991b1b; margin-bottom: 8px;">Parish Portal Sign In</h2>
             <p style="color: #666; font-size: 13px; margin-bottom: 20px;">Sign in as Priest, Secretary, or use Demo
                 Mode.</p>
 
@@ -953,16 +712,56 @@
         </div>
     </div>
 
-    <header class="admin-nav"
-        style="display: flex; justify-content: space-between; align-items: center; padding: 12px 24px;">
+    <header class="admin-nav">
         <div style="display: flex; align-items: center; gap: 15px;">
             <div class="logo-container">
                 <img src="MiniLogo-1.webp" width="140" height="auto" alt="Santuario Del Sto. Cristo Parish Logo">
             </div>
-            <h1 id="dashboardTitle" style="margin: 0; font-size: 1.4rem;">Parish Staff Dashboard</h1>
+            <h1 id="dashboardTitle" style="margin: 0;">Parish Staff Dashboard</h1>
         </div>
-        <div id="adminUserHeader" style="font-size: 14px;"></div>
+
+        <!-- Right side actions & Hamburger Toggle Trigger -->
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <div id="adminUserHeader" class="desktop-only" style="font-size: 14px;"></div>
+            <button class="hamburger-btn" onclick="toggleAdminDrawer()" aria-label="Menu"
+                style="background:none; border:none; color:white; font-size:1.8rem; cursor:pointer;">
+                <svg class="ui-icon" aria-hidden="true" focusable="false" style="width: 24px; height: 24px;">
+                    <use href="#ui-menu"></use>
+                </svg>
+            </button>
+        </div>
     </header>
+
+    <!-- Sliding Side Navigation Drawer -->
+    <div id="adminDrawerOverlay" class="drawer-overlay" onclick="toggleAdminDrawer()"></div>
+    <aside id="adminDrawer" class="mobile-drawer">
+        <div class="drawer-header">
+            <h3>Parish Staff Menu</h3>
+            <button class="close-drawer-btn" onclick="toggleAdminDrawer()">&times;</button>
+        </div>
+        <div class="drawer-links" id="adminDrawerLinks">
+            <a href="#" onclick="toggleAdminDrawer(); openAdminNotifModal()">
+                <svg class="ui-icon" aria-hidden="true" focusable="false">
+                    <use href="#ui-bell"></use>
+                </svg> Notifications & Alerts
+            </a>
+            <a href="#" onclick="toggleAdminDrawer(); showAdminStandardDashboard()">
+                <svg class="ui-icon" aria-hidden="true" focusable="false">
+                    <use href="#ui-folder"></use>
+                </svg> Active Inbox Submissions
+            </a>
+            <a href="#" onclick="toggleAdminDrawer(); showAdminSeminarAttendanceView()">
+                <svg class="ui-icon" aria-hidden="true" focusable="false">
+                    <use href="#ui-shield-check"></use>
+                </svg> Seminar Attendance Check-In
+            </a>
+            <a href="#" onclick="toggleAdminDrawer(); logoutAdmin(event)" style="color: #ff6b6b; font-weight: bold;">
+                <svg class="ui-icon" aria-hidden="true" focusable="false">
+                    <use href="#ui-log-out"></use>
+                </svg> Logout Portal
+            </a>
+        </div>
+    </aside>
 
     <div class="admin-container">
         <div id="statsSection" class="stats-grid"
@@ -1091,14 +890,15 @@
                 <!-- Example Admin Navigation Tab -->
                 <button onclick="showAdminSeminarAttendanceView()" type="button" class="toggle-btn">
                     <svg class="ui-icon" aria-hidden="true" focusable="false">
-                        <use href="#icon-qr-code"></use>
+                        <use href="#ui-shield-check"></use>
                     </svg> Seminar Attendance
                 </button>
-                <button class="refresh-btn" onclick="fetchApplications()" style="margin-left: auto;"><svg
-                        class="ui-icon" aria-hidden="true" focusable="false">
+                <button class="refresh-btn" onclick="fetchApplications()" aria-label="Refresh Submissions"
+                    title="Refresh Submissions" style="margin-left: auto;">
+                    <svg class="ui-icon" aria-hidden="true" focusable="false">
                         <use href="#ui-refresh-cw"></use>
-                    </svg> Refresh
-                    Submissions</button>
+                    </svg><span class="refresh-btn-text"> Refresh Submissions</span>
+                </button>
             </div>
 
             <div id="applicationsTableContainer" style="display: block;">
@@ -1568,7 +1368,7 @@
                             style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;">
                     </div>
 
-                    <h5 style="color: #4a0e17; margin: 12px 0 8px 0;">Father's Information</h5>
+                    <h5 style="color: 991b1b; margin: 12px 0 8px 0;">Father's Information</h5>
                     <div style="display: flex; gap: 10px; margin-bottom: 10px;">
                         <div style="flex: 2;"><input type="text" name="fatherFirstName" placeholder="First Name"
                                 style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
@@ -1579,7 +1379,7 @@
                                 style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
                     </div>
 
-                    <h5 style="color: #4a0e17; margin: 12px 0 8px 0;">Mother's Maiden Information</h5>
+                    <h5 style="color: 991b1b; margin: 12px 0 8px 0;">Mother's Maiden Information</h5>
                     <div style="display: flex; gap: 10px; margin-bottom: 10px;">
                         <div style="flex: 2;"><input type="text" name="motherFirstName" placeholder="First Name"
                                 style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
@@ -1594,7 +1394,7 @@
                 <!-- 2. WEDDING SPECIFIC FIELDS -->
                 <div id="walkInWeddingFields" class="service-walkin-fields"
                     style="display: none; border-top: 1px solid #e2e8f0; padding-top: 12px; margin-bottom: 15px;">
-                    <h5 style="color: #4a0e17; margin: 0 0 8px 0;">Groom's Information</h5>
+                    <h5 style="color: 991b1b; margin: 0 0 8px 0;">Groom's Information</h5>
                     <div style="display: flex; gap: 10px; margin-bottom: 8px;">
                         <div style="flex: 2;"><input type="text" name="groomFirstName" placeholder="First Name"
                                 style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
@@ -1637,7 +1437,7 @@
                                 style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
                     </div>
 
-                    <h5 style="color: #4a0e17; margin: 12px 0 8px 0;">Bride's Information</h5>
+                    <h5 style="color: 991b1b; margin: 12px 0 8px 0;">Bride's Information</h5>
                     <div style="display: flex; gap: 10px; margin-bottom: 8px;">
                         <div style="flex: 2;"><input type="text" name="brideFirstName" placeholder="First Name"
                                 style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
@@ -1693,7 +1493,7 @@
                 <!-- 3. FUNERAL SPECIFIC FIELDS -->
                 <div id="walkInFuneralFields" class="service-walkin-fields"
                     style="display: none; border-top: 1px solid #e2e8f0; padding-top: 12px; margin-bottom: 15px;">
-                    <h5 style="color: #4a0e17; margin: 0 0 8px 0;">Deceased Person's Information</h5>
+                    <h5 style="color: 991b1b; margin: 0 0 8px 0;">Deceased Person's Information</h5>
                     <div style="display: flex; gap: 10px; margin-bottom: 10px;">
                         <div style="flex: 2;"><input type="text" name="deceasedFirstName" placeholder="First Name"
                                 style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
@@ -2053,6 +1853,43 @@
             </div>
         </div>
     </div>
+    <!-- MODAL: UPLOAD OFFICIAL ARCHDIOCESAN CERTIFICATE -->
+    <div id="certificateUploadModal" class="modal-overlay">
+        <div class="modal-box" style="max-width: 500px; text-align: left; padding: 24px;">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #991b1b; padding-bottom: 8px; margin-bottom: 15px;">
+                <h3 style="color: #991b1b; margin: 0; font-size: 1.1rem;">Upload Official Digital Certificate</h3>
+                <button type="button" onclick="closeModal('certificateUploadModal')"
+                    style="background: none; border: none; font-size: 18px; font-weight: bold; cursor: pointer;"><svg
+                        class="ui-icon" aria-hidden="true">
+                        <use href="#ui-x"></use>
+                    </svg></button>
+            </div>
+            <p style="font-size: 13px; color: #64748b; margin-bottom: 15px;">
+                Please upload the scanned digital copy of the official certificate (PDF or Image) required by the
+                Archdiocese for this sacrament.
+            </p>
+            <form onsubmit="handleCertificateUploadSubmit(event)">
+                <input type="hidden" id="certUploadAppId">
+                <div style="margin-bottom: 15px;">
+                    <label
+                        style="display: block; font-weight: bold; font-size: 13px; color: #334155; margin-bottom: 6px;">Select
+                        Certificate File (PDF / Image) *</label>
+                    <input type="file" id="certFileInput" accept=".pdf,image/*" required
+                        style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff;">
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 8px;">
+                    <button type="button" onclick="closeModal('certificateUploadModal')"
+                        style="padding: 9px 14px; border: 1px solid #cbd5e1; background: #f1f5f9; border-radius: 6px; font-weight: bold; cursor: pointer;">Cancel</button>
+                    <button type="submit"
+                        style="background: #991b1b; color: white; border: none; padding: 9px 18px; border-radius: 6px; font-size: 13px; font-weight: bold; cursor: pointer;"><svg
+                            class="ui-icon" aria-hidden="true">
+                            <use href="#ui-upload"></use>
+                        </svg> Upload & Enable Completion</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <script>
         const db = new Dexie('ParishPortalDB');
@@ -2061,6 +1898,14 @@
             applications: '++id, referenceId, userId, applicantName, applicantEmail, sacramentType, status, preferredDate, confirmedDate, confirmedTime, details, documents, adminNotes, statusHistory, archived, createdAt',
             notifications: '++id, userId, referenceId, title, message, isRead, createdAt'
         });
+        function toggleAdminDrawer() {
+            const drawer = document.getElementById('adminDrawer');
+            const overlay = document.getElementById('adminDrawerOverlay');
+            if (drawer && overlay) {
+                drawer.classList.toggle('active');
+                overlay.classList.toggle('active');
+            }
+        }
 
 
         let rawApplicationsData = [];
@@ -2292,9 +2137,9 @@
             const statsSection = document.getElementById('statsSection');
             const dashboardTitle = document.getElementById('dashboardTitle');
 
-                if (currentAdmin) {
-                    closeModal('adminAuthModal');
-                    initPushNotifications();
+            if (currentAdmin) {
+                closeModal('adminAuthModal');
+                initPushNotifications();
 
                 if (currentAdmin.role === 'priest') {
                     if (tableSection) tableSection.style.display = 'none';
@@ -2504,13 +2349,6 @@
                     }
                 }
 
-                const uniqueDocs = app.documents && Array.isArray(app.documents) ? Array.from(
-                    new Map(app.documents.map(doc => {
-                        let name = typeof doc === 'string' ? doc : (doc.name || 'Document');
-                        return [name, doc];
-                    })).values()
-                ) : [];
-
                 // --- ROBUST DOCUMENT COUNTING FOR ADMIN TABLE ---
                 let uploadedCount = 0;
 
@@ -2551,32 +2389,61 @@
                     }
                 }
 
-                const isPaymentReady = app.paymentConfirmed || (app.status || '').includes('Scheduled') || (app.status || '') === 'Completed';
+                // --- TAB-SPECIFIC ACTION BUTTONS (ACTIVE INBOX VS MARKED AS DONE) ---
+                let actionButtonsHtml = '';
 
-                // UPDATED CODE: Allows scheduling if docs are complete OR if a reschedule was requested
-                let scheduleBtnHtml = '';
-                const isRescheduleReq = (app.status || '').toLowerCase().includes('reschedule requested');
+                if (showArchivedView) {
+                    // --- MARKED AS DONE VIEW ---
+                    const hasCertificateUploaded = Boolean(app.certificateUploaded || app.digitalCertificate);
+                    const detailsBtn = `<button type="button" onclick="event.stopPropagation(); openAdminUpdateModal('${app.id}')" style="background: #4a0e17; color: #ffffff;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-eye"></use></svg> Details</button>`;
 
-                if (!isDocComplete && !isRescheduleReq) {
-                    scheduleBtnHtml = `<button type="button" onclick="event.stopPropagation(); showAlert('Action Denied: Documents are still lacking (${uploadedCount}/${minRequired}).')" style="background: #aab7b8; color: #ffffff;">Incomplete</button>`;
-                } else if (!isPaymentReady && !isRescheduleReq) {
-                    scheduleBtnHtml = `<button type="button" onclick="event.stopPropagation(); showAlert('Payment Pending: Scheduling is greyed out until payment is confirmed.')" style="background: #e67e22; color: #ffffff;">Payment Pending</button>`;
+                    if (!hasCertificateUploaded) {
+                        // Replaces the middle slot with Upload Cert, and blocks "Mark as Done" until uploaded
+                        actionButtonsHtml = `
+                            ${detailsBtn}
+                            <button type="button" onclick="event.stopPropagation(); openCertificateUploadModal('${app.id}')" style="background: #0284c7; color: #ffffff;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-upload"></use></svg> Upload Cert</button>
+                            <button type="button" onclick="event.stopPropagation(); showAlert('Action Denied: You must upload the official digital certificate before marking this application as done.')" style="background: #aab7b8; color: #ffffff;" title="Certificate Required">Mark as Done</button>
+                        `;
+                    } else {
+                        const certViewerId = registerDocumentForViewer(app.digitalCertificate?.name || 'Archdiocesan_Certificate.pdf', app.digitalCertificate?.data);
+                        actionButtonsHtml = `
+                            ${detailsBtn}
+                            <button type="button" onclick="event.stopPropagation(); viewDocumentById('${certViewerId}')" style="background: #16a34a; color: #ffffff;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-eye"></use></svg> View Cert</button>
+                            <button type="button" onclick="event.stopPropagation(); toggleArchive('${app.id}')" class="btn-action" style="background: #16a34a; color: #ffffff;" title="Mark as Done"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-check"></use></svg> Done</button>
+                        `;
+                    }
                 } else {
-                    // Label button dynamically: show "Reschedule" if it's a reschedule request, otherwise "Schedule"
-                    const btnLabel = isRescheduleReq ? 'Reschedule' : 'Schedule';
-                    const btnBg = isRescheduleReq ? '#b45309' : '#1e5631'; // Amber for reschedule, green for standard schedule
+                    // --- ACTIVE INBOX VIEW ---
+                    const isPaymentReady = app.paymentConfirmed || (app.status || '').includes('Scheduled') || (app.status || '') === 'Completed';
+                    const isRescheduleReq = (app.status || '').toLowerCase().includes('reschedule requested');
 
-                    scheduleBtnHtml = `<button type="button" onclick="event.stopPropagation(); openAppointmentModal('${app.id}')" style="background: ${btnBg}; color: #ffffff;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-calendar"></use></svg> ${btnLabel}</button>`;
+                    let scheduleBtnHtml = '';
+                    if (!isDocComplete && !isRescheduleReq) {
+                        scheduleBtnHtml = `<button type="button" onclick="event.stopPropagation(); showAlert('Action Denied: Documents are still lacking (${uploadedCount}/${minRequired}).')" style="background: #aab7b8; color: #ffffff;">Incomplete</button>`;
+                    } else if (!isPaymentReady && !isRescheduleReq) {
+                        scheduleBtnHtml = `<button type="button" onclick="event.stopPropagation(); showAlert('Payment Pending: Scheduling is greyed out until payment is confirmed.')" style="background: #e67e22; color: #ffffff;">Payment Pending</button>`;
+                    } else {
+                        const btnLabel = isRescheduleReq ? 'Reschedule' : 'Schedule';
+                        const btnBg = isRescheduleReq ? '#b45309' : '#1e5631';
+                        scheduleBtnHtml = `<button type="button" onclick="event.stopPropagation(); openAppointmentModal('${app.id}')" style="background: ${btnBg}; color: #ffffff;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-calendar"></use></svg> ${btnLabel}</button>`;
+                    }
+
+                    // STRICT VALIDATION: Prevent marking as done in Active Inbox unless a certificate is uploaded
+                    const hasCertificateUploaded = Boolean(app.certificateUploaded || app.digitalCertificate);
+                    let markAsDoneBtnHtml = '';
+
+                    if (!hasCertificateUploaded) {
+                        markAsDoneBtnHtml = `<button type="button" onclick="event.stopPropagation(); showAlert('Action Denied: Official digital certificate must be uploaded before marking as done.')" style="background: #aab7b8; color: #ffffff;" title="Certificate Required">Mark as Done</button>`;
+                    } else {
+                        markAsDoneBtnHtml = `<button type="button" onclick="event.stopPropagation(); toggleArchive('${app.id}')" class="btn-action" style="background: #6c757d; color: #ffffff;" title="Mark as Done"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-check"></use></svg> Mark as Done</button>`;
+                    }
+
+                    actionButtonsHtml = `
+                        <button type="button" onclick="event.stopPropagation(); openAdminUpdateModal('${app.id}')" style="background: #4a0e17; color: #ffffff;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-eye"></use></svg> Details</button>
+                        ${scheduleBtnHtml}
+                        ${markAsDoneBtnHtml}
+                    `;
                 }
-
-                let archiveOrDeleteBtnHtml = '';
-                if (app.archived || st === 'cancelled' || st === 'completed') {
-                    archiveOrDeleteBtnHtml = `<button type="button" onclick="event.stopPropagation(); deleteApplicationRecord('${app.id}')" style="background: #c0392b; color: #ffffff;" title="Permanently Delete Record"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-x"></use></svg> Delete</button>`;
-                } else {
-                    archiveOrDeleteBtnHtml = `<button type="button" onclick="event.stopPropagation(); toggleArchive('${app.id}')" class="btn-action" style="background: #6c757d; color: #ffffff;" title="Mark as Done"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-check"></use></svg> Mark as Done</button>`;
-                }
-
-
 
                 html += `
                 <tr style="${app.archived ? 'opacity: 0.7; background-color: #f9f9f9;' : ''}">
@@ -2598,7 +2465,6 @@
                         </select>
                         ${app.adminNotes ? `<br><small style="color:red; margin-top: 4px; display:block;">Note: ${app.adminNotes}</small>` : ''}
 
-                        <!-- RESCHEDULE DETAILS CARD -->
                         ${app.status && app.status.toLowerCase().includes('reschedule requested') && app.requestedNewDate ? `
                             <div style="background: #fffbeb; border: 1px solid #fde68a; padding: 6px 8px; border-radius: 4px; margin-top: 6px; font-size: 11px; color: #92400e;">
                                 <strong>New Date Requested:</strong> ${app.requestedNewDate}<br>
@@ -2608,9 +2474,7 @@
                     </td>
                     <td>
                         <div class="action-btn-group">
-                            <button type="button" onclick="event.stopPropagation(); openAdminUpdateModal('${app.id}')" style="background: #4a0e17; color: #ffffff;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-eye"></use></svg> Details</button>
-                            ${scheduleBtnHtml}
-                            ${archiveOrDeleteBtnHtml}
+                            ${actionButtonsHtml}
                         </div>
                     </td>
                 </tr>`;
@@ -2894,7 +2758,18 @@
             const numericId = isNaN(id) ? id : Number(id);
             const record = rawApplicationsData.find(a => String(a.id) === String(id));
             if (!record) return;
-            await db.applications.update(numericId, { archived: !record.archived });
+
+            const newArchivedState = !record.archived;
+            const updatePayload = {
+                archived: newArchivedState
+            };
+
+            // If moving to archive / marked as done, ensure status is set to Completed
+            if (newArchivedState) {
+                updatePayload.status = 'Completed';
+            }
+
+            await db.applications.update(numericId, updatePayload);
             fetchApplications();
         }
 
@@ -4099,6 +3974,60 @@
                 feedback.style.color = '#dc2626';
                 feedback.innerText = 'An error occurred while updating the application status.';
             }
+        }
+
+        function openCertificateUploadModal(appId) {
+            const appIdInput = document.getElementById('certUploadAppId');
+            if (appIdInput) appIdInput.value = appId;
+
+            const fileInput = document.getElementById('certFileInput');
+            if (fileInput) fileInput.value = '';
+
+            openModal('certificateUploadModal');
+        }
+
+        async function handleCertificateUploadSubmit(event) {
+            event.preventDefault();
+            const appId = document.getElementById('certUploadAppId').value;
+            const fileInput = document.getElementById('certFileInput');
+            const numericId = isNaN(appId) ? appId : Number(appId);
+
+            if (!fileInput.files || fileInput.files.length === 0) {
+                showAlert('Please select a certificate file to upload.');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = async function (e) {
+                const base64Data = e.target.result;
+                const certObj = {
+                    name: file.name,
+                    size: file.size,
+                    type: file.type,
+                    data: base64Data,
+                    uploadedAt: new Date().toISOString()
+                };
+
+                try {
+                    await db.applications.update(numericId, {
+                        certificateUploaded: true,
+                        digitalCertificate: certObj,
+                        status: 'Completed',
+                        archived: true // Automatically mark as completed/archived once the official cert is uploaded
+                    });
+
+                    closeModal('certificateUploadModal');
+                    showAlert('Official certificate uploaded successfully! Application marked as Completed.', 'Success');
+                    fetchApplications();
+                } catch (err) {
+                    console.error('Error saving certificate:', err);
+                    showAlert('Failed to save certificate to database.');
+                }
+            };
+
+            reader.readAsDataURL(file);
         }
     </script>
 </body>
