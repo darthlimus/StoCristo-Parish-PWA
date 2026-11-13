@@ -564,993 +564,1134 @@
 
     <!-- ==================== SACRAMENTAL APPLICATION FORMS ==================== -->
 
-    <!-- 1. BAPTISM APPLICATION FORM -->
-    <div class="modal-overlay" id="baptismModal">
-        <div class="modal-box">
-            <span class="close-btn" onclick="closeModal('baptismModal')">&times;</span>
-            <h2>Baptism Application</h2>
+    <!-- =========================================================
+     BAPTISM APPLICATION WIZARD MODAL (3 STEPS)
+     ========================================================= -->
+    <div class="wizard-overlay" id="baptismModal">
+        <div class="wizard-modal">
 
-            <form id="baptismForm" onsubmit="event.preventDefault(); saveApplicationLocally('baptism', this);">
-                <!-- 1. APPLICANT INFORMATION -->
-                <h4 style="color: #4a0e17; margin-top: 15px; margin-bottom: 8px;">Applicant's Information</h4>
-                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-                    <div style="flex: 1; min-width: 180px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">First
-                            Name *</label>
-                        <input type="text" id="applicantFirstName" name="applicantFirstName" required
-                            style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
+            <!-- Sticky Top Header -->
+            <div class="wizard-header">
+                <div class="wizard-header-top">
+                    <h2>Baptism Application</h2>
+                    <button type="button" class="wizard-close-btn"
+                        onclick="closeWizardModal('baptismModal')">&times;</button>
+                </div>
+                <!-- Progress Indicator -->
+                <div class="wizard-progress" id="baptismProgress">
+                    <div class="wizard-step-item active" data-step="1">
+                        <span class="wizard-step-dot">1</span>
+                        <span class="wizard-step-label">Step 1: Forms &amp; Details</span>
                     </div>
-                    <div style="flex: 1; min-width: 180px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Last
-                            Name *</label>
-                        <input type="text" id="applicantLastName" name="applicantLastName" required
-                            style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
+                    <div class="wizard-progress-line"></div>
+                    <div class="wizard-step-item" data-step="2">
+                        <span class="wizard-step-dot">2</span>
+                        <span class="wizard-step-label">Step 2: Schedule</span>
                     </div>
-                    <div style="flex: 1.2; min-width: 220px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Email
-                            Address *</label>
-                        <input type="email" id="applicantEmail" name="applicantEmail" required
-                            style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
+                    <div class="wizard-progress-line"></div>
+                    <div class="wizard-step-item" data-step="3">
+                        <span class="wizard-step-dot">3</span>
+                        <span class="wizard-step-label">Step 3: Upload Documents</span>
                     </div>
                 </div>
+            </div>
 
-                <!-- 2. CHILD'S INFORMATION -->
-                <div style="border-top: 1px solid #e2e8f0; padding-top: 16px; margin-top: 16px;">
-                    <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;">Name of child</h4>
-                    <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px;">
-                        <div style="flex: 2; min-width: 180px;">
-                            <label
-                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">First
-                                Name *</label>
-                            <input type="text" id="childFirstName" name="childFirstName" required
-                                style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
+            <!-- Scrollable Middle Body -->
+            <div class="wizard-body">
+                <form id="baptismWizardForm" novalidate>
+
+                    <!-- STEP 1: FORMS & DETAILS (Applicant, Child, Parents, Contact, Sponsors) -->
+                    <div class="wizard-step-pane active" data-step="1">
+
+                        <!-- 1. Applicant Information -->
+                        <div class="wizard-card">
+                            <h3 class="wizard-section-title">Applicant's Information</h3>
+                            <div class="wizard-grid-3">
+                                <div class="wizard-field">
+                                    <label for="bapApplicantFirstName">First Name </label>
+                                    <input type="text" id="bapApplicantFirstName" name="applicantFirstName"
+                                        class="wizard-input" required>
+                                    <div class="field-error-msg">First name is required.</div>
+                                </div>
+                                <div class="wizard-field">
+                                    <label for="bapApplicantLastName">Last Name </label>
+                                    <input type="text" id="bapApplicantLastName" name="applicantLastName"
+                                        class="wizard-input" required>
+                                    <div class="field-error-msg">Last name is required.</div>
+                                </div>
+                                <div class="wizard-field">
+                                    <label for="bapApplicantEmail">Email Address </label>
+                                    <input type="email" id="bapApplicantEmail" name="applicantEmail"
+                                        class="wizard-input" required>
+                                    <div class="field-error-msg">Valid email is required.</div>
+                                </div>
+                            </div>
                         </div>
-                        <div style="flex: 0.8; min-width: 80px;">
-                            <label
-                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">M.I.</label>
-                            <input type="text" id="childMiddleInitial" name="childMiddleInitial" maxlength="3"
-                                style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
+
+                        <!-- 2. Child Information -->
+                        <div class="wizard-card">
+                            <h3 class="wizard-section-title">Name of Child</h3>
+                            <div class="wizard-grid-3" style="margin-bottom: 14px;">
+                                <div class="wizard-field" style="margin-bottom:0;">
+                                    <label for="bapChildFirstName">First Name </label>
+                                    <input type="text" id="bapChildFirstName" name="childFirstName" class="wizard-input"
+                                        required>
+                                    <div class="field-error-msg">Child's first name is required.</div>
+                                </div>
+                                <div class="wizard-field" style="margin-bottom:0;">
+                                    <label for="bapChildMiddleInitial">M.I.</label>
+                                    <input type="text" id="bapChildMiddleInitial" name="childMiddleInitial"
+                                        maxlength="3" class="wizard-input">
+                                </div>
+                                <div class="wizard-field" style="margin-bottom:0;">
+                                    <label for="bapChildLastName">Last Name </label>
+                                    <input type="text" id="bapChildLastName" name="childLastName" class="wizard-input"
+                                        required>
+                                    <div class="field-error-msg">Child's last name is required.</div>
+                                </div>
+                            </div>
+                            <div class="wizard-field" style="max-width: 260px; margin-bottom: 0;">
+                                <label for="bapChildDob">Date of Birth </label>
+                                <input type="date" id="bapChildDob" name="childDob" class="wizard-input" required>
+                                <div class="field-error-msg">Date of birth is required.</div>
+                            </div>
                         </div>
-                        <div style="flex: 2; min-width: 180px;">
-                            <label
-                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Last
-                                Name *</label>
-                            <input type="text" id="childLastName" name="childLastName" required
-                                style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
+
+                        <!-- 3. Father's Details -->
+                        <div class="wizard-card">
+                            <h3 class="wizard-section-title">Name of Father</h3>
+                            <div class="wizard-grid-3" style="margin-bottom: 14px;">
+                                <div class="wizard-field" style="margin-bottom:0;">
+                                    <label for="fatherFirstName">First Name </label>
+                                    <input type="text" id="fatherFirstName" name="fatherFirstName" class="wizard-input"
+                                        required>
+                                    <div class="field-error-msg">Father's first name is required.</div>
+                                </div>
+                                <div class="wizard-field" style="margin-bottom:0;">
+                                    <label for="fatherMiddleInitial">M.I.</label>
+                                    <input type="text" id="fatherMiddleInitial" name="fatherMiddleInitial" maxlength="3"
+                                        class="wizard-input">
+                                </div>
+                                <div class="wizard-field" style="margin-bottom:0;">
+                                    <label for="fatherLastName">Last Name </label>
+                                    <input type="text" id="fatherLastName" name="fatherLastName" class="wizard-input"
+                                        required>
+                                    <div class="field-error-msg">Father's last name is required.</div>
+                                </div>
+                            </div>
+                            <div class="wizard-field" style="margin-bottom: 0;">
+                                <label for="fatherBirthplace">Place of Birth</label>
+                                <input type="text" id="fatherBirthplace" name="fatherBirthplace" class="wizard-input">
+                            </div>
+                        </div>
+
+                        <!-- 4. Mother's Details -->
+                        <div class="wizard-card">
+                            <h3 class="wizard-section-title">Name of Mother</h3>
+                            <div class="wizard-grid-3" style="margin-bottom: 14px;">
+                                <div class="wizard-field" style="margin-bottom:0;">
+                                    <label for="motherFirstName">First Name </label>
+                                    <input type="text" id="motherFirstName" name="motherFirstName" class="wizard-input"
+                                        required>
+                                    <div class="field-error-msg">Mother's first name is required.</div>
+                                </div>
+                                <div class="wizard-field" style="margin-bottom:0;">
+                                    <label for="motherMiddleInitial">M.I.</label>
+                                    <input type="text" id="motherMiddleInitial" name="motherMiddleInitial" maxlength="3"
+                                        class="wizard-input">
+                                </div>
+                                <div class="wizard-field" style="margin-bottom:0;">
+                                    <label for="motherLastName">Maiden Last Name </label>
+                                    <input type="text" id="motherLastName" name="motherLastName" class="wizard-input"
+                                        required>
+                                    <div class="field-error-msg">Mother's maiden last name is required.</div>
+                                </div>
+                            </div>
+                            <div class="wizard-field" style="margin-bottom: 0;">
+                                <label for="motherBirthplace">Place of Birth</label>
+                                <input type="text" id="motherBirthplace" name="motherBirthplace" class="wizard-input">
+                            </div>
+                        </div>
+
+                        <!-- 5. Contact & Marriage Details -->
+                        <div class="wizard-card">
+                            <h3 class="wizard-section-title">Contact &amp; Marriage Details</h3>
+                            <div class="wizard-grid-2" style="margin-bottom: 0;">
+                                <div class="wizard-field" style="margin-bottom: 0;">
+                                    <label for="bapPhone">Contact Number </label>
+                                    <input type="tel" id="bapPhone" name="phone" class="wizard-input" required>
+                                    <div class="field-error-msg">Contact number is required.</div>
+                                </div>
+                                <div class="wizard-field" style="margin-bottom: 0;">
+                                    <label for="parentsMarriedIn">Married In (Church / Place)</label>
+                                    <input type="text" id="parentsMarriedIn" name="parentsMarriedIn"
+                                        class="wizard-input">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 6. Principal Sponsors -->
+                        <div class="wizard-card">
+                            <h3 class="wizard-section-title">Principal Sponsors</h3>
+                            <div class="wizard-grid-2">
+                                <div class="wizard-field">
+                                    <label for="principalNinong">Principal Ninong </label>
+                                    <input type="text" id="principalNinong" name="principalNinong" class="wizard-input"
+                                        required>
+                                    <div class="field-error-msg">Principal Ninong is required.</div>
+                                    <div id="ninongList" style="margin-top: 6px;"></div>
+                                    <button type="button" onclick="addNinongRow()"
+                                        style="background: #ffc439; border: 1px dashed #cbd5e1; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px; margin-top: 6px;">+
+                                        Add Ninong</button>
+                                </div>
+                                <div class="wizard-field">
+                                    <label for="principalNinang">Principal Ninang </label>
+                                    <input type="text" id="principalNinang" name="principalNinang" class="wizard-input"
+                                        required>
+                                    <div class="field-error-msg">Principal Ninang is required.</div>
+                                    <div id="ninangList" style="margin-top: 6px;"></div>
+                                    <button type="button" onclick="addNinangRow()"
+                                        style="background: #ffc439; border: 1px dashed #cbd5e1; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px; margin-top: 6px;">+
+                                        Add Ninang</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- STEP 2: SCHEDULE (Baptism Type & Interactive Calendar) -->
+                    <div class="wizard-step-pane" data-step="2">
+                        <div class="wizard-card">
+                            <h3 class="wizard-section-title">Baptism Schedule &amp; Type</h3>
+                            <div class="wizard-field">
+                                <label for="baptismTypeSelect">Select Baptism Type </label>
+                                <select id="baptismTypeSelect" class="wizard-select" onchange="onBaptismTypeChanged()"
+                                    required>
+                                    <option value="">-- Choose Baptism Type --</option>
+                                    <option value="group">Group Baptism (₱500 | Sat &amp; Sun @ 10:00 AM)</option>
+                                    <option value="individual">Individual Baptism (₱1,500 | Tue to Fri by appointment)
+                                    </option>
+                                </select>
+                                <div class="field-error-msg">Please select a baptism type.</div>
+                            </div>
+
+                            <div
+                                style="background: #e7f3ff; border-left: 4px solid #1877f2; padding: 10px; font-size: 12px; color: #1c1e21; margin-bottom: 14px; border-radius: 4px;">
+                                <strong>Mandatory Baptism Seminar:</strong> Held at San Lorenzo Hall or Catalina Hall
+                                every Saturday at 4:30 PM.
+                            </div>
+
+                            <!-- Calendar Container -->
+                            <div class="fb-calendar-container"
+                                style="background: #ffffff; border: 1px solid #ccd0d5; border-radius: 8px; padding: 14px; font-family: Helvetica, Arial, sans-serif;">
+                                <div
+                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                    <h4 id="bapMonthYearLabel"
+                                        style="margin: 0; color: #1c1e21; font-size: 1rem; font-weight: bold;">Month
+                                        Year</h4>
+                                    <div style="display: flex; gap: 6px;">
+                                        <button type="button" onclick="changeBapCalendarMonth(-1)"
+                                            style="background: #e4e6eb; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-weight: bold;">&lt;</button>
+                                        <button type="button" onclick="changeBapCalendarMonth(1)"
+                                            style="background: #e4e6eb; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-weight: bold;">&gt;</button>
+                                    </div>
+                                </div>
+                                <div
+                                    style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: bold; font-size: 11px; color: #606770; margin-bottom: 6px;">
+                                    <div>Sun</div>
+                                    <div>Mon</div>
+                                    <div>Tue</div>
+                                    <div>Wed</div>
+                                    <div>Thu</div>
+                                    <div>Fri</div>
+                                    <div>Sat</div>
+                                </div>
+                                <div id="bapCalendarGrid"
+                                    style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; margin-bottom: 10px;">
+                                </div>
+                                <div id="bapTimeslotPanel"
+                                    style="border-top: 1px solid #e4e6eb; padding-top: 10px; display: none;">
+                                    <div id="bapSelectedDateHeader"
+                                        style="font-size: 12px; font-weight: bold; color: #1c1e21; margin-bottom: 6px;">
+                                    </div>
+                                    <div id="bapTimeslotGrid"
+                                        style="display: grid; grid-template-columns: 1fr; gap: 8px;"></div>
+                                </div>
+                                <input type="hidden" id="bapSelectedDateInput" name="preferredDate" required>
+                                <input type="hidden" id="bapSelectedTimeInput" name="confirmedTime" required>
+                                <div class="field-error-msg" id="bapScheduleError">Please select a valid preferred date
+                                    and time slot from the calendar.</div>
+                            </div>
                         </div>
                     </div>
 
-                    <div>
-                        <label
-                            style="display: block; font-weight: bold; font-size: 13px; color: #2c3e50; margin-bottom: 5px;">Date
-                            of Birth *</label>
-                        <input type="date" id="childDob" name="childDob" required
-                            style="width: 100%; max-width: 240px; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
-                    </div>
-                </div>
+                    <!-- STEP 3: UPLOAD DOCUMENTS & DATA PRIVACY -->
+                    <div class="wizard-step-pane" data-step="3">
+                        <div class="wizard-card">
+                            <h3 class="wizard-section-title">Required Documents</h3>
+                            <p style="font-size: 13px; color: #475569; margin-top: 0;">Please upload clear copies of the
+                                required documents (PDF, JPG, PNG):</p>
 
-                <!-- Father's Details Section -->
-                <div style="border-top: 1px solid #e2e8f0; padding-top: 16px; margin-top: 16px;">
-                    <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;"> Name of father
-                    </h4>
-                    <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px;">
-                        <div style="flex: 2; min-width: 160px;">
-                            <label
-                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">First
-                                Name </label>
-                            <input type="text" id="fatherFirstName" name="fatherFirstName" required
-                                style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
-                        </div>
-                        <div style="flex: 0.8; min-width: 60px;">
-                            <label
-                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">M.I.</label>
-                            <input type="text" id="fatherMiddleInitial" name="fatherMiddleInitial" maxlength="3"
-                                style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
-                        </div>
-                        <div style="flex: 2; min-width: 160px;">
-                            <label
-                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Last
-                                Name *</label>
-                            <input type="text" id="fatherLastName" name="fatherLastName" required
-                                style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
-                        </div>
-                    </div>
-                    <div>
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Place
-                            of Birth</label>
-                        <input type="text" id="fatherBirthplace" name="fatherBirthplace"
-                            style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
-                    </div>
-                </div>
+                            <!-- 1. Birth Certificate -->
+                            <div class="wizard-field">
+                                <label>1. Child's Birth Certificate (PSA / LCR) </label>
+                                <div class="doc-upload-box" id="bapBirthCertBox"
+                                    onclick="document.getElementById('bapBirthCertFiles').click()">
+                                    <strong style="color: #4a0e17; font-size: 13px;">Click to Upload Birth
+                                        Certificate</strong>
+                                    <div style="font-size: 12px; color: #64748b; margin-top: 4px;">PDF, JPG, PNG</div>
+                                    <div class="doc-file-name" id="bapBirthCertFileName"></div>
+                                    <input type="file" id="bapBirthCertFiles" accept=".pdf,.jpg,.jpeg,.png"
+                                        style="display:none;"
+                                        onchange="handleWizardFileSelect(this, 'bapBirthCertFileName', 'bapBirthCertBox')">
+                                </div>
+                                <div class="field-error-msg" id="bapBirthCertError">Please upload the child's Birth
+                                    Certificate.</div>
+                            </div>
 
-                <!-- Mother's Details Section -->
-                <div style="border-top: 1px solid #e2e8f0; padding-top: 16px; margin-top: 16px;">
-                    <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;">Name of mother</h4>
-                    <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px;">
-                        <div style="flex: 2; min-width: 160px;">
-                            <label
-                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">First
-                                Name *</label>
-                            <input type="text" id="motherFirstName" name="motherFirstName" required
-                                style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
-                        </div>
-                        <div style="flex: 0.8; min-width: 60px;">
-                            <label
-                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">M.I.</label>
-                            <input type="text" id="motherMiddleInitial" name="motherMiddleInitial" maxlength="3"
-                                style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
-                        </div>
-                        <div style="flex: 2; min-width: 160px;">
-                            <label
-                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Maiden
-                                Last Name *</label>
-                            <input type="text" id="motherLastName" name="motherLastName" required
-                                style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
-                        </div>
-                    </div>
-                    <div>
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Place
-                            of Birth</label>
-                        <input type="text" id="motherBirthplace" name="motherBirthplace"
-                            style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
-                    </div>
-                </div>
+                            <!-- 2. Mother's Baptismal -->
+                            <div class="wizard-field">
+                                <label>2. Mother's Baptismal Certificate </label>
+                                <div class="doc-upload-box" id="bapMotherBox"
+                                    onclick="document.getElementById('bapMotherFiles').click()">
+                                    <strong style="color: #4a0e17; font-size: 13px;">Click to Upload Mother's Baptismal
+                                        Certificate</strong>
+                                    <div style="font-size: 12px; color: #64748b; margin-top: 4px;">PDF, JPG, PNG</div>
+                                    <div class="doc-file-name" id="bapMotherFileName"></div>
+                                    <input type="file" id="bapMotherFiles" accept=".pdf,.jpg,.jpeg,.png"
+                                        style="display:none;"
+                                        onchange="handleWizardFileSelect(this, 'bapMotherFileName', 'bapMotherBox')">
+                                </div>
+                                <div class="field-error-msg" id="bapMotherError">Please upload the Mother's Baptismal
+                                    Certificate.</div>
+                            </div>
 
-                <!-- Contact Number & Married In Section -->
-                <div style="border-top: 1px solid #e2e8f0; padding-top: 16px; margin-top: 16px;">
-                    <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;">Contact & Marriage Details</h4>
-                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-                        <div class="form-group" style="flex: 1; min-width: 200px;">
-                            <label
-                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Contact
-                                Number *</label>
-                            <input type="tel" name="phone" required
-                                style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
-                        </div>
-                        <div class="form-group" style="flex: 1; min-width: 200px;">
-                            <label
-                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Married
-                                In</label>
-                            <input type="text" id="parentsMarriedIn" name="parentsMarriedIn"
-                                style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
-                        </div>
-                    </div>
-                </div>
+                            <!-- 3. Father's Baptismal -->
+                            <div class="wizard-field">
+                                <label>3. Father's Baptismal Certificate </label>
+                                <div class="doc-upload-box" id="bapFatherBox"
+                                    onclick="document.getElementById('bapFatherFiles').click()">
+                                    <strong style="color: #4a0e17; font-size: 13px;">Click to Upload Father's Baptismal
+                                        Certificate</strong>
+                                    <div style="font-size: 12px; color: #64748b; margin-top: 4px;">PDF, JPG, PNG</div>
+                                    <div class="doc-file-name" id="bapFatherFileName"></div>
+                                    <input type="file" id="bapFatherFiles" accept=".pdf,.jpg,.jpeg,.png"
+                                        style="display:none;"
+                                        onchange="handleWizardFileSelect(this, 'bapFatherFileName', 'bapFatherBox')">
+                                </div>
+                                <div class="field-error-msg" id="bapFatherError">Please upload the Father's Baptismal
+                                    Certificate.</div>
+                            </div>
 
-                <!-- PRINCIPAL SPONSORS (LEFT & RIGHT COLUMNS WITH DYNAMIC ADD BUTTONS) -->
-                <div style="border-top: 1px solid #e2e8f0; padding-top: 16px; margin-top: 16px;">
-                    <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;">Principal Sponsors</h4>
-
-                    <div style="display: flex; gap: 16px; flex-wrap: wrap;">
-                        <!-- LEFT COLUMN: PRINCIPAL NINONG + DYNAMIC ADD -->
-                        <div style="flex: 1; min-width: 240px;">
-                            <label
-                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Principal
-                                Ninong *</label>
-                            <input type="text" id="principalNinong" name="principalNinong" required
-                                style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px; margin-bottom: 8px;">
-
-                            <div id="ninongList"></div>
-                            <button type="button" onclick="addNinongRow()"
-                                style="background: #e67e22; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 13px; margin-top: 4px;">
-                                + Add Ninong
-                            </button>
-                        </div>
-
-                        <!-- RIGHT COLUMN: PRINCIPAL NINANG + DYNAMIC ADD -->
-                        <div style="flex: 1; min-width: 240px;">
-                            <label
-                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Principal
-                                Ninang *</label>
-                            <input type="text" id="principalNinang" name="principalNinang" required
-                                style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px; margin-bottom: 8px;">
-
-                            <div id="ninangList"></div>
-                            <button type="button" onclick="addNinangRow()"
-                                style="background: #e67e22; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 13px; margin-top: 4px;">
-                                + Add Ninang
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Calendar Container -->
-                <div class="fb-calendar-container"
-                    style="background: #ffffff; border: 1px solid #ccd0d5; border-radius: 8px; padding: 16px; margin: 16px 0; font-family: Helvetica, Arial, sans-serif;">
-                    <div style="margin-bottom: 15px;">
-                        <label
-                            style="display: block; font-weight: bold; color: #1c1e21; font-size: 13px; margin-bottom: 6px;">Select
-                            Baptism Type *</label>
-                        <select id="baptismTypeSelect" onchange="onBaptismTypeChanged()"
-                            style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px; font-size: 14px;"
-                            required>
-                            <option value="">-- Choose Baptism Type --</option>
-                            <option value="group">Group Baptism (₱500 | Sat & Sun @ 10:00 AM)</option>
-                            <option value="individual">Individual Baptism (₱1,500 | Tue to Fri by appointment)
-                            </option>
-                        </select>
-                    </div>
-
-                    <div
-                        style="background: #e7f3ff; border-left: 4px solid #1877f2; padding: 10px; font-size: 12px; color: #1c1e21; margin-bottom: 15px;">
-                        <strong>Mandatory Baptism Seminar:</strong><br>
-                        Held at <strong>San Lorenzo Hall or Catalina Hall</strong> every <strong>Saturday at 4:30
-                            PM</strong>.
-                    </div>
-
-                    <div
-                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <h4 id="bapMonthYearLabel"
-                            style="margin: 0; color: #1c1e21; font-size: 1.05rem; font-weight: bold;">Month Year
-                        </h4>
-                        <div style="display: flex; gap: 6px;">
-                            <button type="button" onclick="changeBapCalendarMonth(-1)"
-                                style="background: #e4e6eb; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-weight: bold;">&lt;</button>
-                            <button type="button" onclick="changeBapCalendarMonth(1)"
-                                style="background: #e4e6eb; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-weight: bold;">&gt;</button>
+                            <!-- Data Privacy Consent -->
+                            <div class="privacy-consent-box">
+                                <label>
+                                    <input type="checkbox" id="privacyConsentCheck" required>
+                                    <span><strong>Data Privacy Consent:</strong> I hereby authorize Santuario Del Sto.
+                                        Cristo Parish to collect, process, and store my personal and sacramental data
+                                        provided in this form in compliance with the <strong>Philippine Data Privacy Act
+                                            (RA 10173)</strong>.</span>
+                                </label>
+                                <div class="field-error-msg" id="bapPrivacyError" style="margin-left: 28px;">You must
+                                    agree to the Data Privacy Act before submitting.</div>
+                            </div>
                         </div>
                     </div>
 
-                    <div
-                        style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: bold; font-size: 11px; color: #606770; margin-bottom: 6px;">
-                        <div>Sun</div>
-                        <div>Mon</div>
-                        <div>Tue</div>
-                        <div>Wed</div>
-                        <div>Thu</div>
-                        <div>Fri</div>
-                        <div>Sat</div>
-                    </div>
+                </form>
+            </div>
 
-                    <div id="bapCalendarGrid"
-                        style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; margin-bottom: 12px;">
-                    </div>
+            <!-- Sticky Bottom Footer -->
+            <div class="wizard-footer">
+                <button type="button" class="btn-wizard-back" id="bapBackBtn" onclick="prevWizardStep('baptism')"
+                    style="visibility: hidden;">Back</button>
+                <button type="button" class="btn-wizard-next" id="bapNextBtn"
+                    onclick="nextWizardStep('baptism')">Next</button>
+            </div>
 
-                    <div id="bapTimeslotPanel" style="border-top: 1px solid #e4e6eb; padding-top: 12px; display: none;">
-                        <div id="bapSelectedDateHeader"
-                            style="font-size: 13px; font-weight: bold; color: #1c1e21; margin-bottom: 8px;"></div>
-                        <div id="bapTimeslotGrid" style="display: grid; grid-template-columns: 1fr; gap: 8px;">
-                        </div>
-                    </div>
-
-                    <input type="hidden" id="bapSelectedDateInput" name="preferredDate" required>
-                    <input type="hidden" id="bapSelectedTimeInput" name="confirmedTime" required>
-                </div>
-
-                <!-- Baptism Document Upload Section -->
-                <div class="form-document-section">
-                    <p class="form-section-title">Required Documents</p>
-                    <p class="doc-hint">Please upload clear copies of the following required documents (PDF, JPG,
-                        PNG):</p>
-
-                    <div style="margin-bottom: 15px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 13px; color: #2c3e50; margin-bottom: 5px;">1.
-                            Child's Birth Certificate (PSA / LCR) *</label>
-                        <div class="inline-drop-zone" onclick="document.getElementById('bapBirthCertFiles').click()"
-                            style="border: 2px dashed #cbd5e1; padding: 12px; border-radius: 6px; text-align: center; cursor: pointer; background: #f8fafc;">
-                            <span><svg class="ui-icon" aria-hidden="true" focusable="false">
-                                    <use href="#icon-file-text"></use>
-                                </svg> </span>
-                            <input type="file" id="bapBirthCertFiles" accept=".pdf,.jpg,.jpeg,.png"
-                                style="display:none;" onchange="handleInlineFiles(event, 'bapBirthCertList')">
-                        </div>
-                        <div class="file-preview-list" id="bapBirthCertList"></div>
-                    </div>
-
-                    <div style="margin-bottom: 15px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 13px; color: #2c3e50; margin-bottom: 5px;">2.
-                            Mother's Baptismal Certificate *</label>
-                        <div class="inline-drop-zone" onclick="document.getElementById('bapMotherFiles').click()"
-                            style="border: 2px dashed #cbd5e1; padding: 12px; border-radius: 6px; text-align: center; cursor: pointer; background: #f8fafc;">
-                            <span><svg class="ui-icon" aria-hidden="true" focusable="false">
-                                    <use href="#icon-file-text"></use>
-                                </svg></span>
-                            <input type="file" id="bapMotherFiles" accept=".pdf,.jpg,.jpeg,.png" style="display:none;"
-                                onchange="handleInlineFiles(event, 'bapMotherList')">
-                        </div>
-                        <div class="file-preview-list" id="bapMotherList"></div>
-                    </div>
-
-                    <div style="margin-bottom: 15px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 13px; color: #2c3e50; margin-bottom: 5px;">3.
-                            Father's Baptismal Certificate *</label>
-                        <div class="inline-drop-zone" onclick="document.getElementById('bapFatherFiles').click()"
-                            style="border: 2px dashed #cbd5e1; padding: 12px; border-radius: 6px; text-align: center; cursor: pointer; background: #f8fafc;">
-                            <span><svg class="ui-icon" aria-hidden="true" focusable="false">
-                                    <use href="#icon-file-text"></use>
-                                </svg> </span>
-                            <input type="file" id="bapFatherFiles" accept=".pdf,.jpg,.jpeg,.png" style="display:none;"
-                                onchange="handleInlineFiles(event, 'bapFatherList')">
-                        </div>
-                        <div class="file-preview-list" id="bapFatherList"></div>
-                    </div>
-                </div>
-
-                <!-- DATA PRIVACY ACT CONSENT -->
-                <div class="form-group"
-                    style="background: #f8f9fa; border: 1px solid #ccd0d5; padding: 12px; border-radius: 6px; margin: 15px 0;">
-                    <label
-                        style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer; font-size: 12px; color: #333; font-weight: normal;">
-                        <input type="checkbox" id="privacyConsentCheck" required
-                            style="margin-top: 2px; cursor: pointer;">
-                        <span>
-                            <strong>Data Privacy Consent:</strong> I hereby authorize Santuario Del Sto. Cristo
-                            Parish to collect, process, and store my personal and sacramental data provided in this
-                            form in compliance with the <strong>Philippine Data Privacy Act (RA 10173)</strong>.
-                        </span>
-                    </label>
-                </div>
-
-                <button type="submit" class="form-submit-btn">Submit Baptism Application</button>
-            </form>
         </div>
     </div>
 
-    <!-- 2. WEDDING APPLICATION FORM -->
-    <div class="modal-overlay" id="weddingModal">
-        <div class="modal-box">
-            <span class="close-btn" onclick="closeModal('weddingModal')">&times;</span>
-            <h2>Wedding Application</h2>
-            <form id="weddingForm" onsubmit="event.preventDefault(); saveApplicationLocally('wedding', this);">
+    <!-- =========================================================
+     WEDDING APPLICATION WIZARD MODAL (5 STEPS)
+     ========================================================= -->
+    <div class="wizard-overlay" id="weddingModal">
+        <div class="wizard-modal">
 
-                <!-- APPLICANT INFORMATION -->
-                <h4 style="color: #4a0e17; margin-top: 15px; margin-bottom: 8px;">Applicant's Information</h4>
-                <div class="form-row">
-                    <div style="display: flex; gap: 12px; margin-bottom: 15px; flex-wrap: wrap;">
-                        <div style="flex: 1; min-width: 180px;">
-                            <label
-                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">First
-                                Name *</label>
-                            <input type="text" id="applicantFirstName" name="applicantFirstName" required
-                                style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                        </div>
-                        <div style="flex: 1; min-width: 180px;">
-                            <label
-                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Last
-                                Name *</label>
-                            <input type="text" id="applicantLastName" name="applicantLastName" required
-                                style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                        </div>
-                        <div style="flex: 1; min-width: 220px;">
-                            <label
-                                style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Email
-                                Address *</label>
-                            <input type="email" id="applicantEmail" name="applicantEmail" required
-                                style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                        </div>
+            <!-- Sticky Top Header -->
+            <div class="wizard-header">
+                <div class="wizard-header-top">
+                    <h2>Wedding Application</h2>
+                    <button type="button" class="wizard-close-btn"
+                        onclick="closeWizardModal('weddingModal')">&times;</button>
+                </div>
+                <!-- Progress Indicator -->
+                <div class="wizard-progress" id="weddingProgress">
+                    <div class="wizard-step-item active" data-step="1">
+                        <span class="wizard-step-dot">1</span>
+                        <span class="wizard-step-label">Step 1: Couple</span>
+                    </div>
+                    <div class="wizard-progress-line"></div>
+                    <div class="wizard-step-item" data-step="2">
+                        <span class="wizard-step-dot">2</span>
+                        <span class="wizard-step-label">Step 2: Parents &amp; Witnesses</span>
+                    </div>
+                    <div class="wizard-progress-line"></div>
+                    <div class="wizard-step-item" data-step="3">
+                        <span class="wizard-step-dot">3</span>
+                        <span class="wizard-step-label">Step 3: Contact &amp; Details</span>
+                    </div>
+                    <div class="wizard-progress-line"></div>
+                    <div class="wizard-step-item" data-step="4">
+                        <span class="wizard-step-dot">4</span>
+                        <span class="wizard-step-label">Step 4: Schedule</span>
+                    </div>
+                    <div class="wizard-progress-line"></div>
+                    <div class="wizard-step-item" data-step="5">
+                        <span class="wizard-step-dot">5</span>
+                        <span class="wizard-step-label">Step 5: Documents</span>
                     </div>
                 </div>
+            </div>
 
-                <!-- GROOM'S INFORMATION -->
-                <h4 style="color: #4a0e17; margin-top: 15px; margin-bottom: 8px;">Groom's Information</h4>
-                <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
-                    <div class="form-group" style="flex: 2; min-width: 180px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">First
-                            Name *</label>
-                        <input type="text" name="groomFirstName" required
-                            style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                    </div>
-                    <div class="form-group" style="flex: 1; min-width: 80px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">M.I.</label>
-                        <input type="text" name="groomMiddleInitial" maxlength="3"
-                            style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                    </div>
-                    <div class="form-group" style="flex: 2; min-width: 180px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Last
-                            Name *</label>
-                        <input type="text" name="groomLastName" required
-                            style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                    </div>
-                </div>
+            <!-- Scrollable Middle Body -->
+            <div class="wizard-body">
+                <form id="weddingWizardForm" novalidate>
 
-                <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
-                    <div class="form-group" style="flex: 1; min-width: 100px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Age
-                            *</label>
-                        <input type="number" name="groomAge" required min="18"
-                            style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                    </div>
-                    <div class="form-group" style="flex: 2; min-width: 160px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Civil
-                            Status *</label>
-                        <select name="groomCivilStatus" required
-                            style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                            <option value="">Select Civil Status</option>
-                            <option value="Single">Single</option>
-                            <option value="Widower">Widower</option>
-                            <option value="Annulled">Annulled</option>
-                        </select>
-                    </div>
-                    <div class="form-group" style="flex: 2; min-width: 160px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Nationality
-                            *</label>
-                        <input type="text" name="groomNationality" required value="Filipino"
-                            style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                    </div>
-                </div>
+                    <!-- STEP 1: GROOM & BRIDE INFORMATION -->
+                    <div class="wizard-step-pane active" data-step="1">
 
-                <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
-                    <div class="form-group" style="flex: 1; min-width: 200px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Place
-                            of Birth *</label>
-                        <input type="text" name="groomPlaceOfBirth" required
-                            style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                    </div>
-                    <div class="form-group" style="flex: 1; min-width: 200px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Occupation
-                            *</label>
-                        <input type="text" name="groomOccupation" required
-                            style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                    </div>
-                </div>
-
-                <div class="form-row" style="margin-bottom: 10px;">
-                    <div class="form-group">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Present
-                            Residence / Address *</label>
-                        <input type="text" name="groomPresentResidence" required
-                            style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                    </div>
-                </div>
-
-                <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
-                    <div class="form-group" style="flex: 1; min-width: 200px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Father's
-                            Full Name *</label>
-                        <input type="text" name="groomFatherName" required
-                            style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                    </div>
-                    <div class="form-group" style="flex: 1; min-width: 200px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Mother's
-                            Full Maiden Name *</label>
-                        <input type="text" name="groomMotherName" required
-                            style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                    </div>
-                </div>
-
-                <!-- BRIDE'S INFORMATION -->
-                <h4 style="color: #4a0e17; margin-top: 15px; margin-bottom: 8px;">Bride's Information</h4>
-                <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
-                    <div class="form-group" style="flex: 2; min-width: 180px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">First
-                            Name *</label>
-                        <input type="text" name="brideFirstName" required
-                            style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                    </div>
-                    <div class="form-group" style="flex: 1; min-width: 80px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">M.I.</label>
-                        <input type="text" name="brideMiddleInitial" maxlength="3"
-                            style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                    </div>
-                    <div class="form-group" style="flex: 2; min-width: 180px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Last
-                            Name *</label>
-                        <input type="text" name="brideLastName" required
-                            style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                    </div>
-                </div>
-
-                <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
-                    <div class="form-group" style="flex: 1; min-width: 100px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Age
-                            *</label>
-                        <input type="number" name="brideAge" required min="18"
-                            style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                    </div>
-                    <div class="form-group" style="flex: 2; min-width: 160px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Civil
-                            Status *</label>
-                        <select name="brideCivilStatus" required
-                            style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                            <option value="">Select Civil Status</option>
-                            <option value="Single">Single</option>
-                            <option value="Widow">Widow</option>
-                            <option value="Annulled">Annulled</option>
-                        </select>
-                    </div>
-                    <div class="form-group" style="flex: 2; min-width: 160px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Nationality
-                            *</label>
-                        <input type="text" name="brideNationality" required value="Filipino"
-                            style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                    </div>
-                </div>
-
-                <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
-                    <div class="form-group" style="flex: 1; min-width: 200px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Place
-                            of Birth *</label>
-                        <input type="text" name="bridePlaceOfBirth" required
-                            style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                    </div>
-                    <div class="form-group" style="flex: 1; min-width: 200px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Occupation
-                            *</label>
-                        <input type="text" name="brideOccupation" required
-                            style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                    </div>
-                </div>
-
-                <div class="form-row" style="margin-bottom: 10px;">
-                    <div class="form-group">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Present
-                            Residence / Address *</label>
-                        <input type="text" name="bridePresentResidence" required
-                            style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                    </div>
-                </div>
-
-                <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
-                    <div class="form-group" style="flex: 1; min-width: 200px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Father's
-                            Full Name *</label>
-                        <input type="text" name="brideFatherName" required
-                            style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                    </div>
-                    <div class="form-group" style="flex: 1; min-width: 200px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Mother's
-                            Full Maiden Name *</label>
-                        <input type="text" name="brideMotherName" required
-                            style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                    </div>
-                </div>
-
-                <!-- PRINCIPAL SPONSORS & DYNAMIC OTHERS -->
-                <div style="border-top: 1px solid #e2e8f0; padding-top: 16px; margin-top: 16px;">
-                    <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;">Principal Sponsors</h4>
-                    <div style="display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap;">
-                        <div style="flex: 1; min-width: 200px;">
-                            <label
-                                style="display: block; font-size: 12px; font-weight: bold; color: #2c3e50; margin-bottom: 4px;">Principal
-                                Ninong *</label>
-                            <input type="text" name="principalNinong" required
-                                style="width:100%; padding:10px 12px; border:1px solid #ccd0d5; border-radius:6px; font-size: 14px;">
-                        </div>
-                        <div style="flex: 1; min-width: 200px;">
-                            <label
-                                style="display: block; font-size: 12px; font-weight: bold; color: #2c3e50; margin-bottom: 4px;">Principal
-                                Ninang *</label>
-                            <input type="text" name="principalNinang" required
-                                style="width:100%; padding:10px 12px; border:1px solid #ccd0d5; border-radius:6px; font-size: 14px;">
-                        </div>
-                    </div>
-
-                    <h4 style="margin: 15px 0 8px 0; color: #4a0e17; font-size: 14px;">Additional Sponsors (Maximum
-                        of 6)</h4>
-                    <div id="weddingSponsorsList"></div>
-                    <button type="button" id="addSponsorBtn" onclick="addWeddingSponsorRow()"
-                        style="background: #f1f5f9; border: 1px dashed #cbd5e1; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; color: #334155; font-weight: bold;">+
-                        Add Additional Sponsor</button>
-                </div>
-
-                <!-- GUEST PRIEST / OFFICIANT SECTION -->
-                <div style="border-top: 1px solid #e2e8f0; padding-top: 16px; margin-top: 16px;">
-                    <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;">Wedding Officiant Details</h4>
-
-                    <div style="margin-bottom: 12px;">
-                        <label
-                            style="display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; font-weight: bold; color: #2c3e50;">
-                            <input type="checkbox" id="hasGuestPriest" name="hasGuestPriest"
-                                onchange="toggleGuestPriestFields()"
-                                style="width: 16px; height: 16px; cursor: pointer;">
-                            Will you be bringing a Guest Priest from another parish?
-                        </label>
-                    </div>
-
-                    <div id="guestPriestDetailsGroup"
-                        style="display: none; background: #f8fafc; padding: 14px; border-radius: 6px; border: 1px solid #e2e8f0;">
-                        <div style="margin-bottom: 10px;">
-                            <label
-                                style="display: block; font-weight: bold; font-size: 13px; color: #2c3e50; margin-bottom: 5px;">Guest
-                                Priest Full Name & Parish *</label>
-                            <input type="text" id="guestPriestName" name="guestPriestName"
-                                style="width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 5px; font-size: 14px;">
-                        </div>
-                        <div
-                            style="background: #fff3cd; border: 1px solid #ffeeba; color: #856404; padding: 10px; border-radius: 4px; font-size: 12px; margin-top: 8px;">
-                            ⚠️ <strong>Guest Priest Requirements:</strong> A copy of the priest's <strong>License to
-                                Marry</strong> must be uploaded below, and a guest priest fee of
-                            <strong>₱10,000</strong> applies.
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ELECTRICITY / VIDEO FEE OPTION -->
-                <div style="border-top: 1px solid #e2e8f0; padding-top: 16px; margin-top: 16px;">
-                    <h4 style="margin: 0 0 12px 0; color: #4a0e17; font-size: 15px;">Optional Fees & Services</h4>
-                    <div style="background: #f8fafc; padding: 14px; border-radius: 6px; border: 1px solid #e2e8f0;">
-                        <label
-                            style="display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; font-weight: bold; color: #2c3e50;">
-                            <input type="checkbox" id="electricityFee" name="electricityFee" value="1000"
-                                style="width: 16px; height: 16px; cursor: pointer;">
-                            Include Electricity / Video Fee (+₱1,000) for professional photo/video equipment
-                        </label>
-                    </div>
-                </div>
-
-                <!-- DEDICATED WEDDING SCHEDULING CALENDAR -->
-                <div class="fb-calendar-container"
-                    style="background: #ffffff; border: 1px solid #ccd0d5; border-radius: 8px; padding: 16px; margin: 15px 0; font-family: Helvetica, Arial, sans-serif;">
-                    <div
-                        style="background: #e7f3ff; border-left: 4px solid #1877f2; padding: 10px; font-size: 12px; color: #1c1e21; margin-bottom: 15px;">
-                        <strong><svg class="ui-icon" aria-hidden="true" focusable="false">
-                                <use href="#icon-church"></use>
-                            </svg> Wedding Schedule Rules:</strong><br>
-                        Available <strong>Tuesday to Saturday</strong>.<br>
-                        Time slots: <strong>10:30 AM</strong> and <strong>3:00 PM</strong> (Strictly 1 slot per time
-                        block).
-                    </div>
-
-                    <div
-                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <h4 id="weddingMonthYearLabel"
-                            style="margin: 0; color: #1c1e21; font-size: 1.05rem; font-weight: bold;">Month Year
-                        </h4>
-                        <div style="display: flex; gap: 6px;">
-                            <button type="button" onclick="changeWeddingCalendarMonth(-1)"
-                                style="background: #e4e6eb; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-weight: bold;">&lt;</button>
-                            <button type="button" onclick="changeWeddingCalendarMonth(1)"
-                                style="background: #e4e6eb; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-weight: bold;">&gt;</button>
-                        </div>
-                    </div>
-
-                    <div
-                        style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: bold; font-size: 11px; color: #606770; margin-bottom: 6px;">
-                        <div>Sun</div>
-                        <div>Mon</div>
-                        <div>Tue</div>
-                        <div>Wed</div>
-                        <div>Thu</div>
-                        <div>Fri</div>
-                        <div>Sat</div>
-                    </div>
-
-                    <div id="weddingCalendarGrid"
-                        style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; margin-bottom: 12px;">
-                    </div>
-
-                    <div id="weddingTimeslotPanel"
-                        style="border-top: 1px solid #e4e6eb; padding-top: 12px; display: none;">
-                        <div id="weddingSelectedDateHeader"
-                            style="font-size: 13px; font-weight: bold; color: #1c1e21; margin-bottom: 8px;"></div>
-                        <div id="weddingTimeslotGrid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                        </div>
-                    </div>
-
-                    <input type="hidden" id="weddingSelectedDateInput" name="preferredDate" required>
-                    <input type="hidden" id="weddingSelectedTimeInput" name="confirmedTime" required>
-                </div>
-
-                <!-- Wedding Document Upload Section -->
-                <div class="form-document-section">
-                    <div class="form-document-section">
-                        <p class="form-section-title">Required Wedding Documents</p>
-                        <p class="doc-hint">Please upload clear copies of the required documents (PDF, JPG, PNG):
-                        </p>
-
-                        <!-- 1. PSA Birth Certificates -->
-                        <div style="margin-bottom: 15px;">
-                            <label
-                                style="display: block; font-weight: bold; font-size: 13px; color: #2c3e50; margin-bottom: 5px;">
-                                1. PSA Birth Certificates (Groom & Bride) *
-                            </label>
-                            <div class="inline-drop-zone" onclick="document.getElementById('wedBirthCertFiles').click()"
-                                style="border: 2px dashed #cbd5e1; padding: 12px; border-radius: 6px; text-align: center; cursor: pointer; background: #f8fafc;">
-                                <span><svg class="ui-icon" aria-hidden="true" focusable="false">
-                                        <use href="#icon-file-text"></use>
-                                    </svg></span>
-                                <input type="file" id="wedBirthCertFiles" multiple accept=".pdf,.jpg,.jpeg,.png"
-                                    style="display:none;" onchange="handleInlineFiles(event, 'wedBirthCertList')">
+                        <!-- Applicant Information Reference -->
+                        <div class="wizard-card">
+                            <h3 class="wizard-section-title">Applicant's Information</h3>
+                            <div class="wizard-grid-3">
+                                <div class="wizard-field">
+                                    <label for="wedApplicantFirstName">First Name </label>
+                                    <input type="text" id="wedApplicantFirstName" name="applicantFirstName"
+                                        class="wizard-input" required>
+                                    <div class="field-error-msg">First name is required.</div>
+                                </div>
+                                <div class="wizard-field">
+                                    <label for="wedApplicantLastName">Last Name </label>
+                                    <input type="text" id="wedApplicantLastName" name="applicantLastName"
+                                        class="wizard-input" required>
+                                    <div class="field-error-msg">Last name is required.</div>
+                                </div>
+                                <div class="wizard-field">
+                                    <label for="wedApplicantEmail">Email Address </label>
+                                    <input type="email" id="wedApplicantEmail" name="applicantEmail"
+                                        class="wizard-input" required>
+                                    <div class="field-error-msg">Valid email is required.</div>
+                                </div>
                             </div>
-                            <div class="file-preview-list" id="wedBirthCertList"></div>
                         </div>
 
-                        <!-- 2. CENOMAR -->
-                        <div style="margin-bottom: 15px;">
-                            <label
-                                style="display: block; font-weight: bold; font-size: 13px; color: #2c3e50; margin-bottom: 5px;">
-                                2. CENOMAR (Certificate of No Marriage) *
-                            </label>
-                            <div class="inline-drop-zone" onclick="document.getElementById('wedCenomarFiles').click()"
-                                style="border: 2px dashed #cbd5e1; padding: 12px; border-radius: 6px; text-align: center; cursor: pointer; background: #f8fafc;">
-                                <span><svg class="ui-icon" aria-hidden="true" focusable="false">
-                                        <use href="#icon-file-text"></use>
-                                    </svg></span>
-                                <input type="file" id="wedCenomarFiles" multiple accept=".pdf,.jpg,.jpeg,.png"
-                                    style="display:none;" onchange="handleInlineFiles(event, 'wedCenomarList')">
-                            </div>
-                            <div class="file-preview-list" id="wedCenomarList"></div>
-                        </div>
+                        <!-- Groom & Bride Two-Column Side-by-Side Cards -->
+                        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
 
-                        <!-- 3. New Baptismal & Confirmation Certificates -->
-                        <div style="margin-bottom: 15px;">
-                            <label
-                                style="display: block; font-weight: bold; font-size: 13px; color: #2c3e50; margin-bottom: 5px;">
-                                3. New Baptismal & Confirmation Certificates (with Marriage Annotation) *
-                            </label>
-                            <div class="inline-drop-zone"
-                                onclick="document.getElementById('wedAnnotationFiles').click()"
-                                style="border: 2px dashed #cbd5e1; padding: 12px; border-radius: 6px; text-align: center; cursor: pointer; background: #f8fafc;">
-                                <span><svg class="ui-icon" aria-hidden="true" focusable="false">
-                                        <use href="#icon-file-text"></use>
-                                    </svg></span>
-                                <input type="file" id="wedAnnotationFiles" multiple accept=".pdf,.jpg,.jpeg,.png"
-                                    style="display:none;" onchange="handleInlineFiles(event, 'wedAnnotationList')">
-                            </div>
-                            <div class="file-preview-list" id="wedAnnotationList"></div>
-                        </div>
+                            <!-- Groom Column -->
+                            <div class="wizard-card" style="flex: 1; min-width: 280px; margin-bottom: 0;">
+                                <h3 class="wizard-section-title" style="color: #4a0e17;">Groom's Information</h3>
 
-                        <!-- 4. Marriage License / Contract -->
-                        <div style="margin-bottom: 15px;">
-                            <label
-                                style="display: block; font-weight: bold; font-size: 13px; color: #2c3e50; margin-bottom: 5px;">
-                                4. Marriage License (or Civil Marriage Contract with Registry Number) *
-                            </label>
-                            <div class="inline-drop-zone" onclick="document.getElementById('wedLicenseFiles').click()"
-                                style="border: 2px dashed #cbd5e1; padding: 12px; border-radius: 6px; text-align: center; cursor: pointer; background: #f8fafc;">
-                                <span><svg class="ui-icon" aria-hidden="true" focusable="false">
-                                        <use href="#icon-file-text"></use>
-                                    </svg></span>
-                                <input type="file" id="wedLicenseFiles" multiple accept=".pdf,.jpg,.jpeg,.png"
-                                    style="display:none;" onchange="handleInlineFiles(event, 'wedLicenseList')">
-                            </div>
-                            <div class="file-preview-list" id="wedLicenseList"></div>
-                        </div>
+                                <div class="wizard-field">
+                                    <label>Groom's Name </label>
+                                    <div style="display: flex; gap: 6px;">
+                                        <input type="text" name="groomFirstName" placeholder="First Name"
+                                            class="wizard-input" style="flex: 2;" required>
+                                        <input type="text" name="groomMiddleInitial" placeholder="M.I." maxlength="3"
+                                            class="wizard-input" style="flex: 0.8;">
+                                        <input type="text" name="groomLastName" placeholder="Last Name"
+                                            class="wizard-input" style="flex: 2;" required>
+                                    </div>
+                                    <div class="field-error-msg">Groom's full name is required.</div>
+                                </div>
 
-                        <!-- GUEST PRIEST LICENSE REQUIREMENT CONTAINER -->
-                        <div id="guestPriestDocContainer"
-                            style="display: none; margin-top: 20px; padding: 14px; background: #fffbeb; border: 1px solid #f59e0b; border-radius: 6px;">
-                            <label
-                                style="display: block; font-weight: bold; font-size: 13px; color: #b45309; margin-bottom: 5px;">
-                                5. Guest Priest's License to Marry (Required for Guest Priest) *
-                            </label>
-                            <p style="font-size: 11px; color: #78350f; margin: 0 0 8px 0;">Since you checked the box
-                                to bring a guest priest, please upload their official License to Marry document.</p>
-                            <div class="inline-drop-zone"
-                                onclick="document.getElementById('guestPriestLicenseFiles').click()"
-                                style="border: 2px dashed #f59e0b; padding: 12px; border-radius: 6px; text-align: center; cursor: pointer; background: #fffdf9;">
-                                <span><svg class="ui-icon" aria-hidden="true" focusable="false">
-                                        <use href="#icon-file-text"></use>
-                                    </svg></span>
-                                <input type="file" id="guestPriestLicenseFiles" accept=".pdf,.jpg,.jpeg,.png"
-                                    style="display:none;" onchange="handleInlineFiles(event, 'guestPriestLicenseList')">
+                                <div class="wizard-grid-2">
+                                    <div class="wizard-field">
+                                        <label>Date of Birth </label>
+                                        <input type="date" name="groomDOB" class="wizard-input" required>
+                                        <div class="field-error-msg">DOB is required.</div>
+                                    </div>
+                                    <div class="wizard-field">
+                                        <label>Age </label>
+                                        <input type="number" name="groomAge" min="18" class="wizard-input" required>
+                                        <div class="field-error-msg">Valid age required.</div>
+                                    </div>
+                                </div>
+
+                                <div class="wizard-grid-2">
+                                    <div class="wizard-field">
+                                        <label>Civil Status </label>
+                                        <select name="groomCivilStatus" class="wizard-select" required>
+                                            <option value="">Select Status</option>
+                                            <option value="Single">Single</option>
+                                            <option value="Widower">Widower</option>
+                                            <option value="Annulled">Annulled</option>
+                                        </select>
+                                        <div class="field-error-msg">Select civil status.</div>
+                                    </div>
+                                    <div class="wizard-field">
+                                        <label>Nationality </label>
+                                        <input type="text" name="groomNationality" class="wizard-input" required>
+                                        <div class="field-error-msg">Nationality is required.</div>
+                                    </div>
+                                </div>
+
+                                <div class="wizard-field">
+                                    <label>Place of Birth </label>
+                                    <input type="text" name="groomPlaceOfBirth" class="wizard-input" required>
+                                    <div class="field-error-msg">Place of birth is required.</div>
+                                </div>
+
+                                <div class="wizard-field">
+                                    <label>Occupation </label>
+                                    <input type="text" name="groomOccupation" class="wizard-input" required>
+                                    <div class="field-error-msg">Occupation is required.</div>
+                                </div>
+
+                                <div class="wizard-field" style="margin-bottom: 0;">
+                                    <label>Present Residence </label>
+                                    <input type="text" name="groomPresentResidence" class="wizard-input" required>
+                                    <div class="field-error-msg">Residence is required.</div>
+                                </div>
                             </div>
-                            <div class="file-preview-list" id="guestPriestLicenseList"></div>
+
+                            <!-- Bride Column -->
+                            <div class="wizard-card" style="flex: 1; min-width: 280px; margin-bottom: 0;">
+                                <h3 class="wizard-section-title" style="color: #4a0e17;">Bride's Information</h3>
+
+                                <div class="wizard-field">
+                                    <label>Bride's Name </label>
+                                    <div style="display: flex; gap: 6px;">
+                                        <input type="text" name="brideFirstName" placeholder="First Name"
+                                            class="wizard-input" style="flex: 2;" required>
+                                        <input type="text" name="brideMiddleInitial" placeholder="M.I." maxlength="3"
+                                            class="wizard-input" style="flex: 0.8;">
+                                        <input type="text" name="brideLastName" placeholder="Last Name"
+                                            class="wizard-input" style="flex: 2;" required>
+                                    </div>
+                                    <div class="field-error-msg">Bride's full name is required.</div>
+                                </div>
+
+                                <div class="wizard-grid-2">
+                                    <div class="wizard-field">
+                                        <label>Date of Birth </label>
+                                        <input type="date" name="brideDOB" class="wizard-input" required>
+                                        <div class="field-error-msg">DOB is required.</div>
+                                    </div>
+                                    <div class="wizard-field">
+                                        <label>Age </label>
+                                        <input type="number" name="brideAge" min="18" class="wizard-input" required>
+                                        <div class="field-error-msg">Valid age required.</div>
+                                    </div>
+                                </div>
+
+                                <div class="wizard-grid-2">
+                                    <div class="wizard-field">
+                                        <label>Civil Status </label>
+                                        <select name="brideCivilStatus" class="wizard-select" required>
+                                            <option value="">Select Status</option>
+                                            <option value="Single">Single</option>
+                                            <option value="Widow">Widow</option>
+                                            <option value="Annulled">Annulled</option>
+                                        </select>
+                                        <div class="field-error-msg">Select civil status.</div>
+                                    </div>
+                                    <div class="wizard-field">
+                                        <label>Nationality </label>
+                                        <input type="text" name="brideNationality" class="wizard-input" required>
+                                        <div class="field-error-msg">Nationality is required.</div>
+                                    </div>
+                                </div>
+
+                                <div class="wizard-field">
+                                    <label>Place of Birth </label>
+                                    <input type="text" name="bridePlaceOfBirth" class="wizard-input" required>
+                                    <div class="field-error-msg">Place of birth is required.</div>
+                                </div>
+
+                                <div class="wizard-field">
+                                    <label>Occupation </label>
+                                    <input type="text" name="brideOccupation" class="wizard-input" required>
+                                    <div class="field-error-msg">Occupation is required.</div>
+                                </div>
+
+                                <div class="wizard-field" style="margin-bottom: 0;">
+                                    <label>Present Residence </label>
+                                    <input type="text" name="bridePresentResidence" class="wizard-input" required>
+                                    <div class="field-error-msg">Residence is required.</div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
-                </div>
 
-                <!-- DATA PRIVACY ACT CONSENT -->
-                <div class="form-group"
-                    style="background: #f8f9fa; border: 1px solid #ccd0d5; padding: 12px; border-radius: 6px; margin: 15px 0;">
-                    <label
-                        style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer; font-size: 12px; color: #333; font-weight: normal;">
-                        <input type="checkbox" id="privacyConsentCheck" required
-                            style="margin-top: 2px; cursor: pointer;">
-                        <span>
-                            <strong>Data Privacy Consent:</strong> I hereby authorize Santuario Del Sto. Cristo
-                            Parish to collect, process, and store my personal and sacramental data provided in this
-                            form in compliance with the <strong>Philippine Data Privacy Act (RA 10173)</strong>. I
-                            understand my data will be used strictly for parish record-keeping, verification, and
-                            ceremony scheduling.
-                        </span>
-                    </label>
-                </div>
+                    <!-- STEP 2: PARENTS & WITNESSES -->
+                    <div class="wizard-step-pane" data-step="2">
+                        <div class="wizard-card">
+                            <h3 class="wizard-section-title">Parents &amp; Witnesses</h3>
 
-                <button type="submit" class="form-submit-btn">Submit Wedding Application</button>
-            </form>
+                            <!-- Parents Names -->
+                            <div style="margin-bottom: 16px;">
+                                <label
+                                    style="font-weight: bold; font-size: 13px; color: #4a0e17; display: block; margin-bottom: 8px;">Mother's
+                                    Full Name (Maiden)</label>
+                                <div class="wizard-grid-2">
+                                    <div class="wizard-field" style="margin-bottom: 0;">
+                                        <input type="text" name="groomMotherName" placeholder="Groom's Mother"
+                                            class="wizard-input" required>
+                                        <div class="field-error-msg">Groom's mother's name is required.</div>
+                                    </div>
+                                    <div class="wizard-field" style="margin-bottom: 0;">
+                                        <input type="text" name="brideMotherName" placeholder="Bride's Mother"
+                                            class="wizard-input" required>
+                                        <div class="field-error-msg">Bride's mother's name is required.</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="margin-bottom: 16px;">
+                                <label
+                                    style="font-weight: bold; font-size: 13px; color: #4a0e17; display: block; margin-bottom: 8px;">Father's
+                                    Full Name</label>
+                                <div class="wizard-grid-2">
+                                    <div class="wizard-field" style="margin-bottom: 0;">
+                                        <input type="text" name="groomFatherName" placeholder="Groom's Father"
+                                            class="wizard-input" required>
+                                        <div class="field-error-msg">Groom's father's name is required.</div>
+                                    </div>
+                                    <div class="wizard-field" style="margin-bottom: 0;">
+                                        <input type="text" name="brideFatherName" placeholder="Bride's Father"
+                                            class="wizard-input" required>
+                                        <div class="field-error-msg">Bride's father's name is required.</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Principal Sponsors -->
+                            <div style="border-top: 1px solid #e2e8f0; padding-top: 14px;">
+                                <label
+                                    style="font-weight: bold; font-size: 13px; color: #4a0e17; display: block; margin-bottom: 8px;">Principal
+                                    Sponsors (Witnesses)</label>
+                                <div class="wizard-grid-2" style="margin-bottom: 10px;">
+                                    <div class="wizard-field" style="margin-bottom: 0;">
+                                        <input type="text" name="principalNinong"
+                                            placeholder="Primary Male Sponsor (Ninong)" class="wizard-input" required>
+                                        <div class="field-error-msg">Primary male sponsor is required.</div>
+                                    </div>
+                                    <div class="wizard-field" style="margin-bottom: 0;">
+                                        <input type="text" name="principalNinang"
+                                            placeholder="Primary Female Sponsor (Ninang)" class="wizard-input" required>
+                                        <div class="field-error-msg">Primary female sponsor is required.</div>
+                                    </div>
+                                </div>
+
+                                <div id="weddingSponsorsList"
+                                    style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px;"></div>
+
+                                <button type="button" id="addSponsorBtn" onclick="addWeddingSponsorRow()"
+                                    style="background: #f1f5f9; border: 1px dashed #cbd5e1; padding: 7px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px; color: #1e293b;">
+                                    + Add Principal Sponsors
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- STEP 3: CONTACT & CEREMONY DETAILS -->
+                    <div class="wizard-step-pane" data-step="3">
+                        <div class="wizard-card">
+                            <h3 class="wizard-section-title">Contact &amp; Ceremony Details</h3>
+
+                            <div class="wizard-grid-2">
+                                <div class="wizard-field">
+                                    <label for="wedContactNumber">Contact Number (Tel / Mobile) </label>
+                                    <input type="tel" id="wedContactNumber" name="contactNumber" class="wizard-input"
+                                        placeholder="e.g. 09123456789" required>
+                                    <div class="field-error-msg">Contact number is required.</div>
+                                </div>
+                                <div class="wizard-field">
+                                    <label for="wedAddress">Current Residence Address </label>
+                                    <input type="text" id="wedAddress" name="weddingAddress" class="wizard-input"
+                                        placeholder="e.g. San Juan City" required>
+                                    <div class="field-error-msg">Address is required.</div>
+                                </div>
+                            </div>
+
+                            <!-- Guest Priest Section -->
+                            <div
+                                style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 14px; border-radius: 8px; margin-top: 14px;">
+                                <label
+                                    style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; font-weight: bold; color: #1e293b; margin-bottom: 0;">
+                                    <input type="checkbox" id="hasGuestPriest" name="hasGuestPriest"
+                                        onchange="toggleGuestPriestFields()"
+                                        style="width: 18px; height: 18px; cursor: pointer; accent-color: #4a0e17;">
+                                    Requested Officiating Priest (Guest Priest)
+                                </label>
+
+                                <div id="guestPriestDetailsGroup"
+                                    style="display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid #e2e8f0;">
+                                    <div class="wizard-grid-2" style="margin-bottom: 10px;">
+                                        <div class="wizard-field" style="margin-bottom: 0;">
+                                            <label>Name of Guest Priest</label>
+                                            <input type="text" id="guestPriestName" name="guestPriestName"
+                                                class="wizard-input">
+                                        </div>
+                                        <div class="wizard-field" style="margin-bottom: 0;">
+                                            <label>Home Parish</label>
+                                            <input type="text" id="guestPriestHomeParish" name="guestPriestHomeParish"
+                                                class="wizard-input">
+                                        </div>
+                                    </div>
+                                    <div class="wizard-grid-3" style="margin-bottom: 10px;">
+                                        <div class="wizard-field" style="margin-bottom: 0;">
+                                            <label>Contact Number</label>
+                                            <input type="text" id="guestPriestContact" name="guestPriestContact"
+                                                class="wizard-input">
+                                        </div>
+                                        <div class="wizard-field" style="margin-bottom: 0;">
+                                            <label>License No.</label>
+                                            <input type="text" id="guestPriestLicenseNo" name="guestPriestLicenseNo"
+                                                class="wizard-input">
+                                        </div>
+                                        <div class="wizard-field" style="margin-bottom: 0;">
+                                            <label>Expiry Date</label>
+                                            <input type="date" id="guestPriestLicenseExpiry"
+                                                name="guestPriestLicenseExpiry" class="wizard-input">
+                                        </div>
+                                    </div>
+                                    <div
+                                        style="background: #fff3cd; border: 1px solid #ffeeba; color: #856404; padding: 8px; border-radius: 4px; font-size: 11px;">
+                                        ⚠️ <strong>Guest Priest Note:</strong> A copy of the priest's <strong>License to
+                                            Marry</strong> must be uploaded in Step 5, and an additional guest priest
+                                        fee of <strong>₱10,000</strong> applies.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Electricity / Video Fee -->
+                            <div style="margin-top: 14px;">
+                                <label
+                                    style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; font-weight: bold; color: #1e293b;">
+                                    <input type="checkbox" id="electricityFee" name="electricityFee" value="1000"
+                                        style="width: 18px; height: 18px; cursor: pointer; accent-color: #4a0e17;">
+                                    Electricity / Video Recording Fee (+₱1,000)
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- STEP 4: SCHEDULE (Interactive Wedding Calendar) -->
+                    <div class="wizard-step-pane" data-step="4">
+                        <div class="wizard-card">
+                            <h3 class="wizard-section-title">Wedding Schedule</h3>
+
+                            <div
+                                style="background: #e7f3ff; border-left: 4px solid #1877f2; padding: 10px; font-size: 12px; color: #1c1e21; margin-bottom: 14px; border-radius: 4px;">
+                                <strong>Wedding Schedule Rules:</strong><br>
+                                Available <strong>Tuesday to Saturday</strong> (Must be at least 30 days in
+                                advance).<br>
+                                Time slots: <strong>10:30 AM</strong> and <strong>3:00 PM</strong> (Strictly 1 wedding
+                                per day).
+                            </div>
+
+                            <!-- Calendar Container -->
+                            <div class="fb-calendar-container"
+                                style="background: #ffffff; border: 1px solid #ccd0d5; border-radius: 8px; padding: 14px; font-family: Helvetica, Arial, sans-serif;">
+                                <div
+                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                    <h4 id="weddingMonthYearLabel"
+                                        style="margin: 0; color: #1c1e21; font-size: 1rem; font-weight: bold;">Month
+                                        Year</h4>
+                                    <div style="display: flex; gap: 6px;">
+                                        <button type="button" onclick="changeWeddingCalendarMonth(-1)"
+                                            style="background: #e4e6eb; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-weight: bold;">&lt;</button>
+                                        <button type="button" onclick="changeWeddingCalendarMonth(1)"
+                                            style="background: #e4e6eb; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-weight: bold;">&gt;</button>
+                                    </div>
+                                </div>
+                                <div
+                                    style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: bold; font-size: 11px; color: #606770; margin-bottom: 6px;">
+                                    <div>Sun</div>
+                                    <div>Mon</div>
+                                    <div>Tue</div>
+                                    <div>Wed</div>
+                                    <div>Thu</div>
+                                    <div>Fri</div>
+                                    <div>Sat</div>
+                                </div>
+                                <div id="weddingCalendarGrid"
+                                    style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; margin-bottom: 10px;">
+                                </div>
+                                <div id="weddingTimeslotPanel"
+                                    style="border-top: 1px solid #e4e6eb; padding-top: 10px; display: none;">
+                                    <div id="weddingSelectedDateHeader"
+                                        style="font-size: 12px; font-weight: bold; color: #1c1e21; margin-bottom: 6px;">
+                                    </div>
+                                    <div id="weddingTimeslotGrid"
+                                        style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;"></div>
+                                </div>
+                                <input type="hidden" id="weddingSelectedDateInput" name="preferredDate" required>
+                                <input type="hidden" id="weddingSelectedTimeInput" name="confirmedTime" required>
+                                <div class="field-error-msg" id="weddingScheduleError">Please select a valid wedding
+                                    date and time slot from the calendar.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 5: UPLOAD DOCUMENTS & DATA PRIVACY -->
+                    <div class="wizard-step-pane" data-step="5">
+                        <div class="wizard-card">
+                            <h3 class="wizard-section-title">Required Wedding Documents</h3>
+                            <p style="font-size: 13px; color: #475569; margin-top: 0;">Please upload clear copies of the
+                                required documents (PDF, JPG, PNG):</p>
+
+                            <!-- 1. PSA Birth Certificates -->
+                            <div class="wizard-field">
+                                <label>1. PSA Birth Certificates (Groom &amp; Bride) </label>
+                                <div class="doc-upload-box" id="wedBirthCertBox"
+                                    onclick="document.getElementById('wedBirthCertFiles').click()">
+                                    <strong style="color: #4a0e17; font-size: 13px;">Click to Upload PSA Birth
+                                        Certificates</strong>
+                                    <div style="font-size: 12px; color: #64748b; margin-top: 4px;">PDF, JPG, PNG</div>
+                                    <div class="doc-file-name" id="wedBirthCertFileName"></div>
+                                    <input type="file" id="wedBirthCertFiles" multiple accept=".pdf,.jpg,.jpeg,.png"
+                                        style="display:none;"
+                                        onchange="handleWizardFileSelect(this, 'wedBirthCertFileName', 'wedBirthCertBox')">
+                                </div>
+                                <div class="field-error-msg" id="wedBirthCertError">Please upload PSA Birth
+                                    Certificates.</div>
+                            </div>
+
+                            <!-- 2. CENOMAR -->
+                            <div class="wizard-field">
+                                <label>2. CENOMAR (Certificate of No Marriage) </label>
+                                <div class="doc-upload-box" id="wedCenomarBox"
+                                    onclick="document.getElementById('wedCenomarFiles').click()">
+                                    <strong style="color: #4a0e17; font-size: 13px;">Click to Upload CENOMAR</strong>
+                                    <div style="font-size: 12px; color: #64748b; margin-top: 4px;">PDF, JPG, PNG</div>
+                                    <div class="doc-file-name" id="wedCenomarFileName"></div>
+                                    <input type="file" id="wedCenomarFiles" multiple accept=".pdf,.jpg,.jpeg,.png"
+                                        style="display:none;"
+                                        onchange="handleWizardFileSelect(this, 'wedCenomarFileName', 'wedCenomarBox')">
+                                </div>
+                                <div class="field-error-msg" id="wedCenomarError">Please upload CENOMAR documents.</div>
+                            </div>
+
+                            <!-- 3. New Baptismal & Confirmation Certificates -->
+                            <div class="wizard-field">
+                                <label>3. New Baptismal &amp; Confirmation Certificates (with Marriage Annotation)
+                                    </label>
+                                <div class="doc-upload-box" id="wedAnnotationBox"
+                                    onclick="document.getElementById('wedAnnotationFiles').click()">
+                                    <strong style="color: #4a0e17; font-size: 13px;">Click to Upload Annotated
+                                        Certificates</strong>
+                                    <div style="font-size: 12px; color: #64748b; margin-top: 4px;">PDF, JPG, PNG</div>
+                                    <div class="doc-file-name" id="wedAnnotationFileName"></div>
+                                    <input type="file" id="wedAnnotationFiles" multiple accept=".pdf,.jpg,.jpeg,.png"
+                                        style="display:none;"
+                                        onchange="handleWizardFileSelect(this, 'wedAnnotationFileName', 'wedAnnotationBox')">
+                                </div>
+                                <div class="field-error-msg" id="wedAnnotationError">Please upload annotated
+                                    baptismal/confirmation certificates.</div>
+                            </div>
+
+                            <!-- 4. Marriage License / Contract -->
+                            <div class="wizard-field">
+                                <label>4. Marriage License (or Civil Marriage Contract with Registry Number) </label>
+                                <div class="doc-upload-box" id="wedLicenseBox"
+                                    onclick="document.getElementById('wedLicenseFiles').click()">
+                                    <strong style="color: #4a0e17; font-size: 13px;">Click to Upload Marriage
+                                        License</strong>
+                                    <div style="font-size: 12px; color: #64748b; margin-top: 4px;">PDF, JPG, PNG</div>
+                                    <div class="doc-file-name" id="wedLicenseFileName"></div>
+                                    <input type="file" id="wedLicenseFiles" multiple accept=".pdf,.jpg,.jpeg,.png"
+                                        style="display:none;"
+                                        onchange="handleWizardFileSelect(this, 'wedLicenseFileName', 'wedLicenseBox')">
+                                </div>
+                                <div class="field-error-msg" id="wedLicenseError">Please upload the Marriage License or
+                                    Contract.</div>
+                            </div>
+
+                            <!-- Guest Priest License Container (Conditionally shown if guest priest checked) -->
+                            <div id="guestPriestDocContainer"
+                                style="display: none; margin-bottom: 16px; padding: 14px; background: #fffbeb; border: 1px solid #f59e0b; border-radius: 8px;">
+                                <label
+                                    style="display: block; font-weight: bold; font-size: 13px; color: #b45309; margin-bottom: 6px;">
+                                    5. Guest Priest's License to Marry 
+                                </label>
+                                <p style="font-size: 11px; color: #78350f; margin: 0 0 8px 0;">Required because you
+                                    requested a guest officiating priest.</p>
+                                <div class="doc-upload-box" id="guestPriestBox"
+                                    onclick="document.getElementById('guestPriestLicenseFiles').click()"
+                                    style="border-color: #f59e0b; background: #fffdf9;">
+                                    <strong style="color: #b45309; font-size: 13px;">Click to Upload Guest Priest
+                                        License</strong>
+                                    <div class="doc-file-name" id="guestPriestFileName"></div>
+                                    <input type="file" id="guestPriestLicenseFiles" accept=".pdf,.jpg,.jpeg,.png"
+                                        style="display:none;"
+                                        onchange="handleWizardFileSelect(this, 'guestPriestFileName', 'guestPriestBox')">
+                                </div>
+                            </div>
+
+                            <!-- Data Privacy Consent -->
+                            <div class="privacy-consent-box">
+                                <label>
+                                    <input type="checkbox" id="weddingPrivacyConsentCheck" required>
+                                    <span><strong>Data Privacy Consent:</strong> I hereby authorize Santuario Del Sto.
+                                        Cristo Parish to collect, process, and store my personal and sacramental data
+                                        provided in this form in compliance with the <strong>Philippine Data Privacy Act
+                                            (RA 10173)</strong>.</span>
+                                </label>
+                                <div class="field-error-msg" id="weddingPrivacyError" style="margin-left: 28px;">You
+                                    must agree to the Data Privacy Act before submitting.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            <!-- Sticky Bottom Footer -->
+            <div class="wizard-footer">
+                <button type="button" class="btn-wizard-back" id="weddingBackBtn" onclick="prevWizardStep('wedding')"
+                    style="visibility: hidden;">Back</button>
+                <button type="button" class="btn-wizard-next" id="weddingNextBtn"
+                    onclick="nextWizardStep('wedding')">Next</button>
+            </div>
+
         </div>
     </div>
 
-    <!-- 3. FUNERAL APPLICATION FORM -->
-    <div class="modal-overlay" id="funeralModal">
-        <div class="modal-box">
-            <span class="close-btn" onclick="closeModal('funeralModal')">&times;</span>
-            <h2>Resurrection Chapel Wake & Vigil Request</h2>
-            <form id="funeralForm" onsubmit="event.preventDefault(); saveApplicationLocally('funeral', this);">
+    <!-- =========================================================
+     3. FUNERAL / RESURRECTION CHAPEL WIZARD MODAL (2 STEPS)
+     ========================================================= -->
+    <div class="wizard-overlay" id="funeralModal">
+        <div class="wizard-modal">
 
-                <!-- APPLICANT INFORMATION -->
-                <h4 style="color: #4a0e17; margin-top: 15px; margin-bottom: 8px;">Applicant's Information</h4>
-                <div style="display: flex; gap: 12px; margin-bottom: 15px; flex-wrap: wrap;">
-                    <div style="flex: 1; min-width: 180px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">First
-                            Name *</label>
-                        <input type="text" id="applicantFirstName" name="applicantFirstName" required
-                            style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
+            <!-- Sticky Top Header -->
+            <div class="wizard-header">
+                <div class="wizard-header-top">
+                    <h2>Resurrection Chapel Wake &amp; Vigil Request</h2>
+                    <button type="button" class="wizard-close-btn"
+                        onclick="closeWizardModal('funeralModal')">&times;</button>
+                </div>
+                <!-- Progress Indicator -->
+                <div class="wizard-progress" id="funeralProgress">
+                    <div class="wizard-step-item active" data-step="1">
+                        <span class="wizard-step-dot">1</span>
+                        <span class="wizard-step-label">Step 1: Chapel Availability &amp; Schedule</span>
                     </div>
-                    <div style="flex: 1; min-width: 180px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Last
-                            Name *</label>
-                        <input type="text" id="applicantLastName" name="applicantLastName" required
-                            style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                    </div>
-                    <div style="flex: 1; min-width: 220px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Email
-                            Address *</label>
-                        <input type="email" id="applicantEmail" name="applicantEmail" required
-                            style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
+                    <div class="wizard-progress-line"></div>
+                    <div class="wizard-step-item" data-step="2">
+                        <span class="wizard-step-dot">2</span>
+                        <span class="wizard-step-label">Step 2: Applicant &amp; Deceased Details</span>
                     </div>
                 </div>
+            </div>
 
-                <!-- DECEASED'S INFORMATION -->
-                <h4 style="color: #4a0e17; margin-top: 15px; margin-bottom: 8px;">Deceased's Information</h4>
-                <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap;">
-                    <div class="form-group" style="flex: 2; min-width: 180px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">First
-                            Name *</label>
-                        <input type="text" name="deceasedFirstName" required
-                            style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                    </div>
-                    <div class="form-group" style="flex: 1; min-width: 80px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">M.I.</label>
-                        <input type="text" name="deceasedMiddleInitial" maxlength="3"
-                            style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                    </div>
-                    <div class="form-group" style="flex: 2; min-width: 180px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Last
-                            Name *</label>
-                        <input type="text" name="deceasedLastName" required
-                            style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                    </div>
-                </div>
+            <!-- Scrollable Middle Body -->
+            <div class="wizard-body">
+                <form id="funeralWizardForm" novalidate>
 
-                <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 12px;">
-                    <div class="form-group" style="flex: 1; max-width: 180px;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Age
-                            of Death *</label>
-                        <input type="number" name="age" required
-                            style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                    </div>
-                </div>
+                    <!-- STEP 1: CHAPEL AVAILABILITY CALENDAR & SCHEDULE -->
+                    <div class="wizard-step-pane active" data-step="1">
+                        <div class="wizard-card">
+                            <h3 class="wizard-section-title">Chapel Availability &amp; Wake Schedule</h3>
 
-                <!-- CONTACT NUMBER -->
-                <h4 style="color: #4a0e17; margin-top: 15px; margin-bottom: 8px;">Contact Number</h4>
-                <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 12px;">
-                    <div class="form-group" style="flex: 1;">
-                        <label
-                            style="display: block; font-weight: bold; font-size: 12px; color: #2c3e50; margin-bottom: 4px;">Contact
-                            Phone Number *</label>
-                        <input type="tel" name="phone" required
-                            style="width: 100%; padding: 10px 12px; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 14px;">
-                    </div>
-                </div>
+                            <div
+                                style="background: #e7f3ff; border-left: 4px solid #1877f2; padding: 10px; font-size: 12px; color: #1c1e21; margin-bottom: 14px; border-radius: 4px;">
+                                <strong><svg class="ui-icon" aria-hidden="true" focusable="false">
+                                        <use href="#icon-flame"></use>
+                                    </svg> Resurrection Chapel Availability:</strong><br>
+                                Check the calendar below to see if the chapel is available (<span
+                                    style="color:#10b981; font-weight:bold;">Green</span>) or occupied (<span
+                                    style="color:#ef4444; font-weight:bold;">Red</span>). Click <strong>Today's
+                                    Date</strong> to start the wake, then select your <strong>Interment Date</strong>
+                                (Max 7 days).
+                            </div>
 
-                <!-- INTERACTIVE FUNERAL RANGE & CHAPEL CALENDAR WIDGET -->
-                <div class="fb-calendar-container"
-                    style="background: #ffffff; border: 1px solid #ccd0d5; border-radius: 8px; padding: 16px; margin-bottom: 15px; font-family: Helvetica, Arial, sans-serif;">
+                            <!-- Setup Options & Range Summary -->
+                            <div
+                                style="background: #f8f9fa; border: 1px solid #e2e8f0; padding: 12px; border-radius: 6px; margin-bottom: 14px;">
+                                <div
+                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                    <label
+                                        style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 13px; margin-bottom: 0;">
+                                        <input type="checkbox" id="chapelAirconCheck" name="includeAircon"
+                                            onchange="updateFuneralSpanCalculation()">
+                                        <strong>Include Air Conditioning</strong> (₱6,000/day vs ₱2,000 standard)
+                                    </label>
+                                </div>
+                                <div id="funeralFeeNotice" style="font-size: 12px; color: #333; font-weight: bold;">
+                                    Please select your wake start and interment dates from the calendar below.
+                                </div>
+                            </div>
 
-                    <div
-                        style="background: #e7f3ff; border-left: 4px solid #1877f2; padding: 10px; font-size: 12px; color: #1c1e21; margin-bottom: 15px;">
-                        <strong><svg class="ui-icon" aria-hidden="true" focusable="false">
-                                <use href="#icon-flame"></use>
-                            </svg> Resurrection Chapel Scheduling:</strong><br>
-                        Click <strong>Today's Date</strong> to start the wake, then select your <strong>Interment
-                            Date</strong> (Max 7 days).
-                    </div>
+                            <!-- Calendar Container -->
+                            <div class="fb-calendar-container"
+                                style="background: #ffffff; border: 1px solid #ccd0d5; border-radius: 8px; padding: 14px; font-family: Helvetica, Arial, sans-serif;">
 
-                    <!-- Setup Options & Range Summary -->
-                    <div
-                        style="background: #f8f9fa; border: 1px solid #e2e8f0; padding: 12px; border-radius: 6px; margin-bottom: 15px;">
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                            <label
-                                style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 12px;">
-                                <input type="checkbox" id="chapelAirconCheck" name="includeAircon"
-                                    onchange="updateFuneralSpanCalculation()">
-                                <strong>Include Air Conditioning</strong> (₱6,000/day vs ₱2,000 standard)
-                            </label>
+                                <!-- Calendar Month Header -->
+                                <div
+                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                    <h4 id="funeralMonthYearLabel"
+                                        style="margin: 0; color: #1c1e21; font-size: 1rem; font-weight: bold;">Month
+                                        Year</h4>
+                                    <div style="display: flex; gap: 6px;">
+                                        <button type="button" onclick="changeFuneralCalendarMonth(-1)"
+                                            style="background: #e4e6eb; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-weight: bold;">&lt;</button>
+                                        <button type="button" onclick="changeFuneralCalendarMonth(1)"
+                                            style="background: #e4e6eb; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-weight: bold;">&gt;</button>
+                                    </div>
+                                </div>
+
+                                <!-- Legend -->
+                                <div
+                                    style="display: flex; gap: 14px; font-size: 11px; color: #475569; margin-bottom: 10px; flex-wrap: wrap;">
+                                    <span><span
+                                            style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#10b981; margin-right:4px;"></span>Available
+                                        Today</span>
+                                    <span><span
+                                            style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#ef4444; margin-right:4px;"></span>Occupied</span>
+                                    <span><span
+                                            style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#1877f2; margin-right:4px;"></span>Selectable
+                                        Span</span>
+                                </div>
+
+                                <!-- Days of Week Header -->
+                                <div
+                                    style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: bold; font-size: 11px; color: #606770; margin-bottom: 6px;">
+                                    <div>Sun</div>
+                                    <div>Mon</div>
+                                    <div>Tue</div>
+                                    <div>Wed</div>
+                                    <div>Thu</div>
+                                    <div>Fri</div>
+                                    <div>Sat</div>
+                                </div>
+
+                                <!-- Calendar Grid -->
+                                <div id="funeralCalendarGrid"
+                                    style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; margin-bottom: 10px;">
+                                </div>
+
+                                <!-- Selected Date Summary Panel -->
+                                <div id="funeralTimeslotPanel"
+                                    style="border-top: 1px solid #e4e6eb; padding-top: 10px; display: none; font-size: 13px;">
+                                    <div id="funeralSelectedDateHeader"
+                                        style="font-weight: bold; color: #1c1e21; margin-bottom: 4px;"></div>
+                                    <div id="funeralSummaryBox" style="color: #555;"></div>
+                                </div>
+
+                                <!-- Hidden Inputs for Form Submission -->
+                                <input type="hidden" id="funeralSelectedDateInput" name="preferredDate" required>
+                                <input type="hidden" id="intermentDateInput" name="intermentDate" required>
+                                <input type="hidden" id="wakeDaysInput" name="wakeDays" value="1">
+                                <input type="hidden" id="funeralSelectedTimeInput" name="confirmedTime"
+                                    value="08:00 - 17:00">
+                                <input type="hidden" id="funeralCalculatedFeeInput" name="totalFee" value="2000">
+                                <div class="field-error-msg" id="funeralScheduleError">Please select both the wake start
+                                    date (today) and your target interment date before proceeding.</div>
+                            </div>
                         </div>
-                        <div id="funeralFeeNotice" style="font-size: 12px; color: #333; font-weight: bold;">
-                            Please select start and interment dates from the calendar.
+                    </div>
+
+                    <!-- STEP 2: APPLICANT, DECEASED DETAILS & CONSENT -->
+                    <div class="wizard-step-pane" data-step="2">
+
+                        <!-- Applicant Information -->
+                        <div class="wizard-card">
+                            <h3 class="wizard-section-title">Applicant's Information</h3>
+                            <div class="wizard-grid-3">
+                                <div class="wizard-field" style="margin-bottom:0;">
+                                    <label for="funApplicantFirstName">First Name </label>
+                                    <input type="text" id="funApplicantFirstName" name="applicantFirstName"
+                                        class="wizard-input" required>
+                                    <div class="field-error-msg">First name is required.</div>
+                                </div>
+                                <div class="wizard-field" style="margin-bottom:0;">
+                                    <label for="funApplicantLastName">Last Name </label>
+                                    <input type="text" id="funApplicantLastName" name="applicantLastName"
+                                        class="wizard-input" required>
+                                    <div class="field-error-msg">Last name is required.</div>
+                                </div>
+                                <div class="wizard-field" style="margin-bottom:0;">
+                                    <label for="funApplicantEmail">Email Address </label>
+                                    <input type="email" id="funApplicantEmail" name="applicantEmail"
+                                        class="wizard-input" required>
+                                    <div class="field-error-msg">Valid email is required.</div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Calendar Month Header -->
-                    <div
-                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <h4 id="funeralMonthYearLabel"
-                            style="margin: 0; color: #1c1e21; font-size: 1.05rem; font-weight: bold;">Month
-                            Year
-                        </h4>
-                        <div style="display: flex; gap: 6px;">
-                            <button type="button" onclick="changeFuneralCalendarMonth(-1)"
-                                style="background: #e4e6eb; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-weight: bold;">&lt;</button>
-                            <button type="button" onclick="changeFuneralCalendarMonth(1)"
-                                style="background: #e4e6eb; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-weight: bold;">&gt;</button>
+                        <!-- Deceased's Information -->
+                        <div class="wizard-card">
+                            <h3 class="wizard-section-title">Deceased's Information</h3>
+                            <div class="wizard-grid-3" style="margin-bottom: 14px;">
+                                <div class="wizard-field" style="margin-bottom:0;">
+                                    <label for="deceasedFirstName">First Name </label>
+                                    <input type="text" id="deceasedFirstName" name="deceasedFirstName"
+                                        class="wizard-input" required>
+                                    <div class="field-error-msg">Deceased's first name is required.</div>
+                                </div>
+                                <div class="wizard-field" style="margin-bottom:0;">
+                                    <label for="deceasedMiddleInitial">M.I.</label>
+                                    <input type="text" id="deceasedMiddleInitial" name="deceasedMiddleInitial"
+                                        maxlength="3" class="wizard-input">
+                                </div>
+                                <div class="wizard-field" style="margin-bottom:0;">
+                                    <label for="deceasedLastName">Last Name </label>
+                                    <input type="text" id="deceasedLastName" name="deceasedLastName"
+                                        class="wizard-input" required>
+                                    <div class="field-error-msg">Deceased's last name is required.</div>
+                                </div>
+                            </div>
+                            <div class="wizard-grid-2" style="margin-bottom: 0;">
+                                <div class="wizard-field" style="margin-bottom:0;">
+                                    <label for="deceasedAge">Age of Death </label>
+                                    <input type="number" id="deceasedAge" name="age" min="0" class="wizard-input"
+                                        required>
+                                    <div class="field-error-msg">Age of death is required.</div>
+                                </div>
+                                <div class="wizard-field" style="margin-bottom:0;">
+                                    <label for="funPhone">Contact Phone Number </label>
+                                    <input type="tel" id="funPhone" name="phone" class="wizard-input" required>
+                                    <div class="field-error-msg">Contact number is required.</div>
+                                </div>
+                            </div>
                         </div>
+
+                        <!-- Data Privacy Consent -->
+                        <div class="wizard-card">
+                            <div class="privacy-consent-box" style="margin-top: 0;">
+                                <label>
+                                    <input type="checkbox" id="funeralPrivacyConsentCheck" required>
+                                    <span><strong>Data Privacy Consent:</strong> I hereby authorize Santuario Del Sto.
+                                        Cristo Parish to collect, process, and store my personal data provided in this
+                                        form in compliance with the <strong>Philippine Data Privacy Act
+                                            (RA 10173)</strong>.</span>
+                                </label>
+                                <div class="field-error-msg" id="funeralPrivacyError" style="margin-left: 28px;">You
+                                    must
+                                    agree to the Data Privacy Act before submitting.</div>
+                            </div>
+                        </div>
+
                     </div>
 
-                    <!-- Days of Week Header -->
-                    <div
-                        style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: bold; font-size: 11px; color: #606770; margin-bottom: 6px;">
-                        <div>Sun</div>
-                        <div>Mon</div>
-                        <div>Tue</div>
-                        <div>Wed</div>
-                        <div>Thu</div>
-                        <div>Fri</div>
-                        <div>Sat</div>
-                    </div>
+                </form>
+            </div>
 
-                    <!-- Calendar Grid -->
-                    <div id="funeralCalendarGrid"
-                        style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; margin-bottom: 12px;">
-                    </div>
+            <!-- Sticky Bottom Footer -->
+            <div class="wizard-footer">
+                <button type="button" class="btn-wizard-back" id="funeralBackBtn" onclick="prevWizardStep('funeral')"
+                    style="visibility: hidden;">Back</button>
+                <button type="button" class="btn-wizard-next" id="funeralNextBtn"
+                    onclick="nextWizardStep('funeral')">Next</button>
+            </div>
 
-                    <!-- Selected Date Summary Panel -->
-                    <div id="funeralTimeslotPanel"
-                        style="border-top: 1px solid #e4e6eb; padding-top: 10px; display: none; font-size: 13px;">
-                        <div id="funeralSelectedDateHeader"
-                            style="font-weight: bold; color: #1c1e21; margin-bottom: 4px;"></div>
-                        <div id="funeralSummaryBox" style="color: #555;"></div>
-                    </div>
-
-                    <!-- Hidden Inputs for Form Submission -->
-                    <input type="hidden" id="funeralSelectedDateInput" name="preferredDate" required>
-                    <input type="hidden" id="intermentDateInput" name="intermentDate" required>
-                    <input type="hidden" id="wakeDaysInput" name="wakeDays" value="1">
-                    <input type="hidden" id="funeralSelectedTimeInput" name="confirmedTime" value="08:00 - 17:00">
-                    <input type="hidden" id="funeralCalculatedFeeInput" name="totalFee" value="2000">
-                </div>
-
-                <!-- REPUBLIC ACT NO. 10173 (DATA PRIVACY ACT) CONSENT SECTION -->
-                <div class="form-group"
-                    style="background: #f8f9fa; border: 1px solid #ccd0d5; padding: 12px; border-radius: 6px; margin: 15px 0;">
-                    <label
-                        style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer; font-size: 12px; color: #333; font-weight: normal;">
-                        <input type="checkbox" id="privacyConsentCheck" required
-                            style="margin-top: 2px; cursor: pointer;">
-                        <span>
-                            <strong>Data Privacy Consent:</strong> I hereby authorize Santuario Del Sto.
-                            Cristo
-                            Parish
-                            to collect, process, and store my personal data provided in this form in
-                            compliance with
-                            the
-                            <strong>Philippine Data Privacy Act (RA 10173)</strong>.
-                        </span>
-                    </label>
-                </div>
-
-                <button type="submit" class="form-submit-btn">Submit Resurrection Chapel Request</button>
-            </form>
         </div>
     </div>
 
@@ -1688,7 +1829,7 @@
                 <div style="margin-bottom: 15px;">
                     <label
                         style="display: block; font-weight: bold; color: #2c3e50; margin-bottom: 6px; font-size: 0.9rem;">Reason
-                        for Rescheduling *</label>
+                        for Rescheduling </label>
                     <textarea id="reschedReasonInput" rows="3" required
                         style="width: 100%; padding: 8px; border: 1px solid #abb2b9; border-radius: 4px;"
                         placeholder="e.g., Conflict with family travel or godparent availability..."></textarea>
@@ -1733,13 +1874,13 @@
             <form id="editProfileForm" onsubmit="handleEditProfileSubmit(event)">
                 <div style="margin-bottom: 12px;">
                     <label style="display: block; font-weight: bold; font-size: 13px; margin-bottom: 4px;">First
-                        Name *</label>
+                        Name </label>
                     <input type="text" id="editFirstName" required
                         style="width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;">
                 </div>
                 <div style="margin-bottom: 12px;">
                     <label style="display: block; font-weight: bold; font-size: 13px; margin-bottom: 4px;">Last Name
-                        *</label>
+                        </label>
                     <input type="text" id="editLastName" required
                         style="width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;">
                 </div>
@@ -1860,8 +2001,8 @@
             <div style="margin-bottom: 20px;">
                 <label
                     style="display: block; font-size: 12px; font-weight: bold; color: #334155; margin-bottom: 5px; text-align: left;">Upload
-                    GCash Payment Screenshot / Receipt *</label>
-                <input type="file" id="gcashReceiptFile" accept="image/*" style="width: 100%; font-size: 13px;">
+                    GCash Payment Screenshot / Receipt </label>
+                <input type="file" id="gcashReceiptFile" accept="image/" style="width: 100%; font-size: 13px;">
             </div>
 
             <div style="display: flex; gap: 10px;">
@@ -1998,8 +2139,644 @@
             }
         });
 
-        // Global state for the reschedule calendar
+        // =========================================================
+        // WIZARD STATE STORAGE (Preserves data across steps)
+        // =========================================================
+        const wizardState = {
+            baptism: {
+                currentStep: 1,
+                totalSteps: 3,
+                data: {}
+            }
+        };
 
+        // 1. FIX: Working Close Modal Function
+        // Wizard Open Modal Function
+        // Baptism Wizard Opener (with autofill restored)
+        function openWizardModal(modalId) {
+            if (modalId === 'baptismModal') {
+                wizardState.baptism.currentStep = 1;
+                updateWizardUI('baptism');
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.style.display = 'flex';
+                    modal.classList.add('active');
+                }
+                if (typeof autofillUserData === 'function') {
+                    autofillUserData();
+                }
+                setTimeout(checkWizardScroll, 100);
+            }
+        }
+
+        // Wedding Wizard Opener (with autofill restored)
+        function openWeddingWizard(modalId) {
+            if (modalId === 'weddingModal') {
+                wizardState.wedding.currentStep = 1;
+                updateWeddingWizardUI();
+                const modal = document.getElementById('weddingModal');
+                if (modal) {
+                    modal.style.display = 'flex';
+                    modal.classList.add('active');
+                }
+                if (typeof autofillUserData === 'function') {
+                    autofillUserData();
+                }
+                if (typeof renderWeddingCalendar === 'function') {
+                    renderWeddingCalendar();
+                }
+                setTimeout(checkWeddingWizardScroll, 100);
+            }
+        }
+
+        // Update UI for Active Step, Progress Dots, and Footer Buttons
+        function updateWizardUI(type) {
+            const state = wizardState[type];
+            const formId = 'baptismWizardForm';
+            const progressId = 'baptismProgress';
+
+            // 1. Show only the current step pane
+            const panes = document.querySelectorAll(`#${formId} .wizard-step-pane`);
+            panes.forEach(pane => {
+                const stepNum = Number(pane.getAttribute('data-step'));
+                pane.classList.toggle('active', stepNum === state.currentStep);
+            });
+
+            // 2. Update Progress Dots & Labels
+            const stepItems = document.querySelectorAll(`#${progressId} .wizard-step-item`);
+            stepItems.forEach(item => {
+                const stepNum = Number(item.getAttribute('data-step'));
+                item.classList.remove('active', 'completed');
+                if (stepNum === state.currentStep) {
+                    item.classList.add('active');
+                } else if (stepNum < state.currentStep) {
+                    item.classList.add('completed');
+                }
+            });
+
+            // 3. Update Footer Buttons
+            const backBtn = document.getElementById('bapBackBtn');
+            const nextBtn = document.getElementById('bapNextBtn');
+
+            backBtn.style.visibility = state.currentStep === 1 ? 'hidden' : 'visible';
+            nextBtn.textContent = state.currentStep === state.totalSteps ? 'Submit Application' : 'Next';
+
+            // Scroll modal body back to top on step change and re-evaluate scroll lock
+            const modalBody = document.querySelector('#baptismModal .wizard-body');
+            if (modalBody) {
+                modalBody.scrollTop = 0;
+            }
+
+            setTimeout(checkWizardScroll, 50);
+        }
+
+        // Save current step inputs into JS state object
+        function saveCurrentStepData(type) {
+            const formId = 'baptismWizardForm';
+            const form = document.getElementById(formId);
+            const formData = new FormData(form);
+
+            formData.forEach((value, key) => {
+                wizardState[type].data[key] = value;
+            });
+        }
+
+        // Unified Next Step Handler (Handles both 'baptism' and 'wedding')
+        async function nextWizardStep(type) {
+            if (type === 'baptism') {
+                const state = wizardState.baptism;
+                if (!validateBaptismStep(state.currentStep)) return; // <-- FIXED HERE
+                saveWizardStepData('baptism');
+
+                if (state.currentStep < state.totalSteps) {
+                    state.currentStep++;
+                    updateWizardUI('baptism');
+                } else {
+                    submitBaptismApplication();
+                }
+            } else if (type === 'wedding') {
+                const state = wizardState.wedding;
+                if (!validateWeddingStep(state.currentStep)) return;
+                saveWeddingStepData();
+
+                if (state.currentStep < state.totalSteps) {
+                    state.currentStep++;
+                    updateWeddingWizardUI();
+                } else {
+                    submitWeddingApplication();
+                }
+            }
+            else if (type === 'funeral') {
+                const state = wizardState.funeral;
+                if (!validateFuneralStep(state.currentStep)) return;
+
+                if (state.currentStep < state.totalSteps) {
+                    state.currentStep++;
+                    updateFuneralWizardUI();
+                } else {
+                    const form = document.getElementById('funeralWizardForm');
+                    await saveApplicationLocally('funeral', form);
+                    funeralWakeStartDate = null;
+                    funeralIntermentDate = null;
+                    wizardState.funeral.currentStep = 1;
+                }
+
+            }
+        }
+
+        // Unified Back Step Handler (Handles both 'baptism' and 'wedding')
+        async function prevWizardStep(type) {
+            if (type === 'baptism') {
+                const state = wizardState.baptism;
+                saveWizardStepData('baptism');
+                if (state.currentStep > 1) {
+                    state.currentStep--;
+                    updateWizardUI('baptism');
+                }
+            } else if (type === 'wedding') {
+                const state = wizardState.wedding;
+                saveWeddingStepData();
+                if (state.currentStep > 1) {
+                    state.currentStep--;
+                    updateWeddingWizardUI();
+                }
+            }
+            else if (type === 'funeral') {
+            const state = wizardState.funeral;
+            if (state.currentStep > 1) {
+                state.currentStep--;
+                updateFuneralWizardUI();
+            }
+        }
+        }
+
+        function saveWeddingStepData() {
+            const form = document.getElementById('weddingWizardForm');
+            if (!form) return;
+            const formData = new FormData(form);
+            formData.forEach((value, key) => {
+                wizardState.wedding.data[key] = value;
+            });
+        }
+
+        // Wedding Step Validation (Allows missing documents on Step 5)
+        function validateWeddingStep(step) {
+            const pane = document.querySelector(`#weddingWizardForm .wizard-step-pane[data-step="${step}"]`);
+            let valid = typeof validateStandardInputs === 'function' ? validateStandardInputs(pane) : true;
+
+            if (step === 3) {
+                const hasGuestPriest = document.getElementById('hasGuestPriest')?.checked;
+                const guestDocContainer = document.getElementById('guestPriestDocContainer');
+                if (guestDocContainer) guestDocContainer.style.display = hasGuestPriest ? 'block' : 'none';
+
+            }
+
+            if (step === 4) {
+                const selectedDate = document.getElementById('weddingSelectedDateInput')?.value;
+                const selectedTime = document.getElementById('weddingSelectedTimeInput')?.value;
+                const schedError = document.getElementById('weddingScheduleError');
+
+                if (!selectedDate || !selectedTime) {
+                    if (schedError) schedError.classList.add('visible');
+                    valid = false;
+                } else {
+                    if (schedError) schedError.classList.remove('visible');
+                }
+            }
+
+            if (step === 5) {
+                // Documents are intentionally NOT required here; missing docs will set status to 'To Follow-Up'
+                const privacyCheck = document.getElementById('weddingPrivacyConsentCheck');
+                const privacyError = document.getElementById('weddingPrivacyError');
+                if (privacyCheck && !privacyCheck.checked) {
+                    if (privacyError) privacyError.classList.add('visible');
+                    valid = false;
+                } else {
+                    if (privacyError) privacyError.classList.remove('visible');
+                }
+            }
+
+            return valid;
+        }
+
+        // =========================================================
+        // SCROLL-TO-BOTTOM LOCK FOR NEXT BUTTON
+        // =========================================================
+        function checkWizardScroll() {
+            const modalBody = document.querySelector('#baptismModal .wizard-body');
+            const nextBtn = document.getElementById('bapNextBtn');
+            if (!modalBody || !nextBtn) return;
+
+            const hasScrollbar = modalBody.scrollHeight > modalBody.clientHeight;
+
+            if (hasScrollbar) {
+                // Check if user has scrolled close to the bottom (within 15px tolerance)
+                const isAtBottom = modalBody.scrollTop + modalBody.clientHeight >= modalBody.scrollHeight - 15;
+
+                if (!isAtBottom) {
+                    nextBtn.disabled = true;
+                    return;
+                }
+            }
+
+            // If no scrollbar needed or user scrolled to bottom, enable Next button
+            nextBtn.disabled = false;
+        }
+
+        // Attach scroll event listener to modal body
+        document.addEventListener('DOMContentLoaded', () => {
+            const modalBody = document.querySelector('#baptismModal .wizard-body');
+            if (modalBody) {
+                modalBody.addEventListener('scroll', checkWizardScroll);
+            }
+        });
+
+        // =========================================================
+        // HELPERS: ERROR HIGHLIGHTING & FILE UPLOAD
+        // =========================================================
+        function setFieldError(inputEl, errorEl, hasError, customMsg) {
+            if (inputEl) {
+                inputEl.classList.toggle('input-error', hasError);
+            }
+            if (errorEl) {
+                if (customMsg) errorEl.textContent = customMsg;
+                errorEl.classList.toggle('visible', hasError);
+            }
+        }
+
+        function validateStandardInputs(containerEl) {
+            let valid = true;
+            const inputs = containerEl.querySelectorAll('input[required]:not([type="file"]):not([type="checkbox"]):not([type="radio"]), select[required]');
+
+            inputs.forEach(input => {
+                const errorEl = input.parentElement.querySelector('.field-error-msg');
+                let isEmpty = !input.value || input.value.trim() === '';
+
+                if (!isEmpty && input.type === 'email') {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    isEmpty = !emailRegex.test(input.value.trim());
+                }
+
+                setFieldError(input, errorEl, isEmpty);
+                if (isEmpty) valid = false;
+            });
+
+            return valid;
+        }
+
+        function handleWizardFileSelect(fileInput, labelId, boxId) {
+            const labelEl = document.getElementById(labelId);
+            const boxEl = document.getElementById(boxId);
+            const errorEl = boxEl.parentElement.querySelector('.field-error-msg');
+
+            if (fileInput.files && fileInput.files.length > 0) {
+                const names = Array.from(fileInput.files).map(f => f.name).join(', ');
+                labelEl.textContent = `Selected: ${names}`;
+                setFieldError(boxEl, errorEl, false);
+            } else {
+                labelEl.textContent = '';
+            }
+        }
+
+        // =========================================================
+        // BAPTISM STEP-BY-STEP VALIDATION
+        // =========================================================
+        function validateBaptismStep(step) {
+            let valid = true;
+
+            // --- Step 1 & 2 validation remains as you have it ---
+            if (step === 1) {
+                // Example Step 1 checks...
+            } else if (step === 2) {
+                // Example Step 2 checks...
+            }
+            // --- Step 3: Documents (Now Optional) ---
+            else if (step === 3) {
+                // Files are intentionally optional. Missing files will result in 'To Follow-Up' status.
+                // We ONLY validate the Data Privacy Consent checkbox here:
+                const privacyCheck = document.getElementById('privacyConsentCheck');
+                const privacyError = document.getElementById('bapPrivacyError');
+
+                if (privacyCheck && !privacyCheck.checked) {
+                    if (privacyError) privacyError.classList.add('visible');
+                    valid = false;
+                } else {
+                    if (privacyError) privacyError.classList.remove('visible');
+                }
+
+                // Ensure any old file error elements are hidden so they don't block submission
+                const bapBirthError = document.getElementById('bapBirthCertError');
+                const bapMotherError = document.getElementById('bapMotherError');
+                const bapFatherError = document.getElementById('bapFatherError');
+                if (bapBirthError) bapBirthError.classList.remove('visible');
+                if (bapMotherError) bapMotherError.classList.remove('visible');
+                if (bapFatherError) bapFatherError.classList.remove('visible');
+            }
+
+            return valid;
+        }
+
+        // =========================================================
+        // FINAL SUBMISSION TO DEXIE.JS & REFERENCE ID
+        // =========================================================
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve({ name: file.name, type: file.type, data: reader.result });
+                reader.onerror = err => reject(err);
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // =========================================================
+        // UNIFIED BAPTISM SUBMISSION (Allows missing docs -> "To Follow-Up")
+        // =========================================================
+        async function submitBaptismApplication() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser')) || { id: 'guest', email: wizardState.baptism.data.applicantEmail };
+            const randomNum = Math.floor(100000 + Math.random() * 900000);
+            const referenceId = `BAP-${new Date().getFullYear()}-${randomNum}`;
+
+            try {
+                const uploadedDocs = [];
+                let hasAllDocs = true;
+
+                const birthFile = document.getElementById('bapBirthCertFiles')?.files[0];
+                if (birthFile) uploadedDocs.push({ label: "Child's Birth Certificate", ...(await fileToBase64(birthFile)) });
+                else hasAllDocs = false;
+
+                const motherFile = document.getElementById('bapMotherFiles')?.files[0];
+                if (motherFile) uploadedDocs.push({ label: "Mother's Baptismal Certificate", ...(await fileToBase64(motherFile)) });
+                else hasAllDocs = false;
+
+                const fatherFile = document.getElementById('bapFatherFiles')?.files[0];
+                if (fatherFile) uploadedDocs.push({ label: "Father's Baptismal Certificate", ...(await fileToBase64(fatherFile)) });
+                else hasAllDocs = false;
+
+                // UPDATED EXACT STATUS STRING HERE:
+                
+                const applicationStatus = hasAllDocs ? 'Pending' : 'To Follow-Up & Upload Lacking Documents';
+
+                const applicationRecord = {
+                    id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${randomNum}`,
+                    referenceId: referenceId,
+                    userId: currentUser.id,
+                    sacramentType: 'baptism',
+                    status: applicationStatus,
+                    preferredDate: wizardState.baptism.data.preferredDate,
+                    confirmedTime: wizardState.baptism.data.confirmedTime,
+                    details: { ...wizardState.baptism.data },
+                    documents: uploadedDocs,
+                    submittedAt: new Date().toISOString()
+                };
+
+                if (typeof db !== 'undefined' && db.applications) {
+                    await db.applications.add(applicationRecord);
+                }
+
+                if (typeof renderUserDashboard === 'function') {
+                    await renderUserDashboard();
+                }
+
+                document.getElementById('baptismWizardForm').reset();
+                wizardState.baptism.data = {};
+                wizardState.baptism.currentStep = 1;
+                closeWizardModal('baptismModal');
+
+                document.getElementById('displayRefId').textContent = referenceId;
+                openModal('confirmationModal');
+            } catch (error) {
+                console.error('Baptism submission error:', error);
+                showAlert('There was an error saving your baptism application. Please try again.');
+            }
+        }
+
+        // =========================================================
+        // UNIFIED WEDDING SUBMISSION (Allows missing docs -> "To Follow-Up")
+        // =========================================================
+        async function submitWeddingApplication() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser')) || { id: 'guest', email: wizardState.wedding.data.applicantEmail };
+            const randomNum = Math.floor(100000 + Math.random() * 900000);
+            const referenceId = `WED-${new Date().getFullYear()}-${randomNum}`;
+
+            try {
+                const uploadedDocs = [];
+                let hasAllDocs = true;
+
+                const birthFiles = document.getElementById('wedBirthCertFiles')?.files;
+                if (birthFiles && birthFiles.length > 0) {
+                    for (let f of birthFiles) { uploadedDocs.push({ label: "PSA Birth Certificate", ...(await fileToBase64(f)) }); }
+                } else { hasAllDocs = false; }
+
+                const cenomarFiles = document.getElementById('wedCenomarFiles')?.files;
+                if (cenomarFiles && cenomarFiles.length > 0) {
+                    for (let f of cenomarFiles) { uploadedDocs.push({ label: "CENOMAR", ...(await fileToBase64(f)) }); }
+                } else { hasAllDocs = false; }
+
+                const annotationFiles = document.getElementById('wedAnnotationFiles')?.files;
+                if (annotationFiles && annotationFiles.length > 0) {
+                    for (let f of annotationFiles) { uploadedDocs.push({ label: "Annotated Certificate", ...(await fileToBase64(f)) }); }
+                } else { hasAllDocs = false; }
+
+                const licenseFiles = document.getElementById('wedLicenseFiles')?.files;
+                if (licenseFiles && licenseFiles.length > 0) {
+                    for (let f of licenseFiles) { uploadedDocs.push({ label: "Marriage License", ...(await fileToBase64(f)) }); }
+                } else { hasAllDocs = false; }
+
+                const hasGuestPriest = document.getElementById('hasGuestPriest')?.checked;
+                const gpFile = document.getElementById('guestPriestLicenseFiles')?.files[0];
+                if (hasGuestPriest) {
+                    if (gpFile) uploadedDocs.push({ label: "Guest Priest License to Marry", ...(await fileToBase64(gpFile)) });
+                    else hasAllDocs = false;
+                }
+
+                const applicationStatus = hasAllDocs ? 'Pending' : 'To Follow-Up';
+
+                const applicationRecord = {
+                    id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${randomNum}`,
+                    referenceId: referenceId,
+                    userId: currentUser.id,
+                    sacramentType: 'wedding',
+                    status: applicationStatus,
+                    preferredDate: wizardState.wedding.data.preferredDate,
+                    confirmedTime: wizardState.wedding.data.confirmedTime,
+                    details: { ...wizardState.wedding.data },
+                    documents: uploadedDocs,
+                    submittedAt: new Date().toISOString()
+                };
+
+                if (typeof db !== 'undefined' && db.applications) {
+                    await db.applications.add(applicationRecord);
+                }
+
+                if (typeof renderUserDashboard === 'function') {
+                    await renderUserDashboard();
+                }
+
+                document.getElementById('weddingWizardForm').reset();
+                wizardState.wedding.data = {};
+                wizardState.wedding.currentStep = 1;
+                closeWizardModal('weddingModal');
+
+                document.getElementById('displayRefId').textContent = referenceId;
+                openModal('confirmationModal');
+            } catch (error) {
+                console.error('Wedding submission error:', error);
+                showAlert('There was an error saving your wedding application. Please try again.');
+            }
+        }
+
+        // 1. Add funeral to wizardState
+        wizardState.funeral = {
+            currentStep: 1,
+            totalSteps: 2,
+            data: {}
+        };
+
+        // 2. Open Funeral Wizard Modal
+        function openFuneralWizard() {
+            wizardState.funeral.currentStep = 1;
+            funeralWakeStartDate = null;
+            funeralIntermentDate = null;
+            updateFuneralWizardUI();
+
+            const modal = document.getElementById('funeralModal');
+            if (modal) {
+                modal.style.display = 'flex';
+                modal.classList.add('active');
+            }
+            if (typeof autofillUserData === 'function') {
+                autofillUserData();
+            }
+            if (typeof renderFuneralCalendar === 'function') {
+                renderFuneralCalendar();
+            }
+            setTimeout(checkFuneralWizardScroll, 100);
+        }
+
+        // 3. Update Funeral Wizard Step UI
+        function updateFuneralWizardUI() {
+            const state = wizardState.funeral;
+            const panes = document.querySelectorAll('#funeralWizardForm .wizard-step-pane');
+            panes.forEach(pane => {
+                const stepNum = Number(pane.getAttribute('data-step'));
+                pane.classList.toggle('active', stepNum === state.currentStep);
+            });
+
+            const stepItems = document.querySelectorAll('#funeralProgress .wizard-step-item');
+            stepItems.forEach(item => {
+                const stepNum = Number(item.getAttribute('data-step'));
+                item.classList.remove('active', 'completed');
+                if (stepNum === state.currentStep) {
+                    item.classList.add('active');
+                } else if (stepNum < state.currentStep) {
+                    item.classList.add('completed');
+                }
+            });
+
+            const backBtn = document.getElementById('funeralBackBtn');
+            const nextBtn = document.getElementById('funeralNextBtn');
+            if (backBtn) backBtn.style.visibility = state.currentStep === 1 ? 'hidden' : 'visible';
+            if (nextBtn) nextBtn.textContent = state.currentStep === state.totalSteps ? 'Submit Resurrection Chapel Request' : 'Next';
+
+            const modalBody = document.querySelector('#funeralModal .wizard-body');
+            if (modalBody) modalBody.scrollTop = 0;
+            setTimeout(checkFuneralWizardScroll, 50);
+        }
+
+        // 4. Scroll Lock Check for Funeral Wizard
+        function checkFuneralWizardScroll() {
+            const modalBody = document.querySelector('#funeralModal .wizard-body');
+            const nextBtn = document.getElementById('funeralNextBtn');
+            if (!modalBody || !nextBtn) return;
+
+            const hasScrollbar = modalBody.scrollHeight > modalBody.clientHeight;
+            if (hasScrollbar) {
+                const isAtBottom = modalBody.scrollTop + modalBody.clientHeight >= modalBody.scrollHeight - 15;
+                if (!isAtBottom) {
+                    nextBtn.disabled = true;
+                    return;
+                }
+            }
+            nextBtn.disabled = false;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const funeralBody = document.querySelector('#funeralModal .wizard-body');
+            if (funeralBody) {
+                funeralBody.addEventListener('scroll', checkFuneralWizardScroll);
+            }
+        });
+
+        // 5. Validate Funeral Steps
+        function validateFuneralStep(step) {
+            if (step === 1) {
+                const startDate = document.getElementById('funeralSelectedDateInput')?.value;
+                const intermentDate = document.getElementById('intermentDateInput')?.value;
+                const schedError = document.getElementById('funeralScheduleError');
+
+                if (!startDate || !intermentDate) {
+                    if (schedError) schedError.classList.add('visible');
+                    return false;
+                }
+                if (schedError) schedError.classList.remove('visible');
+                return true;
+            }
+
+            if (step === 2) {
+                const pane = document.querySelector('#funeralWizardForm .wizard-step-pane[data-step="2"]');
+                let valid = typeof validateStandardInputs === 'function' ? validateStandardInputs(pane) : true;
+
+                const privacyCheck = document.getElementById('funeralPrivacyConsentCheck');
+                const privacyError = document.getElementById('funeralPrivacyError');
+                if (privacyCheck && !privacyCheck.checked) {
+                    if (privacyError) privacyError.classList.add('visible');
+                    valid = false;
+                } else {
+                    if (privacyError) privacyError.classList.remove('visible');
+                }
+                return valid;
+            }
+            return true;
+        }
+        function saveWizardStepData(type) {
+            if (type === 'baptism') {
+                const form = document.getElementById('baptismWizardForm');
+                if (!form) return;
+                const data = wizardState.baptism.data;
+
+                const inputs = form.querySelectorAll('input, select, textarea');
+                inputs.forEach(input => {
+                    if (input.name || input.id) {
+                        const key = input.name || input.id;
+                        if (input.type === 'checkbox') {
+                            data[key] = input.checked;
+                        } else if (input.type === 'radio') {
+                            if (input.checked) data[key] = input.value;
+                        } else {
+                            data[key] = input.value;
+                        }
+                    }
+                });
+            } else if (type === 'wedding') {
+                const form = document.getElementById('weddingWizardForm');
+                if (!form) return;
+                const data = wizardState.wedding.data;
+
+                const inputs = form.querySelectorAll('input, select, textarea');
+                inputs.forEach(input => {
+                    if (input.name || input.id) {
+                        const key = input.name || input.id;
+                        if (input.type === 'checkbox') {
+                            data[key] = input.checked;
+                        } else if (input.type === 'radio') {
+                            if (input.checked) data[key] = input.value;
+                        } else {
+                            data[key] = input.value;
+                        }
+                    }
+                });
+            }
+        }
 
         // 1. Open the modal and initialize data + calendar view
         async function openRescheduleRequestModal(appId) {
@@ -2233,8 +3010,15 @@
 
         async function openAttendanceQrModal(appId) {
             try {
-                const queryId = isNaN(appId) ? appId : Number(appId);
-                const app = await db.applications.get(queryId);
+                let app;
+
+                // Correctly handle looking up by Reference ID string vs Numeric Database ID
+                if (typeof appId === 'string' && (isNaN(appId) || appId.includes('-'))) {
+                    app = await db.applications.where('referenceId').equals(appId).first();
+                } else {
+                    const queryId = Number(appId);
+                    app = await db.applications.get(queryId);
+                }
 
                 if (!app) {
                     alert('Application record not found.');
@@ -2248,7 +3032,6 @@
                 if (!modal) {
                     modal = document.createElement('div');
                     modal.id = 'attendanceQrModal';
-                    // CRITICAL FIX: Extremely high z-index to guarantee it sits above the dashboard modal (1050)
                     modal.style.cssText = 'position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 999999;';
                     document.body.appendChild(modal);
                 } else {
@@ -2256,19 +3039,19 @@
                 }
 
                 modal.innerHTML = `
-                        <div style="background: white; padding: 24px; border-radius: 12px; max-width: 320px; width: 100%; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
-                            <h3 style="margin-top: 0; color: #4a0e17; font-size: 16px;">Attendance QR Code</h3>
-                            <p style="font-size: 12px; color: #64748b; margin-bottom: 15px;">Present this QR code at the parish entrance during your seminar or check-in.</p>
-                            <div style="background: #f8fafc; padding: 15px; border-radius: 8px; display: inline-block; border: 1px solid #e2e8f0;">
-                                <img src="${qrCodeUrl}" alt="QR Code for ${app.referenceId}" style="width: 180px; height: 180px; display: block;" />
-                            </div>
-                            <div style="margin-top: 12px; font-weight: bold; color: #0f172a; font-size: 14px;">${app.referenceId}</div>
-                            <div style="font-size: 12px; color: #475569; text-transform: capitalize; margin-bottom: 20px;">${app.sacramentType}</div>
-                            <button onclick="document.getElementById('attendanceQrModal').style.display = 'none'" style="background: #cbd5e1; color: #0f172a; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: bold; width: 100%;">
-                                Close
-                            </button>
-                        </div>
-                    `;
+            <div style="background: white; padding: 24px; border-radius: 12px; max-width: 320px; width: 100%; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
+                <h3 style="margin-top: 0; color: #4a0e17; font-size: 16px;">Attendance QR Code</h3>
+                <p style="font-size: 12px; color: #64748b; margin-bottom: 15px;">Present this QR code at the parish entrance during your seminar or check-in.</p>
+                <div style="background: #f8fafc; padding: 15px; border-radius: 8px; display: inline-block; border: 1px solid #e2e8f0;">
+                    <img src="${qrCodeUrl}" alt="QR Code for ${app.referenceId}" style="width: 180px; height: 180px; display: block;" />
+                </div>
+                <div style="margin-top: 12px; font-weight: bold; color: #0f172a; font-size: 14px;">${app.referenceId}</div>
+                <div style="font-size: 12px; color: #475569; text-transform: capitalize; margin-bottom: 20px;">${app.sacramentType}</div>
+                <button onclick="document.getElementById('attendanceQrModal').style.display = 'none'" style="background: #cbd5e1; color: #0f172a; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: bold; width: 100%;">
+                    Close
+                </button>
+            </div>
+        `;
             } catch (err) {
                 console.error('Error opening attendance QR modal:', err);
                 alert('Could not generate attendance QR code.');
@@ -2277,6 +3060,17 @@
 
         function closeUserSeminarQrModal() {
             document.getElementById('userSeminarQrModal').style.display = 'none';
+        }
+
+        function triggerBrowserPush(title, body, tag) {
+            if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification(title, {
+                    body: body,
+                    icon: '/favicon.webp',
+                    badge: '/favicon.webp',
+                    tag: tag || 'parish-notification'
+                });
+            }
         }
 
         // Function to query Dexie.js and check slot capacity (Max 3 slots per time block)
@@ -2374,25 +3168,144 @@
         // ==========================================
         // 3. MODAL CONTROLS
         // ==========================================
+        // Open Modal (Routes baptismModal to the wizard opener)
+        // Global open modal router
+
+        // =========================================================
+        // WEDDING WIZARD OPENER FUNCTION (Fixes ReferenceError)
+        // =========================================================
+        if (typeof wizardState !== 'undefined' && !wizardState.wedding) {
+            wizardState.wedding = {
+                currentStep: 1,
+                totalSteps: 5,
+                data: {}
+            };
+        }
+        // =========================================================
+        // WEDDING WIZARD UI UPDATER & STEP MANAGEMENT
+        // =========================================================
+        if (typeof wizardState !== 'undefined' && !wizardState.wedding) {
+            wizardState.wedding = {
+                currentStep: 1,
+                totalSteps: 5,
+                data: {}
+            };
+        }
+
+        function updateWeddingWizardUI() {
+            const state = wizardState.wedding;
+            const formId = 'weddingWizardForm';
+            const progressId = 'weddingProgress';
+
+            // 1. Show only the active step pane
+            const panes = document.querySelectorAll(`#${formId} .wizard-step-pane`);
+            panes.forEach(pane => {
+                const stepNum = Number(pane.getAttribute('data-step'));
+                pane.classList.toggle('active', stepNum === state.currentStep);
+            });
+
+            // 2. Update Progress Dots & Labels
+            const stepItems = document.querySelectorAll(`#${progressId} .wizard-step-item`);
+            stepItems.forEach(item => {
+                const stepNum = Number(item.getAttribute('data-step'));
+                item.classList.remove('active', 'completed');
+                if (stepNum === state.currentStep) {
+                    item.classList.add('active');
+                } else if (stepNum < state.currentStep) {
+                    item.classList.add('completed');
+                }
+            });
+
+            // 3. Update Footer Buttons
+            const backBtn = document.getElementById('weddingBackBtn');
+            const nextBtn = document.getElementById('weddingNextBtn');
+
+            if (backBtn) backBtn.style.visibility = state.currentStep === 1 ? 'hidden' : 'visible';
+            if (nextBtn) nextBtn.textContent = state.currentStep === state.totalSteps ? 'Submit Wedding Application' : 'Next';
+
+            // Scroll modal body back to top on step change and re-evaluate scroll lock
+            const modalBody = document.querySelector('#weddingModal .wizard-body');
+            if (modalBody) {
+                modalBody.scrollTop = 0;
+            }
+
+            setTimeout(checkWeddingWizardScroll, 50);
+        }
+
+
+        function openWeddingWizard(modalId) {
+            if (modalId === 'weddingModal') {
+                if (typeof wizardState !== 'undefined' && wizardState.wedding) {
+                    wizardState.wedding.currentStep = 1;
+                    updateWeddingWizardUI();
+                }
+                const modal = document.getElementById('weddingModal');
+                if (modal) {
+                    modal.style.display = 'flex';
+                    modal.classList.add('active');
+                }
+
+                // Initialize calendar grid and scroll checks
+                if (typeof renderWeddingCalendar === 'function') {
+                    renderWeddingCalendar();
+                }
+                setTimeout(checkWeddingWizardScroll, 100);
+            }
+        }
+        // =========================================================
+        // WEDDING WIZARD SCROLL CHECK HELPER
+        // =========================================================
+        function checkWeddingWizardScroll() {
+            const modalBody = document.querySelector('#weddingModal .wizard-body');
+            const nextBtn = document.getElementById('weddingNextBtn');
+            if (!modalBody || !nextBtn) return;
+
+            const hasScrollbar = modalBody.scrollHeight > modalBody.clientHeight;
+            if (hasScrollbar) {
+                const isAtBottom = modalBody.scrollTop + modalBody.clientHeight >= modalBody.scrollHeight - 15;
+                if (!isAtBottom) {
+                    nextBtn.disabled = true;
+                    return;
+                }
+            }
+            nextBtn.disabled = false;
+        }
+
+        // Bind scroll event listener to the wedding wizard body
+        document.addEventListener('DOMContentLoaded', () => {
+            const modalBody = document.querySelector('#weddingModal .wizard-body');
+            if (modalBody) {
+                modalBody.addEventListener('scroll', checkWeddingWizardScroll);
+            }
+        });
         function openModal(modalId, event) {
             if (event) event.preventDefault();
 
             const currentUser = JSON.parse(localStorage.getItem('currentUser'));
             const modal = document.getElementById(modalId);
 
-            const protectedModals = [
-                'baptismModal',
-                'weddingModal',
-                'funeralModal'
-            ];
+            const protectedModals = ['baptismModal', 'weddingModal', 'funeralModal'];
 
             if (protectedModals.includes(modalId) && !currentUser) {
                 const authModal = document.getElementById('authModal');
                 if (authModal) {
                     authModal.style.display = 'flex';
                     authModal.classList.add('active');
-                    if (typeof switchAuthTab === 'function') switchAuthTab('login');
+                    if (typeof switchAuthTab === 'function') switchAuthTab('signin');
                 }
+                return;
+            }
+
+            if (modalId === 'baptismModal') {
+                openWizardModal('baptismModal');
+                return;
+            }
+            if (modalId === 'weddingModal') {
+                openWeddingWizard('weddingModal');
+                return;
+            }
+            if (modalId === 'funeralModal') {
+                openFuneralWizard();
                 return;
             }
 
@@ -2401,31 +3314,13 @@
                 modal.classList.add('active');
                 autofillUserData();
 
-                // ADD THIS LINE: Automatically generate the funeral calendar when modal opens
                 if (modalId === 'funeralModal' && typeof renderFuneralCalendar === 'function') {
                     renderFuneralCalendar();
                 }
             }
-
-            if (modal) {
-                modal.style.display = 'block'; // or your custom active class logic
-
-                // AUTO-TRIGGER: If the reschedule modal opens, force-render the calendar immediately!
-                if (modalId === 'requestReschedModal') {
-                    // Fallback: if activeReschedApp wasn't set, grab the first active user application
-                    if (!activeReschedApp && typeof db !== 'undefined') {
-                        db.applications.toArray().then(apps => {
-                            // Grab the first pending/approved app as a fallback
-                            activeReschedApp = apps[apps.length - 1] || {};
-                            renderReschedCalendar();
-                        });
-                    } else {
-                        renderReschedCalendar();
-                    }
-                }
-            }
         }
 
+        // Standard close modal
         function closeModal(modalId) {
             const modal = document.getElementById(modalId);
             if (modal) {
@@ -2433,6 +3328,17 @@
                 modal.classList.remove('active');
             }
         }
+
+        // Wizard close modal (Fixes X button not hiding the modal)
+        function closeWizardModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'none';
+                modal.classList.remove('active');
+            }
+        }
+
+
         async function handleSignIn(event) {
             if (event) event.preventDefault();
 
@@ -3351,6 +4257,14 @@
                     <span style="color: #27ae60; font-weight: bold; font-size: 12px;">
                         🔒 Approved (Rescheduling is locked)
                     </span>
+                `;
+                    }
+                    // 👉 ADD THIS NEW BLOCK HERE:
+                    if (app.status && (app.status.includes('Seminar') || app.status.includes('Scheduled'))) {
+                        actionButtonsHtml += `
+                    <button onclick="openAttendanceQrModal('${app.referenceId}')" style="background: #8e44ad; color: white; border: none; padding: 7px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">
+                        View Attendance QR
+                    </button>
                 `;
                     }
 
