@@ -2282,6 +2282,24 @@
             document.getElementById('funCount').textContent = activeApps.filter(a => (a.sacramentType || '').toLowerCase().includes('funeral')).length;
         }
 
+        // Helper function to style the static status badge
+        function getStatusBadgeHTML(status) {
+            const normalized = (status || 'Pending').toLowerCase();
+            let badgeClass = 'bg-yellow-100 text-yellow-800 border-yellow-300'; // Default / Reviewing / Pending
+
+            if (normalized === 'approved' || normalized === 'confirmed') {
+                badgeClass = 'bg-green-100 text-green-800 border-green-300';
+            } else if (normalized === 'rejected' || normalized === 'declined' || normalized === 'cancelled') {
+                badgeClass = 'bg-red-100 text-red-800 border-red-300';
+            } else if (normalized === 'completed') {
+                badgeClass = 'bg-blue-100 text-blue-800 border-blue-300';
+            }
+
+            return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${badgeClass}">
+                ${status || 'Reviewing'}
+            </span>`;
+        }
+
         function renderTable() {
             const tbody = document.getElementById('applicationsTableBody');
             if (!tbody) return;
@@ -2325,15 +2343,23 @@
                 const dateStr = app.createdAt ? new Date(app.createdAt).toLocaleDateString() : 'N/A';
                 const sacramentTitle = app.sacramentType ? (app.sacramentType.charAt(0).toUpperCase() + app.sacramentType.slice(1)) : 'N/A';
                 const currentStatus = app.status || 'Pending';
+                // --- CLEAN STATUS BADGE (NO LONGER A DROPDOWN) ---
                 let badgeClass = 'status-pending';
                 const st = currentStatus.toLowerCase();
-                if (st === 'approved') badgeClass = 'status-approved';
-                else if (st === 'rejected') badgeClass = 'status-rejected';
-                else if (st === 'reschedule requested') badgeClass = 'status-resched';
 
+                if (st.includes('approved') || st.includes('completed') || st.includes('ready for payment') || st.includes('seminar') || st.includes('ceremony')) {
+                    badgeClass = 'status-approved';
+                } else if (st.includes('rejected') || st.includes('needs revision')) {
+                    badgeClass = 'status-rejected';
+                } else if (st.includes('reschedule')) {
+                    badgeClass = 'status-resched';
+                }
+
+                let statusBadgeHtml = `<span class="${badgeClass}" style="display: block; width: 100%; text-align: center; padding: 8px 12px; border-radius: 6px; font-weight: bold; font-size: 12px; box-sizing: border-box;">${currentStatus}</span>`;
                 const targetDate = app.preferredDate || app.targetDate || app.confirmedDate || dateStr;
-                const contactInfo = app.applicantName ? `<strong>${app.applicantName}</strong><br><small style="color:#555;">${app.applicantEmail || ''}</small>` : (app.applicantEmail || app.email || 'N/A');
-
+                const rawName = app.applicantName || app.details?.applicantName || `${app.details?.applicantFirstName || ''} ${app.details?.applicantLastName || ''}`.trim();
+                const rawEmail = app.applicantEmail || app.details?.applicantEmail || app.email || '';
+                const contactInfo = rawName ? `<strong>${rawName}</strong><br><small style="color:#555;">${rawEmail}</small>` : (rawEmail || 'N/A');
                 const isWalkIn = Boolean(app.details?.walkInAccommodation);
                 const hasGuestPriest = app.details?.hasGuestPriest || false;
                 const sacramentKey = (app.sacramentType || '').toLowerCase().includes('baptism') ? 'baptism' : ((app.sacramentType || '').toLowerCase().includes('wedding') ? 'wedding' : 'funeral');
@@ -2452,19 +2478,8 @@
                     <td>${contactInfo}</td>
                     <td>${targetDate}</td>
                     <td>${filesHtml}</td>
-                    <td>
-                        <select onchange="updateApplicationStatus('${app.id}', this.value)" class="status-select ${badgeClass}">
-                            <option value="Reviewing" ${currentStatus === 'reviewing' ? 'selected' : ''}>Reviewing</option>
-                            <option value="Reschedule Requested" ${currentStatus.includes('reschedule requested') ? 'selected' : ''}>⚠️ Reschedule Requested</option>
-                            <option value="To Follow-Up & Upload Lacking Documents" ${currentStatus.includes('lacking') ? 'selected' : ''}>To Follow-Up & Upload Lacking Documents</option>
-                            <option value="Reviewed & Ready for Payment" ${currentStatus.includes('payment') ? 'selected' : ''}>Reviewed & Ready for Payment</option>
-                            <option value="Needs Revision" ${currentStatus === 'needs revision' ? 'selected' : ''}>Needs Revision</option>
-                            <option value="Scheduled for Seminar" ${currentStatus.includes('seminar') ? 'selected' : ''}>Scheduled for Seminar</option>
-                            <option value="Scheduled for Ceremony" ${currentStatus.includes('ceremony') ? 'selected' : ''}>Scheduled for Ceremony</option>
-                            <option value="Completed" ${currentStatus === 'completed' ? 'selected' : ''}>Completed</option>
-                        </select>
-                        ${app.adminNotes ? `<br><small style="color:red; margin-top: 4px; display:block;">Note: ${app.adminNotes}</small>` : ''}
-
+                        <td class="px-4 py-3 whitespace-nowrap">
+                        ${statusBadgeHtml}
                         ${app.status && app.status.toLowerCase().includes('reschedule requested') && app.requestedNewDate ? `
                             <div style="background: #fffbeb; border: 1px solid #fde68a; padding: 6px 8px; border-radius: 4px; margin-top: 6px; font-size: 11px; color: #92400e;">
                                 <strong>New Date Requested:</strong> ${app.requestedNewDate}<br>
@@ -2486,14 +2501,29 @@
             let app = rawApplicationsData.find(a => String(a.id) === String(appId)) || await db.applications.get(Number(appId) || appId);
             if (!app) return;
 
+            // --- 1. BASIC FORM INPUT POPULATION ---
             document.getElementById('adminAppId').value = app.id;
             document.getElementById('adminStatusSelect').value = app.status || 'Pending';
-            document.getElementById('adminPaymentConfirmedCheck').checked = Boolean(app.paymentConfirmed);
             document.getElementById('adminConfirmedDate').value = app.confirmedDate || '';
             document.getElementById('adminConfirmedTime').value = app.confirmedTime || '';
             document.getElementById('adminNotesInput').value = app.adminNotes || '';
 
-            //  CLEAN & FORMATTED DETAILS PARSER (Baptism, Wedding, Funeral)
+            // --- 2. PAYMENT CONFIRMATION CHECKBOX & DISABLED STATE ---
+            const paymentCheckbox = document.getElementById('adminPaymentConfirmedCheck');
+            const hasPaymentProof = Boolean(app.paymentProof);
+            paymentCheckbox.checked = Boolean(app.paymentConfirmed);
+            paymentCheckbox.disabled = !hasPaymentProof;
+            if (!hasPaymentProof) {
+                paymentCheckbox.parentElement.style.opacity = '0.6';
+                paymentCheckbox.parentElement.style.cursor = 'not-allowed';
+                paymentCheckbox.title = 'Payment proof has not been uploaded by the parishioner yet.';
+            } else {
+                paymentCheckbox.parentElement.style.opacity = '1';
+                paymentCheckbox.parentElement.style.cursor = 'pointer';
+                paymentCheckbox.title = '';
+            }
+
+            // --- 3. CLEAN & FORMATTED DETAILS PARSER (Baptism, Wedding, Funeral) ---
             let formattedDetails = '<em style="color:#666;">No additional details.</em>';
             const d = app.details || {};
             const sType = (app.sacramentType || '').toLowerCase();
@@ -2501,66 +2531,59 @@
             if (d && typeof d === 'object') {
                 if (sType.includes('baptism')) {
                     formattedDetails = `
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px;">
-                            <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-baby"></use></svg> Child's Name:</strong> ${d.childName || `${d.childFirstName || ''} ${d.childMiddleInitial || ''} ${d.childLastName || ''}`.trim() || 'N/A'}</div>
-                            <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-calendar"></use></svg> Date of Birth:</strong> ${d.childDob || d.dob || 'N/A'}</div>
-                            <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-user"></use></svg> Father's Name:</strong> ${d.fatherName || `${d.fatherFirstName || ''} ${d.fatherMiddleInitial || ''} ${d.fatherLastName || ''}`.trim() || 'N/A'}</div>
-                            <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-user"></use></svg> Mother's Maiden Name:</strong> ${d.motherName || `${d.motherFirstName || ''} ${d.motherMiddleInitial || ''} ${d.motherLastName || ''}`.trim() || 'N/A'}</div>
-                            <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-phone"></use></svg> Contact Phone:</strong> ${d.phone || 'N/A'}</div>
-                            <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-church"></use></svg> Married In:</strong> ${d.parentsMarriedIn || 'N/A'}</div>
-                            <div style="grid-column: span 2;"><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-users"></use></svg> Principal Ninong:</strong> ${d.principalNinong || 'None listed'}</div>
-                            <div style="grid-column: span 2;"><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-users"></use></svg> Principal Ninang:</strong> ${d.principalNinang || 'None listed'}</div>
-                        </div>
-                    `;
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px;">
+                    <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-baby"></use></svg> Child's Name:</strong> ${d.childName || `${d.childFirstName || ''} ${d.childMiddleInitial || ''} ${d.childLastName || ''}`.trim() || 'N/A'}</div>
+                    <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-calendar"></use></svg> Date of Birth:</strong> ${d.childDob || d.dob || 'N/A'}</div>
+                    <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-user"></use></svg> Father's Name:</strong> ${d.fatherName || `${d.fatherFirstName || ''} ${d.fatherMiddleInitial || ''} ${d.fatherLastName || ''}`.trim() || 'N/A'}</div>
+                    <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-user"></use></svg> Mother's Maiden Name:</strong> ${d.motherName || `${d.motherFirstName || ''} ${d.motherMiddleInitial || ''} ${d.motherLastName || ''}`.trim() || 'N/A'}</div>
+                    <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-phone"></use></svg> Contact Phone:</strong> ${d.phone || 'N/A'}</div>
+                    <div><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-church"></use></svg> Married In:</strong> ${d.parentsMarriedIn || 'N/A'}</div>
+                    <div style="grid-column: span 2;"><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-users"></use></svg> Principal Ninong:</strong> ${d.principalNinong || 'None listed'}</div>
+                    <div style="grid-column: span 2;"><strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-users"></use></svg> Principal Ninang:</strong> ${d.principalNinang || 'None listed'}</div>
+                </div>
+            `;
                 }
                 else if (sType.includes('wedding')) {
-                    // Format additional sponsors list if any exist
                     let additionalSponsorsHtml = 'None';
                     if (d.additionalSponsors && d.additionalSponsors.length > 0) {
                         additionalSponsorsHtml = d.additionalSponsors.map(s => `• ${s.name} (${s.role})`).join('<br>');
                     }
 
                     formattedDetails = `
-        <div style="font-size: 13px; line-height: 1.5; color: #1e293b;">
-            <!-- GROOM & BRIDE HEADER SUMMARY -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; background: #f8fafc; padding: 10px; border-radius: 6px;">
-                <div>
-                    <strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-user-round"></use></svg> Groom:</strong> ${d.groomName || `${d.groomFirstName || ''} ${d.groomLastName || ''}`.trim() || 'N/A'}<br>
-                    <strong>Age & Status:</strong> ${d.groomAge || 'N/A'} yrs old, ${d.groomCivilStatus || 'N/A'}<br>
-                    <strong>Nationality:</strong> ${d.groomNationality || 'Filipino'}<br>
-                    <strong>Place of Birth:</strong> ${d.groomPlaceOfBirth || 'N/A'}<br>
-                    <strong>Occupation:</strong> ${d.groomOccupation || 'N/A'}<br>
-                    <strong>Residence:</strong> ${d.groomPresentResidence || 'N/A'}<br>
-                    <strong>Parents:</strong> ${d.groomFatherName || 'N/A'} & ${d.groomMotherName || 'N/A'}
+                <div style="font-size: 13px; line-height: 1.5; color: #1e293b;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; background: #f8fafc; padding: 10px; border-radius: 6px;">
+                        <div>
+                            <strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-user-round"></use></svg> Groom:</strong> ${d.groomName || `${d.groomFirstName || ''} ${d.groomLastName || ''}`.trim() || 'N/A'}<br>
+                            <strong>Age & Status:</strong> ${d.groomAge || 'N/A'} yrs old, ${d.groomCivilStatus || 'N/A'}<br>
+                            <strong>Nationality:</strong> ${d.groomNationality || 'Filipino'}<br>
+                            <strong>Place of Birth:</strong> ${d.groomPlaceOfBirth || 'N/A'}<br>
+                            <strong>Occupation:</strong> ${d.groomOccupation || 'N/A'}<br>
+                            <strong>Residence:</strong> ${d.groomPresentResidence || 'N/A'}<br>
+                            <strong>Parents:</strong> ${d.groomFatherName || 'N/A'} & ${d.groomMotherName || 'N/A'}
+                        </div>
+                        <div>
+                            <strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-user-round"></use></svg> Bride:</strong> ${d.brideName || `${d.brideFirstName || ''} ${d.brideLastName || ''}`.trim() || 'N/A'}<br>
+                            <strong>Age & Status:</strong> ${d.brideAge || 'N/A'} yrs old, ${d.brideCivilStatus || 'N/A'}<br>
+                            <strong>Nationality:</strong> ${d.brideNationality || 'Filipino'}<br>
+                            <strong>Place of Birth:</strong> ${d.bridePlaceOfBirth || 'N/A'}<br>
+                            <strong>Occupation:</strong> ${d.brideOccupation || 'N/A'}<br>
+                            <strong>Residence:</strong> ${d.bridePresentResidence || 'N/A'}<br>
+                            <strong>Parents:</strong> ${d.brideFatherName || 'N/A'} & ${d.brideMotherName || 'N/A'}
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 10px; padding: 8px; background: #fff; border: 1px solid #e2e8f0; border-radius: 6px;">
+                        <strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-users"></use></svg> Principal Sponsors:</strong><br>
+                        • ${d.principalNinong || 'N/A'} (Ninong) &nbsp;|&nbsp; • ${d.principalNinang || 'N/A'} (Ninang)<br>
+                        <div style="margin-top: 6px;"><strong>Additional Sponsors:</strong><br>${additionalSponsorsHtml}</div>
+                    </div>
+                    <div style="padding: 8px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 6px;">
+                        <strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-church"></use></svg> Officiant & Optional Fees:</strong><br>
+                        • <strong>Guest Priest:</strong> ${d.hasGuestPriest ? 'Yes — ' + (d.guestPriestName || 'Provided') : 'No (Parish Priest)'}<br>
+                        • <strong>Electricity / Video Fee (₱1,000):</strong> ${d.electricityFeeIncluded ? 'Included (+₱1,000)' : 'Not Included'}
+                    </div>
                 </div>
-                <div>
-                    <strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-user-round"></use></svg> Bride:</strong> ${d.brideName || `${d.brideFirstName || ''} ${d.brideLastName || ''}`.trim() || 'N/A'}<br>
-                    <strong>Age & Status:</strong> ${d.brideAge || 'N/A'} yrs old, ${d.brideCivilStatus || 'N/A'}<br>
-                    <strong>Nationality:</strong> ${d.brideNationality || 'Filipino'}<br>
-                    <strong>Place of Birth:</strong> ${d.bridePlaceOfBirth || 'N/A'}<br>
-                    <strong>Occupation:</strong> ${d.brideOccupation || 'N/A'}<br>
-                    <strong>Residence:</strong> ${d.bridePresentResidence || 'N/A'}<br>
-                    <strong>Parents:</strong> ${d.brideFatherName || 'N/A'} & ${d.brideMotherName || 'N/A'}
-                </div>
-            </div>
-
-            <!-- SPONSORS -->
-            <div style="margin-bottom: 10px; padding: 8px; background: #fff; border: 1px solid #e2e8f0; border-radius: 6px;">
-                <strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-users"></use></svg> Principal Sponsors:</strong><br>
-                • ${d.principalNinong || 'N/A'} (Ninong) &nbsp;|&nbsp; • ${d.principalNinang || 'N/A'} (Ninang)<br>
-                <div style="margin-top: 6px;"><strong>Additional Sponsors (Up to 6):</strong><br>${additionalSponsorsHtml}</div>
-            </div>
-
-            <!-- OFFICIANT & FEES -->
-            <div style="padding: 8px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 6px;">
-                <strong><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-church"></use></svg> Officiant & Optional Fees:</strong><br>
-                • <strong>Guest Priest:</strong> ${d.hasGuestPriest ? 'Yes — ' + (d.guestPriestName || 'Provided') : 'No ( Parish Priest )'}<br>
-                • <strong>Electricity / Video Fee (₱1,000):</strong> ${d.electricityFeeIncluded ? 'Included (+₱1,000)' : 'Not Included'}
-            </div>
-        </div>
-    `;
+            `;
                 }
-
                 else if (sType.includes('funeral')) {
                     formattedDetails = `
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px;">
@@ -2571,17 +2594,14 @@
                 </div>
             `;
                 } else {
-                    // Fallback for general services
                     formattedDetails = Object.entries(d).map(([k, v]) => `<div><strong>${k}:</strong> ${v}</div>`).join('');
                 }
             }
 
+            // --- 4. DOCUMENTS PARSER ---
             let docsHtml = '<em style="color:#666; font-size:12px;">No sacramental documents attached.</em>';
-
             if (app.documents) {
                 let docItems = [];
-
-                // Handle if app.documents is an Object (e.g. { "Mother's Baptismal Certificate": [...] })
                 if (!Array.isArray(app.documents) && typeof app.documents === 'object') {
                     for (const [docLabel, fileList] of Object.entries(app.documents)) {
                         if (!fileList) continue;
@@ -2596,9 +2616,7 @@
                             }
                         });
                     }
-                }
-                // Handle if app.documents is an Array
-                else if (Array.isArray(app.documents) && app.documents.length > 0) {
+                } else if (Array.isArray(app.documents) && app.documents.length > 0) {
                     app.documents.forEach((doc, idx) => {
                         if (typeof doc === 'string') {
                             docItems.push({
@@ -2617,34 +2635,35 @@
                 }
 
                 if (docItems.length > 0) {
-                    docsHtml = docItems.map((item, idx) => {
+                    docsHtml = docItems.map((item) => {
                         let docTypeLabel = item.categoryLabel ? `<span style="background: #4a0e17; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; margin-right: 6px; font-weight: bold;">${item.categoryLabel}</span>` : '';
                         let viewerId = registerDocumentForViewer(item.name, item.data);
                         return `
-                            <div style="margin: 6px 0; display: flex; align-items: center; justify-content: space-between; background: #fff; padding: 6px 10px; border: 1px solid #e2e8f0; border-radius: 4px;">
-                                <div style="display: flex; align-items: center; gap: 6px; overflow: hidden; max-width: 80%;">
-                                    ${docTypeLabel}
-                                    <span style="font-size: 12px; font-weight: bold; color: #1e293b; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">${item.name}</span>
-                                </div>
-                                <button type="button" onclick="viewDocumentById('${viewerId}')" style="background: #0056b3; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; white-space: nowrap;">View</button>
-                            </div>`;
+                    <div style="margin: 6px 0; display: flex; align-items: center; justify-content: space-between; background: #fff; padding: 6px 10px; border: 1px solid #e2e8f0; border-radius: 4px;">
+                        <div style="display: flex; align-items: center; gap: 6px; overflow: hidden; max-width: 80%;">
+                            ${docTypeLabel}
+                            <span style="font-size: 12px; font-weight: bold; color: #1e293b; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">${item.name}</span>
+                        </div>
+                        <button type="button" onclick="viewDocumentById('${viewerId}')" style="background: #0056b3; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; white-space: nowrap;">View</button>
+                    </div>`;
                     }).join('');
                 }
             }
 
-
+            // --- 5. PAYMENT PROOF PARSER ---
             let paymentProofHtml = '<em style="color:#666; font-size: 12px;">No payment receipt uploaded yet.</em>';
             if (app.paymentProof) {
                 let proofName = app.paymentProof.name || 'GCash_Receipt.png';
                 let proofUrl = app.paymentProof.data || app.paymentProof;
                 let proofViewerId = registerDocumentForViewer(proofName, proofUrl);
                 paymentProofHtml = `
-        <div style="margin: 4px 0; display: flex; align-items: center; gap: 8px; background: #e8f5e9; padding: 8px; border-radius: 4px; border: 1px solid #c8e6c9;">
-            <span style="font-size: 12px; font-weight: bold; color: #2e7d32;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-credit-card"></use></svg> GCash Receipt: ${proofName}</span>
-            <button type="button" onclick="viewDocumentById('${proofViewerId}')" style="background: #2e7d32; color: white; border: none; padding: 3px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-eye"></use></svg> View Payment Proof</button>
-        </div>`;
+            <div style="margin: 4px 0; display: flex; align-items: center; gap: 8px; background: #e8f5e9; padding: 8px; border-radius: 4px; border: 1px solid #c8e6c9;">
+                <span style="font-size: 12px; font-weight: bold; color: #2e7d32;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-credit-card"></use></svg> GCash Receipt: ${proofName}</span>
+                <button type="button" onclick="viewDocumentById('${proofViewerId}')" style="background: #2e7d32; color: white; border: none; padding: 3px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-eye"></use></svg> View Payment Proof</button>
+            </div>`;
             }
 
+            // --- 6. RENDER MODAL HTML ---
             document.getElementById('applicantInfoSection').innerHTML = `
         <div style="margin-bottom: 6px;"><strong>Ref ID:</strong> <span style="color: #4a0e17; font-weight: bold;">${app.referenceId || 'N/A'}</span> | <strong>Sacrament:</strong> ${app.sacramentType || 'N/A'}</div>
         <div style="margin-bottom: 8px;"><strong>Applicant:</strong> ${app.applicantName || app.fullName || 'N/A'} (${app.applicantEmail || app.email || 'N/A'})</div>
@@ -2655,6 +2674,12 @@
         <div style="margin-top: 12px; border-top: 1px dashed #ccc; padding-top: 8px;">
             <strong style="color: #4a0e17; display: block; margin-bottom: 4px;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-folder-open"></use></svg> Sacramental Requirements:</strong>
             <div style="margin-bottom: 10px;">${docsHtml}</div>
+            
+            <!-- MARK AS VERIFIED BUTTON -->
+            <button type="button" onclick="markDocumentsVerified('${app.id}')" style="background: #1e5631; color: white; border: none; padding: 7px 14px; border-radius: 4px; font-weight: bold; font-size: 12px; cursor: pointer; margin-bottom: 12px; display: inline-flex; align-items: center; gap: 6px;">
+                <svg class="ui-icon" aria-hidden="true"><use href="#ui-check"></use></svg> Mark Documents as Verified & Ready for Payment
+            </button>
+
             <strong style="color: #1e5631; display: block; margin-bottom: 4px;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-credit-card"></use></svg> Payment Proof / GCash Receipt:</strong>
             <div style="margin-bottom: 8px;">${paymentProofHtml}</div>
             <div style="font-size: 13px; margin-top: 6px;">
@@ -2684,6 +2709,42 @@
 
             // Otherwise, allow the admin to proceed to the appointment modal
             openAppointmentModal(appId);
+        }
+
+        async function markDocumentsVerified(appId) {
+            const numericId = isNaN(appId) ? appId : Number(appId);
+            const app = await db.applications.get(numericId);
+            if (!app) return;
+
+            const currentUser = JSON.parse(localStorage.getItem('currentAdminUser')) || { fullName: 'Secretariat' };
+            const historyEntry = {
+                oldStatus: app.status || 'Pending',
+                newStatus: 'Reviewed & Ready for Payment',
+                adminNote: 'Documents verified by staff.',
+                changedAt: new Date().toISOString(),
+                changedBy: currentUser.fullName
+            };
+            const updatedHistory = app.statusHistory ? [...app.statusHistory, historyEntry] : [historyEntry];
+
+            await db.applications.update(numericId, {
+                status: 'Reviewed & Ready for Payment',
+                statusHistory: updatedHistory,
+                adminNotes: (app.adminNotes ? app.adminNotes + ' ' : '') + '[Documents Verified]'
+            });
+
+            if (app.userId && app.userId !== 'STAFF-WALKIN-USER') {
+                await dispatchSystemNotification({
+                    targetUserId: Number(app.userId) || app.userId,
+                    referenceId: app.referenceId,
+                    title: `Documents Verified (${app.sacramentType})`,
+                    message: `Your documents have been verified. Your application status is now "Reviewed & Ready for Payment".`,
+                    category: 'parishioner'
+                });
+            }
+
+            closeModal('adminUpdateModal');
+            fetchApplications();
+            showAlert('Documents successfully marked as verified! Status updated to "Reviewed & Ready for Payment".', 'Success');
         }
 
         async function handleAdminUpdateSubmit(event) {
@@ -3217,17 +3278,13 @@
             const todayStr = new Date().toISOString().split('T')[0];
 
             let html = '';
-            for (let i = 0; i < firstDayIndex; i++) {
-                html += `<div style="min-height: 80px;"></div>`;
-            }
+            for (let i = 0; i < firstDayIndex; i++) { html += `<div style="min-height: 80px;"></div>`; }
 
             for (let day = 1; day <= totalDays; day++) {
-                const formattedDay = String(day).padStart(2, '0');
-                const formattedMonth = String(month + 1).padStart(2, '0');
-                const dateString = `${year}-${formattedMonth}-${formattedDay}`;
-
+                const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 const dayBookings = rawApplicationsData.filter(app => {
-                    if (app.archived || (app.status || '').toLowerCase() === 'rejected') return false;
+                    const status = (app.status || '').toLowerCase();
+                    if (app.archived || status === 'rejected') return false;
                     const appDate = app.confirmedDate || app.preferredDate || '';
                     return appDate.startsWith(dateString);
                 });
@@ -3240,24 +3297,20 @@
 
                 let eventsHtml = '';
                 dayBookings.forEach(app => {
-                    const type = (app.sacramentType || '').toLowerCase();
-                    let badgeBg = '#7f8c8d';
-                    let label = type.charAt(0).toUpperCase() + type.slice(1);
+                    const typeLower = (app.sacramentType || '').toLowerCase();
+                    let badgeBg = '#991b1b';
+                    if (typeLower.includes('baptism')) badgeBg = '#1877f2';
+                    else if (typeLower.includes('wedding')) badgeBg = '#8e44ad';
+                    else if (typeLower.includes('funeral')) badgeBg = '#c0392b';
 
-                    if (type.includes('baptism')) badgeBg = '#1877f2';
-                    else if (type.includes('wedding')) badgeBg = '#8e44ad';
-                    else if (type.includes('funeral')) badgeBg = '#c0392b';
-
-                    eventsHtml += `<div style="background: ${badgeBg}; color: white; font-size: 10px; font-weight: bold; padding: 2px 4px; border-radius: 3px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${label}: ${app.applicantName || app.fullName}">${label}</div>`;
+                    const typeText = (app.sacramentType || '').toUpperCase();
+                    eventsHtml += `<div style="background: ${badgeBg}; color: white; font-size: 10px; font-weight: bold; padding: 2px 4px; border-radius: 3px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${typeText}</div>`;
                 });
 
                 html += `
-                <div onclick="inspectMasterDate('${dateString}')" style="background: ${cellBg}; border: ${cellBorder}; border-radius: 6px; padding: 6px; min-height: 85px; cursor: pointer; display: flex; flex-direction: column; justify-content: flex-start; text-align: left; box-sizing: border-box;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                        <strong style="font-size: 14px; color: ${isToday ? '#d35400' : '#1c1e21'}; font-weight: 700;">${day}</strong>
-                        ${dayBookings.length > 0 ? `<span style="font-size: 10px; background: #e4e6eb; color: #1c1e21; padding: 1px 5px; border-radius: 10px; font-weight: bold;">${dayBookings.length}</span>` : ''}
-                    </div>
-                    <div style="margin-top: 4px; overflow-y: auto; max-height: 50px; width: 100%;">${eventsHtml}</div>
+                <div onclick="inspectMasterDate('${dateString}')" style="background: ${cellBg}; border: ${cellBorder}; border-radius: 6px; padding: 6px; min-height: 85px; cursor: pointer;">
+                    <strong style="font-size: 14px; color: ${isToday ? '#d35400' : '#1c1e21'};">${day}</strong>
+                    <div style="margin-top: 4px; overflow-y: auto; max-height: 50px;">${eventsHtml}</div>
                 </div>`;
             }
             gridEl.innerHTML = html;
@@ -3527,6 +3580,10 @@
         async function handleStaffWalkInSubmit(event, formElement) {
             if (event) event.preventDefault();
 
+            // If formElement is not passed directly, try to locate it from the modal form
+            if (!formElement) {
+                formElement = document.querySelector('#walkInModal form');
+            }
             if (!formElement) {
                 console.error("Form element reference is missing.");
                 return;
@@ -3537,12 +3594,72 @@
             const phone = formElement.querySelector('#walkInPhone')?.value.trim() || '';
             const date = formElement.querySelector('#selectedStaffWalkInDate')?.value || '';
             const time = formElement.querySelector('#walkInTimeSlot')?.value || '';
-            const isPaidOTC = formElement.querySelector('#walkInPaidOTC')?.checked || true;
-            const wakeDays = (service === 'Funeral') ? parseInt(formElement.querySelector('#walkInWakeDays')?.value || 3) : 0;
+            const isPaidOTC = formElement.querySelector('#walkInPaidOTC')?.checked ?? true;
 
             if (!date) {
                 alert('Please pick an available date from the interactive calendar grid first.');
                 return;
+            }
+
+            // Gather service-specific details dynamically
+            let details = {
+                phone: phone,
+                walkInAccommodation: true
+            };
+
+            const sType = service.toLowerCase();
+            if (sType.includes('baptism')) {
+                details.childFirstName = formElement.querySelector('[name="childFirstName"]')?.value.trim() || '';
+                details.childMiddleInitial = formElement.querySelector('[name="childMiddleInitial"]')?.value.trim() || '';
+                details.childLastName = formElement.querySelector('[name="childLastName"]')?.value.trim() || '';
+                details.childName = `${details.childFirstName} ${details.childMiddleInitial} ${details.childLastName}`.trim();
+                details.childDob = formElement.querySelector('[name="childDob"]')?.value || '';
+
+                details.fatherFirstName = formElement.querySelector('[name="fatherFirstName"]')?.value.trim() || '';
+                details.fatherMiddleInitial = formElement.querySelector('[name="fatherMiddleInitial"]')?.value.trim() || '';
+                details.fatherLastName = formElement.querySelector('[name="fatherLastName"]')?.value.trim() || '';
+                details.fatherName = `${details.fatherFirstName} ${details.fatherMiddleInitial} ${details.fatherLastName}`.trim();
+
+                details.motherFirstName = formElement.querySelector('[name="motherFirstName"]')?.value.trim() || '';
+                details.motherMiddleInitial = formElement.querySelector('[name="motherMiddleInitial"]')?.value.trim() || '';
+                details.motherLastName = formElement.querySelector('[name="motherLastName"]')?.value.trim() || '';
+                details.motherName = `${details.motherFirstName} ${details.motherMiddleInitial} ${details.motherLastName}`.trim();
+            } else if (sType.includes('wedding')) {
+                details.groomFirstName = formElement.querySelector('[name="groomFirstName"]')?.value.trim() || '';
+                details.groomMiddleInitial = formElement.querySelector('[name="groomMiddleInitial"]')?.value.trim() || '';
+                details.groomLastName = formElement.querySelector('[name="groomLastName"]')?.value.trim() || '';
+                details.groomName = `${details.groomFirstName} ${details.groomMiddleInitial} ${details.groomLastName}`.trim();
+                details.groomAge = formElement.querySelector('[name="groomAge"]')?.value || '';
+                details.groomCivilStatus = formElement.querySelector('[name="groomCivilStatus"]')?.value || '';
+                details.groomNationality = formElement.querySelector('[name="groomNationality"]')?.value || 'Filipino';
+                details.groomPlaceOfBirth = formElement.querySelector('[name="groomPlaceOfBirth"]')?.value || '';
+                details.groomOccupation = formElement.querySelector('[name="groomOccupation"]')?.value || '';
+                details.groomPresentResidence = formElement.querySelector('[name="groomPresentResidence"]')?.value || '';
+                details.groomFatherName = formElement.querySelector('[name="groomFatherName"]')?.value || '';
+                details.groomMotherName = formElement.querySelector('[name="groomMotherName"]')?.value || '';
+
+                details.brideFirstName = formElement.querySelector('[name="brideFirstName"]')?.value.trim() || '';
+                details.brideMiddleInitial = formElement.querySelector('[name="brideMiddleInitial"]')?.value.trim() || '';
+                details.brideLastName = formElement.querySelector('[name="brideLastName"]')?.value.trim() || '';
+                details.brideName = `${details.brideFirstName} ${details.brideMiddleInitial} ${details.brideLastName}`.trim();
+                details.brideAge = formElement.querySelector('[name="brideAge"]')?.value || '';
+                details.brideCivilStatus = formElement.querySelector('[name="brideCivilStatus"]')?.value || '';
+                details.brideNationality = formElement.querySelector('[name="brideNationality"]')?.value || 'Filipino';
+                details.bridePlaceOfBirth = formElement.querySelector('[name="bridePlaceOfBirth"]')?.value || '';
+                details.brideOccupation = formElement.querySelector('[name="brideOccupation"]')?.value || '';
+                details.bridePresentResidence = formElement.querySelector('[name="bridePresentResidence"]')?.value || '';
+                details.brideFatherName = formElement.querySelector('[name="brideFatherName"]')?.value || '';
+                details.brideMotherName = formElement.querySelector('[name="brideMotherName"]')?.value || '';
+
+                details.electricityFeeIncluded = formElement.querySelector('[name="electricityFee"]')?.checked || false;
+            } else if (sType.includes('funeral')) {
+                details.deceasedFirstName = formElement.querySelector('[name="deceasedFirstName"]')?.value.trim() || '';
+                details.deceasedMiddleInitial = formElement.querySelector('[name="deceasedMiddleInitial"]')?.value.trim() || '';
+                details.deceasedLastName = formElement.querySelector('[name="deceasedLastName"]')?.value.trim() || '';
+                details.deceasedName = `${details.deceasedFirstName} ${details.deceasedMiddleInitial} ${details.deceasedLastName}`.trim();
+                details.age = formElement.querySelector('[name="deceasedAge"]')?.value || '';
+                details.dateOfDeath = formElement.querySelector('[name="dateOfDeath"]')?.value || '';
+                details.wakeDays = parseInt(formElement.querySelector('#walkInWakeDays')?.value || 3);
             }
 
             const prefix = service.slice(0, 3).toUpperCase();
@@ -3558,8 +3675,8 @@
                 preferredDate: date,
                 confirmedDate: date,
                 confirmedTime: time,
-                details: { phone: phone, walkInAccommodation: true, wakeDays: wakeDays },
-                documents: [], // Explicitly empty: No digital documents required for staff walk-ins
+                details: details,
+                documents: [], // Staff walk-ins verified on-site without digital uploads required
                 paymentConfirmed: isPaidOTC,
                 adminNotes: 'Manually accommodated on-site via Staff Interactive Calendar. Physical docs verified.',
                 archived: false,
@@ -3568,17 +3685,19 @@
 
             try {
                 await db.applications.add(walkInData);
-                alert(` Walk-In Confirmed Successfully!\nReference ID: ${referenceId}\nScheduled: ${date} (${time})\n(No digital documents required - Verified on-site)`);
+                showAlert(`Walk-In Confirmed Successfully!\nReference ID: ${referenceId}\nScheduled: ${date} (${time})`, 'Success');
 
                 formElement.reset();
                 document.getElementById('selectedStaffWalkInDate').value = '';
+                toggleWalkInServiceForms();
                 renderStaffInteractiveCalendar();
                 if (typeof fetchApplications === 'function') {
                     fetchApplications();
                 }
+                closeModal('walkInModal');
             } catch (err) {
                 console.error('Error saving walk-in:', err);
-                alert(' Error saving walk-in to database.');
+                showAlert('Error saving walk-in record to database.');
             }
         }
 
