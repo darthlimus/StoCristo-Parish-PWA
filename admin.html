@@ -12,9 +12,8 @@
     <!-- PWA Manifest & Theme for Admin -->
     <link rel="manifest" href="./admin-manifest.json">
     <meta name="theme-color" content="#800020">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
     <style>
         .modal-overlay {
             display: none;
@@ -899,6 +898,20 @@
                         <use href="#ui-refresh-cw"></use>
                     </svg><span class="refresh-btn-text"> Refresh Submissions</span>
                 </button>
+                <!-- TOP-BAR BACKUP BUTTON (Place beside Seminar Attendance button) -->
+                <button type="button" onclick="openModal('databaseBackupModal')"
+                    style="background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; padding: 8px 14px; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; position: relative; transition: all 0.2s;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" style="color: #4a0e17;">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                        <polyline points="7 3 7 8 15 8"></polyline>
+                    </svg>
+                    <span>Database Backup</span>
+                    <!-- Optional notification dot if backup is due -->
+                    <span id="backupDotIndicator"
+                        style="display: none; width: 8px; height: 8px; background: #ef4444; border-radius: 50%; position: absolute; top: -2px; right: -2px;"></span>
+                </button>
             </div>
 
             <div id="applicationsTableContainer" style="display: block;">
@@ -926,7 +939,6 @@
             </div>
         </div>
     </div>
-
     <!-- MODAL: WALK-IN ACCOMMODATION / RESERVATION -->
     <div id="walkInModal" class="modal-overlay">
         <div class="modal-box"
@@ -1001,7 +1013,7 @@
                             style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;">
                     </div>
 
-                    <h5 style="color: #4a0e17; margin: 12px 0 8px 0;">Father's Information</h5>
+                    <h5 style="color: #991b1b; margin: 12px 0 8px 0;">Father's Information</h5>
                     <div style="display: flex; gap: 10px; margin-bottom: 10px;">
                         <div style="flex: 2;"><input type="text" name="fatherFirstName" placeholder="First Name"
                                 style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
@@ -1012,7 +1024,7 @@
                                 style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
                     </div>
 
-                    <h5 style="color: #4a0e17; margin: 12px 0 8px 0;">Mother's Maiden Information</h5>
+                    <h5 style="color: #991b1b; margin: 12px 0 8px 0;">Mother's Maiden Information</h5>
                     <div style="display: flex; gap: 10px; margin-bottom: 10px;">
                         <div style="flex: 2;"><input type="text" name="motherFirstName" placeholder="First Name"
                                 style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
@@ -1027,7 +1039,7 @@
                 <!-- 2. WEDDING SPECIFIC FIELDS -->
                 <div id="walkInWeddingFields" class="service-walkin-fields"
                     style="display: none; border-top: 1px solid #e2e8f0; padding-top: 12px; margin-bottom: 15px;">
-                    <h5 style="color: #4a0e17; margin: 0 0 8px 0;">Groom's Information</h5>
+                    <h5 style="color: #991b1b; margin: 0 0 8px 0;">Groom's Information</h5>
                     <div style="display: flex; gap: 10px; margin-bottom: 8px;">
                         <div style="flex: 2;"><input type="text" name="groomFirstName" placeholder="First Name"
                                 style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
@@ -1070,7 +1082,7 @@
                                 style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
                     </div>
 
-                    <h5 style="color: #4a0e17; margin: 12px 0 8px 0;">Bride's Information</h5>
+                    <h5 style="color: #991b1b; margin: 12px 0 8px 0;">Bride's Information</h5>
                     <div style="display: flex; gap: 10px; margin-bottom: 8px;">
                         <div style="flex: 2;"><input type="text" name="brideFirstName" placeholder="First Name"
                                 style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
@@ -1126,7 +1138,7 @@
                 <!-- 3. FUNERAL SPECIFIC FIELDS -->
                 <div id="walkInFuneralFields" class="service-walkin-fields"
                     style="display: none; border-top: 1px solid #e2e8f0; padding-top: 12px; margin-bottom: 15px;">
-                    <h5 style="color: #4a0e17; margin: 0 0 8px 0;">Deceased Person's Information</h5>
+                    <h5 style="color: #991b1b; margin: 0 0 8px 0;">Deceased Person's Information</h5>
                     <div style="display: flex; gap: 10px; margin-bottom: 10px;">
                         <div style="flex: 2;"><input type="text" name="deceasedFirstName" placeholder="First Name"
                                 style="width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 4px;"></div>
@@ -1151,17 +1163,19 @@
                 </div>
 
                 <!-- ================= CALENDAR & SCHEDULING ================= -->
+                <!-- FUNERAL DURATION & SPAN SUMMARY -->
                 <div id="funeralDurationGroup"
                     style="margin-bottom: 15px; display: none; background: #f8fafc; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0;">
                     <label
                         style="display: block; font-weight: bold; font-size: 13px; color: #334155; margin-bottom: 6px;">Wake
                         Duration (Number of Days in Chapel) *</label>
-                    <input type="number" id="walkInWakeDays" min="1" max="7" value="3"
+                    <input type="number" id="walkInWakeDays" min="1" max="7" value="7"
                         onchange="renderStaffInteractiveCalendar()"
                         style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;">
                 </div>
 
                 <div style="margin-bottom: 15px;">
+                    <!-- Calendar Header & Grid -->
                     <div
                         style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                         <span id="staffCalendarMonthLabel"
@@ -1187,6 +1201,14 @@
                     <div id="staffCalendarGrid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;">
                     </div>
                     <input type="hidden" id="selectedStaffWalkInDate" required>
+
+                    <!-- Resurrection Chapel Reservation Summary Box -->
+                    <div id="funeralSpanSummary"
+                        style="margin-top: 12px; padding: 12px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; color: #1e293b; display: none;">
+                        <strong>Resurrection Chapel Reservation (<span id="summaryWakeDays">7</span> Days)</strong><br>
+                        Wake Span: <span id="summaryWakeSpan">---</span><br>
+                        Stipend Total: ₱<span id="summaryStipend">14,000</span> (@ ₱2,000/day)
+                    </div>
                 </div>
 
                 <div style="margin-bottom: 15px;">
@@ -1518,17 +1540,19 @@
                 </div>
 
                 <!-- ================= CALENDAR & SCHEDULING ================= -->
+                <!-- FUNERAL DURATION & SPAN SUMMARY -->
                 <div id="funeralDurationGroup"
                     style="margin-bottom: 15px; display: none; background: #f8fafc; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0;">
                     <label
                         style="display: block; font-weight: bold; font-size: 13px; color: #334155; margin-bottom: 6px;">Wake
                         Duration (Number of Days in Chapel) *</label>
-                    <input type="number" id="walkInWakeDays" min="1" max="7" value="3"
+                    <input type="number" id="walkInWakeDays" min="1" max="7" value="7"
                         onchange="renderStaffInteractiveCalendar()"
                         style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;">
                 </div>
 
                 <div style="margin-bottom: 15px;">
+                    <!-- Calendar Header & Grid -->
                     <div
                         style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                         <span id="staffCalendarMonthLabel"
@@ -1554,6 +1578,14 @@
                     <div id="staffCalendarGrid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;">
                     </div>
                     <input type="hidden" id="selectedStaffWalkInDate" required>
+
+                    <!-- Resurrection Chapel Reservation Summary Box (Matches your reference design) -->
+                    <div id="funeralSpanSummary"
+                        style="margin-top: 12px; padding: 12px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; color: #1e293b; display: none;">
+                        <strong>Resurrection Chapel Reservation (<span id="summaryWakeDays">7</span> Days)</strong><br>
+                        Wake Span: <span id="summaryWakeSpan">---</span><br>
+                        Stipend Total: ₱<span id="summaryStipend">14,000</span> (@ ₱2,000/day)
+                    </div>
                 </div>
 
                 <div style="margin-bottom: 15px;">
@@ -1890,6 +1922,102 @@
             </form>
         </div>
     </div>
+
+    <!-- MODAL: MODERN DATABASE BACKUP & RECOVERY -->
+    <div id="databaseBackupModal" class="modal-overlay"
+        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div class="modal-box"
+            style="background: white; width: 100%; max-width: 520px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); overflow: hidden; animation: modalFadeIn 0.2s ease;">
+
+            <!-- Modal Header -->
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; padding: 18px 24px; border-bottom: 1px solid #e2e8f0; background: #f8fafc;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="background: #fdf2f2; padding: 8px; border-radius: 8px; color: #4a0e17;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                            <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                        </svg>
+                    </div>
+                    <h3 style="color: #0f172a; margin: 0; font-size: 16px; font-weight: 700;">Database Backup & Recovery
+                    </h3>
+                </div>
+                <button type="button" onclick="closeModal('databaseBackupModal')"
+                    style="background: none; border: none; cursor: pointer; color: #64748b; padding: 4px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div style="padding: 24px;">
+                <!-- Reminder Alert Box -->
+                <div id="modalBackupReminder"
+                    style="display: none; background: #fffbeb; border: 1px solid #fef3c7; border-left: 4px solid #f59e0b; padding: 12px 14px; border-radius: 6px; font-size: 13px; color: #92400e; margin-bottom: 20px; align-items: center; gap: 10px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
+                        </path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    <span><strong>Action Recommended:</strong> You haven't exported a data backup yet today.</span>
+                </div>
+
+                <p style="font-size: 13px; color: #475569; margin-top: 0; margin-bottom: 20px; line-height: 1.5;">
+                    Securely download a complete JSON snapshot of all parish data including applications, records, and
+                    schedules. You can restore this file at any time.
+                </p>
+
+                <!-- Action Options Grid -->
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <!-- Export Action -->
+                    <button type="button" onclick="exportDatabaseBackup()"
+                        style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 14px 16px; background: #4a0e17; color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; transition: background 0.2s;">
+                        <span style="display: flex; align-items: center; gap: 10px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            Download Full Backup (.json)
+                        </span>
+                        <span
+                            style="font-size: 11px; background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 4px;">Recommended</span>
+                    </button>
+
+                    <!-- Restore Action -->
+                    <label
+                        style="display: flex; align-items: center; justify-content: space-between; width: 100%; box-sizing: border-box; padding: 14px 16px; background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; transition: background 0.2s;">
+                        <span style="display: flex; align-items: center; gap: 10px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                            Restore Database from Backup
+                        </span>
+                        <input type="file" id="importBackupFile" accept=".json" onchange="importDatabaseBackup(event)"
+                            style="display: none;">
+                    </label>
+                </div>
+
+                <!-- Status Footer -->
+                <div
+                    style="margin-top: 20px; padding-top: 14px; border-top: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #64748b;">
+                    <span id="modalLastBackupText">Last Backup: Never</span>
+                    <span style="color: #10b981; font-weight: 500;">● System Active</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script>
         const db = new Dexie('ParishPortalDB');
@@ -2299,6 +2427,47 @@
                 ${status || 'Reviewing'}
             </span>`;
         }
+        function getNormalizedDocuments(docsField) {
+            let items = [];
+            if (!docsField) return items;
+            if (Array.isArray(docsField)) {
+                docsField.forEach((d, idx) => {
+                    if (typeof d === 'string') {
+                        items.push({ name: `Document ${idx + 1}`, data: d, type: 'Document' });
+                    } else if (d) {
+                        items.push({
+                            name: d.name || d.fileName || d.documentTitle || d.documentType || `Document ${idx + 1}`,
+                            data: d.data || d.fileData || d.url || '',
+                            type: d.documentType || d.documentTitle || d.label || 'Document'
+                        });
+                    }
+                });
+            } else if (typeof docsField === 'object') {
+                for (const [key, val] of Object.entries(docsField)) {
+                    if (Array.isArray(val)) {
+                        val.forEach((f, idx) => {
+                            if (typeof f === 'string') {
+                                items.push({ name: `${key} (${idx + 1})`, data: f, type: key });
+                            } else if (f) {
+                                items.push({
+                                    name: f.name || f.fileName || f.documentTitle || `${key} (${idx + 1})`,
+                                    data: f.data || f.fileData || f.url || '',
+                                    type: key
+                                });
+                            }
+                        });
+                    } else if (val && typeof val === 'object') {
+                        items.push({
+                            name: val.name || val.fileName || val.documentTitle || key,
+                            data: val.data || val.fileData || val.url || '',
+                            type: key
+                        });
+                    }
+                }
+            }
+            return items;
+        }
+
 
         function renderTable() {
             const tbody = document.getElementById('applicationsTableBody');
@@ -2312,7 +2481,7 @@
             const statusFilter = (statusFilterEl ? statusFilterEl.value : 'ALL').toLowerCase();
             const searchInput = (searchInputEl ? searchInputEl.value : '').toLowerCase().trim();
 
-            const reqConfig = { baptism: 3, wedding: 3, funeral: 0 };
+            const reqConfig = { baptism: 2, wedding: 4, funeral: 0 };
 
             let filtered = rawApplicationsData.filter(app => {
                 const isArchived = Boolean(app.archived);
@@ -2343,6 +2512,7 @@
                 const dateStr = app.createdAt ? new Date(app.createdAt).toLocaleDateString() : 'N/A';
                 const sacramentTitle = app.sacramentType ? (app.sacramentType.charAt(0).toUpperCase() + app.sacramentType.slice(1)) : 'N/A';
                 const currentStatus = app.status || 'Pending';
+
                 // --- CLEAN STATUS BADGE (NO LONGER A DROPDOWN) ---
                 let badgeClass = 'status-pending';
                 const st = currentStatus.toLowerCase();
@@ -2360,46 +2530,25 @@
                 const rawName = app.applicantName || app.details?.applicantName || `${app.details?.applicantFirstName || ''} ${app.details?.applicantLastName || ''}`.trim();
                 const rawEmail = app.applicantEmail || app.details?.applicantEmail || app.email || '';
                 const contactInfo = rawName ? `<strong>${rawName}</strong><br><small style="color:#555;">${rawEmail}</small>` : (rawEmail || 'N/A');
-                const isWalkIn = Boolean(app.details?.walkInAccommodation);
+
+                // Safely scoped per-application flags
+                const isWalkIn = Boolean(app.details?.walkInAccommodation || app.isWalkIn || (app.type && app.type.toLowerCase() === 'walk-in'));
                 const hasGuestPriest = app.details?.hasGuestPriest || false;
                 const sacramentKey = (app.sacramentType || '').toLowerCase().includes('baptism') ? 'baptism' : ((app.sacramentType || '').toLowerCase().includes('wedding') ? 'wedding' : 'funeral');
 
                 let minRequired = 0;
                 if (!isWalkIn) {
                     if (sacramentKey === 'wedding') {
-                        minRequired = hasGuestPriest ? 4 : 3;
+                        minRequired = hasGuestPriest ? 5 : 4;
                     } else if (sacramentKey === 'baptism') {
-                        minRequired = 2;
+                        minRequired = 3;
                     } else {
                         minRequired = reqConfig[sacramentKey] !== undefined ? reqConfig[sacramentKey] : 0;
                     }
                 }
 
                 // --- ROBUST DOCUMENT COUNTING FOR ADMIN TABLE ---
-                let uploadedCount = 0;
-
-                if (app.documents) {
-                    if (Array.isArray(app.documents)) {
-                        const uniqueMap = new Map();
-                        app.documents.forEach(doc => {
-                            let name = typeof doc === 'string' ? doc : (doc.name || doc.fileName || 'Document');
-                            uniqueMap.set(name, doc);
-                        });
-                        uploadedCount = uniqueMap.size;
-                    } else if (typeof app.documents === 'object') {
-                        let totalFiles = 0;
-                        for (const [categoryKey, fileList] of Object.entries(app.documents)) {
-                            if (fileList) {
-                                if (Array.isArray(fileList) && fileList.length > 0) {
-                                    totalFiles += 1;
-                                } else if (typeof fileList === 'object' && Object.keys(fileList).length > 0) {
-                                    totalFiles += 1;
-                                }
-                            }
-                        }
-                        uploadedCount = totalFiles;
-                    }
-                }
+                let uploadedCount = getNormalizedDocuments(app.documents).length;
 
                 const isDocComplete = uploadedCount >= minRequired;
 
@@ -2424,7 +2573,6 @@
                     const detailsBtn = `<button type="button" onclick="event.stopPropagation(); openAdminUpdateModal('${app.id}')" style="background: #4a0e17; color: #ffffff;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-eye"></use></svg> Details</button>`;
 
                     if (!hasCertificateUploaded) {
-                        // Replaces the middle slot with Upload Cert, and blocks "Mark as Done" until uploaded
                         actionButtonsHtml = `
                             ${detailsBtn}
                             <button type="button" onclick="event.stopPropagation(); openCertificateUploadModal('${app.id}')" style="background: #0284c7; color: #ffffff;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-upload"></use></svg> Upload Cert</button>
@@ -2454,7 +2602,6 @@
                         scheduleBtnHtml = `<button type="button" onclick="event.stopPropagation(); openAppointmentModal('${app.id}')" style="background: ${btnBg}; color: #ffffff;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-calendar"></use></svg> ${btnLabel}</button>`;
                     }
 
-                    // STRICT VALIDATION: Prevent marking as done in Active Inbox unless a certificate is uploaded
                     const hasCertificateUploaded = Boolean(app.certificateUploaded || app.digitalCertificate);
                     let markAsDoneBtnHtml = '';
 
@@ -2478,7 +2625,7 @@
                     <td>${contactInfo}</td>
                     <td>${targetDate}</td>
                     <td>${filesHtml}</td>
-                        <td class="px-4 py-3 whitespace-nowrap">
+                    <td class="px-4 py-3 whitespace-nowrap">
                         ${statusBadgeHtml}
                         ${app.status && app.status.toLowerCase().includes('reschedule requested') && app.requestedNewDate ? `
                             <div style="background: #fffbeb; border: 1px solid #fde68a; padding: 6px 8px; border-radius: 4px; margin-top: 6px; font-size: 11px; color: #92400e;">
@@ -2598,10 +2745,11 @@
                 }
             }
 
-            // --- 4. DOCUMENTS PARSER ---
+            // --- 4. DOCUMENTS PARSER (FIXED TO SUPPORT `label` & `missingDocuments`) ---
             let docsHtml = '<em style="color:#666; font-size:12px;">No sacramental documents attached.</em>';
+
+            let docItems = [];
             if (app.documents) {
-                let docItems = [];
                 if (!Array.isArray(app.documents) && typeof app.documents === 'object') {
                     for (const [docLabel, fileList] of Object.entries(app.documents)) {
                         if (!fileList) continue;
@@ -2609,7 +2757,7 @@
                         arr.forEach(fileObj => {
                             if (fileObj) {
                                 docItems.push({
-                                    categoryLabel: docLabel,
+                                    categoryLabel: fileObj.label || docLabel,
                                     name: fileObj.fileName || fileObj.name || docLabel,
                                     data: fileObj.fileData || fileObj.url || fileObj.data || ''
                                 });
@@ -2620,25 +2768,27 @@
                     app.documents.forEach((doc, idx) => {
                         if (typeof doc === 'string') {
                             docItems.push({
-                                categoryLabel: doc.documentType || 'Document',
+                                categoryLabel: 'Document',
                                 name: `Document ${idx + 1}`,
                                 data: doc
                             });
                         } else if (doc) {
                             docItems.push({
-                                categoryLabel: doc.documentType || doc.documentTitle || 'Document',
-                                name: doc.name || doc.fileName || `Document ${idx + 1}`,
-                                data: doc.data || doc.fileData || ''
+                                categoryLabel: doc.label || doc.documentType || doc.documentTitle || 'Document',
+                                name: doc.name || doc.fileName || doc.label || `Document ${idx + 1}`,
+                                data: doc.data || doc.fileData || doc.url || ''
                             });
                         }
                     });
                 }
+            }
 
-                if (docItems.length > 0) {
-                    docsHtml = docItems.map((item) => {
-                        let docTypeLabel = item.categoryLabel ? `<span style="background: #4a0e17; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; margin-right: 6px; font-weight: bold;">${item.categoryLabel}</span>` : '';
-                        let viewerId = registerDocumentForViewer(item.name, item.data);
-                        return `
+            // Build HTML for successfully uploaded files
+            if (docItems.length > 0) {
+                docsHtml = docItems.map((item) => {
+                    let docTypeLabel = item.categoryLabel ? `<span style="background: #4a0e17; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; margin-right: 6px; font-weight: bold;">${item.categoryLabel}</span>` : '';
+                    let viewerId = registerDocumentForViewer(item.name, item.data);
+                    return `
                     <div style="margin: 6px 0; display: flex; align-items: center; justify-content: space-between; background: #fff; padding: 6px 10px; border: 1px solid #e2e8f0; border-radius: 4px;">
                         <div style="display: flex; align-items: center; gap: 6px; overflow: hidden; max-width: 80%;">
                             ${docTypeLabel}
@@ -2646,8 +2796,24 @@
                         </div>
                         <button type="button" onclick="viewDocumentById('${viewerId}')" style="background: #0056b3; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; white-space: nowrap;">View</button>
                     </div>`;
-                    }).join('');
-                }
+                }).join('');
+            }
+
+            // Append Missing / To Follow-Up Documents block if any exist
+            if (app.missingDocuments && app.missingDocuments.length > 0) {
+                docsHtml += `
+                <div style="margin-top: 10px; padding: 8px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 6px;">
+                    <strong style="font-size: 11px; color: #b45309; text-transform: uppercase;">Pending / To Follow-Up Documents:</strong>
+                    <ul style="margin: 4px 0 0 16px; padding: 0; font-size: 12px; color: #92400e;">
+                        ${app.missingDocuments.map(item => `<li>${item}</li>`).join('')}
+                    </ul>
+                </div>`;
+            }
+
+            // Inject into your admin modal's document container element (adjust ID if yours differs)
+            const docContainer = document.getElementById('adminDocumentsContainer') || document.getElementById('adminDocReviewContainer');
+            if (docContainer) {
+                docContainer.innerHTML = docsHtml;
             }
 
             // --- 5. PAYMENT PROOF PARSER ---
@@ -2893,6 +3059,15 @@
                     } else if (sacramentType.includes('wedding')) {
                         isAllowed = (dayOfWeek >= 2 && dayOfWeek <= 6);
                         badgeText = isAllowed ? 'Wedding Slot' : 'Restricted';
+                    }
+                } else if (activeSchedulingStage === 'seminar') {
+                    if (sacramentType.includes('baptism')) {
+                        isAllowed = (dayOfWeek === 6); // Saturdays only
+                        badgeText = isAllowed ? 'Bap Seminar' : 'Saturday Only';
+                    } else if (sacramentType.includes('wedding')) {
+                        const isFirstSunday = (dayOfWeek === 0 && day <= 7); // 1st Sunday of the month
+                        isAllowed = isFirstSunday;
+                        badgeText = isAllowed ? 'Pre-Cana' : '1st Sunday Only';
                     }
                 }
 
@@ -3143,22 +3318,30 @@
             const timeInput = document.getElementById('apptConfirmedTime');
             const hintEl = document.getElementById('seminarRuleHint');
 
-            // Safely get sacrament type value or fallback to empty string
             const sacramentType = sacramentTypeEl ? sacramentTypeEl.value.toLowerCase() : '';
+            const selectedDate = new Date(dateStr);
+            const dayOfWeek = selectedDate.getDay();
+            const dayOfMonth = selectedDate.getDate();
 
             if (sacramentType.includes('baptism')) {
+                if (activeSchedulingStage === 'seminar' && dayOfWeek !== 6) {
+                    if (hintEl) hintEl.innerHTML = `<span style="color: #dc2626;"> Baptism seminars are strictly scheduled on Saturdays only.</span>`;
+                    return false;
+                }
                 if (timeInput) timeInput.value = '16:30';
                 if (hintEl) hintEl.textContent = '✓ Saturday 4:30 PM Baptism Seminar & Interview';
             } else if (sacramentType.includes('wedding')) {
+                if (activeSchedulingStage === 'seminar' && !(dayOfWeek === 0 && dayOfMonth <= 7)) {
+                    if (hintEl) hintEl.innerHTML = `<span style="color: #dc2626;"> Wedding Pre-Cana seminars are strictly scheduled on the 1st Sunday of the month only.</span>`;
+                    return false;
+                }
                 if (timeInput) timeInput.value = '08:00 - 17:00';
                 if (hintEl) hintEl.textContent = '✓ 1st Sunday Pre-Cana Seminar (8:00 AM - 5:00 PM)';
-            } else if (sacramentType.includes('funeral')) {
-                if (timeInput) timeInput.value = '08:00 - 17:00';
-                if (hintEl) hintEl.innerHTML = `✓ Resurrection Chapel Vigil Slot for <strong>${dateStr}</strong>`;
             } else {
                 if (timeInput) timeInput.value = '18:00';
-                if (hintEl) hintEl.textContent = '✓ Evening Vigil Slot';
+                if (hintEl) hintEl.textContent = '✓ Evening Slot';
             }
+            return true;
         }
 
         async function handleAppointmentSubmit(event) {
@@ -3405,31 +3588,38 @@
         }
 
         async function renderStaffInteractiveCalendar() {
-            const service = document.getElementById('walkInSacramentType').value;
+            const serviceElement = document.getElementById('walkInSacramentType');
             const grid = document.getElementById('staffCalendarGrid');
             const monthLabel = document.getElementById('staffCalendarMonthLabel');
             const serviceNotice = document.getElementById('staffServiceNotice');
             const funeralDurationGroup = document.getElementById('funeralDurationGroup');
+            const summaryBox = document.getElementById('funeralSpanSummary');
+
+            if (!grid || !monthLabel) return;
+
+            const service = serviceElement ? serviceElement.value : '';
 
             if (!service) {
                 grid.innerHTML = '<div style="grid-column: span 7; text-align: center; padding: 30px; color: #94a3b8; font-size: 13px;">Please select a sacrament service above to load calendar availability.</div>';
                 monthLabel.textContent = 'Select Service';
-                serviceNotice.style.display = 'none';
-                funeralDurationGroup.style.display = 'none';
+                if (serviceNotice) serviceNotice.style.display = 'none';
+                if (funeralDurationGroup) funeralDurationGroup.style.display = 'none';
+                if (summaryBox) summaryBox.style.display = 'none';
                 return;
             }
 
-            funeralDurationGroup.style.display = service === 'Funeral' ? 'block' : 'none';
-            serviceNotice.style.display = 'block';
-
-            if (service === 'Group Baptism') {
-                serviceNotice.innerHTML = '<svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-pin"></use></svg> <strong>Group Baptism:</strong> Saturdays & Sundays @ 10:00 AM (Max 3 slots).';
-            } else if (service === 'Individual Baptism') {
-                serviceNotice.innerHTML = '<svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-pin"></use></svg> <strong>Individual Baptism:</strong> Tuesday to Friday by appointment (Max 1 slot/day).';
-            } else if (service === 'Wedding') {
-                serviceNotice.innerHTML = '<svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-church"></use></svg> <strong>Wedding Rule:</strong> At least 30 days advance notice from today. Strictly 1 per day.';
-            } else if (service === 'Funeral') {
-                serviceNotice.innerHTML = '<svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-heart-handshake"></use></svg> <strong>Resurrection Chapel:</strong> Select wake start date to block out full wake-to-interment span.';
+            if (funeralDurationGroup) funeralDurationGroup.style.display = service === 'Funeral' ? 'block' : 'none';
+            if (serviceNotice) {
+                serviceNotice.style.display = 'block';
+                if (service === 'Group Baptism') {
+                    serviceNotice.innerHTML = '<strong>Group Baptism:</strong> Saturdays & Sundays @ 10:00 AM (Max 3 slots).';
+                } else if (service === 'Individual Baptism') {
+                    serviceNotice.innerHTML = '<strong>Individual Baptism:</strong> Tuesday to Friday by appointment (Max 1 slot/day).';
+                } else if (service === 'Wedding') {
+                    serviceNotice.innerHTML = '<strong>Wedding Rule:</strong> At least 30 days advance notice from today. Strictly 1 per day.';
+                } else if (service === 'Funeral') {
+                    serviceNotice.innerHTML = '<strong>Resurrection Chapel:</strong> Click wake start date to automatically span the 7-day wake-to-interment period.';
+                }
             }
 
             const year = staffCalendarDate.getFullYear();
@@ -3452,6 +3642,28 @@
             const minWeddingDate = new Date(today);
             minWeddingDate.setDate(minWeddingDate.getDate() + 30);
 
+            const selectedDateInput = document.getElementById('selectedStaffWalkInDate');
+            const selectedDateVal = selectedDateInput ? selectedDateInput.value : '';
+            const wakeDays = service === 'Funeral' ? parseInt(document.getElementById('walkInWakeDays')?.value || 7) : 1;
+
+            if (summaryBox && service === 'Funeral' && selectedDateVal) {
+                const startD = new Date(selectedDateVal);
+                const endD = new Date(startD);
+                endD.setDate(endD.getDate() + (wakeDays - 1));
+
+                const formatDate = (d) => d.toISOString().split('T')[0];
+                const sumWakeDays = document.getElementById('summaryWakeDays');
+                const sumWakeSpan = document.getElementById('summaryWakeSpan');
+                const sumStipend = document.getElementById('summaryStipend');
+
+                if (sumWakeDays) sumWakeDays.textContent = wakeDays;
+                if (sumWakeSpan) sumWakeSpan.textContent = `${formatDate(startD)} to ${formatDate(endD)} (${wakeDays} Days)`;
+                if (sumStipend) sumStipend.textContent = (wakeDays * 2000).toLocaleString();
+                summaryBox.style.display = 'block';
+            } else if (summaryBox) {
+                summaryBox.style.display = 'none';
+            }
+
             grid.innerHTML = '';
             for (let i = 0; i < firstDay; i++) {
                 grid.innerHTML += '<div></div>';
@@ -3462,19 +3674,27 @@
                 cellDate.setHours(0, 0, 0, 0);
                 const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
-                const dayOfWeek = cellDate.getDay(); // 0:Sun, 1:Mon, 2:Tue, 3:Wed, 4:Thu, 5:Fri, 6:Sat
+                const dayOfWeek = cellDate.getDay();
                 const isPast = cellDate < today;
 
                 let isValidServiceDay = true;
                 let offDayReason = 'Off Day';
+                let isInSpan = false;
+                let isStartDay = (selectedDateVal === dateStr);
 
-                //  STRICT SEPARATE RULES FOR ADMIN WALK-IN:
+                let statusText = 'Available';
+                let statusColor = '#16a34a';
+                let cellBackground = '#ffffff';
+                let isClickable = !isPast;
+
                 if (service === 'Group Baptism') {
-                    isValidServiceDay = (dayOfWeek === 0 || dayOfWeek === 6); // Sat & Sun only
+                    isValidServiceDay = (dayOfWeek === 0 || dayOfWeek === 6);
                     offDayReason = 'Sat/Sun Only';
+                    isClickable = isValidServiceDay && !isPast;
                 } else if (service === 'Individual Baptism') {
-                    isValidServiceDay = (dayOfWeek >= 2 && dayOfWeek <= 5); // Tue to Fri only
+                    isValidServiceDay = (dayOfWeek >= 2 && dayOfWeek <= 5);
                     offDayReason = 'Tue-Fri Only';
+                    isClickable = isValidServiceDay && !isPast;
                 } else if (service === 'Wedding') {
                     if (cellDate < minWeddingDate) {
                         isValidServiceDay = false;
@@ -3483,46 +3703,11 @@
                         isValidServiceDay = (dayOfWeek >= 2 && dayOfWeek <= 6);
                     }
                 } else if (service === 'Funeral') {
-                    isValidServiceDay = (dayOfWeek !== 1); // Closed Mondays
+                    const isToday = (cellDate.getTime() === today.getTime());
+                    isValidServiceDay = isToday;
+                    offDayReason = 'Current Date Only';
+                    isClickable = isToday && !isPast;
                 }
-
-                let isFull = false;
-                if (service === 'Funeral') {
-                    isFull = existingApps.some(app => {
-                        if (!app.sacramentType || !app.sacramentType.toLowerCase().includes('funeral') || (app.status || '').toLowerCase() === 'rejected' || app.archived) return false;
-                        const startStr = app.confirmedDate || app.preferredDate;
-                        const daysCount = parseInt(app.details?.wakeDays || app.wakeDays || 3);
-                        if (!startStr) return false;
-
-                        const startD = new Date(startStr);
-                        const endD = new Date(startD);
-                        endD.setDate(endD.getDate() + (daysCount - 1));
-
-                        return cellDate >= startD && cellDate <= endD;
-                    });
-                } else {
-                    const bookedCount = existingApps.filter(app => {
-                        const active = (app.status || '').toLowerCase() !== 'rejected' && !app.archived;
-                        const appDate = app.confirmedDate || app.preferredDate || '';
-                        const dbType = (app.sacramentType || '').toLowerCase();
-                        const refId = (app.referenceId || '').toUpperCase();
-
-                        if (service === 'Group Baptism') {
-                            return active && (dbType.includes('group') || dbType === 'baptism' || refId.startsWith('GRP')) && appDate.startsWith(dateStr);
-                        } else if (service === 'Individual Baptism') {
-                            return active && (dbType.includes('individual') || refId.startsWith('IND')) && appDate.startsWith(dateStr);
-                        }
-                        return active && dbType.includes(service.toLowerCase()) && appDate.startsWith(dateStr);
-                    }).length;
-
-                    const maxLimit = (service === 'Group Baptism') ? 3 : 1;
-                    isFull = bookedCount >= maxLimit;
-                }
-
-                let statusText = 'Available';
-                let statusColor = '#16a34a';
-                let cellBackground = '#ffffff';
-                let isClickable = true;
 
                 if (isPast) {
                     statusText = 'Past';
@@ -3534,45 +3719,71 @@
                     statusColor = '#64748b';
                     cellBackground = '#f8fafc';
                     isClickable = false;
-                } else if (isFull) {
-                    statusText = service === 'Funeral' ? 'Occupied' : 'Fully Booked';
-                    statusColor = '#dc2626';
-                    cellBackground = '#fee2e2';
-                    isClickable = false;
-                }
-
-                const selectedDateVal = document.getElementById('selectedStaffWalkInDate').value;
-                const isSelected = (selectedDateVal === dateStr);
-                if (isSelected && isClickable) {
-                    cellBackground = '#3b82f6';
+                } else if (isStartDay) {
+                    cellBackground = '#2563eb';
+                    statusColor = '#ffffff';
+                    statusText = 'Wake Start';
+                } else if (isInSpan) {
+                    cellBackground = '#dbeafe';
+                    statusText = 'Wake Span';
+                    statusColor = '#1e40af';
                 }
 
                 const cell = document.createElement('div');
                 cell.className = 'staff-cal-cell';
                 cell.dataset.date = dateStr;
                 cell.style.cssText = `
-            background: ${cellBackground}; 
-            border: ${isSelected ? '2px solid #1d4ed8' : '1px solid #e2e8f0'}; 
-            border-radius: 6px; 
-            padding: 8px 4px; 
-            min-height: 60px; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: space-between; 
-            align-items: center;
-            ${isClickable ? 'cursor: pointer; transition: background 0.2s;' : 'opacity: 0.75; cursor: not-allowed;'}
-        `;
+                    background: ${cellBackground}; 
+                    border: ${isStartDay ? '2px solid #1e40af' : '1px solid #e2e8f0'}; 
+                    border-radius: 6px; 
+                    padding: 8px 4px; 
+                    min-height: 60px; 
+                    display: flex; 
+                    flex-direction: column; 
+                    justify-content: space-between; 
+                    align-items: center;
+                    ${isClickable ? 'cursor: pointer; transition: background 0.2s;' : 'opacity: 0.75; cursor: not-allowed;'}
+                `;
 
                 cell.innerHTML = `
-            <span style="font-weight: bold; font-size: 13px; color: ${isSelected ? '#ffffff' : (isClickable ? '#0f172a' : '#94a3b8')}">${day}</span>
-            <span style="font-size: 10px; font-weight: bold; color: ${isSelected ? '#ffffff' : statusColor}; text-align: center;">${statusText}</span>
-        `;
+                    <span style="font-weight: bold; font-size: 13px; color: ${isStartDay || (service === 'Funeral' && isInSpan && !isStartDay) ? (isStartDay ? '#ffffff' : '#1e40af') : (isClickable ? '#0f172a' : '#94a3b8')}">${day}</span>
+                    <span style="font-size: 10px; font-weight: bold; color: ${isStartDay || (service === 'Funeral' && isInSpan) ? (isStartDay ? '#ffffff' : '#1e40af') : statusColor}; text-align: center;">${statusText}</span>
+                `;
 
                 if (isClickable) {
                     cell.onclick = () => selectStaffDate(dateStr, service);
                 }
 
                 grid.appendChild(cell);
+            }
+        }
+
+        function selectStaffDate(dateStr, service) {
+            const hiddenInput = document.getElementById('selectedStaffWalkInDate');
+            if (!hiddenInput) return;
+
+            // If Funeral, allow clicking a new start date or reset if clicked outside
+            hiddenInput.value = dateStr;
+
+            // Re-render calendar so the 7-day span recalculates from the new start date
+            renderStaffInteractiveCalendar();
+
+            // Populate time slot dropdown
+            const timeSlotSelect = document.getElementById('walkInTimeSlot');
+            if (timeSlotSelect) {
+                timeSlotSelect.innerHTML = '<option value="">-- Select Time Slot --</option>';
+                let slots = [];
+                if (service === 'Group Baptism') slots = ['10:00 AM Session'];
+                else if (service === 'Individual Baptism') slots = ['10:00 AM', '02:00 PM'];
+                else if (service === 'Wedding') slots = ['10:30 AM', '03:00 PM'];
+                else if (service === 'Funeral') slots = ['08:00 AM - 05:00 PM (Chapel Day-Use Span)'];
+
+                slots.forEach(time => {
+                    const option = document.createElement('option');
+                    option.value = time;
+                    option.textContent = `${dateStr} @ ${time}`;
+                    timeSlotSelect.appendChild(option);
+                });
             }
         }
 
@@ -3702,7 +3913,14 @@
         }
 
         function selectStaffDate(dateStr, service) {
-            document.getElementById('selectedStaffWalkInDate').value = dateStr;
+            // Save the selected wake start date.
+            const selectedDateInput = document.getElementById('selectedStaffWalkInDate');
+            if (selectedDateInput) {
+                selectedDateInput.value = dateStr;
+            }
+
+            // Re-render after selecting the start date to unlock the 7-day funeral span.
+            renderStaffInteractiveCalendar();
 
             document.querySelectorAll('.staff-cal-cell').forEach(cell => {
                 if (cell.dataset.date === dateStr) {
@@ -4147,6 +4365,106 @@
             };
 
             reader.readAsDataURL(file);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            checkDailyBackupStatus();
+        });
+
+        function checkDailyBackupStatus() {
+            const todayStr = new Date().toISOString().split('T')[0];
+            const lastBackupDate = localStorage.getItem('admin_last_backup_date');
+
+            const statusTextEl = document.getElementById('modalLastBackupText');
+            const reminderBoxEl = document.getElementById('modalBackupReminder');
+            const dotIndicatorEl = document.getElementById('backupDotIndicator');
+
+            if (lastBackupDate) {
+                if (statusTextEl) statusTextEl.textContent = `Last Backup: ${lastBackupDate}`;
+
+                if (lastBackupDate === todayStr) {
+                    if (reminderBoxEl) reminderBoxEl.style.display = 'none';
+                    if (dotIndicatorEl) dotIndicatorEl.style.display = 'none';
+                } else {
+                    if (reminderBoxEl) reminderBoxEl.style.display = 'flex';
+                    if (dotIndicatorEl) dotIndicatorEl.style.display = 'block';
+                }
+            } else {
+                if (statusTextEl) statusTextEl.textContent = `Last Backup: Never`;
+                if (reminderBoxEl) reminderBoxEl.style.display = 'flex';
+                if (dotIndicatorEl) dotIndicatorEl.style.display = 'block';
+            }
+        }
+
+        async function exportDatabaseBackup() {
+            try {
+                if (typeof db === 'undefined') {
+                    alert('Database connection not found.');
+                    return;
+                }
+
+                const backupData = {
+                    exportDate: new Date().toISOString(),
+                    version: 1,
+                    tables: {}
+                };
+
+                for (const table of db.tables) {
+                    const records = await table.toArray();
+                    backupData.tables[table.name] = records;
+                }
+
+                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
+                const downloadAnchor = document.createElement('a');
+                downloadAnchor.setAttribute("href", dataStr);
+
+                const dateStr = new Date().toISOString().split('T')[0];
+                downloadAnchor.setAttribute("download", `parish_system_backup_${dateStr}.json`);
+                document.body.appendChild(downloadAnchor);
+                downloadAnchor.click();
+                downloadAnchor.remove();
+
+                localStorage.setItem('admin_last_backup_date', dateStr);
+                checkDailyBackupStatus();
+
+                alert('Database backup exported successfully!');
+                closeModal('databaseBackupModal');
+            } catch (err) {
+                console.error("Backup export failed:", err);
+                alert('Failed to export database backup.');
+            }
+        }
+
+        async function importDatabaseBackup(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (!confirm('⚠️ WARNING: Restoring a database backup will overwrite existing local records. Do you wish to continue?')) {
+                event.target.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = async function (e) {
+                try {
+                    const backupData = JSON.parse(e.target.result);
+                    if (!backupData.tables) throw new Error('Invalid backup file format.');
+
+                    for (const tableName of Object.keys(backupData.tables)) {
+                        if (db[tableName]) {
+                            await db[tableName].clear();
+                            await db[tableName].bulkAdd(backupData.tables[tableName]);
+                        }
+                    }
+
+                    alert('Database successfully restored from backup! The page will now reload.');
+                    location.reload();
+                } catch (err) {
+                    console.error("Restore failed:", err);
+                    alert('Failed to restore database. Ensure you selected a valid backup JSON file.');
+                }
+            };
+            reader.readAsText(file);
         }
     </script>
 </body>

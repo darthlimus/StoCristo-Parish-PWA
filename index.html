@@ -10,6 +10,8 @@
     <script src="dexie.js"></script>
     <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#800020">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <style>
         /* --- Global Centered Modal Fix --- */
         /* --- Global Centered Modal Fix & Width Adjustment --- */
@@ -250,6 +252,7 @@
         a .ui-icon {
             margin-right: .28em
         }
+        
     </style>
 </head>
 
@@ -406,8 +409,6 @@
     <!-- Mobile Side Navigation Drawer & Backdrop Overlay -->
     <div id="mobileDrawerOverlay" class="drawer-overlay mobile-only" onclick="toggleMobileMenu()"></div>
 
-    <!-- Mobile Side Navigation Drawer & Backdrop Overlay -->
-    <div id="mobileDrawerOverlay" class="drawer-overlay mobile-only" onclick="toggleMobileMenu()"></div>
 
     <aside id="mobileDrawer" class="mobile-drawer mobile-only">
         <div class="drawer-header">
@@ -786,15 +787,18 @@
                                 style="background: #ffffff; border: 1px solid #ccd0d5; border-radius: 8px; padding: 14px; font-family: Helvetica, Arial, sans-serif;">
                                 <div
                                     style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                    <button type="button" onclick="changeBapCalendarMonth(-1)"
+                                        style="background: #e4e6eb; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-weight: bold;">&lt;</button>
                                     <h4 id="bapMonthYearLabel"
                                         style="margin: 0; color: #1c1e21; font-size: 1rem; font-weight: bold;">Month
                                         Year</h4>
-                                    <div style="display: flex; gap: 6px;">
-                                        <button type="button" onclick="changeBapCalendarMonth(-1)"
-                                            style="background: #e4e6eb; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-weight: bold;">&lt;</button>
-                                        <button type="button" onclick="changeBapCalendarMonth(1)"
-                                            style="background: #e4e6eb; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-weight: bold;">&gt;</button>
-                                    </div>
+
+                                    <button type="button" onclick="changeBapCalendarMonth(1)"
+                                        style="background: #e4e6eb; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-weight: bold;">&gt;</button>
+                                </div>
+                                <div style="display: flex; gap: 6px;">
+
+
                                 </div>
                                 <div
                                     style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: bold; font-size: 11px; color: #606770; margin-bottom: 6px;">
@@ -1382,7 +1386,7 @@
                             <!-- 3. New Baptismal & Confirmation Certificates -->
                             <div class="wizard-field">
                                 <label>3. New Baptismal &amp; Confirmation Certificates (with Marriage Annotation)
-                                    </label>
+                                </label>
                                 <div class="doc-upload-box" id="wedAnnotationBox"
                                     onclick="document.getElementById('wedAnnotationFiles').click()">
                                     <strong style="color: #4a0e17; font-size: 13px;">Click to Upload Annotated
@@ -1419,7 +1423,7 @@
                                 style="display: none; margin-bottom: 16px; padding: 14px; background: #fffbeb; border: 1px solid #f59e0b; border-radius: 8px;">
                                 <label
                                     style="display: block; font-weight: bold; font-size: 13px; color: #b45309; margin-bottom: 6px;">
-                                    5. Guest Priest's License to Marry 
+                                    5. Guest Priest's License to Marry
                                 </label>
                                 <p style="font-size: 11px; color: #78350f; margin: 0 0 8px 0;">Required because you
                                     requested a guest officiating priest.</p>
@@ -1880,7 +1884,7 @@
                 </div>
                 <div style="margin-bottom: 12px;">
                     <label style="display: block; font-weight: bold; font-size: 13px; margin-bottom: 4px;">Last Name
-                        </label>
+                    </label>
                     <input type="text" id="editLastName" required
                         style="width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;">
                 </div>
@@ -2302,12 +2306,12 @@
                 }
             }
             else if (type === 'funeral') {
-            const state = wizardState.funeral;
-            if (state.currentStep > 1) {
-                state.currentStep--;
-                updateFuneralWizardUI();
+                const state = wizardState.funeral;
+                if (state.currentStep > 1) {
+                    state.currentStep--;
+                    updateFuneralWizardUI();
+                }
             }
-        }
         }
 
         function saveWeddingStepData() {
@@ -2492,9 +2496,12 @@
         // UNIFIED BAPTISM SUBMISSION (Allows missing docs -> "To Follow-Up")
         // =========================================================
         async function submitBaptismApplication() {
-            const currentUser = JSON.parse(localStorage.getItem('currentUser')) || { id: 'guest', email: wizardState.baptism.data.applicantEmail };
+            // In submitBaptismApplication() inside index_2.html
+            const baptismType = (document.getElementById('baptismTypeSelect')?.value || wizardState.baptism.data.baptismTypeSelect || 'group').toLowerCase();
+            let prefix = baptismType.includes('individual') ? 'IND' : 'GRP';
             const randomNum = Math.floor(100000 + Math.random() * 900000);
-            const referenceId = `BAP-${new Date().getFullYear()}-${randomNum}`;
+            const referenceId = `${prefix}-${new Date().getFullYear()}-${randomNum}`;
+
 
             try {
                 const uploadedDocs = [];
@@ -2513,14 +2520,30 @@
                 else hasAllDocs = false;
 
                 // UPDATED EXACT STATUS STRING HERE:
-                
                 const applicationStatus = hasAllDocs ? 'Pending' : 'To Follow-Up & Upload Lacking Documents';
 
+                // Safe fallback user resolution
+                let activeUser = (typeof currentUser !== 'undefined') ? currentUser : null;
+                if (!activeUser) {
+                    try {
+                        activeUser = JSON.parse(localStorage.getItem('currentUser') || localStorage.getItem('loggedUser') || '{}');
+                    } catch (e) {
+                        activeUser = {};
+                    }
+                }
+
+                const userId = activeUser.id || activeUser.userId || `user-${Date.now()}`;
+                const applicantEmail = wizardState.baptism.data.applicantEmail || activeUser.email || activeUser.applicantEmail || '';
+                const applicantName = `${wizardState.baptism.data.applicantFirstName || ''} ${wizardState.baptism.data.applicantLastName || ''}`.trim() || activeUser.name || activeUser.fullName || activeUser.applicantName || 'Parishioner';
+
+                // In submitBaptismApplication() / submitWeddingApplication()
                 const applicationRecord = {
                     id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${randomNum}`,
                     referenceId: referenceId,
-                    userId: currentUser.id,
-                    sacramentType: 'baptism',
+                    userId: userId,
+                    applicantName: applicantName,
+                    applicantEmail: applicantEmail,
+                    sacramentType: 'baptism', // or 'wedding'
                     status: applicationStatus,
                     preferredDate: wizardState.baptism.data.preferredDate,
                     confirmedTime: wizardState.baptism.data.confirmedTime,
@@ -2560,47 +2583,52 @@
 
             try {
                 const uploadedDocs = [];
-                let hasAllDocs = true;
+                const missingDocs = [];
 
-                const birthFiles = document.getElementById('wedBirthCertFiles')?.files;
-                if (birthFiles && birthFiles.length > 0) {
-                    for (let f of birthFiles) { uploadedDocs.push({ label: "PSA Birth Certificate", ...(await fileToBase64(f)) }); }
-                } else { hasAllDocs = false; }
+                // Helper function to process file inputs safely
+                async function processFileField(elementId, labelName) {
+                    const fileInput = document.getElementById(elementId);
+                    if (fileInput && fileInput.files && fileInput.files.length > 0) {
+                        for (let f of fileInput.files) {
+                            uploadedDocs.push({ label: labelName, ...(await fileToBase64(f)) });
+                        }
+                    } else {
+                        missingDocs.push(labelName);
+                    }
+                }
 
-                const cenomarFiles = document.getElementById('wedCenomarFiles')?.files;
-                if (cenomarFiles && cenomarFiles.length > 0) {
-                    for (let f of cenomarFiles) { uploadedDocs.push({ label: "CENOMAR", ...(await fileToBase64(f)) }); }
-                } else { hasAllDocs = false; }
+                // Check each required wedding document
+                await processFileField('wedBirthCertFiles', 'PSA Birth Certificate');
+                await processFileField('wedCenomarFiles', 'CENOMAR');
+                await processFileField('wedAnnotationFiles', 'Annotated Certificate');
+                await processFileField('wedLicenseFiles', 'Marriage License');
 
-                const annotationFiles = document.getElementById('wedAnnotationFiles')?.files;
-                if (annotationFiles && annotationFiles.length > 0) {
-                    for (let f of annotationFiles) { uploadedDocs.push({ label: "Annotated Certificate", ...(await fileToBase64(f)) }); }
-                } else { hasAllDocs = false; }
-
-                const licenseFiles = document.getElementById('wedLicenseFiles')?.files;
-                if (licenseFiles && licenseFiles.length > 0) {
-                    for (let f of licenseFiles) { uploadedDocs.push({ label: "Marriage License", ...(await fileToBase64(f)) }); }
-                } else { hasAllDocs = false; }
-
+                // Optional / Conditional Guest Priest check
                 const hasGuestPriest = document.getElementById('hasGuestPriest')?.checked;
                 const gpFile = document.getElementById('guestPriestLicenseFiles')?.files[0];
                 if (hasGuestPriest) {
-                    if (gpFile) uploadedDocs.push({ label: "Guest Priest License to Marry", ...(await fileToBase64(gpFile)) });
-                    else hasAllDocs = false;
+                    if (gpFile) {
+                        uploadedDocs.push({ label: "Guest Priest License to Marry", ...(await fileToBase64(gpFile)) });
+                    } else {
+                        missingDocs.push("Guest Priest License to Marry");
+                    }
                 }
 
-                const applicationStatus = hasAllDocs ? 'Pending' : 'To Follow-Up';
+                // If any required document is missing, set status to 'To Follow-Up'
+                const applicationStatus = missingDocs.length === 0 ? 'Pending' : 'To Follow-Up';
 
                 const applicationRecord = {
                     id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${randomNum}`,
                     referenceId: referenceId,
                     userId: currentUser.id,
+                    applicantName: `${wizardState.wedding.data.applicantFirstName || ''} ${wizardState.wedding.data.applicantLastName || ''}`.trim() || currentUser.fullName || 'Parishioner',
                     sacramentType: 'wedding',
                     status: applicationStatus,
-                    preferredDate: wizardState.wedding.data.preferredDate,
-                    confirmedTime: wizardState.wedding.data.confirmedTime,
+                    preferredDate: wizardState.wedding.data.preferredDate || '',
+                    confirmedTime: wizardState.wedding.data.confirmedTime || '',
                     details: { ...wizardState.wedding.data },
                     documents: uploadedDocs,
+                    missingDocuments: missingDocs, // Stored so admin sees what needs to be followed up
                     submittedAt: new Date().toISOString()
                 };
 
@@ -2778,36 +2806,6 @@
             }
         }
 
-        // 1. Open the modal and initialize data + calendar view
-        async function openRescheduleRequestModal(appId) {
-            const numericId = isNaN(appId) ? appId : Number(appId);
-            let app = await db.applications.get(numericId);
-            if (!app) {
-                showAlert('Application record not found.');
-                return;
-            }
-            activeReschedApp = app;
-
-            document.getElementById('reschedAppId').value = app.id;
-            document.getElementById('reschedReasonInput').value = '';
-            selectedReschedNewDate = '';
-            document.getElementById('reschedNewDateInput').value = '';
-            document.getElementById('reschedSelectedDateDisplay').textContent = 'Selected New Date: None';
-
-            const existingTarget = app.preferredDate || app.targetDate || app.confirmedDate || '';
-            if (existingTarget) {
-                const d = new Date(existingTarget);
-                if (!isNaN(d)) {
-                    currentReschedCalDate = new Date(d.getFullYear(), d.getMonth(), 1);
-                }
-            } else {
-                currentReschedCalDate = new Date();
-            }
-
-            openModal('requestReschedModal');
-            renderReschedCalendar();
-        }
-
         // 2. Render the interactive calendar grid inside #reschedCalendarGrid
         async function renderReschedCalendar() {
             const monthLabel = document.getElementById('reschedCalMonthLabel');
@@ -2895,52 +2893,6 @@
             document.getElementById('reschedNewDateInput').value = dateStr;
             document.getElementById('reschedSelectedDateDisplay').textContent = `Selected New Date: ${dateStr}`;
             renderReschedCalendar();
-        }
-
-        // 5. Submit form handler
-        async function submitRescheduleRequest(event) {
-            event.preventDefault();
-            const appId = document.getElementById('reschedAppId').value;
-            const reason = document.getElementById('reschedReasonInput').value;
-            const newDate = document.getElementById('reschedNewDateInput').value;
-
-            if (!newDate) {
-                showAlert('Please click and select your preferred new date from the calendar grid.');
-                return;
-            }
-
-            const numericId = isNaN(appId) ? appId : Number(appId);
-            let app = await db.applications.get(numericId);
-            if (!app) {
-                showAlert('Application record not found.');
-                return;
-            }
-
-            const historyEntry = {
-                oldStatus: app.status || 'Pending',
-                newStatus: 'Reschedule Requested',
-                adminNote: `Parishioner requested reschedule to ${newDate}. Reason: ${reason}`,
-                changedAt: new Date().toISOString(),
-                changedBy: app.applicantName || 'Parishioner'
-            };
-            const updatedHistory = app.statusHistory ? [...app.statusHistory, historyEntry] : [historyEntry];
-
-            await db.applications.update(numericId, {
-                rescheduleRequested: true,
-                rescheduleReason: reason,
-                requestedNewDate: newDate,
-                status: 'Reschedule Requested',
-                statusHistory: updatedHistory,
-                updatedAt: new Date().toISOString()
-            });
-
-            showAlert('Your schedule change request has been submitted successfully!', 'Success');
-            closeModal('requestReschedModal');
-
-            if (typeof renderUserDashboard === 'function') {
-                await renderUserDashboard();
-            }
-
         }
 
         // Handle date selection click
@@ -3803,16 +3755,6 @@
             }
         }
 
-        // Remove an individual file from accumulation store
-        function removeInlineFile(inputId, indexToRemove, targetListId) {
-            if (window.accumulatedFiles[inputId]) {
-                window.accumulatedFiles[inputId].splice(indexToRemove, 1);
-            }
-
-            syncInputFiles(inputId);
-            renderBadges(inputId, targetListId);
-        }
-
         // --- Remove Individual File from FileList ---
         function removeInlineFile(inputId, indexToRemove, targetListId) {
             const currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -4411,227 +4353,293 @@
             }
         }
 
+        window.resubmissionFilesData = window.resubmissionFilesData || {};
+
+        function handleResubInlineFile(event, documentTitle) {
+            const fileInput = event.target;
+            if (!fileInput.files || fileInput.files.length === 0) return;
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                if (!window.resubmissionFilesData) {
+                    window.resubmissionFilesData = {};
+                }
+
+                // Store the base64 data and metadata under the document title category
+                window.resubmissionFilesData[documentTitle] = [{
+                    fileName: file.name,
+                    fileData: e.target.result,
+                    documentTitle: documentTitle
+                }];
+
+                console.log(`Resubmission file loaded for ${documentTitle}:`, file.name);
+            };
+
+            reader.readAsDataURL(file);
+        }
         // Open Modal to upload additional document files
         async function openResubmitDocsModal(appId) {
             const numericId = isNaN(appId) ? appId : Number(appId);
-            const app = await db.applications.get(numericId);
-
+            let app = await db.applications.get(numericId);
             if (!app) {
-                showAlert('Application record not found.', 'Error');
+                showAlert('Application record not found.');
                 return;
             }
 
             document.getElementById('resubmitAppId').value = app.id;
-            window.resubmissionFilesData = {};
+            const sacrament = (app.sacramentType || '').toLowerCase();
+            const hasGuestPriest = app.details?.hasGuestPriest || false;
 
-            const summaryEl = document.getElementById('resubmitAppSummary');
-            summaryEl.innerHTML = `
-                    <strong>Ref ID:</strong> ${app.referenceId} | <strong>Sacrament:</strong> ${app.sacramentType.toUpperCase()}<br>
-                    <strong>Secretariat Remarks:</strong> <span style="color: #c0392b;">${app.adminNotes || 'Please upload the specific missing documents requested by the office.'}</span>
-                `;
-
-            let missingList = [];
-            const notes = (app.adminNotes || '').toLowerCase();
-
-            if (app.sacramentType === 'wedding') {
-                // Standard wedding document checks based on what's missing
-                if (notes.includes('birth certificate')) missingList.push("PSA Birth Certificates");
-                if (notes.includes('cenomar')) missingList.push("CENOMAR");
-                if (notes.includes('annotation') || notes.includes('baptismal')) missingList.push("New Baptismal & Confirmation Certificates with Marriage Annotation");
-                if (notes.includes('license') || notes.includes('contract')) missingList.push("Marriage License / Civil Marriage Contract");
-
-                // Dynamic check: If application details indicate a guest priest was selected or notes mention it
-                if (app.details?.hasGuestPriest || notes.includes('guest priest') || notes.includes('license to marry')) {
-                    missingList.push("Guest Priest's License to Marry");
+            let requiredList = [];
+            if (sacrament.includes('baptism')) {
+                requiredList = [
+                    "Child's Birth Certificate",
+                    "Mother's Baptismal Certificate",
+                    "Father's Baptismal Certificate"
+                ];
+            } else if (sacrament.includes('wedding')) {
+                requiredList = [
+                    "PSA Birth Certificates (Groom & Bride)",
+                    "CENOMAR (Certificate of No Marriage)",
+                    "New Baptismal & Confirmation Certificates (Annotated)",
+                    "Marriage License / Contract"
+                ];
+                if (hasGuestPriest) {
+                    requiredList.push("Guest Priest's License to Marry");
                 }
             } else {
-                // Fallback for other sacraments
-                if (notes.includes('mother')) missingList.push("Mother's Baptismal Certificate");
-                if (notes.includes('father')) missingList.push("Father's Baptismal Certificate");
-                if (notes.includes('birth certificate')) missingList.push("Child's Birth Certificate");
+                requiredList = ["Required Supporting Document"];
             }
 
-            if (missingList.length === 0) {
-                missingList = ["Required Lacking Document"];
-            }
+            // Determine already uploaded document types/labels
+            const existingDocs = getNormalizedDocuments(app.documents);
+            const uploadedTypes = existingDocs.map(d => (d.type || d.name || '').toLowerCase());
 
+            // Identify missing documents
+            const missingDocs = requiredList.filter(reqName => {
+                return !uploadedTypes.some(upType => upType.includes(reqName.toLowerCase()) || reqName.toLowerCase().includes(upType));
+            });
+
+            const summaryEl = document.getElementById('resubmitAppSummary');
             const container = document.getElementById('resubmitDynamicUploadsContainer');
-            if (container) {
-                let html = '';
-                missingList.forEach((reqName, idx) => {
-                    const inputId = `resub_file_${idx}`;
-                    const listId = `resub_list_${idx}`;
-                    const safeTitle = reqName.replace(/'/g, "\\'");
 
-                    html += `
-                            <div style="margin-bottom: 15px; background: #fff; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px;">
-                                <label style="display: block; font-weight: bold; font-size: 13px; color: #1e293b; margin-bottom: 6px;">
-                                    ${reqName} *
-                                </label>
-                                <div class="inline-drop-zone" onclick="document.getElementById('${inputId}').click()"
-                                    style="border: 2px dashed #cbd5e1; padding: 12px; border-radius: 6px; text-align: center; cursor: pointer; background: #f8fafc;">
-                                    <span style="font-size: 13px; color: #475569;">📁 Click or drag file for ${reqName}</span>
-                                    <input type="file" id="${inputId}" accept=".pdf,.jpg,.jpeg,.png" style="display:none;" 
-                                        onchange="handleResubInlineFile(event, '${listId}', '${safeTitle}')">
-                                </div>
-                                <div class="file-preview-list" id="${listId}" style="margin-top: 6px;"></div>
-                            </div>
-                        `;
-                });
-                container.innerHTML = html;
+            if (summaryEl) {
+                summaryEl.innerHTML = `<strong>Sacrament:</strong> ${app.sacramentType} (Ref: ${app.referenceId})<br>
+        <strong>Missing Documents to Upload:</strong> ${missingDocs.length > 0 ? missingDocs.join(', ') : 'None (All uploaded)'}`;
+            }
+
+            if (container) {
+                if (missingDocs.length === 0) {
+                    container.innerHTML = `<p style="color: #16a34a; font-weight: bold; text-align: center; padding: 15px;">All required documents have been uploaded! You may submit.</p>`;
+                } else {
+                    container.innerHTML = missingDocs.map((docName, idx) => `
+                <div style="margin-bottom: 12px; background: #f8fafc; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;">
+                    <label style="display: block; font-weight: bold; font-size: 13px; color: #1e293b; margin-bottom: 4px;">${docName} *</label>
+                    <input type="file" name="missingDoc_${idx}" data-doctitle="${docName}" accept=".pdf,.jpg,.jpeg,.png" required style="width: 100%; font-size: 13px;">
+                </div>
+            `).join('');
+                }
             }
 
             openModal('resubmitDocsModal');
         }
 
-        // Global storage for resubmission files
-        window.resubmissionFilesData = window.resubmissionFilesData || {};
-
-        async function handleResubInlineFile(event, listContainerId, docTitle) {
-            const fileInput = event.target;
-            const files = fileInput.files;
-            const container = document.getElementById(listContainerId);
-
-            if (!container || !files || files.length === 0) return;
-
-            if (!window.resubmissionFilesData[docTitle]) {
-                window.resubmissionFilesData[docTitle] = [];
-            }
-
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-
-                if (file.size > 10 * 1024 * 1024) {
-                    showAlert(`File "${file.name}" exceeds the 10MB size limit.`, 'File Too Large');
-                    continue;
-                }
-
-                const base64Data = await fileToBase64(file);
-
-                window.resubmissionFilesData[docTitle].push({
-                    fileName: file.name,
-                    fileType: file.type,
-                    fileData: base64Data,
-                    documentTitle: docTitle
-                });
-
-                // Render preview chip
-                const fileTag = document.createElement('div');
-                fileTag.style.cssText = "display: flex; align-items: center; justify-content: space-between; background: #fff; border: 1px solid #cbd5e1; padding: 6px 10px; border-radius: 4px; margin-top: 4px; font-size: 12px;";
-                fileTag.innerHTML = `
-                            <span style="color: #1e293b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 85%;">📄 ${file.name}</span>
-                            <button type="button" onclick="this.parentElement.remove();" style="background: none; border: none; color: #ef4444; cursor: pointer; font-weight: bold;" title="Remove">✕</button>
-                        `;
-                container.appendChild(fileTag);
-            }
-        }
-
         async function handleResubmitDocsSubmit(event) {
-            event.preventDefault();
-            const rawAppId = document.getElementById('resubmitAppId')?.value;
-            const appId = rawAppId ? (isNaN(rawAppId) ? rawAppId : Number(rawAppId)) : null;
+            if (event) event.preventDefault();
+            const appId = document.getElementById('resubmitAppId').value;
+            const numericId = isNaN(appId) ? appId : Number(appId);
+            const app = await db.applications.get(numericId);
+            if (!app) return;
 
-            if (!appId) {
-                showAlert('Application reference not found.', 'Error');
+            const container = document.getElementById('resubmitDynamicUploadsContainer');
+            if (!container) return;
+            const fileInputs = container.querySelectorAll('input[type="file"]');
+
+            let newDocs = Array.isArray(app.documents) ? [...app.documents] : [];
+            let missingList = app.missingDocuments ? [...app.missingDocuments] : [];
+            let uploadedCount = 0;
+
+            for (let input of fileInputs) {
+                if (input.files && input.files.length > 0) {
+                    const file = input.files[0];
+                    const docTitle = input.getAttribute('data-doctitle') || 'Supporting Document';
+                    const b64Data = await fileToBase64(file);
+
+                    const docObj = {
+                        label: docTitle,
+                        name: file.name,
+                        type: file.type,
+                        data: b64Data.data,
+                        uploadedAt: new Date().toISOString()
+                    };
+
+                    newDocs.push(docObj);
+                    uploadedCount++;
+
+                    // Remove uploaded document title from missing list
+                    missingList = missingList.filter(m => !m.toLowerCase().includes(docTitle.toLowerCase()) && !docTitle.toLowerCase().includes(m.toLowerCase()));
+                }
+            }
+
+            if (uploadedCount === 0) {
+                showAlert('Please select at least one document to upload.', 'No File Selected');
                 return;
             }
 
-            const app = await db.applications.get(appId);
-            if (!app) {
-                showAlert('Application not found in database.', 'Error');
-                return;
-            }
+            // If all missing docs are now provided, reset status to Pending for admin review
+            const updatedStatus = missingList.length === 0 ? 'Pending' : 'To Follow-Up & Upload Lacking Documents';
 
-            // 1. Safeguard and copy existing documents so we don't lose previously uploaded files
-            let updatedDocs = {};
-            if (app.documents && typeof app.documents === 'object' && !Array.isArray(app.documents)) {
-                updatedDocs = { ...app.documents };
-            }
-
-            // Helper function to convert file to base64 object
-            async function processFiles(files) {
-                let arr = [];
-                for (let file of files) {
-                    arr.push({
-                        fileName: file.name,
-                        fileType: file.type,
-                        fileData: await fileToBase64(file)
-                    });
-                }
-                return arr;
-            }
-
-            // 2. Capture newly uploaded files from the resubmission form inputs based on sacrament type
-            if (app.sacramentType === 'baptism') {
-                const birthCertInput = document.getElementById('resub_bapBirthCertFiles') || document.getElementById('bapBirthCertFiles');
-                const motherInput = document.getElementById('resub_bapMotherFiles') || document.getElementById('bapMotherFiles');
-                const fatherInput = document.getElementById('resub_bapFatherFiles') || document.getElementById('bapFatherFiles');
-
-                if (birthCertInput?.files?.length > 0) {
-                    updatedDocs["Child's Birth Certificate"] = await processFiles(birthCertInput.files);
-                }
-                if (motherInput?.files?.length > 0) {
-                    updatedDocs["Mother's Baptismal Certificate"] = await processFiles(motherInput.files);
-                }
-                if (fatherInput?.files?.length > 0) {
-                    updatedDocs["Father's Baptismal Certificate"] = await processFiles(fatherInput.files);
-                }
-            }
-            else if (app.sacramentType === 'wedding') {
-                const birthCertInput = document.getElementById('resub_wedBirthCertFiles') || document.getElementById('wedBirthCertFiles');
-                const cenomarInput = document.getElementById('resub_wedCenomarFiles') || document.getElementById('wedCenomarFiles');
-                const annotationInput = document.getElementById('resub_wedAnnotationFiles') || document.getElementById('wedAnnotationFiles');
-                const licenseInput = document.getElementById('resub_wedLicenseFiles') || document.getElementById('wedLicenseFiles');
-
-                if (birthCertInput?.files?.length > 0) {
-                    updatedDocs["PSA Birth Certificate"] = await processFiles(birthCertInput.files);
-                }
-                if (cenomarInput?.files?.length > 0) {
-                    updatedDocs["CENOMAR"] = await processFiles(cenomarInput.files);
-                }
-                if (annotationInput?.files?.length > 0) {
-                    updatedDocs["Annotated Baptismal & Confirmation Certificate"] = await processFiles(annotationInput.files);
-                }
-                if (licenseInput?.files?.length > 0) {
-                    updatedDocs["Marriage License / Contract"] = await processFiles(licenseInput.files);
-                }
-            }
-
-            // Also merge any accumulated files from window.resubmissionFilesData if active
-            if (window.resubmissionFilesData) {
-                for (const [title, files] of Object.entries(window.resubmissionFilesData)) {
-                    if (files && files.length > 0) {
-                        updatedDocs[title] = files;
-                    }
-                }
-            }
-
+            // Create audit trail entry for admin history
             const historyEntry = {
-                oldStatus: app.status,
-                newStatus: 'Pending Verification',
-                adminNote: 'Applicant resubmitted lacking requirements.',
+                oldStatus: app.status || 'To Follow-Up',
+                newStatus: updatedStatus,
+                adminNote: `Parishioner uploaded ${uploadedCount} lacking document(s). Status updated to ${updatedStatus}.`,
                 changedAt: new Date().toISOString(),
-                changedBy: app.applicantName || 'Applicant'
+                changedBy: app.applicantName || 'Parishioner'
             };
-
             const updatedHistory = app.statusHistory ? [...app.statusHistory, historyEntry] : [historyEntry];
 
-            // 3. Update database with merged documents and reset status for staff review
-            await db.applications.update(appId, {
-                status: 'Pending Verification',
-                adminNotes: 'Lacking documents uploaded. Ready for re-verification.',
-                documents: updatedDocs,
+            // Update the Dexie application record
+            await db.applications.update(numericId, {
+                documents: newDocs,
+                missingDocuments: missingList,
+                status: updatedStatus,
                 statusHistory: updatedHistory,
+                adminNotes: `Lacking documents uploaded by parishioner. Status: ${updatedStatus}.`,
                 updatedAt: new Date().toISOString()
             });
 
-            window.resubmissionFilesData = {};
+            if (typeof db.notifications !== 'undefined') {
+                await db.notifications.add({
+                    userId: 'ADMIN',
+                    referenceId: app.referenceId,
+                    title: `Lacking Documents Uploaded: ${app.referenceId}`,
+                    message: `${app.applicantName || 'Parishioner'} uploaded lacking documents for ${app.sacramentType}. Status is now ${updatedStatus}.`,
+                    isRead: false,
+                    createdAt: new Date().toISOString()
+                });
+            }
 
             closeModal('resubmitDocsModal');
             if (typeof renderUserDashboard === 'function') {
                 await renderUserDashboard();
             }
-            showAlert('Your documents have been successfully resubmitted for verification!', 'Success');
+            showAlert('Lacking documents uploaded and submitted successfully to the parish records!', 'Success');
+        }
+
+        async function parishionerDeleteApplication(appId) {
+            if (!confirm('Are you sure you want to cancel and delete this application?')) return;
+            const numericId = isNaN(appId) ? appId : Number(appId);
+            try {
+                await db.applications.delete(numericId);
+                if (typeof renderUserDashboard === 'function') {
+                    await renderUserDashboard();
+                }
+                showAlert('Application has been cancelled and removed.', 'Cancelled');
+            } catch (err) {
+                console.error('Error cancelling application:', err);
+                showAlert('Failed to cancel application.');
+            }
+        }
+
+        let activePaymentAppId = null;
+
+        function openPaymentModal(appId) {
+            activePaymentAppId = appId;
+            const app = window.currentUserApplications?.find(a => String(a.id) === String(appId));
+
+            let amount = '₱500'; // Default group baptism fee
+            if (app) {
+                const sType = (app.sacramentType || '').toLowerCase();
+                if (sType.includes('individual')) amount = '₱1,500';
+                else if (sType.includes('wedding')) amount = app.details?.electricityFeeIncluded ? '₱6,000' : '₱5,000';
+                else if (sType.includes('funeral')) amount = '₱2,000';
+            }
+
+            const amtDisplay = document.getElementById('gcashAmountDisplay');
+            if (amtDisplay) amtDisplay.textContent = amount;
+
+            const receiptInput = document.getElementById('gcashReceiptFile');
+            if (receiptInput) receiptInput.value = '';
+
+            openModal('gcashPaymentModal');
+        }
+
+        async function submitGcashPayment() {
+            if (!activePaymentAppId) return;
+            const fileInput = document.getElementById('gcashReceiptFile');
+            if (!fileInput.files || fileInput.files.length === 0) {
+                showAlert('Please upload your GCash payment screenshot or receipt.');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const b64Data = await fileToBase64(file);
+
+            const numericId = isNaN(activePaymentAppId) ? activePaymentAppId : Number(activePaymentAppId);
+            const app = await db.applications.get(numericId);
+            if (!app) return;
+
+            await db.applications.update(numericId, {
+                paymentProof: {
+                    name: file.name,
+                    data: b64Data.data,
+                    uploadedAt: new Date().toISOString()
+                },
+                status: 'Reviewing',
+                adminNotes: 'GCash payment receipt submitted by parishioner. Awaiting staff verification.'
+            });
+
+            closeModal('gcashPaymentModal');
+            if (typeof renderUserDashboard === 'function') {
+                await renderUserDashboard();
+            }
+            showAlert('GCash payment receipt submitted successfully! Staff will verify your payment.', 'Payment Submitted');
+        }
+
+        // Global storage for resubmission files
+        window.resubmissionFilesData = window.resubmissionFilesData || {};
+        function getNormalizedDocuments(docsField) {
+            let items = [];
+            if (!docsField) return items;
+            if (Array.isArray(docsField)) {
+                docsField.forEach((d, idx) => {
+                    if (typeof d === 'string') {
+                        items.push({ name: `Document ${idx + 1}`, data: d, type: 'Document' });
+                    } else if (d) {
+                        items.push({
+                            name: d.name || d.fileName || d.documentTitle || d.documentType || `Document ${idx + 1}`,
+                            data: d.data || d.fileData || d.url || '',
+                            type: d.documentType || d.documentTitle || d.label || 'Document'
+                        });
+                    }
+                });
+            } else if (typeof docsField === 'object') {
+                for (const [key, val] of Object.entries(docsField)) {
+                    if (Array.isArray(val)) {
+                        val.forEach((f, idx) => {
+                            if (typeof f === 'string') {
+                                items.push({ name: `${key} (${idx + 1})`, data: f, type: key });
+                            } else if (f) {
+                                items.push({
+                                    name: f.name || f.fileName || f.documentTitle || `${key} (${idx + 1})`,
+                                    data: f.data || f.fileData || f.url || '',
+                                    type: key
+                                });
+                            }
+                        });
+                    } else if (val && typeof val === 'object') {
+                        items.push({
+                            name: val.name || val.fileName || val.documentTitle || key,
+                            data: val.data || val.fileData || val.url || '',
+                            type: key
+                        });
+                    }
+                }
+            }
+            return items;
         }
 
         function autofillUserData() {
@@ -5686,63 +5694,6 @@
             renderFuneralCalendar();
         }
 
-        async function selectFuneralCalendarDate(dateStr) {
-            const todayObj = new Date();
-            todayObj.setHours(0, 0, 0, 0);
-            const todayStr = `${todayObj.getFullYear()}-${String(todayObj.getMonth() + 1).padStart(2, '0')}-${String(todayObj.getDate()).padStart(2, '0')}`;
-
-            if (!funeralWakeStartDate || (funeralWakeStartDate && funeralIntermentDate)) {
-                // First click: Set Wake Start Date (Strictly Today)
-                if (dateStr !== todayStr) {
-                    showAlert('Funeral wake start date must be today.', 'Invalid Start Date');
-                    return;
-                }
-
-                funeralWakeStartDate = dateStr;
-                funeralIntermentDate = null;
-                document.getElementById('funeralSelectedDateInput').value = dateStr;
-                document.getElementById('intermentDateInput').value = '';
-
-                const panel = document.getElementById('funeralTimeslotPanel');
-                if (panel) panel.style.display = 'block';
-
-                const headerEl = document.getElementById('funeralSelectedDateHeader');
-                if (headerEl) headerEl.textContent = `Wake Start: ${dateStr}`;
-
-                const summaryEl = document.getElementById('funeralSummaryBox');
-                if (summaryEl) {
-                    summaryEl.innerHTML = `Now select your <strong>Target Interment Date</strong> on the calendar (Max 7 days).`;
-                }
-
-                renderFuneralCalendar();
-                return;
-            }
-
-            // Second click: Set Target Interment Date
-            if (dateStr < funeralWakeStartDate) {
-                showAlert('Interment date cannot be earlier than the wake start date.', 'Invalid Range');
-                return;
-            }
-
-            const startD = new Date(funeralWakeStartDate);
-            const endD = new Date(dateStr);
-            const diffTime = Math.abs(endD - startD);
-            const wakeDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-
-            // Strict 7-day (1 week) maximum check
-            if (wakeDays > 7) {
-                showAlert('Maximum wake duration is 1 week (7 days). Please select an interment date within 7 days of the wake start date.', 'Max 7 Days Exceeded');
-                return;
-            }
-
-            funeralIntermentDate = dateStr;
-            document.getElementById('intermentDateInput').value = dateStr;
-            document.getElementById('wakeDaysInput').value = wakeDays;
-
-            renderFuneralCalendar();
-            updateFuneralSpanCalculation();
-        }
-
         function updateFuneralSpanCalculation() {
             if (!funeralWakeStartDate || !funeralIntermentDate) return;
 
@@ -5765,59 +5716,6 @@
             <strong>Stipend Total:</strong> <span style="color: #27ae60; font-weight: bold;">₱${totalFee.toLocaleString()}</span> (@ ₱${ratePerDay.toLocaleString()}/day)
         </div>
     `;
-        }
-
-        function openRescheduleRequestModal(appId) {
-            document.getElementById('reschedAppId').value = appId;
-            document.getElementById('reschedReasonInput').value = '';
-            openModal('requestReschedModal');
-        }
-
-        async function submitRescheduleRequest(event) {
-            event.preventDefault();
-            const appId = document.getElementById('reschedAppId').value;
-            const reason = document.getElementById('reschedReasonInput').value;
-            const newDate = document.getElementById('reschedNewDateInput').value;
-
-            if (!newDate) {
-                showAlert('Please select your preferred new date from the calendar.');
-                return;
-            }
-
-            const numericId = isNaN(appId) ? appId : Number(appId);
-            let app = await db.applications.get(numericId);
-            if (!app) {
-                showAlert('Application record not found.');
-                return;
-            }
-
-            // 1. Log the history trail
-            const historyEntry = {
-                oldStatus: app.status || 'Pending',
-                newStatus: 'Reschedule Requested',
-                adminNote: `Parishioner requested reschedule to ${newDate}. Reason: ${reason}`,
-                changedAt: new Date().toISOString(),
-                changedBy: app.applicantName || 'Parishioner'
-            };
-            const updatedHistory = app.statusHistory ? [...app.statusHistory, historyEntry] : [historyEntry];
-
-            // 2. Update Dexie with explicit fields that the admin dashboard looks for
-            await db.applications.update(numericId, {
-                status: 'Reschedule Requested',          // Sets the core status filter for admin
-                rescheduleRequested: true,               // Flag for admin UI conditional checks
-                rescheduleReason: reason,                // The reason text
-                requestedNewDate: newDate,               // The date requested by the parishioner
-                statusHistory: updatedHistory,
-                updatedAt: new Date().toISOString()
-            });
-
-            showAlert('Your reschedule request has been submitted to the parish office successfully!', 'Success');
-            closeModal('requestReschedModal');
-
-            // Refresh parishioner dashboard
-            if (typeof renderUserDashboard === 'function') {
-                await renderUserDashboard();
-            }
         }
 
         function updateFuneralFeeCalculation() {
@@ -5845,138 +5743,88 @@
             }
         }
 
-        function updateFuneralSpanCalculation() {
-            if (!funeralWakeStartDate || !funeralIntermentDate) return;
-
-            const isAircon = document.getElementById('chapelAirconCheck')?.checked || false;
-            let startD = new Date(funeralWakeStartDate);
-            let endD = new Date(funeralIntermentDate);
-            let wakeDays = Math.round((endD - startD) / (1000 * 60 * 60 * 24)) + 1;
-
-            const ratePerDay = isAircon ? 6000 : 2000;
-            const totalFee = wakeDays * ratePerDay;
-
-            document.getElementById('funeralCalculatedFeeInput').value = totalFee;
-
-            const panel = document.getElementById('funeralTimeslotPanel');
-            panel.style.display = 'block';
-            document.getElementById('funeralSelectedDateHeader').textContent = `Resurrection Chapel Reservation (${wakeDays} Days)`;
-            document.getElementById('funeralSummaryBox').innerHTML = `
-        <div style="margin-top: 6px;">
-            <strong>Wake Span:</strong> ${funeralWakeStartDate} to ${funeralIntermentDate} (${wakeDays} Days)<br>
-            <strong>Stipend Total:</strong> <span style="color: #27ae60; font-weight: bold;">₱${totalFee.toLocaleString()}</span> (@ ₱${ratePerDay.toLocaleString()}/day)
-        </div>
-    `;
-        }
-
-        // Example: Displaying payment section when status is 'Ready for Payment'
+        // --- 1. RENDER PAYMENT SECTION (IF EMBEDDED IN UI) ---
         function renderPaymentSection(application) {
             if (application.status === 'Ready for Payment') {
                 return `
-            <div class="payment-box">
-                <h3>Scan to Pay via GCash</h3>
-                <img src="path-to-your-gcash-qr.png" alt="GCash QR Code" style="max-width: 200px;" />
-                <p>Account Name: Parish Church</p>
-                <p>Account Number: 0912-345-6789</p>
-                
-                <form id="paymentForm" onsubmit="submitPaymentProof(event, '${application.referenceId}')">
-                    <label for="referenceNumber">GCash Reference Number:</label>
-                    <input type="text" id="referenceNumber" required placeholder="Enter 13-digit reference no." />
+                <div class="payment-box">
+                    <h3>Scan to Pay via GCash</h3>
+                    <img src="path-to-your-gcash-qr.png" alt="GCash QR Code" style="max-width: 200px;" />
+                    <p>Account Name: Parish Church</p>
+                    <p>Account Number: 0912-345-6789</p>
                     
-                    <label for="receiptUpload">Upload Receipt Screenshot:</label>
-                    <input type="file" id="receiptUpload" accept="image/*" required />
-                    
-                    <button type="submit">Submit Payment Proof</button>
-                </form>
-            </div>
-        `;
+                    <form id="paymentForm" onsubmit="submitPaymentProof(event, '${application.referenceId || application.id}')">
+                        <label for="referenceNumber">GCash Reference Number:</label>
+                        <input type="text" id="referenceNumber" required placeholder="Enter 13-digit reference no." />
+                        
+                        <label for="receiptUpload">Upload Receipt Screenshot:</label>
+                        <input type="file" id="receiptUpload" accept="image/*" required />
+                        
+                        <button type="submit">Submit Payment Proof</button>
+                    </form>
+                </div>
+            `;
             }
             return '';
         }
 
-        function submitPaymentProof(event, referenceId) {
-            event.preventDefault();
-            const referenceNumber = document.getElementById('referenceNumber').value;
-
-            // Retrieve existing applications from localStorage (or your backend)
-            let applications = JSON.parse(localStorage.getItem('applications')) || [];
-
-            // Find and update the specific application
-            applications = applications.map(app => {
-                if (app.referenceId === referenceId) {
-                    app.paymentReference = referenceNumber;
-                    // Update status so parish staff see it ready for final confirmation/walk-in accommodation
-                    app.status = 'For Verification / Walk-In Ready';
-                }
-                return app;
-            });
-
-            localStorage.setItem('applications', JSON.stringify(applications));
-            alert('Payment proof submitted successfully! Parish staff can now review and accommodate your schedule.');
-            location.reload();
-        }
-
+        // --- 2. OPEN GCASH PAYMENT MODAL (SAFE ID HANDLING FOR DEXIE) ---
         async function openPaymentModal(appInput) {
             let app = appInput;
 
-            // If an ID string or number was passed instead of an object, fetch it from Dexie
+            // If an ID string or number was passed instead of an object, fetch it properly from Dexie
             if (typeof appInput === 'string' || typeof appInput === 'number') {
-                app = await db.applications.get(Number(appInput));
+                // Support both numeric primary keys and string/UUID primary keys
+                const queryId = isNaN(appInput) ? String(appInput) : Number(appInput);
+                app = await db.applications.get(queryId);
             }
 
-            if (!app) return;
+            if (!app) {
+                console.error("Application not found for payment modal:", appInput);
+                showAlert("Could not load application payment details.");
+                return;
+            }
 
-            // Save app id in hidden input if you have one
-            const appIdInput = document.getElementById('paymentAppId');
-            if (appIdInput) appIdInput.value = app.id || '';
+            // Save app id in hidden input (supporting both possible modal ID naming conventions)
+            const appIdInputs = document.querySelectorAll('#paymentAppId, #paymentAppIdInput');
+            appIdInputs.forEach(input => {
+                if (input) input.value = app.id;
+            });
 
-            // Calculate dynamic fee using the application's sacrament type and details
-            const totalAmount = calculateTotalPayment(app.sacramentType, app.details);
+            // Calculate dynamic fee safely
+            const totalAmount = typeof calculateTotalPayment === 'function'
+                ? calculateTotalPayment(app.sacramentType, app.details)
+                : 0;
             const formattedAmount = `₱${totalAmount.toLocaleString()}`;
 
-            // Safely update display elements
-            const amountDisplay = document.getElementById('gcashAmountDisplay');
-            if (amountDisplay) {
-                amountDisplay.textContent = formattedAmount;
-            }
+            // Update amount display elements
+            const amountDisplays = document.querySelectorAll('#gcashAmountDisplay, #paymentAmountDisplay');
+            amountDisplays.forEach(display => {
+                if (display) display.textContent = formattedAmount;
+            });
 
-            const modal = document.getElementById('gcashPaymentModal');
+            // Display the payment modal (checking both possible modal element IDs)
+            const modal = document.getElementById('gcashPaymentModal') || document.getElementById('paymentModal');
             if (modal) {
                 modal.classList.add('active');
                 modal.style.display = 'flex';
             }
         }
 
-        function openGcashPaymentModal(app) {
-            // If app details are missing, grab them directly from the active form inputs on the page!
-            const details = app?.details || {
-                wakeDays: parseInt(document.getElementById('wakeDaysInput')?.value, 10) || 3,
-                isAircon: document.getElementById('airconCheckbox')?.checked || false,
-                hasGuestPriest: document.getElementById('hasGuestPriest')?.checked || false,
-                baptismType: document.getElementById('baptismTypeSelect')?.value || 'group'
-            };
-
-            const sacramentType = app?.sacramentType || document.getElementById('sacramentTypeField')?.value || 'funeral';
-
-            // Calculate total using the robust function
-            const totalAmount = calculateTotalPayment(sacramentType, details);
-
-            // Update modal display
-            const amountDisplayEl = document.getElementById('gcashAmountDisplay');
-            if (amountDisplayEl) {
-                amountDisplayEl.textContent = `₱${totalAmount.toLocaleString()}`;
-            }
-
-            // Open modal
-            openModal('gcashPaymentModal');
-        }
-
+        // --- 3. HANDLE PAYMENT PROOF FILE & DATA SUBMISSION ---
         async function handlePaymentProofSubmit(event) {
             event.preventDefault();
-            const rawId = document.getElementById('paymentAppId').value;
-            const appId = isNaN(rawId) ? rawId : Number(rawId);
 
-            const input = document.getElementById('paymentProofFileInput');
+            const rawId = document.getElementById('paymentAppId')?.value || document.getElementById('paymentAppIdInput')?.value;
+            if (!rawId) {
+                showAlert('Application reference identifier is missing.', 'Error');
+                return;
+            }
+
+            // Normalize ID format for Dexie query
+            const appId = isNaN(rawId) ? String(rawId) : Number(rawId);
+
+            const input = document.getElementById('paymentProofFileInput') || document.getElementById('receiptUpload');
             const accumulatedList = window.accumulatedFiles?.['paymentProofFileList'] || [];
             const filesToProcess = accumulatedList.length > 0 ? accumulatedList : Array.from(input?.files || []);
 
@@ -5985,34 +5833,56 @@
                 return;
             }
 
-            const app = await db.applications.get(appId);
-            if (!app) return;
+            try {
+                const app = await db.applications.get(appId);
+                if (!app) {
+                    showAlert('Application not found in database.', 'Error');
+                    return;
+                }
 
-            const base64File = await fileToBase64(filesToProcess[0]);
+                const base64File = await fileToBase64(filesToProcess[0]);
 
-            const historyEntry = {
-                oldStatus: app.status || 'Reviewed & Ready for Payment',
-                newStatus: 'Payment Submitted / For Verification',
-                adminNote: `Parishioner submitted GCash payment proof screenshot.`,
-                changedAt: new Date().toISOString(),
-                changedBy: app.applicantName || 'Applicant'
-            };
+                const historyEntry = {
+                    oldStatus: app.status || 'Reviewed & Ready for Payment',
+                    newStatus: 'Payment Submitted / For Verification',
+                    adminNote: `Parishioner submitted GCash payment proof screenshot.`,
+                    changedAt: new Date().toISOString(),
+                    changedBy: app.applicantName || 'Applicant'
+                };
 
-            const updatedHistory = app.statusHistory ? [...(app.statusHistory || []), historyEntry] : [historyEntry];
+                const updatedHistory = app.statusHistory ? [...app.statusHistory, historyEntry] : [historyEntry];
 
-            // ISANGANG HINAY SA APPS DATABASE: I-save sa 'paymentProof' hiwalay sa 'documents'
-            await db.applications.update(appId, {
-                status: 'Payment Submitted / For Verification',
-                paymentConfirmed: false,
-                adminNotes: `GCash payment receipt uploaded. Pending staff verification.`,
-                statusHistory: updatedHistory,
-                paymentProof: base64File // <--- Hiwalay na property para sa resibo!
-            });
+                // Update database record securely with separated paymentProof field
+                await db.applications.update(appId, {
+                    status: 'Payment Submitted / For Verification',
+                    paymentConfirmed: false,
+                    adminNotes: `GCash payment receipt uploaded. Pending staff verification.`,
+                    statusHistory: updatedHistory,
+                    paymentProof: base64File
+                });
 
-            closeModal('paymentModal');
-            await renderUserDashboard();
-            showAlert('Your payment proof screenshot has been successfully submitted to the parish staff for verification!', 'Payment Proof Submitted');
+                // Close all payment modals
+                const modals = ['gcashPaymentModal', 'paymentModal'];
+                modals.forEach(modalId => {
+                    if (typeof closeModal === 'function') {
+                        closeModal(modalId);
+                    } else {
+                        const m = document.getElementById(modalId);
+                        if (m) { m.style.display = 'none'; m.classList.remove('active'); }
+                    }
+                });
+
+                if (typeof renderUserDashboard === 'function') {
+                    await renderUserDashboard();
+                }
+
+                showAlert('Your payment proof screenshot has been successfully submitted to the parish staff for verification!', 'Payment Proof Submitted');
+            } catch (error) {
+                console.error('Error submitting payment proof:', error);
+                showAlert('An error occurred while saving your payment proof. Please try again.');
+            }
         }
+
         function toggleGuestPriestFields() {
             const isChecked = document.getElementById('hasGuestPriest')?.checked;
             const group = document.getElementById('guestPriestDetailsGroup');
