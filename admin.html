@@ -1163,16 +1163,6 @@
                 </div>
 
                 <!-- ================= CALENDAR & SCHEDULING ================= -->
-                <!-- FUNERAL DURATION & SPAN SUMMARY -->
-                <div id="funeralDurationGroup"
-                    style="margin-bottom: 15px; display: none; background: #f8fafc; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0;">
-                    <label
-                        style="display: block; font-weight: bold; font-size: 13px; color: #334155; margin-bottom: 6px;">Wake
-                        Duration (Number of Days in Chapel) *</label>
-                    <input type="number" id="walkInWakeDays" min="1" max="7" value="7"
-                        onchange="renderStaffInteractiveCalendar()"
-                        style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;">
-                </div>
 
                 <div style="margin-bottom: 15px;">
                     <!-- Calendar Header & Grid -->
@@ -2481,7 +2471,7 @@
             const statusFilter = (statusFilterEl ? statusFilterEl.value : 'ALL').toLowerCase();
             const searchInput = (searchInputEl ? searchInputEl.value : '').toLowerCase().trim();
 
-            const reqConfig = { baptism: 2, wedding: 4, funeral: 0 };
+            const reqConfig = { baptism: 3, wedding: 8, funeral: 0 };
 
             let filtered = rawApplicationsData.filter(app => {
                 const isArchived = Boolean(app.archived);
@@ -2529,32 +2519,48 @@
                 const targetDate = app.preferredDate || app.targetDate || app.confirmedDate || dateStr;
                 const rawName = app.applicantName || app.details?.applicantName || `${app.details?.applicantFirstName || ''} ${app.details?.applicantLastName || ''}`.trim();
                 const rawEmail = app.applicantEmail || app.details?.applicantEmail || app.email || '';
-                const contactInfo = rawName ? `<strong>${rawName}</strong><br><small style="color:#555;">${rawEmail}</small>` : (rawEmail || 'N/A');
-
+                const hasGuestPriest = Boolean(app.details?.hasGuestPriest);
+                const rawPhone = app.details?.phone || app.phone || 'N/A';
                 // Safely scoped per-application flags
-                const isWalkIn = Boolean(app.details?.walkInAccommodation || app.isWalkIn || (app.type && app.type.toLowerCase() === 'walk-in'));
-                const hasGuestPriest = app.details?.hasGuestPriest || false;
-                const sacramentKey = (app.sacramentType || '').toLowerCase().includes('baptism') ? 'baptism' : ((app.sacramentType || '').toLowerCase().includes('wedding') ? 'wedding' : 'funeral');
+                const isWalkIn = Boolean(
+                    app.details?.walkInAccommodation ||
+                    app.isWalkIn ||
+                    app.userId === 'STAFF-WALKIN-USER' ||
+                    (app.referenceId && app.referenceId.toUpperCase().startsWith('WALKIN')) ||
+                    ((app.applicantEmail || '').toLowerCase().endsWith('@walkin.parish'))
+                );
 
-                let minRequired = 0;
-                if (!isWalkIn) {
-                    if (sacramentKey === 'wedding') {
-                        minRequired = hasGuestPriest ? 5 : 4;
-                    } else if (sacramentKey === 'baptism') {
-                        minRequired = 3;
-                    } else {
-                        minRequired = reqConfig[sacramentKey] !== undefined ? reqConfig[sacramentKey] : 0;
-                    }
+                const sacramentKey = (app.sacramentType || '').toLowerCase().includes('baptism')
+                    ? 'baptism'
+                    : ((app.sacramentType || '').toLowerCase().includes('wedding') ? 'wedding' : 'funeral');
+
+                let minRequired = reqConfig[sacramentKey] ?? 0;
+                if (sacramentKey === 'wedding' && hasGuestPriest) {
+                    minRequired += 1; // 9 total when Guest Priest is selected
+                }
+                let contactInfo = 'N/A';
+
+                if (isWalkIn) {
+                    contactInfo = rawName
+                        ? `<strong>${rawName}</strong><br><small style="color:#555;">${rawPhone}</small>`
+                        : `<small style="color:#555;">${rawPhone}</small>`;
+                } else {
+                    contactInfo = rawName
+                        ? `<strong>${rawName}</strong><br><small style="color:#555;">${rawEmail || 'N/A'}</small>`
+                        : (rawEmail || 'N/A');
                 }
 
                 // --- ROBUST DOCUMENT COUNTING FOR ADMIN TABLE ---
                 let uploadedCount = getNormalizedDocuments(app.documents).length;
 
-                const isDocComplete = uploadedCount >= minRequired;
+                // Walk-in applicants submit & verify physical documents over the counter
+                const isDocComplete = isWalkIn || (uploadedCount >= minRequired);
 
                 // --- CLEAN & COMPACT DOCUMENT STATUS ---
                 let filesHtml = '';
-                if (minRequired === 0) {
+                if (isWalkIn) {
+                    filesHtml = `<span style="background: #27ae60; color: white; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-check"></use></svg> Complete (Walk-In OTC)</span>`;
+                } else if (minRequired === 0) {
                     filesHtml = `<span style="background: #27ae60; color: white; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block;"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-check"></use></svg> Complete</span>`;
                 } else {
                     if (isDocComplete) {
@@ -2603,12 +2609,13 @@
                     }
 
                     const hasCertificateUploaded = Boolean(app.certificateUploaded || app.digitalCertificate);
-                    let markAsDoneBtnHtml = '';
+                    const isCompletedStatus = (app.status || '').trim().toLowerCase() === 'completed';
 
-                    if (!hasCertificateUploaded) {
-                        markAsDoneBtnHtml = `<button type="button" onclick="event.stopPropagation(); showAlert('Action Denied: Official digital certificate must be uploaded before marking as done.')" style="background: #aab7b8; color: #ffffff;" title="Certificate Required">Mark as Done</button>`;
+                    let markAsDoneBtnHtml = '';
+                    if (!isCompletedStatus) {
+                        markAsDoneBtnHtml = `<button type="button" onclick="event.stopPropagation(); showAlert('Action Denied: Application can only be marked as done once its status is set to Completed.')" style="background: #aab7b8; color: #ffffff;" title="Status must be Completed">Mark as Done</button>`;
                     } else {
-                        markAsDoneBtnHtml = `<button type="button" onclick="event.stopPropagation(); toggleArchive('${app.id}')" class="btn-action" style="background: #6c757d; color: #ffffff;" title="Mark as Done"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-check"></use></svg> Mark as Done</button>`;
+                        markAsDoneBtnHtml = `<button type="button" onclick="event.stopPropagation(); toggleArchive('${app.id}')" class="btn-action" style="background: #16a34a; color: #ffffff;" title="Mark as Done"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-check"></use></svg> Mark as Done</button>`;
                     }
 
                     actionButtonsHtml = `
@@ -2991,8 +2998,11 @@
                 archived: newArchivedState
             };
 
-            // If moving to archive / marked as done, ensure status is set to Completed
             if (newArchivedState) {
+                if ((record.status || '').trim().toLowerCase() !== 'completed') {
+                    showAlert('Action Denied: Application can only be marked as done once its status is Completed.');
+                    return;
+                }
                 updatePayload.status = 'Completed';
             }
 
@@ -3570,22 +3580,21 @@
         }
 
 
-        // Function called by the Prev/Next buttons
-        function changeStaffCalendarMonth(offset) {
-            if (!staffCalendarDate) {
-                staffCalendarDate = new Date();
-            }
-
-            // Shift month forward or backward
-            staffCalendarDate.setMonth(staffCalendarDate.getMonth() + offset);
-
-            // Re-render the calendar grid for the new month
-            if (typeof renderStaffInteractiveCalendar === 'function') {
-                renderStaffInteractiveCalendar();
-            } else {
-                console.warn("renderStaffInteractiveCalendar is not defined.");
-            }
+        function parseLocalDateStr(dateStr) {
+            if (!dateStr) return null;
+            const parts = dateStr.split('-').map(Number);
+            if (parts.length !== 3) return null;
+            return new Date(parts[0], parts[1] - 1, parts[2]);
         }
+
+        function formatLocalDateStr(dateObj) {
+            const y = dateObj.getFullYear();
+            const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const d = String(dateObj.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
+
 
         async function renderStaffInteractiveCalendar() {
             const serviceElement = document.getElementById('walkInSacramentType');
@@ -3618,7 +3627,7 @@
                 } else if (service === 'Wedding') {
                     serviceNotice.innerHTML = '<strong>Wedding Rule:</strong> At least 30 days advance notice from today. Strictly 1 per day.';
                 } else if (service === 'Funeral') {
-                    serviceNotice.innerHTML = '<strong>Resurrection Chapel:</strong> Click wake start date to automatically span the 7-day wake-to-interment period.';
+                    serviceNotice.innerHTML = '<strong>Resurrection Chapel:</strong> Click today\'s date to start and span up to 7 days. Past dates and days beyond the span are greyed out.';
                 }
             }
 
@@ -3627,37 +3636,35 @@
             const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
             monthLabel.textContent = `${monthNames[month]} ${year}`;
 
-            let existingApps = [];
-            try {
-                existingApps = await db.applications.toArray();
-            } catch (e) {
-                console.error("Database read error:", e);
-            }
-
             const firstDay = new Date(year, month, 1).getDay();
             const totalDays = new Date(year, month + 1, 0).getDate();
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
             const minWeddingDate = new Date(today);
             minWeddingDate.setDate(minWeddingDate.getDate() + 30);
 
             const selectedDateInput = document.getElementById('selectedStaffWalkInDate');
             const selectedDateVal = selectedDateInput ? selectedDateInput.value : '';
-            const wakeDays = service === 'Funeral' ? parseInt(document.getElementById('walkInWakeDays')?.value || 7) : 1;
+            const startDateObj = parseLocalDateStr(selectedDateVal);
 
-            if (summaryBox && service === 'Funeral' && selectedDateVal) {
-                const startD = new Date(selectedDateVal);
-                const endD = new Date(startD);
-                endD.setDate(endD.getDate() + (wakeDays - 1));
+            let wakeDays = 1;
+            if (service === 'Funeral') {
+                const rawWake = parseInt(document.getElementById('walkInWakeDays')?.value || '7', 10);
+                wakeDays = Math.min(7, Math.max(1, isNaN(rawWake) ? 7 : rawWake));
+            }
 
-                const formatDate = (d) => d.toISOString().split('T')[0];
+            const endDateObj = startDateObj
+                ? new Date(startDateObj.getFullYear(), startDateObj.getMonth(), startDateObj.getDate() + (wakeDays - 1))
+                : null;
+
+            if (summaryBox && service === 'Funeral' && startDateObj && endDateObj) {
                 const sumWakeDays = document.getElementById('summaryWakeDays');
                 const sumWakeSpan = document.getElementById('summaryWakeSpan');
                 const sumStipend = document.getElementById('summaryStipend');
 
                 if (sumWakeDays) sumWakeDays.textContent = wakeDays;
-                if (sumWakeSpan) sumWakeSpan.textContent = `${formatDate(startD)} to ${formatDate(endD)} (${wakeDays} Days)`;
+                if (sumWakeSpan) sumWakeSpan.textContent = `${formatLocalDateStr(startDateObj)} to ${formatLocalDateStr(endDateObj)} (${wakeDays} Days)`;
                 if (sumStipend) sumStipend.textContent = (wakeDays * 2000).toLocaleString();
                 summaryBox.style.display = 'block';
             } else if (summaryBox) {
@@ -3671,16 +3678,16 @@
 
             for (let day = 1; day <= totalDays; day++) {
                 const cellDate = new Date(year, month, day);
-                cellDate.setHours(0, 0, 0, 0);
-                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-
+                const dateStr = formatLocalDateStr(cellDate);
                 const dayOfWeek = cellDate.getDay();
                 const isPast = cellDate < today;
+                const isToday = cellDate.getTime() === today.getTime();
 
                 let isValidServiceDay = true;
                 let offDayReason = 'Off Day';
-                let isInSpan = false;
                 let isStartDay = (selectedDateVal === dateStr);
+                let isInSpan = false;
+                let isBeyondSpan = false;
 
                 let statusText = 'Available';
                 let statusColor = '#16a34a';
@@ -3702,53 +3709,79 @@
                     } else {
                         isValidServiceDay = (dayOfWeek >= 2 && dayOfWeek <= 6);
                     }
+                    isClickable = isValidServiceDay && !isPast;
                 } else if (service === 'Funeral') {
-                    const isToday = (cellDate.getTime() === today.getTime());
-                    isValidServiceDay = isToday;
-                    offDayReason = 'Current Date Only';
-                    isClickable = isToday && !isPast;
+                    if (startDateObj && endDateObj) {
+                        isInSpan = (cellDate >= startDateObj && cellDate <= endDateObj) && !isPast;
+                        isBeyondSpan = (cellDate > endDateObj) && !isPast;
+                        // Only dates within the active 7-day span are clickable
+                        isClickable = isInSpan && !isPast;
+                        statusText = isStartDay ? 'Wake Start' : (isInSpan ? 'Wake Span' : (isPast ? 'Past' : 'Beyond Span'));
+                    } else {
+                        isValidServiceDay = isToday;
+                        offDayReason = 'Click Today';
+                        isClickable = isToday && !isPast;
+                        statusText = isPast ? 'Past' : (isToday ? 'Start Today' : offDayReason);
+                    }
                 }
 
                 if (isPast) {
                     statusText = 'Past';
-                    statusColor = '#64748b';
-                    cellBackground = '#f8fafc';
+                    statusColor = '#94a3b8';
+                    cellBackground = '#e2e8f0';
+                    isClickable = false;
+                } else if (service === 'Funeral' && isStartDay) {
+                    cellBackground = '#2563eb';
+                    statusColor = '#ffffff';
+                    statusText = 'Wake Start';
+                } else if (service === 'Funeral' && isInSpan) {
+                    cellBackground = '#dbeafe';
+                    statusColor = '#1e40af';
+                    statusText = 'Wake Span';
+                } else if (service === 'Funeral' && isBeyondSpan) {
+                    cellBackground = '#e2e8f0';
+                    statusColor = '#94a3b8';
+                    statusText = 'Beyond Span';
                     isClickable = false;
                 } else if (!isValidServiceDay) {
                     statusText = offDayReason;
-                    statusColor = '#64748b';
-                    cellBackground = '#f8fafc';
+                    statusColor = '#94a3b8';
+                    cellBackground = '#f1f5f9';
                     isClickable = false;
                 } else if (isStartDay) {
                     cellBackground = '#2563eb';
                     statusColor = '#ffffff';
-                    statusText = 'Wake Start';
-                } else if (isInSpan) {
-                    cellBackground = '#dbeafe';
-                    statusText = 'Wake Span';
-                    statusColor = '#1e40af';
+                    statusText = 'Selected';
                 }
 
                 const cell = document.createElement('div');
                 cell.className = 'staff-cal-cell';
                 cell.dataset.date = dateStr;
-                cell.style.cssText = `
-                    background: ${cellBackground}; 
-                    border: ${isStartDay ? '2px solid #1e40af' : '1px solid #e2e8f0'}; 
-                    border-radius: 6px; 
-                    padding: 8px 4px; 
-                    min-height: 60px; 
-                    display: flex; 
-                    flex-direction: column; 
-                    justify-content: space-between; 
-                    align-items: center;
-                    ${isClickable ? 'cursor: pointer; transition: background 0.2s;' : 'opacity: 0.75; cursor: not-allowed;'}
-                `;
+
+                const borderStyle = isStartDay ? '2px solid #1e40af' : '1px solid #cbd5e1';
+                cell.style.setProperty('background', cellBackground, 'important');
+                cell.style.setProperty('background-color', cellBackground, 'important');
+                cell.style.setProperty('border', borderStyle, 'important');
+                cell.style.setProperty('border-radius', '6px', 'important');
+                cell.style.setProperty('padding', '8px 4px', 'important');
+                cell.style.setProperty('min-height', '60px', 'important');
+                cell.style.setProperty('display', 'flex', 'important');
+                cell.style.setProperty('flex-direction', 'column', 'important');
+                cell.style.setProperty('justify-content', 'space-between', 'important');
+                cell.style.setProperty('align-items', 'center', 'important');
+                cell.style.setProperty('opacity', isBeyondSpan || isPast ? '0.55' : '1', 'important');
+                cell.style.setProperty('cursor', isClickable ? 'pointer' : 'not-allowed', 'important');
+
+                const dayNumColor = isStartDay
+                    ? '#ffffff'
+                    : (service === 'Funeral' && isInSpan)
+                        ? '#1e40af'
+                        : (isClickable ? '#0f172a' : '#94a3b8');
 
                 cell.innerHTML = `
-                    <span style="font-weight: bold; font-size: 13px; color: ${isStartDay || (service === 'Funeral' && isInSpan && !isStartDay) ? (isStartDay ? '#ffffff' : '#1e40af') : (isClickable ? '#0f172a' : '#94a3b8')}">${day}</span>
-                    <span style="font-size: 10px; font-weight: bold; color: ${isStartDay || (service === 'Funeral' && isInSpan) ? (isStartDay ? '#ffffff' : '#1e40af') : statusColor}; text-align: center;">${statusText}</span>
-                `;
+            <span style="font-weight: bold; font-size: 13px; color: ${dayNumColor} !important;">${day}</span>
+            <span style="font-size: 10px; font-weight: bold; color: ${statusColor} !important; text-align: center;">${statusText}</span>
+        `;
 
                 if (isClickable) {
                     cell.onclick = () => selectStaffDate(dateStr, service);
@@ -3758,35 +3791,82 @@
             }
         }
 
-        function selectStaffDate(dateStr, service) {
-            const hiddenInput = document.getElementById('selectedStaffWalkInDate');
-            if (!hiddenInput) return;
-
-            // If Funeral, allow clicking a new start date or reset if clicked outside
-            hiddenInput.value = dateStr;
-
-            // Re-render calendar so the 7-day span recalculates from the new start date
-            renderStaffInteractiveCalendar();
-
-            // Populate time slot dropdown
-            const timeSlotSelect = document.getElementById('walkInTimeSlot');
-            if (timeSlotSelect) {
-                timeSlotSelect.innerHTML = '<option value="">-- Select Time Slot --</option>';
-                let slots = [];
-                if (service === 'Group Baptism') slots = ['10:00 AM Session'];
-                else if (service === 'Individual Baptism') slots = ['10:00 AM', '02:00 PM'];
-                else if (service === 'Wedding') slots = ['10:30 AM', '03:00 PM'];
-                else if (service === 'Funeral') slots = ['08:00 AM - 05:00 PM (Chapel Day-Use Span)'];
-
-                slots.forEach(time => {
-                    const option = document.createElement('option');
-                    option.value = time;
-                    option.textContent = `${dateStr} @ ${time}`;
-                    timeSlotSelect.appendChild(option);
-                });
+        function changeStaffCalendarMonth(direction) {
+            if (!(staffCalendarDate instanceof Date) || isNaN(staffCalendarDate)) {
+                staffCalendarDate = new Date();
+            }
+            staffCalendarDate.setMonth(staffCalendarDate.getMonth() + Number(direction || 0));
+            if (typeof renderStaffInteractiveCalendar === 'function') {
+                renderStaffInteractiveCalendar();
             }
         }
 
+        let funeralSelectedStartDate = '';
+        function selectStaffDate(dateStr, service) {
+            const grid = document.getElementById('staffCalendarGrid');
+            const selectedDateInput = document.getElementById('selectedStaffWalkInDate');
+            const clickedDate = parseLocalDateStr(dateStr);
+
+            if (service === 'Funeral') {
+                let currentStartStr = grid ? (grid.dataset.funeralStart || '') : '';
+
+                if (!currentStartStr) {
+                    currentStartStr = dateStr;
+                    if (grid) grid.dataset.funeralStart = currentStartStr;
+                }
+
+                const startObj = parseLocalDateStr(currentStartStr);
+                const endObj = startObj
+                    ? new Date(startObj.getFullYear(), startObj.getMonth(), startObj.getDate() + 6)
+                    : null;
+
+                const isWithin7Days = (startObj && endObj && clickedDate)
+                    ? (clickedDate >= startObj && clickedDate <= endObj)
+                    : false;
+
+                console.log('Funeral click:', { dateStr, currentStartStr, isWithin7Days });
+
+                if (!isWithin7Days) return;
+
+                if (selectedDateInput) {
+                    selectedDateInput.value = currentStartStr;
+                }
+            } else {
+                if (grid) delete grid.dataset.funeralStart;
+                if (selectedDateInput) {
+                    selectedDateInput.value = dateStr;
+                }
+            }
+
+            renderStaffInteractiveCalendar();
+
+            const timeSlotSelect = document.getElementById('walkInTimeSlot');
+            if (!timeSlotSelect) return;
+
+            timeSlotSelect.innerHTML = '';
+
+            let slots = [];
+            if (service === 'Group Baptism') slots = ['10:00 AM Session'];
+            else if (service === 'Individual Baptism') slots = ['10:00 AM', '02:00 PM'];
+            else if (service === 'Wedding') slots = ['10:30 AM', '03:00 PM'];
+            else if (service === 'Funeral') slots = ['08:00 AM - 05:00 PM (Chapel Day-Use Span)'];
+
+            slots.forEach((time, idx) => {
+                const option = document.createElement('option');
+                option.value = time;
+                option.textContent = `${dateStr} @ ${time}`;
+                if (idx === 0) option.selected = true;
+                timeSlotSelect.appendChild(option);
+            });
+        }
+
+        function getFieldOrNA(formElement, selector) {
+            const val = formElement.querySelector(selector)?.value;
+            if (val === undefined || val === null || String(val).trim() === '') {
+                return 'N/A';
+            }
+            return String(val).trim();
+        }
 
         async function handleStaffWalkInSubmit(event, formElement) {
             if (event) event.preventDefault();
@@ -3818,51 +3898,53 @@
                 walkInAccommodation: true
             };
 
+
             const sType = service.toLowerCase();
             if (sType.includes('baptism')) {
-                details.childFirstName = formElement.querySelector('[name="childFirstName"]')?.value.trim() || '';
-                details.childMiddleInitial = formElement.querySelector('[name="childMiddleInitial"]')?.value.trim() || '';
-                details.childLastName = formElement.querySelector('[name="childLastName"]')?.value.trim() || '';
-                details.childName = `${details.childFirstName} ${details.childMiddleInitial} ${details.childLastName}`.trim();
-                details.childDob = formElement.querySelector('[name="childDob"]')?.value || '';
+                details.childFirstName = getFieldOrNA(formElement, '[name="childFirstName"]');
+                details.childMiddleInitial = getFieldOrNA(formElement, '[name="childMiddleInitial"]');
+                details.childLastName = getFieldOrNA(formElement, '[name="childLastName"]');
+                details.childName = [details.childFirstName, details.childMiddleInitial, details.childLastName].join(' ');
+                details.childDob = getFieldOrNA(formElement, '[name="childDob"]');
 
-                details.fatherFirstName = formElement.querySelector('[name="fatherFirstName"]')?.value.trim() || '';
-                details.fatherMiddleInitial = formElement.querySelector('[name="fatherMiddleInitial"]')?.value.trim() || '';
-                details.fatherLastName = formElement.querySelector('[name="fatherLastName"]')?.value.trim() || '';
-                details.fatherName = `${details.fatherFirstName} ${details.fatherMiddleInitial} ${details.fatherLastName}`.trim();
+                details.fatherFirstName = getFieldOrNA(formElement, '[name="fatherFirstName"]');
+                details.fatherMiddleInitial = getFieldOrNA(formElement, '[name="fatherMiddleInitial"]');
+                details.fatherLastName = getFieldOrNA(formElement, '[name="fatherLastName"]');
+                details.fatherName = [details.fatherFirstName, details.fatherMiddleInitial, details.fatherLastName].join(' ');
 
-                details.motherFirstName = formElement.querySelector('[name="motherFirstName"]')?.value.trim() || '';
-                details.motherMiddleInitial = formElement.querySelector('[name="motherMiddleInitial"]')?.value.trim() || '';
-                details.motherLastName = formElement.querySelector('[name="motherLastName"]')?.value.trim() || '';
-                details.motherName = `${details.motherFirstName} ${details.motherMiddleInitial} ${details.motherLastName}`.trim();
+                details.motherFirstName = getFieldOrNA(formElement, '[name="motherFirstName"]');
+                details.motherMiddleInitial = getFieldOrNA(formElement, '[name="motherMiddleInitial"]');
+                details.motherLastName = getFieldOrNA(formElement, '[name="motherLastName"]');
+                details.motherName = [details.motherFirstName, details.motherMiddleInitial, details.motherLastName].join(' ');
             } else if (sType.includes('wedding')) {
-                details.groomFirstName = formElement.querySelector('[name="groomFirstName"]')?.value.trim() || '';
-                details.groomMiddleInitial = formElement.querySelector('[name="groomMiddleInitial"]')?.value.trim() || '';
-                details.groomLastName = formElement.querySelector('[name="groomLastName"]')?.value.trim() || '';
-                details.groomName = `${details.groomFirstName} ${details.groomMiddleInitial} ${details.groomLastName}`.trim();
-                details.groomAge = formElement.querySelector('[name="groomAge"]')?.value || '';
-                details.groomCivilStatus = formElement.querySelector('[name="groomCivilStatus"]')?.value || '';
-                details.groomNationality = formElement.querySelector('[name="groomNationality"]')?.value || 'Filipino';
-                details.groomPlaceOfBirth = formElement.querySelector('[name="groomPlaceOfBirth"]')?.value || '';
-                details.groomOccupation = formElement.querySelector('[name="groomOccupation"]')?.value || '';
-                details.groomPresentResidence = formElement.querySelector('[name="groomPresentResidence"]')?.value || '';
-                details.groomFatherName = formElement.querySelector('[name="groomFatherName"]')?.value || '';
-                details.groomMotherName = formElement.querySelector('[name="groomMotherName"]')?.value || '';
+                details.groomFirstName = getFieldOrNA(formElement, '[name="groomFirstName"]');
+                details.groomMiddleInitial = getFieldOrNA(formElement, '[name="groomMiddleInitial"]');
+                details.groomLastName = getFieldOrNA(formElement, '[name="groomLastName"]');
+                details.groomName = [details.groomFirstName, details.groomMiddleInitial, details.groomLastName].join(' ');
+                details.groomAge = getFieldOrNA(formElement, '[name="groomAge"]');
+                details.groomCivilStatus = getFieldOrNA(formElement, '[name="groomCivilStatus"]');
+                details.groomNationality = getFieldOrNA(formElement, '[name="groomNationality"]');
+                details.groomPlaceOfBirth = getFieldOrNA(formElement, '[name="groomPlaceOfBirth"]');
+                details.groomOccupation = getFieldOrNA(formElement, '[name="groomOccupation"]');
+                details.groomPresentResidence = getFieldOrNA(formElement, '[name="groomPresentResidence"]');
+                details.groomFatherName = getFieldOrNA(formElement, '[name="groomFatherName"]');
+                details.groomMotherName = getFieldOrNA(formElement, '[name="groomMotherName"]');
 
-                details.brideFirstName = formElement.querySelector('[name="brideFirstName"]')?.value.trim() || '';
-                details.brideMiddleInitial = formElement.querySelector('[name="brideMiddleInitial"]')?.value.trim() || '';
-                details.brideLastName = formElement.querySelector('[name="brideLastName"]')?.value.trim() || '';
-                details.brideName = `${details.brideFirstName} ${details.brideMiddleInitial} ${details.brideLastName}`.trim();
-                details.brideAge = formElement.querySelector('[name="brideAge"]')?.value || '';
-                details.brideCivilStatus = formElement.querySelector('[name="brideCivilStatus"]')?.value || '';
-                details.brideNationality = formElement.querySelector('[name="brideNationality"]')?.value || 'Filipino';
-                details.bridePlaceOfBirth = formElement.querySelector('[name="bridePlaceOfBirth"]')?.value || '';
-                details.brideOccupation = formElement.querySelector('[name="brideOccupation"]')?.value || '';
-                details.bridePresentResidence = formElement.querySelector('[name="bridePresentResidence"]')?.value || '';
-                details.brideFatherName = formElement.querySelector('[name="brideFatherName"]')?.value || '';
-                details.brideMotherName = formElement.querySelector('[name="brideMotherName"]')?.value || '';
+                details.brideFirstName = getFieldOrNA(formElement, '[name="brideFirstName"]');
+                details.brideMiddleInitial = getFieldOrNA(formElement, '[name="brideMiddleInitial"]');
+                details.brideLastName = getFieldOrNA(formElement, '[name="brideLastName"]');
+                details.brideName = [details.brideFirstName, details.brideMiddleInitial, details.brideLastName].join(' ');
+                details.brideAge = getFieldOrNA(formElement, '[name="brideAge"]');
+                details.brideCivilStatus = getFieldOrNA(formElement, '[name="brideCivilStatus"]');
+                details.brideNationality = getFieldOrNA(formElement, '[name="brideNationality"]');
+                details.bridePlaceOfBirth = getFieldOrNA(formElement, '[name="bridePlaceOfBirth"]');
+                details.brideOccupation = getFieldOrNA(formElement, '[name="brideOccupation"]');
+                details.bridePresentResidence = getFieldOrNA(formElement, '[name="bridePresentResidence"]');
+                details.brideFatherName = getFieldOrNA(formElement, '[name="brideFatherName"]');
+                details.brideMotherName = getFieldOrNA(formElement, '[name="brideMotherName"]');
 
-                details.electricityFeeIncluded = formElement.querySelector('[name="electricityFee"]')?.checked || false;
+                const elecChecked = Boolean(formElement.querySelector('[name="electricityFee"]')?.checked);
+                details.electricityFeeIncluded = elecChecked ? 'Included (+₱1,000)' : 'N/A';
             } else if (sType.includes('funeral')) {
                 details.deceasedFirstName = formElement.querySelector('[name="deceasedFirstName"]')?.value.trim() || '';
                 details.deceasedMiddleInitial = formElement.querySelector('[name="deceasedMiddleInitial"]')?.value.trim() || '';
@@ -3880,7 +3962,7 @@
                 referenceId: referenceId,
                 userId: 'STAFF-WALKIN-USER',
                 applicantName: applicantName,
-                applicantEmail: `${applicantName.toLowerCase().replace(/\s+/g, '')}@walkin.parish`,
+                applicantEmail: '', // Do not generate a fake @walkin.parish email
                 sacramentType: service,
                 status: 'Approved',
                 preferredDate: date,
@@ -3912,46 +3994,6 @@
             }
         }
 
-        function selectStaffDate(dateStr, service) {
-            // Save the selected wake start date.
-            const selectedDateInput = document.getElementById('selectedStaffWalkInDate');
-            if (selectedDateInput) {
-                selectedDateInput.value = dateStr;
-            }
-
-            // Re-render after selecting the start date to unlock the 7-day funeral span.
-            renderStaffInteractiveCalendar();
-
-            document.querySelectorAll('.staff-cal-cell').forEach(cell => {
-                if (cell.dataset.date === dateStr) {
-                    cell.style.background = '#3b82f6';
-                    cell.style.border = '2px solid #1d4ed8';
-                    cell.querySelectorAll('span').forEach(s => s.style.color = '#ffffff');
-                } else {
-                    cell.style.background = '#ffffff';
-                    cell.style.border = '1px solid #e2e8f0';
-                    const spans = cell.querySelectorAll('span');
-                    if (spans[0]) spans[0].style.color = '#0f172a';
-                    if (spans[1]) spans[1].style.color = '#16a34a';
-                }
-            });
-
-            const timeSlotSelect = document.getElementById('walkInTimeSlot');
-            timeSlotSelect.innerHTML = '<option value="">-- Select Time Slot --</option>';
-
-            let slots = [];
-            if (service === 'Group Baptism') slots = ['10:00 AM Session'];
-            else if (service === 'Individual Baptism') slots = ['10:00 AM', '02:00 PM'];
-            else if (service === 'Wedding') slots = ['10:30 AM', '03:00 PM'];
-            else if (service === 'Funeral') slots = ['08:00 AM - 05:00 PM (Chapel Day-Use)'];
-
-            slots.forEach(time => {
-                const option = document.createElement('option');
-                option.value = time;
-                option.textContent = `${dateStr} @ ${time}`;
-                timeSlotSelect.appendChild(option);
-            });
-        }
 
         let currentBapCalDate = new Date();
         let selectedBapDateStr = '';

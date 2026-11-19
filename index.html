@@ -252,7 +252,6 @@
         a .ui-icon {
             margin-right: .28em
         }
-        
     </style>
 </head>
 
@@ -1348,69 +1347,143 @@
                     <div class="wizard-step-pane" data-step="5">
                         <div class="wizard-card">
                             <h3 class="wizard-section-title">Required Wedding Documents</h3>
-                            <p style="font-size: 13px; color: #475569; margin-top: 0;">Please upload clear copies of the
-                                required documents (PDF, JPG, PNG):</p>
+                            <p style="font-size: 13px; color: #475569; margin-top: 0;">
+                                Please upload clear copies of the required wedding documents (PDF, JPG, PNG):
+                            </p>
 
-                            <!-- 1. PSA Birth Certificates -->
+                            <!-- 1. PSA Birth Certificates (Separated: Groom & Bride) -->
                             <div class="wizard-field">
-                                <label>1. PSA Birth Certificates (Groom &amp; Bride) </label>
-                                <div class="doc-upload-box" id="wedBirthCertBox"
-                                    onclick="document.getElementById('wedBirthCertFiles').click()">
-                                    <strong style="color: #4a0e17; font-size: 13px;">Click to Upload PSA Birth
-                                        Certificates</strong>
-                                    <div style="font-size: 12px; color: #64748b; margin-top: 4px;">PDF, JPG, PNG</div>
-                                    <div class="doc-file-name" id="wedBirthCertFileName"></div>
-                                    <input type="file" id="wedBirthCertFiles" multiple accept=".pdf,.jpg,.jpeg,.png"
-                                        style="display:none;"
-                                        onchange="handleWizardFileSelect(this, 'wedBirthCertFileName', 'wedBirthCertBox')">
+                                <label>1. PSA Birth Certificates (Groom &amp; Bride)</label>
+                                <div class="wizard-grid-2">
+                                    <div>
+                                        <div class="doc-upload-box" id="wedGroomBirthCertBox"
+                                            onclick="document.getElementById('wedGroomBirthCertFiles').click()">
+                                            <strong style="color: #4a0e17; font-size: 13px;">Groom's PSA Birth
+                                                Certificate</strong>
+                                            <div style="font-size: 12px; color: #64748b; margin-top: 4px;">PDF, JPG, PNG
+                                            </div>
+                                            <div class="doc-file-name" id="wedGroomBirthCertFileName"></div>
+                                            <input type="file" id="wedGroomBirthCertFiles" accept=".pdf,.jpg,.jpeg,.png"
+                                                style="display:none;"
+                                                onchange="handleWizardFileSelect(this, 'wedGroomBirthCertFileName', 'wedGroomBirthCertBox')">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="doc-upload-box" id="wedBrideBirthCertBox"
+                                            onclick="document.getElementById('wedBrideBirthCertFiles').click()">
+                                            <strong style="color: #4a0e17; font-size: 13px;">Bride's PSA Birth
+                                                Certificate</strong>
+                                            <div style="font-size: 12px; color: #64748b; margin-top: 4px;">PDF, JPG, PNG
+                                            </div>
+                                            <div class="doc-file-name" id="wedBrideBirthCertFileName"></div>
+                                            <input type="file" id="wedBrideBirthCertFiles" accept=".pdf,.jpg,.jpeg,.png"
+                                                style="display:none;"
+                                                onchange="handleWizardFileSelect(this, 'wedBrideBirthCertFileName', 'wedBrideBirthCertBox')">
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="field-error-msg" id="wedBirthCertError">Please upload PSA Birth
-                                    Certificates.</div>
+                                <div class="field-error-msg" id="wedBirthCertError">Please upload PSA Birth Certificates
+                                    for Groom and Bride.</div>
                             </div>
 
-                            <!-- 2. CENOMAR -->
+                            <!-- 2. CENOMAR (Single Upload) -->
                             <div class="wizard-field">
-                                <label>2. CENOMAR (Certificate of No Marriage) </label>
+                                <label>2. CENOMAR (Certificate of No Marriage)</label>
                                 <div class="doc-upload-box" id="wedCenomarBox"
                                     onclick="document.getElementById('wedCenomarFiles').click()">
                                     <strong style="color: #4a0e17; font-size: 13px;">Click to Upload CENOMAR</strong>
                                     <div style="font-size: 12px; color: #64748b; margin-top: 4px;">PDF, JPG, PNG</div>
                                     <div class="doc-file-name" id="wedCenomarFileName"></div>
-                                    <input type="file" id="wedCenomarFiles" multiple accept=".pdf,.jpg,.jpeg,.png"
+                                    <input type="file" id="wedCenomarFiles" accept=".pdf,.jpg,.jpeg,.png"
                                         style="display:none;"
                                         onchange="handleWizardFileSelect(this, 'wedCenomarFileName', 'wedCenomarBox')">
                                 </div>
-                                <div class="field-error-msg" id="wedCenomarError">Please upload CENOMAR documents.</div>
-                            </div>
-
-                            <!-- 3. New Baptismal & Confirmation Certificates -->
-                            <div class="wizard-field">
-                                <label>3. New Baptismal &amp; Confirmation Certificates (with Marriage Annotation)
-                                </label>
-                                <div class="doc-upload-box" id="wedAnnotationBox"
-                                    onclick="document.getElementById('wedAnnotationFiles').click()">
-                                    <strong style="color: #4a0e17; font-size: 13px;">Click to Upload Annotated
-                                        Certificates</strong>
-                                    <div style="font-size: 12px; color: #64748b; margin-top: 4px;">PDF, JPG, PNG</div>
-                                    <div class="doc-file-name" id="wedAnnotationFileName"></div>
-                                    <input type="file" id="wedAnnotationFiles" multiple accept=".pdf,.jpg,.jpeg,.png"
-                                        style="display:none;"
-                                        onchange="handleWizardFileSelect(this, 'wedAnnotationFileName', 'wedAnnotationBox')">
+                                <div class="field-error-msg" id="wedCenomarError">Please upload the CENOMAR document.
                                 </div>
-                                <div class="field-error-msg" id="wedAnnotationError">Please upload annotated
-                                    baptismal/confirmation certificates.</div>
                             </div>
 
-                            <!-- 4. Marriage License / Contract -->
+                            <!-- 3. New Baptismal Certificates with Marriage Annotation (Separated: Groom & Bride) -->
                             <div class="wizard-field">
-                                <label>4. Marriage License (or Civil Marriage Contract with Registry Number) </label>
+                                <label>3. New Baptismal Certificates with Marriage Annotation (Groom &amp;
+                                    Bride)</label>
+                                <div class="wizard-grid-2">
+                                    <div>
+                                        <div class="doc-upload-box" id="wedGroomBaptismalBox"
+                                            onclick="document.getElementById('wedGroomBaptismalFiles').click()">
+                                            <strong style="color: #4a0e17; font-size: 13px;">Groom's Baptismal
+                                                Certificate</strong>
+                                            <div style="font-size: 12px; color: #64748b; margin-top: 4px;">PDF, JPG, PNG
+                                            </div>
+                                            <div class="doc-file-name" id="wedGroomBaptismalFileName"></div>
+                                            <input type="file" id="wedGroomBaptismalFiles" accept=".pdf,.jpg,.jpeg,.png"
+                                                style="display:none;"
+                                                onchange="handleWizardFileSelect(this, 'wedGroomBaptismalFileName', 'wedGroomBaptismalBox')">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="doc-upload-box" id="wedBrideBaptismalBox"
+                                            onclick="document.getElementById('wedBrideBaptismalFiles').click()">
+                                            <strong style="color: #4a0e17; font-size: 13px;">Bride's Baptismal
+                                                Certificate</strong>
+                                            <div style="font-size: 12px; color: #64748b; margin-top: 4px;">PDF, JPG, PNG
+                                            </div>
+                                            <div class="doc-file-name" id="wedBrideBaptismalFileName"></div>
+                                            <input type="file" id="wedBrideBaptismalFiles" accept=".pdf,.jpg,.jpeg,.png"
+                                                style="display:none;"
+                                                onchange="handleWizardFileSelect(this, 'wedBrideBaptismalFileName', 'wedBrideBaptismalBox')">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field-error-msg" id="wedBaptismalError">Please upload annotated baptismal
+                                    certificates for Groom and Bride.</div>
+                            </div>
+
+                            <!-- 4. New Confirmation Certificates with Marriage Annotation (Separated: Groom & Bride) -->
+                            <div class="wizard-field">
+                                <label>4. New Confirmation Certificates with Marriage Annotation (Groom &amp;
+                                    Bride)</label>
+                                <div class="wizard-grid-2">
+                                    <div>
+                                        <div class="doc-upload-box" id="wedGroomConfirmationBox"
+                                            onclick="document.getElementById('wedGroomConfirmationFiles').click()">
+                                            <strong style="color: #4a0e17; font-size: 13px;">Groom's Confirmation
+                                                Certificate</strong>
+                                            <div style="font-size: 12px; color: #64748b; margin-top: 4px;">PDF, JPG, PNG
+                                            </div>
+                                            <div class="doc-file-name" id="wedGroomConfirmationFileName"></div>
+                                            <input type="file" id="wedGroomConfirmationFiles"
+                                                accept=".pdf,.jpg,.jpeg,.png" style="display:none;"
+                                                onchange="handleWizardFileSelect(this, 'wedGroomConfirmationFileName', 'wedGroomConfirmationBox')">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="doc-upload-box" id="wedBrideConfirmationBox"
+                                            onclick="document.getElementById('wedBrideConfirmationFiles').click()">
+                                            <strong style="color: #4a0e17; font-size: 13px;">Bride's Confirmation
+                                                Certificate</strong>
+                                            <div style="font-size: 12px; color: #64748b; margin-top: 4px;">PDF, JPG, PNG
+                                            </div>
+                                            <div class="doc-file-name" id="wedBrideConfirmationFileName"></div>
+                                            <input type="file" id="wedBrideConfirmationFiles"
+                                                accept=".pdf,.jpg,.jpeg,.png" style="display:none;"
+                                                onchange="handleWizardFileSelect(this, 'wedBrideConfirmationFileName', 'wedBrideConfirmationBox')">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field-error-msg" id="wedConfirmationError">Please upload annotated
+                                    confirmation certificates for Groom and Bride.</div>
+                            </div>
+
+                            <!-- 5. Marriage License / Contract (Single Upload) -->
+                            <div class="wizard-field">
+                                <label>5. Marriage License or Civil Marriage Contract</label>
                                 <div class="doc-upload-box" id="wedLicenseBox"
                                     onclick="document.getElementById('wedLicenseFiles').click()">
-                                    <strong style="color: #4a0e17; font-size: 13px;">Click to Upload Marriage
-                                        License</strong>
+                                    <strong style="color: #4a0e17; font-size: 13px;">Click to Upload Marriage License /
+                                        Contract</strong>
                                     <div style="font-size: 12px; color: #64748b; margin-top: 4px;">PDF, JPG, PNG</div>
                                     <div class="doc-file-name" id="wedLicenseFileName"></div>
-                                    <input type="file" id="wedLicenseFiles" multiple accept=".pdf,.jpg,.jpeg,.png"
+                                    <input type="file" id="wedLicenseFiles" accept=".pdf,.jpg,.jpeg,.png"
                                         style="display:none;"
                                         onchange="handleWizardFileSelect(this, 'wedLicenseFileName', 'wedLicenseBox')">
                                 </div>
@@ -1418,15 +1491,15 @@
                                     Contract.</div>
                             </div>
 
-                            <!-- Guest Priest License Container (Conditionally shown if guest priest checked) -->
+                            <!-- Optional Guest Priest License -->
                             <div id="guestPriestDocContainer"
                                 style="display: none; margin-bottom: 16px; padding: 14px; background: #fffbeb; border: 1px solid #f59e0b; border-radius: 8px;">
                                 <label
                                     style="display: block; font-weight: bold; font-size: 13px; color: #b45309; margin-bottom: 6px;">
-                                    5. Guest Priest's License to Marry
+                                    Guest Priest's License to Marry (Optional / When Guest Priest Selected)
                                 </label>
-                                <p style="font-size: 11px; color: #78350f; margin: 0 0 8px 0;">Required because you
-                                    requested a guest officiating priest.</p>
+                                <p style="font-size: 11px; color: #78350f; margin: 0 0 8px 0;">Required if you requested
+                                    a guest officiating priest.</p>
                                 <div class="doc-upload-box" id="guestPriestBox"
                                     onclick="document.getElementById('guestPriestLicenseFiles').click()"
                                     style="border-color: #f59e0b; background: #fffdf9;">
@@ -1468,20 +1541,18 @@
         </div>
     </div>
 
-    <!-- =========================================================
+    <!-- 
      3. FUNERAL / RESURRECTION CHAPEL WIZARD MODAL (2 STEPS)
-     ========================================================= -->
+
     <div class="wizard-overlay" id="funeralModal">
         <div class="wizard-modal">
 
-            <!-- Sticky Top Header -->
             <div class="wizard-header">
                 <div class="wizard-header-top">
                     <h2>Resurrection Chapel Wake &amp; Vigil Request</h2>
                     <button type="button" class="wizard-close-btn"
                         onclick="closeWizardModal('funeralModal')">&times;</button>
                 </div>
-                <!-- Progress Indicator -->
                 <div class="wizard-progress" id="funeralProgress">
                     <div class="wizard-step-item active" data-step="1">
                         <span class="wizard-step-dot">1</span>
@@ -1495,11 +1566,9 @@
                 </div>
             </div>
 
-            <!-- Scrollable Middle Body -->
             <div class="wizard-body">
                 <form id="funeralWizardForm" novalidate>
 
-                    <!-- STEP 1: CHAPEL AVAILABILITY CALENDAR & SCHEDULE -->
                     <div class="wizard-step-pane active" data-step="1">
                         <div class="wizard-card">
                             <h3 class="wizard-section-title">Chapel Availability &amp; Wake Schedule</h3>
@@ -1516,7 +1585,6 @@
                                 (Max 7 days).
                             </div>
 
-                            <!-- Setup Options & Range Summary -->
                             <div
                                 style="background: #f8f9fa; border: 1px solid #e2e8f0; padding: 12px; border-radius: 6px; margin-bottom: 14px;">
                                 <div
@@ -1533,11 +1601,9 @@
                                 </div>
                             </div>
 
-                            <!-- Calendar Container -->
                             <div class="fb-calendar-container"
                                 style="background: #ffffff; border: 1px solid #ccd0d5; border-radius: 8px; padding: 14px; font-family: Helvetica, Arial, sans-serif;">
 
-                                <!-- Calendar Month Header -->
                                 <div
                                     style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                                     <h4 id="funeralMonthYearLabel"
@@ -1551,7 +1617,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Legend -->
                                 <div
                                     style="display: flex; gap: 14px; font-size: 11px; color: #475569; margin-bottom: 10px; flex-wrap: wrap;">
                                     <span><span
@@ -1564,7 +1629,6 @@
                                         Span</span>
                                 </div>
 
-                                <!-- Days of Week Header -->
                                 <div
                                     style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: bold; font-size: 11px; color: #606770; margin-bottom: 6px;">
                                     <div>Sun</div>
@@ -1576,12 +1640,10 @@
                                     <div>Sat</div>
                                 </div>
 
-                                <!-- Calendar Grid -->
                                 <div id="funeralCalendarGrid"
                                     style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; margin-bottom: 10px;">
                                 </div>
 
-                                <!-- Selected Date Summary Panel -->
                                 <div id="funeralTimeslotPanel"
                                     style="border-top: 1px solid #e4e6eb; padding-top: 10px; display: none; font-size: 13px;">
                                     <div id="funeralSelectedDateHeader"
@@ -1589,7 +1651,6 @@
                                     <div id="funeralSummaryBox" style="color: #555;"></div>
                                 </div>
 
-                                <!-- Hidden Inputs for Form Submission -->
                                 <input type="hidden" id="funeralSelectedDateInput" name="preferredDate" required>
                                 <input type="hidden" id="intermentDateInput" name="intermentDate" required>
                                 <input type="hidden" id="wakeDaysInput" name="wakeDays" value="1">
@@ -1602,10 +1663,8 @@
                         </div>
                     </div>
 
-                    <!-- STEP 2: APPLICANT, DECEASED DETAILS & CONSENT -->
                     <div class="wizard-step-pane" data-step="2">
 
-                        <!-- Applicant Information -->
                         <div class="wizard-card">
                             <h3 class="wizard-section-title">Applicant's Information</h3>
                             <div class="wizard-grid-3">
@@ -1630,7 +1689,6 @@
                             </div>
                         </div>
 
-                        <!-- Deceased's Information -->
                         <div class="wizard-card">
                             <h3 class="wizard-section-title">Deceased's Information</h3>
                             <div class="wizard-grid-3" style="margin-bottom: 14px;">
@@ -1667,7 +1725,6 @@
                             </div>
                         </div>
 
-                        <!-- Data Privacy Consent -->
                         <div class="wizard-card">
                             <div class="privacy-consent-box" style="margin-top: 0;">
                                 <label>
@@ -1688,7 +1745,6 @@
                 </form>
             </div>
 
-            <!-- Sticky Bottom Footer -->
             <div class="wizard-footer">
                 <button type="button" class="btn-wizard-back" id="funeralBackBtn" onclick="prevWizardStep('funeral')"
                     style="visibility: hidden;">Back</button>
@@ -1697,8 +1753,127 @@
             </div>
 
         </div>
-    </div>
+    </div>                 ========================================================= -->
 
+
+    <!-- =========================================================
+     3. FUNERAL / RESURRECTION CHAPEL MODAL (CALENDAR + CONTACT INFO)
+     ========================================================= -->
+    <div class="modal-overlay" id="funeralModal"
+        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
+        <div class="modal-box"
+            style="max-width: 600px; background: #ffffff; border-radius: 8px; padding: 24px; text-align: left; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #4a0e17; padding-bottom: 10px; margin-bottom: 15px;">
+                <h3 style="color: #4a0e17; margin: 0; font-size: 1.2rem;">Resurrection Chapel Availability</h3>
+                <button type="button" class="close-btn" onclick="closeModal('funeralModal')"
+                    style="cursor: pointer; font-size: 1.5rem; color: #333; background:none; border:none;">&times;</button>
+            </div>
+
+            <!-- OCCUPIED NOTICE BANNER (Shown if today is occupied) -->
+            <div id="chapelOccupiedBanner"
+                style="display: none; background: #fee2e2; border: 1px solid #ef4444; color: #b91c1c; padding: 12px 14px; border-radius: 6px; margin-bottom: 14px; font-size: 13px; line-height: 1.5; align-items: flex-start; gap: 10px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    style="flex-shrink: 0; margin-top: 2px;">
+                    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+                    <path d="M12 9v4" />
+                    <path d="M12 17h.01" />
+                </svg>
+                <div>
+                    <strong>The Resurrection Chapel is currently occupied today.</strong> Please contact the parish
+                    staff for further assistance.
+                </div>
+            </div>
+
+            <!-- CALENDAR CONTAINER (Always visible so users can check dates) -->
+            <div class="fb-calendar-container"
+                style="background: #ffffff; border: 1px solid #ccd0d5; border-radius: 8px; padding: 14px; font-family: Helvetica, Arial, sans-serif; margin-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h4 id="funeralMonthYearLabel"
+                        style="margin: 0; color: #1c1e21; font-size: 1rem; font-weight: bold;">Month Year</h4>
+                    <div style="display: flex; gap: 6px;">
+                        <button type="button" onclick="changeFuneralCalendarMonth(-1)"
+                            style="background: #e4e6eb; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-weight: bold;">&lt;</button>
+                        <button type="button" onclick="changeFuneralCalendarMonth(1)"
+                            style="background: #e4e6eb; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-weight: bold;">&gt;</button>
+                    </div>
+                </div>
+
+                <div
+                    style="display: flex; gap: 14px; font-size: 11px; color: #475569; margin-bottom: 10px; flex-wrap: wrap;">
+                    <span><span
+                            style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#10b981; margin-right:4px;"></span>Available</span>
+                    <span><span
+                            style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#ef4444; margin-right:4px;"></span>Occupied
+                        / Walk-In Span</span>
+                    <span><span
+                            style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#94a3b8; margin-right:4px;"></span>Past</span>
+                    <span><span
+                            style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#1877f2; margin-right:4px;"></span>Selected
+                        Span</span>
+                </div>
+
+                <div
+                    style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: bold; font-size: 11px; color: #606770; margin-bottom: 6px;">
+                    <div>Sun</div>
+                    <div>Mon</div>
+                    <div>Tue</div>
+                    <div>Wed</div>
+                    <div>Thu</div>
+                    <div>Fri</div>
+                    <div>Sat</div>
+                </div>
+                <div id="funeralCalendarGrid"
+                    style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center;">
+                </div>
+            </div>
+
+            <!-- CALENDAR CONTAINER (Keep your existing calendar block here) -->
+            ...
+
+            <!-- PARISH CONTACT INFORMATION PLACEHOLDER (Modern Lucide-style SVGs) -->
+            <div
+                style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 16px; font-size: 13px; color: #334155;">
+                <strong style="color: #4a0e17; display: block; margin-bottom: 10px; font-size: 14px;">
+                    Parish Office Contact Information (For Chapel Inquiries):
+                </strong>
+
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"
+                            style="color: #4a0e17; width: 16px; height: 16px;">
+                            <use href="#icon-phone"></use>
+                        </svg>
+                        <span><strong>Phone:</strong> [Insert Parish Landline / Mobile Number]</span>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="#4a0e17" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                            style="flex-shrink: 0;">
+                            <rect width="20" height="16" x="2" y="4" rx="2" />
+                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                        </svg>
+                        <span><strong>Email:</strong> [Insert Parish Office Email]</span>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="#4a0e17" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                            style="flex-shrink: 0;">
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                        </svg>
+                        <span><strong>Office Hours:</strong> [Insert Office Hours, e.g., Tue–Sun, 8:00 AM – 5:00
+                            PM]</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
     <!-- ========================================== -->
     <!-- DEDICATED PARISHIONER DASHBOARD & ACCOUNT MODAL -->
     <!-- ========================================== -->
@@ -2597,10 +2772,22 @@
                     }
                 }
 
-                // Check each required wedding document
-                await processFileField('wedBirthCertFiles', 'PSA Birth Certificate');
+                // Separated Groom & Bride PSA Birth Certificates
+                await processFileField('wedGroomBirthCertFiles', "Groom's PSA Birth Certificate");
+                await processFileField('wedBrideBirthCertFiles', "Bride's PSA Birth Certificate");
+
+                // Single CENOMAR
                 await processFileField('wedCenomarFiles', 'CENOMAR');
-                await processFileField('wedAnnotationFiles', 'Annotated Certificate');
+
+                // Separated Groom & Bride Baptismal Certificates
+                await processFileField('wedGroomBaptismalFiles', "Groom's Baptismal Certificate");
+                await processFileField('wedBrideBaptismalFiles', "Bride's Baptismal Certificate");
+
+                // Separated Groom & Bride Confirmation Certificates
+                await processFileField('wedGroomConfirmationFiles', "Groom's Confirmation Certificate");
+                await processFileField('wedBrideConfirmationFiles', "Bride's Confirmation Certificate");
+
+                // Single Marriage License
                 await processFileField('wedLicenseFiles', 'Marriage License');
 
                 // Optional / Conditional Guest Priest check
@@ -2615,7 +2802,7 @@
                 }
 
                 // If any required document is missing, set status to 'To Follow-Up'
-                const applicationStatus = missingDocs.length === 0 ? 'Pending' : 'To Follow-Up';
+                const applicationStatus = missingDocs.length === 0 ? 'Pending' : 'To Follow-Up & Upload Lacking Documents';
 
                 const applicationRecord = {
                     id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${randomNum}`,
@@ -2626,7 +2813,7 @@
                     status: applicationStatus,
                     preferredDate: wizardState.wedding.data.preferredDate || '',
                     confirmedTime: wizardState.wedding.data.confirmedTime || '',
-                    details: { ...wizardState.wedding.data },
+                    details: { ...wizardState.wedding.data, hasGuestPriest },
                     documents: uploadedDocs,
                     missingDocuments: missingDocs, // Stored so admin sees what needs to be followed up
                     submittedAt: new Date().toISOString()
@@ -2661,24 +2848,13 @@
         };
 
         // 2. Open Funeral Wizard Modal
-        function openFuneralWizard() {
-            wizardState.funeral.currentStep = 1;
-            funeralWakeStartDate = null;
-            funeralIntermentDate = null;
-            updateFuneralWizardUI();
-
+        async function openFuneralWizard() {
             const modal = document.getElementById('funeralModal');
             if (modal) {
                 modal.style.display = 'flex';
                 modal.classList.add('active');
             }
-            if (typeof autofillUserData === 'function') {
-                autofillUserData();
-            }
-            if (typeof renderFuneralCalendar === 'function') {
-                renderFuneralCalendar();
-            }
-            setTimeout(checkFuneralWizardScroll, 100);
+            await renderFuneralCalendar();
         }
 
         // 3. Update Funeral Wizard Step UI
@@ -4379,68 +4555,64 @@
 
             reader.readAsDataURL(file);
         }
-        // Open Modal to upload additional document files
         async function openResubmitDocsModal(appId) {
             const numericId = isNaN(appId) ? appId : Number(appId);
-            let app = await db.applications.get(numericId);
-            if (!app) {
-                showAlert('Application record not found.');
-                return;
-            }
+            const app = await db.applications.get(numericId);
+            if (!app) return;
 
             document.getElementById('resubmitAppId').value = app.id;
-            const sacrament = (app.sacramentType || '').toLowerCase();
-            const hasGuestPriest = app.details?.hasGuestPriest || false;
-
-            let requiredList = [];
-            if (sacrament.includes('baptism')) {
-                requiredList = [
-                    "Child's Birth Certificate",
-                    "Mother's Baptismal Certificate",
-                    "Father's Baptismal Certificate"
-                ];
-            } else if (sacrament.includes('wedding')) {
-                requiredList = [
-                    "PSA Birth Certificates (Groom & Bride)",
-                    "CENOMAR (Certificate of No Marriage)",
-                    "New Baptismal & Confirmation Certificates (Annotated)",
-                    "Marriage License / Contract"
-                ];
-                if (hasGuestPriest) {
-                    requiredList.push("Guest Priest's License to Marry");
-                }
-            } else {
-                requiredList = ["Required Supporting Document"];
-            }
-
-            // Determine already uploaded document types/labels
-            const existingDocs = getNormalizedDocuments(app.documents);
-            const uploadedTypes = existingDocs.map(d => (d.type || d.name || '').toLowerCase());
-
-            // Identify missing documents
-            const missingDocs = requiredList.filter(reqName => {
-                return !uploadedTypes.some(upType => upType.includes(reqName.toLowerCase()) || reqName.toLowerCase().includes(upType));
-            });
-
-            const summaryEl = document.getElementById('resubmitAppSummary');
             const container = document.getElementById('resubmitDynamicUploadsContainer');
+            if (!container) return;
 
-            if (summaryEl) {
-                summaryEl.innerHTML = `<strong>Sacrament:</strong> ${app.sacramentType} (Ref: ${app.referenceId})<br>
-        <strong>Missing Documents to Upload:</strong> ${missingDocs.length > 0 ? missingDocs.join(', ') : 'None (All uploaded)'}`;
+            const uploadedLabels = new Set(
+                (Array.isArray(app.documents) ? app.documents : [])
+                    .map(d => (d?.label || '').trim().toLowerCase())
+                    .filter(Boolean)
+            );
+
+            let missingList = Array.isArray(app.missingDocuments) && app.missingDocuments.length > 0
+                ? [...app.missingDocuments]
+                : [];
+
+            // Fallback reconstruction if missingDocuments was empty on an older record
+            if (missingList.length === 0) {
+                const sType = (app.sacramentType || '').toLowerCase();
+                if (sType.includes('baptism')) {
+                    missingList = [
+                        "Child's Birth Certificate",
+                        "Mother's Baptismal Certificate",
+                        "Father's Baptismal Certificate"
+                    ].filter(lbl => !uploadedLabels.has(lbl.toLowerCase()));
+                } else if (sType.includes('wedding')) {
+                    const expectedWedding = [
+                        "Groom's PSA Birth Certificate",
+                        "Bride's PSA Birth Certificate",
+                        "CENOMAR",
+                        "Groom's Baptismal Certificate",
+                        "Bride's Baptismal Certificate",
+                        "Groom's Confirmation Certificate",
+                        "Bride's Confirmation Certificate",
+                        "Marriage License"
+                    ];
+                    if (app.details?.hasGuestPriest) {
+                        expectedWedding.push("Guest Priest License to Marry");
+                    }
+                    missingList = expectedWedding.filter(lbl => !uploadedLabels.has(lbl.toLowerCase()));
+                }
             }
 
-            if (container) {
-                if (missingDocs.length === 0) {
-                    container.innerHTML = `<p style="color: #16a34a; font-weight: bold; text-align: center; padding: 15px;">All required documents have been uploaded! You may submit.</p>`;
-                } else {
-                    container.innerHTML = missingDocs.map((docName, idx) => `
-                <div style="margin-bottom: 12px; background: #f8fafc; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;">
-                    <label style="display: block; font-weight: bold; font-size: 13px; color: #1e293b; margin-bottom: 4px;">${docName} *</label>
-                    <input type="file" name="missingDoc_${idx}" data-doctitle="${docName}" accept=".pdf,.jpg,.jpeg,.png" required style="width: 100%; font-size: 13px;">
-                </div>
-            `).join('');
-                }
+            if (missingList.length === 0) {
+                container.innerHTML = `<p style="font-size: 13px; color: #16a34a;">All required documents have already been uploaded.</p>`;
+            } else {
+                container.innerHTML = missingList.map((docTitle, idx) => `
+                    <div style="margin-bottom: 12px; padding: 10px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px;">
+                        <label style="display: block; font-weight: bold; font-size: 13px; color: #4a0e17; margin-bottom: 6px;">
+                            ${idx + 1}. ${docTitle} *
+                        </label>
+                        <input type="file" data-doctitle="${docTitle.replace(/"/g, '&quot;')}" accept=".pdf,.jpg,.jpeg,.png"
+                            style="width: 100%; font-size: 13px; background: #fff; padding: 6px; border: 1px solid #cbd5e1; border-radius: 4px;">
+                    </div>
+                `).join('');
             }
 
             openModal('resubmitDocsModal');
@@ -4465,21 +4637,23 @@
                 if (input.files && input.files.length > 0) {
                     const file = input.files[0];
                     const docTitle = input.getAttribute('data-doctitle') || 'Supporting Document';
-                    const b64Data = await fileToBase64(file);
+                    const b64Result = await fileToBase64(file);
+                    const fileData = typeof b64Result === 'string' ? b64Result : b64Result.data;
 
                     const docObj = {
                         label: docTitle,
                         name: file.name,
                         type: file.type,
-                        data: b64Data.data,
+                        data: fileData,
                         uploadedAt: new Date().toISOString()
                     };
 
                     newDocs.push(docObj);
                     uploadedCount++;
 
-                    // Remove uploaded document title from missing list
-                    missingList = missingList.filter(m => !m.toLowerCase().includes(docTitle.toLowerCase()) && !docTitle.toLowerCase().includes(m.toLowerCase()));
+                    // Exact match so Groom's vs Bride's documents are removed individually
+                    const normalizedTitle = docTitle.trim().toLowerCase();
+                    missingList = missingList.filter(m => m.trim().toLowerCase() !== normalizedTitle);
                 }
             }
 
@@ -4493,7 +4667,7 @@
 
             // Create audit trail entry for admin history
             const historyEntry = {
-                oldStatus: app.status || 'To Follow-Up',
+                oldStatus: app.status || 'To Follow-Up & Upload Lacking Documents',
                 newStatus: updatedStatus,
                 adminNote: `Parishioner uploaded ${uploadedCount} lacking document(s). Status updated to ${updatedStatus}.`,
                 changedAt: new Date().toISOString(),
@@ -5488,9 +5662,72 @@
             renderWeddingCalendar();
         });
 
+        function parseLocalDate(dateStr) {
+            if (!dateStr) return null;
+            const clean = String(dateStr).slice(0, 10);
+            const parts = clean.split('-').map(Number);
+            if (parts.length !== 3 || parts.some(isNaN)) return null;
+            return new Date(parts[0], parts[1] - 1, parts[2]);
+        }
+
+        function formatLocalDate(d) {
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        }
+
+        function getBookedSpanDates(app) {
+            const dates = [];
+            const startStr = app.confirmedDate || app.preferredDate || app.details?.preferredDate || app.details?.wakeStartDate || app.wakeStartDate;
+            if (!startStr) return dates;
+
+            const startD = parseLocalDate(startStr);
+            if (!startD) return dates;
+
+            const rawEndStr = app.details?.intermentDate || app.intermentDate || app.endDate || app.details?.endDate;
+            let endD = parseLocalDate(rawEndStr);
+
+            const wakeDays = parseInt(app.wakeDays || app.details?.wakeDays || 0, 10);
+            if (!endD && wakeDays > 0) {
+                endD = new Date(startD.getFullYear(), startD.getMonth(), startD.getDate() + (wakeDays - 1));
+            }
+            if (!endD || endD < startD) {
+                endD = new Date(startD.getTime());
+            }
+
+            // Cap safety loop to 31 days
+            let curr = new Date(startD.getTime());
+            let guard = 0;
+            while (curr <= endD && guard < 31) {
+                dates.push(formatLocalDate(curr));
+                curr.setDate(curr.getDate() + 1);
+                guard++;
+            }
+            return dates;
+        }
+        function getMaxAllowedIntermentStr(startStr) {
+            const startD = parseLocalDate(startStr);
+            if (!startD) return null;
+            // Inclusive 7-day span: Day 1 is startD, Day 7 is startD + 6 days
+            const maxD = new Date(startD.getFullYear(), startD.getMonth(), startD.getDate() + 6);
+            return formatLocalDate(maxD);
+        }
+
+        function getFirstOccupiedFromStart(startStr, occupiedSet) {
+            const startD = parseLocalDate(startStr);
+            if (!startD) return null;
+            for (let offset = 1; offset <= 6; offset++) {
+                const probe = new Date(startD.getFullYear(), startD.getMonth(), startD.getDate() + offset);
+                const probeStr = formatLocalDate(probe);
+                if (occupiedSet.has(probeStr)) {
+                    return probeStr;
+                }
+            }
+            return null;
+        }
+
         async function renderFuneralCalendar() {
             const gridEl = document.getElementById('funeralCalendarGrid');
             const labelEl = document.getElementById('funeralMonthYearLabel');
+            const occupiedBanner = document.getElementById('chapelOccupiedBanner');
 
             if (!gridEl || !labelEl) return;
 
@@ -5504,128 +5741,126 @@
 
             const todayObj = new Date();
             todayObj.setHours(0, 0, 0, 0);
-            const todayStr = `${todayObj.getFullYear()}-${String(todayObj.getMonth() + 1).padStart(2, '0')}-${String(todayObj.getDate()).padStart(2, '0')}`;
+            const todayStr = formatLocalDate(todayObj);
 
-            // Fetch occupied funeral dates from database
-            let allFuneralApps = [];
+            // 1. Declare occupiedDates properly before querying Dexie
+            const occupiedDates = new Set();
+
             try {
                 if (typeof db !== 'undefined' && db.applications) {
                     const allApps = await db.applications.toArray();
-                    allFuneralApps = allApps.filter(app => {
-                        const appStatus = (app.status || '').toLowerCase();
-                        if (appStatus === 'rejected' || app.archived) return false;
-                        return (app.sacramentType || '').toLowerCase().includes('funeral');
+                    const activeFunerals = allApps.filter(app => {
+                        const status = (app.status || '').toLowerCase();
+                        if (status === 'rejected' || status === 'cancelled' || app.archived) return false;
+                        const sType = (app.sacramentType || '').toLowerCase();
+                        const refId = (app.referenceId || '').toUpperCase();
+                        return sType.includes('funeral') || sType.includes('chapel') || refId.startsWith('FUN');
+                    });
+
+                    activeFunerals.forEach(app => {
+                        getBookedSpanDates(app).forEach(dStr => occupiedDates.add(dStr));
                     });
                 }
             } catch (err) {
-                console.error("Error fetching funeral apps:", err);
+                console.error("Error fetching chapel occupancy:", err);
             }
 
-            const occupiedDates = new Set();
-            allFuneralApps.forEach(app => {
-                const startStr = app.confirmedDate || app.preferredDate;
-                const endStr = app.details?.intermentDate || app.intermentDate || startStr;
-                if (!startStr) return;
+            if (occupiedBanner) {
+                occupiedBanner.style.display = occupiedDates.has(todayStr) ? 'flex' : 'none';
+            }
 
-                let curr = new Date(startStr);
-                let end = new Date(endStr);
-                while (curr <= end) {
-                    occupiedDates.add(curr.toISOString().split('T')[0]);
-                    curr.setDate(curr.getDate() + 1);
-                }
-            });
+            const spanCompleted = Boolean(funeralWakeStartDate && funeralIntermentDate);
+            const pickingInterment = Boolean(funeralWakeStartDate && !funeralIntermentDate);
+            const maxIntermentStr = pickingInterment ? getMaxAllowedIntermentStr(funeralWakeStartDate) : null;
+            const firstBlockerStr = pickingInterment ? getFirstOccupiedFromStart(funeralWakeStartDate, occupiedDates) : null;
+
+            // 2. Compute earliest occupied date from start date (or today) onward
+            const occupiedSorted = Array.from(occupiedDates).sort();
+            const boundaryStart = funeralWakeStartDate || todayStr;
+            const firstOccupiedAfterBoundary = occupiedSorted.find(d => d >= boundaryStart) || null;
+            const isBeyondOccupied = (dStr) => Boolean(firstOccupiedAfterBoundary && dStr > firstOccupiedAfterBoundary);
 
             let html = '';
+
+            // Blank padding cells for days before the 1st of the month
             for (let i = 0; i < firstDayIndex; i++) {
                 html += `<div></div>`;
             }
 
+            // Actual calendar day cells
             for (let day = 1; day <= totalDays; day++) {
                 const formattedDay = String(day).padStart(2, '0');
                 const formattedMonth = String(month + 1).padStart(2, '0');
                 const dateString = `${year}-${formattedMonth}-${formattedDay}`;
-                const dayOfWeek = new Date(dateString).getDay();
 
-                const isToday = (dateString === todayStr);
+                const isPast = dateString < todayStr;
+                const isToday = dateString === todayStr;
                 const isOccupied = occupiedDates.has(dateString);
+                const beyondOccupied = isBeyondOccupied(dateString);
 
-                let isStart = funeralWakeStartDate === dateString;
-                let isEnd = funeralIntermentDate === dateString;
-                let isInSpan = false;
+                const inSelectedSpan = spanCompleted &&
+                    dateString >= funeralWakeStartDate &&
+                    dateString <= funeralIntermentDate;
 
-                if (funeralWakeStartDate && funeralIntermentDate) {
-                    isInSpan = dateString > funeralWakeStartDate && dateString < funeralIntermentDate;
-                }
+                const isBeyondCompletedSpan = spanCompleted &&
+                    (dateString < funeralWakeStartDate || dateString > funeralIntermentDate);
 
-                let canClick = false;
-                let badgeText = 'Closed';
-                let badgeColor = '#94a3b8';
+                const isBeyondMaxSpan = pickingInterment &&
+                    (dateString < funeralWakeStartDate ||
+                        (maxIntermentStr && dateString > maxIntermentStr) ||
+                        (firstBlockerStr && dateString >= firstBlockerStr));
 
-                // Availability Rules:
-                // Stage 1: Only TODAY is clickable as wake start date.
-                // Stage 2: Only dates up to 7 days from wake start date are selectable.
-                if (!funeralWakeStartDate) {
-                    if (isToday && !isOccupied) {
-                        canClick = true;
-                        badgeText = 'Available Today';
-                        badgeColor = '#10b981';
-                    }
-                } else if (funeralWakeStartDate && !funeralIntermentDate) {
-                    const startD = new Date(funeralWakeStartDate);
-                    const maxD = new Date(startD);
-                    maxD.setDate(maxD.getDate() + 6); // 7-day span maximum (Start day + 6)
-                    const maxStr = `${maxD.getFullYear()}-${String(maxD.getMonth() + 1).padStart(2, '0')}-${String(maxD.getDate()).padStart(2, '0')}`;
+                let bgStyle = '#f0fdf4';
+                let textStyle = '#166534';
+                let dotColor = '#10b981'; // Green for available
+                let statusTooltip = 'Available';
+                let cursorStyle = 'pointer';
+                let borderStyle = isToday ? '2px solid #16a34a' : '1px solid #bbf7d0';
+                let clickAttr = `onclick="selectFuneralCalendarDate('${dateString}')"`;
 
-                    if (dateString >= funeralWakeStartDate && dateString <= maxStr && !isOccupied) {
-                        canClick = true;
-                        badgeText = (dateString === funeralWakeStartDate) ? 'Wake Start' : 'Within 7 Days';
-                        badgeColor = '#1877f2';
-                    }
-                } else {
-                    // Reset selection on click if both dates are already selected
-                    canClick = true;
-                }
-
-                let bgStyle = '#f4f2f2';
-                let textStyle = '#b0b3b8';
-
-                if (canClick) {
-                    bgStyle = '#f0f2f5';
-                    textStyle = '#050505';
-                }
-
-                if (isToday && !funeralWakeStartDate) {
-                    bgStyle = '#e8f5e9';
-                    textStyle = '#1b5e20';
-                }
-
-                if (isOccupied) {
-                    bgStyle = '#f8d7da';
-                    textStyle = '#721c24';
-                    canClick = false;
-                    badgeText = 'Occupied';
-                    badgeColor = '#ef4444';
-                }
-
-                if (isStart || isEnd) {
+                if (inSelectedSpan) {
                     bgStyle = '#1877f2';
                     textStyle = '#ffffff';
-                    badgeColor = '#ffffff';
-                } else if (isInSpan) {
-                    bgStyle = '#d0e8ff';
-                    textStyle = '#1d4ed8';
-                    badgeColor = '#2563eb';
+                    dotColor = '#ffffff';
+                    statusTooltip = 'Selected Wake Span';
+                    borderStyle = '2px solid #0f172a';
+                    clickAttr = `onclick="selectFuneralCalendarDate('${dateString}')"`;
+                } else if (isPast) {
+                    bgStyle = '#f1f5f9';
+                    textStyle = '#94a3b8';
+                    dotColor = '#94a3b8';
+                    statusTooltip = 'Past Date';
+                    cursorStyle = 'not-allowed';
+                    borderStyle = '1px solid #e2e8f0';
+                    clickAttr = '';
+                } else if (isBeyondCompletedSpan || isBeyondMaxSpan || beyondOccupied) {
+                    bgStyle = '#f1f5f9';
+                    textStyle = '#94a3b8';
+                    dotColor = '#94a3b8';
+                    statusTooltip = beyondOccupied
+                        ? 'Unavailable (Beyond Occupied Date)'
+                        : (isBeyondCompletedSpan ? 'Outside Selected Span' : 'Beyond 7-Day Span Limit');
+                    cursorStyle = spanCompleted ? 'pointer' : 'not-allowed';
+                    borderStyle = '1px solid #e2e8f0';
+                    clickAttr = spanCompleted ? `onclick="selectFuneralCalendarDate('${dateString}')"` : '';
+                } else if (isOccupied) {
+                    bgStyle = '#fef2f2';
+                    textStyle = '#991b1b';
+                    dotColor = '#ef4444';
+                    statusTooltip = 'Occupied / Walk-In Booked';
+                    cursorStyle = 'not-allowed';
+                    borderStyle = '1px solid #fecaca';
+                    clickAttr = '';
                 }
 
-                const cursorStyle = canClick ? 'pointer' : 'not-allowed';
-
                 html += `
-            <div onclick="${canClick ? `selectFuneralCalendarDate('${dateString}')` : ''}" 
-                 style="background: ${bgStyle}; color: ${textStyle}; padding: 8px 4px; border-radius: 6px; cursor: ${cursorStyle}; font-size: 13px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 44px; border: ${isToday ? '2px solid #2e7d32' : (isStart || isEnd ? '2px solid #000' : '1px solid transparent')};">
-                <strong style="font-size: 14px;">${day}</strong>
-                <span style="width: 7px; height: 7px; background: ${badgeColor}; border-radius: 50%; display: inline-block; margin-top: 6px;" title="${badgeText}"></span>
-            </div>
-        `;
+                    <div ${clickAttr}
+                        title="${statusTooltip}"
+                        style="background: ${bgStyle}; color: ${textStyle}; padding: 8px 4px; border-radius: 6px; font-size: 13px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 44px; border: ${borderStyle}; cursor: ${cursorStyle};">
+                        <strong style="font-size: 14px;">${day}</strong>
+                        <span style="width: 7px; height: 7px; background: ${dotColor}; border-radius: 50%; display: inline-block; margin-top: 6px;"></span>
+                    </div>
+                `;
             }
 
             gridEl.innerHTML = html;
@@ -5634,63 +5869,93 @@
         async function selectFuneralCalendarDate(dateStr) {
             const todayObj = new Date();
             todayObj.setHours(0, 0, 0, 0);
-            const todayStr = `${todayObj.getFullYear()}-${String(todayObj.getMonth() + 1).padStart(2, '0')}-${String(todayObj.getDate()).padStart(2, '0')}`;
+            const todayStr = formatLocalDate(todayObj);
 
-            // Reset range if user clicks again after completing selection
+            if (dateStr < todayStr) return;
+
+            // Reset range if clicking again after completing a span
             if (funeralWakeStartDate && funeralIntermentDate) {
                 funeralWakeStartDate = null;
                 funeralIntermentDate = null;
-                document.getElementById('funeralSelectedDateInput').value = '';
-                document.getElementById('intermentDateInput').value = '';
+                const startEl = document.getElementById('funeralSelectedDateInput');
+                const endEl = document.getElementById('intermentDateInput');
+                if (startEl) startEl.value = '';
+                if (endEl) endEl.value = '';
                 renderFuneralCalendar();
                 return;
             }
 
-            // Step 1: Set Wake Start Date (Strictly Current Day / Today)
+            // Step 1: Set Wake Start Date (must be today)
             if (!funeralWakeStartDate) {
                 if (dateStr !== todayStr) {
-                    showAlert('Wake start date must be the current day (Today).', 'Invalid Start Date');
+                    showAlert('Wake start date must be today.', 'Invalid Start Date');
                     return;
                 }
 
                 funeralWakeStartDate = dateStr;
-                document.getElementById('funeralSelectedDateInput').value = dateStr;
+                const startEl = document.getElementById('funeralSelectedDateInput');
+                if (startEl) startEl.value = dateStr;
 
                 const panel = document.getElementById('funeralTimeslotPanel');
                 if (panel) panel.style.display = 'block';
 
-                document.getElementById('funeralSelectedDateHeader').textContent = `Wake Start: ${dateStr}`;
-                document.getElementById('funeralSummaryBox').innerHTML = `Now select your <strong>Target Interment Date</strong> (Maximum 7-day span).`;
+                const header = document.getElementById('funeralSelectedDateHeader');
+                const summary = document.getElementById('funeralSummaryBox');
+                if (header) header.textContent = `Wake Start: ${dateStr}`;
+                if (summary) summary.innerHTML = `Now select your <strong>Target Interment Date</strong> (up to 7-day span).`;
 
                 renderFuneralCalendar();
                 return;
             }
 
-            // Step 2: Set Target Interment Date (Within 7-day window)
+            // Step 2: Set Target Interment Date (up to 7 days, checking no occupied date inside span)
             if (dateStr < funeralWakeStartDate) {
                 showAlert('Interment date cannot be earlier than the wake start date.', 'Invalid Range');
                 return;
             }
 
-            const startD = new Date(funeralWakeStartDate);
-            const endD = new Date(dateStr);
+            const startD = parseLocalDate(funeralWakeStartDate);
+            const endD = parseLocalDate(dateStr);
             const diffDays = Math.round((endD - startD) / (1000 * 60 * 60 * 24)) + 1;
 
             if (diffDays > 7) {
-                showAlert('Maximum wake duration is 7 days. Please select an interment date within 7 days of the wake start date.', '7-Day Span Limit');
+                showAlert('Maximum wake duration is 7 days. Please select an interment date within 7 days.', '7-Day Span Limit');
                 return;
             }
 
+            // Verify no occupied date falls inside the requested span
+            const allApps = (typeof db !== 'undefined' && db.applications) ? await db.applications.toArray() : [];
+            const occupiedSet = new Set();
+            allApps.forEach(app => {
+                const status = (app.status || '').toLowerCase();
+                if (status === 'rejected' || status === 'cancelled' || app.archived) return;
+                const sType = (app.sacramentType || '').toLowerCase();
+                const refId = (app.referenceId || '').toUpperCase();
+                if (sType.includes('funeral') || sType.includes('chapel') || refId.startsWith('FUN')) {
+                    getBookedSpanDates(app).forEach(d => occupiedSet.add(d));
+                }
+            });
+
+            let probe = new Date(startD.getTime());
+            while (probe <= endD) {
+                if (occupiedSet.has(formatLocalDate(probe))) {
+                    showAlert('Your selected span overlaps with an existing Resurrection Chapel / walk-in reservation.', 'Date Unavailable');
+                    return;
+                }
+                probe.setDate(probe.getDate() + 1);
+            }
+
             funeralIntermentDate = dateStr;
-            document.getElementById('intermentDateInput').value = dateStr;
-            document.getElementById('wakeDaysInput').value = diffDays;
+            const endEl = document.getElementById('intermentDateInput');
+            const daysEl = document.getElementById('wakeDaysInput');
+            if (endEl) endEl.value = dateStr;
+            if (daysEl) daysEl.value = diffDays;
 
             renderFuneralCalendar();
             updateFuneralSpanCalculation();
         }
-
-        function changeFuneralCalendarMonth(direction) {
-            currentFuneralCalDate.setMonth(currentFuneralCalDate.getMonth() + direction);
+        function changeFuneralCalendarMonth(offset) {
+            currentFuneralCalDate.setMonth(currentFuneralCalDate.getMonth() + offset);
             renderFuneralCalendar();
         }
 
