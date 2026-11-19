@@ -5810,13 +5810,14 @@
                         (maxIntermentStr && dateString > maxIntermentStr) ||
                         (firstBlockerStr && dateString >= firstBlockerStr));
 
-                let bgStyle = '#f0fdf4';
-                let textStyle = '#166534';
-                let dotColor = '#10b981'; // Green for available
-                let statusTooltip = 'Available';
-                let cursorStyle = 'pointer';
-                let borderStyle = isToday ? '2px solid #16a34a' : '1px solid #bbf7d0';
-                let clickAttr = `onclick="selectFuneralCalendarDate('${dateString}')"`;
+
+                let bgStyle = '#f1f5f9';
+                let textStyle = '#94a3b8';
+                let dotColor = '#94a3b8';
+                let statusTooltip = 'Unavailable';
+                let cursorStyle = 'not-allowed';
+                let borderStyle = '1px solid #e2e8f0';
+                let clickAttr = '';
 
                 if (inSelectedSpan) {
                     bgStyle = '#1877f2';
@@ -5853,6 +5854,27 @@
                     clickAttr = '';
                 }
 
+                if (isToday) {
+                    if (isOccupied) {
+                        // Today is occupied -> Red
+                        bgStyle = '#fef2f2';
+                        textStyle = '#991b1b';
+                        dotColor = '#ef4444';
+                        statusTooltip = 'Today — Occupied / Walk-In Booked';
+                        cursorStyle = 'not-allowed';
+                        borderStyle = '2px solid #ef4444';
+                        clickAttr = '';
+                    } else {
+                        // Today is available -> Green
+                        bgStyle = '#f0fdf4';
+                        textStyle = '#166534';
+                        dotColor = '#10b981';
+                        statusTooltip = 'Today — Available';
+                        cursorStyle = 'pointer';
+                        borderStyle = '2px solid #16a34a';
+                        clickAttr = `onclick="selectFuneralCalendarDate('${dateString}')"`;
+                    }
+                }
                 html += `
                     <div ${clickAttr}
                         title="${statusTooltip}"
